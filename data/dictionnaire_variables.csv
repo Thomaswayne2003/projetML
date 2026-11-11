@@ -1,0 +1,161 @@
+fichier,colonne,frequence,decalage,cible,definition
+dataset_ml_news_v2.csv,n225_open,quotidien,aucun (connu avant la clôture),False,Nikkei 225 : open (Yahoo ^N225)
+dataset_ml_news_v2.csv,n225_high,quotidien,aucun (connu avant la clôture),False,Nikkei 225 : high (Yahoo ^N225)
+dataset_ml_news_v2.csv,n225_low,quotidien,aucun (connu avant la clôture),False,Nikkei 225 : low (Yahoo ^N225)
+dataset_ml_news_v2.csv,n225_close,quotidien,aucun (connu avant la clôture),False,Nikkei 225 : close (Yahoo ^N225)
+dataset_ml_news_v2.csv,n225_volume,quotidien,aucun (connu avant la clôture),False,Nikkei 225 : volume (Yahoo ^N225)
+dataset_ml_news_v2.csv,n225_volume_missing,quotidien,aucun (connu avant la clôture),False,1 si le volume du Nikkei manquait chez Yahoo (remplacé par la veille)
+dataset_ml_news_v2.csv,n225_ret_1d,quotidien,aucun (connu avant la clôture),False,Rendement du Nikkei sur 1 séance(s)
+dataset_ml_news_v2.csv,n225_ret_5d,quotidien,aucun (connu avant la clôture),False,Rendement du Nikkei sur 5 séance(s)
+dataset_ml_news_v2.csv,n225_ret_20d,quotidien,aucun (connu avant la clôture),False,Rendement du Nikkei sur 20 séance(s)
+dataset_ml_news_v2.csv,n225_ret_60d,quotidien,aucun (connu avant la clôture),False,Rendement du Nikkei sur 60 séance(s)
+dataset_ml_news_v2.csv,n225_mom_3m,quotidien,aucun (connu avant la clôture),False,Momentum du Nikkei sur 3 mois : P_t / P_{t-k} - 1
+dataset_ml_news_v2.csv,n225_mom_6m,quotidien,aucun (connu avant la clôture),False,Momentum du Nikkei sur 6 mois : P_t / P_{t-k} - 1
+dataset_ml_news_v2.csv,n225_mom_12m,quotidien,aucun (connu avant la clôture),False,Momentum du Nikkei sur 12 mois : P_t / P_{t-k} - 1
+dataset_ml_news_v2.csv,n225_dist_sma20,quotidien,aucun (connu avant la clôture),False,Écart du Nikkei à sa moyenne mobile 20 séances : close / SMA - 1
+dataset_ml_news_v2.csv,n225_dist_sma50,quotidien,aucun (connu avant la clôture),False,Écart du Nikkei à sa moyenne mobile 50 séances : close / SMA - 1
+dataset_ml_news_v2.csv,n225_dist_sma200,quotidien,aucun (connu avant la clôture),False,Écart du Nikkei à sa moyenne mobile 200 séances : close / SMA - 1
+dataset_ml_news_v2.csv,n225_vol_20d,quotidien,aucun (connu avant la clôture),False,"Volatilité réalisée du Nikkei sur 20 séances, annualisée"
+dataset_ml_news_v2.csv,n225_vol_ewma,quotidien,aucun (connu avant la clôture),False,"Volatilité EWMA du Nikkei (lambda = 0,94), annualisée"
+dataset_ml_news_v2.csv,n225_rsi14,quotidien,aucun (connu avant la clôture),False,RSI de Wilder 14 séances
+dataset_ml_news_v2.csv,n225_macd,quotidien,aucun (connu avant la clôture),False,"MACD (12, 26, 9) divisé par le prix"
+dataset_ml_news_v2.csv,n225_macd_hist,quotidien,aucun (connu avant la clôture),False,"MACD (12, 26, 9)_hist divisé par le prix"
+dataset_ml_news_v2.csv,n225_bb_pctb,quotidien,aucun (connu avant la clôture),False,"Position dans les bandes de Bollinger (20 j, 2 sigma)"
+dataset_ml_news_v2.csv,n225_atr14_pct,quotidien,aucun (connu avant la clôture),False,Average True Range 14 j divisé par le prix
+dataset_ml_news_v2.csv,sp500,quotidien,veille calendaire,False,"Indice sp500, clôture (Yahoo)"
+dataset_ml_news_v2.csv,taiex,quotidien,aucun (connu avant la clôture),False,"Indice taiex, clôture (Yahoo)"
+dataset_ml_news_v2.csv,shanghai,quotidien,veille calendaire,False,"Indice shanghai, clôture (Yahoo)"
+dataset_ml_news_v2.csv,nifty50,quotidien,veille calendaire,False,"Indice nifty50, clôture (Yahoo)"
+dataset_ml_news_v2.csv,msci_em_eem,quotidien,veille calendaire,False,"ETF EEM, proxy du MSCI Emerging Markets (USD)"
+dataset_ml_news_v2.csv,topix_etf,quotidien,aucun (connu avant la clôture),False,"ETF topix_etf (1306.T / 1311.T), proxy du TOPIX / Core30, corrigé des erreurs d'échelle"
+dataset_ml_news_v2.csv,topix_core30_etf,quotidien,aucun (connu avant la clôture),False,"ETF topix_core30_etf (1306.T / 1311.T), proxy du TOPIX / Core30, corrigé des erreurs d'échelle"
+dataset_ml_news_v2.csv,eurjpy,quotidien,veille calendaire,False,Taux de change eurjpy (yens pour une unité de devise)
+dataset_ml_news_v2.csv,us10y,quotidien,veille calendaire,False,"Rendement à 10 ans us10y, en %"
+dataset_ml_news_v2.csv,vix,quotidien,veille calendaire,False,"VIX (CBOE), niveau"
+dataset_ml_news_v2.csv,jgb2y,quotidien,1 séance,False,"Rendement JGB 2 ans, en % (MOF)"
+dataset_ml_news_v2.csv,jgb5y,quotidien,1 séance,False,"Rendement JGB 5 ans, en % (MOF)"
+dataset_ml_news_v2.csv,jgb10y,quotidien,1 séance,False,"Rendement JGB 10 ans, en % (MOF)"
+dataset_ml_news_v2.csv,jgb30y,quotidien,1 séance,False,"Rendement JGB 30 ans, en % (MOF)"
+dataset_ml_news_v2.csv,bund10y,quotidien,veille calendaire,False,"Rendement à 10 ans bund10y, en %"
+dataset_ml_news_v2.csv,eur_overnight,quotidien,2 séances,False,"Taux au jour le jour de l'euro, en % (EONIA puis €STR)"
+dataset_ml_news_v2.csv,euribor3m_mavg,quotidien,1 séance,False,"Euribor 3 mois, moyenne mensuelle, en %"
+dataset_ml_news_v2.csv,tona,quotidien,1 séance,False,"TONA, taux au jour le jour du yen, en % (BoJ)"
+dataset_ml_news_v2.csv,tankan_large_manuf,quotidien,aucun (connu avant la clôture),False,"Tankan, DI des grandes entreprises : large_manuf (dernière publication)"
+dataset_ml_news_v2.csv,tankan_large_nonmanuf,quotidien,aucun (connu avant la clôture),False,"Tankan, DI des grandes entreprises : large_nonmanuf (dernière publication)"
+dataset_ml_news_v2.csv,tankan_large_manuf_fcst,quotidien,aucun (connu avant la clôture),False,"Tankan, DI des grandes entreprises : large_manuf_fcst (dernière publication)"
+dataset_ml_news_v2.csv,cpi_all,quotidien,aucun (connu avant la clôture),False,"CPI Japon : all (dernière publication, e-Stat)"
+dataset_ml_news_v2.csv,cpi_core,quotidien,aucun (connu avant la clôture),False,"CPI Japon : core (dernière publication, e-Stat)"
+dataset_ml_news_v2.csv,cpi_corecore,quotidien,aucun (connu avant la clôture),False,"CPI Japon : corecore (dernière publication, e-Stat)"
+dataset_ml_news_v2.csv,cpi_all_yoy,quotidien,aucun (connu avant la clôture),False,"CPI Japon : all_yoy (dernière publication, e-Stat)"
+dataset_ml_news_v2.csv,cpi_core_yoy,quotidien,aucun (connu avant la clôture),False,"CPI Japon : core_yoy (dernière publication, e-Stat)"
+dataset_ml_news_v2.csv,cpi_corecore_yoy,quotidien,aucun (connu avant la clôture),False,"CPI Japon : corecore_yoy (dernière publication, e-Stat)"
+dataset_ml_news_v2.csv,usdjpy,quotidien,veille calendaire,False,Taux de change usdjpy (yens pour une unité de devise)
+dataset_ml_news_v2.csv,boj_meeting_day,quotidien,aucun (connu avant la clôture),False,Calendrier BoJ : meeting_day
+dataset_ml_news_v2.csv,boj_outlook_day,quotidien,aucun (connu avant la clôture),False,Calendrier BoJ : outlook_day
+dataset_ml_news_v2.csv,boj_days_to_next,quotidien,aucun (connu avant la clôture),False,Calendrier BoJ : days_to_next
+dataset_ml_news_v2.csv,boj_days_since_last,quotidien,aucun (connu avant la clôture),False,Calendrier BoJ : days_since_last
+dataset_ml_news_v2.csv,spread_us_jgb10y,quotidien,veille calendaire,False,"Écart de taux us_jgb10y, en points de %"
+dataset_ml_news_v2.csv,spread_bund_jgb10y,quotidien,veille calendaire,False,"Écart de taux bund_jgb10y, en points de %"
+dataset_ml_news_v2.csv,msci_japan_etf,quotidien,veille calendaire,False,"ETF iShares MSCI Japan (EWJ), USD"
+dataset_ml_news_v2.csv,msci_japan_small_etf,quotidien,veille calendaire,False,"ETF iShares MSCI Japan Small-Cap (SCJ), USD"
+dataset_ml_news_v2.csv,gdelt_japan_tone,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : japan_tone (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,gdelt_japan_tone_5d,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : japan_tone_5d (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,gdelt_japan_share,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : japan_share (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,gdelt_japan_attention,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : japan_attention (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,gdelt_boj_tone,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : boj_tone (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,gdelt_boj_tone_5d,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : boj_tone_5d (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,gdelt_boj_share,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : boj_share (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,gdelt_boj_attention,quotidien,aucun (connu avant la clôture),False,"Série GDELT agrégée du V1 : boj_attention (ton de -10 à +10, share = articles pour 10 000, attention = z-score 60 séances)"
+dataset_ml_news_v2.csv,news_japan_n,quotidien,aucun (connu avant la clôture),False,Nombre d'articles du thème japan rattachés à la séance
+dataset_ml_news_v2.csv,news_japan_sent,quotidien,aucun (connu avant la clôture),False,"Score FinBERT moyen des articles du thème japan rattachés à la séance, dans [-1, 1]"
+dataset_ml_news_v2.csv,news_japan_sent_5d,quotidien,aucun (connu avant la clôture),False,"Score FinBERT moyen du thème japan sur 5 séances, pondéré par le nombre d'articles"
+dataset_ml_news_v2.csv,news_japan_sent_20d,quotidien,aucun (connu avant la clôture),False,"Score FinBERT moyen du thème japan sur 20 séances, pondéré par le nombre d'articles"
+dataset_ml_news_v2.csv,news_japan_neg_share_5d,quotidien,aucun (connu avant la clôture),False,"Part des articles du thème japan avec P(négatif) > 0,5 sur 5 séances"
+dataset_ml_news_v2.csv,news_boj_n,quotidien,aucun (connu avant la clôture),False,Nombre d'articles du thème boj rattachés à la séance
+dataset_ml_news_v2.csv,news_boj_sent,quotidien,aucun (connu avant la clôture),False,"Score FinBERT moyen des articles du thème boj rattachés à la séance, dans [-1, 1]"
+dataset_ml_news_v2.csv,news_boj_sent_5d,quotidien,aucun (connu avant la clôture),False,"Score FinBERT moyen du thème boj sur 5 séances, pondéré par le nombre d'articles"
+dataset_ml_news_v2.csv,news_boj_sent_20d,quotidien,aucun (connu avant la clôture),False,"Score FinBERT moyen du thème boj sur 20 séances, pondéré par le nombre d'articles"
+dataset_ml_news_v2.csv,news_boj_neg_share_5d,quotidien,aucun (connu avant la clôture),False,"Part des articles du thème boj avec P(négatif) > 0,5 sur 5 séances"
+dataset_ml_news_v2.csv,news_gap,quotidien,aucun (connu avant la clôture),False,1 si aucun article GDELT pour la séance (panne) : scores repris des séances précédentes
+dataset_ml_news_v2.csv,smb_etf_ret_1d,quotidien,aucun (connu avant la clôture),False,Small - large Japon sur 1 jour(s) : rendement SCJ - rendement EWJ
+dataset_ml_news_v2.csv,smb_etf_ret_20d,quotidien,aucun (connu avant la clôture),False,Small - large Japon sur 20 jour(s) : rendement SCJ - rendement EWJ
+dataset_ml_news_v2.csv,carry_1m,quotidien,aucun (connu avant la clôture),False,"Portage mensuel de la couverture EUR/JPY : (1+i_EUR/12)/(1+i_JPY/12) - 1 (€STR, TONA)"
+dataset_ml_news_v2.csv,gdelt_gap,quotidien,aucun (connu avant la clôture),False,1 si la série GDELT agrégée manquait ce jour (valeur précédente reprise)
+dataset_ml_news_v2.csv,gdelt_japan_score,quotidien,aucun (connu avant la clôture),False,"Score quotidien japan dans [-1, 1] : tanh du ton GDELT de tous les articles du jour, centré-réduit sur 250 séances"
+dataset_ml_news_v2.csv,gdelt_boj_score,quotidien,aucun (connu avant la clôture),False,"Score quotidien boj dans [-1, 1] : tanh du ton GDELT de tous les articles du jour, centré-réduit sur 250 séances"
+dataset_ml_news_v2.csv,target_ret_next_1d,quotidien,aucun (connu avant la clôture),True,Rendement du Nikkei de la clôture t à la clôture t+1
+dataset_ml_news_v2.csv,target_up_next_1d,quotidien,aucun (connu avant la clôture),True,1 si le Nikkei monte le lendemain
+dataset_monthly_ml.csv,n225_close,mensuel,aucun (connu avant la clôture),False,Nikkei 225 : close (Yahoo ^N225)
+dataset_monthly_ml.csv,n225_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de n225 sur le mois
+dataset_monthly_ml.csv,n225_mom_3m,mensuel,aucun (connu avant la clôture),False,Momentum du Nikkei sur 3 mois : P_t / P_{t-k} - 1
+dataset_monthly_ml.csv,n225_mom_6m,mensuel,aucun (connu avant la clôture),False,Momentum du Nikkei sur 6 mois : P_t / P_{t-k} - 1
+dataset_monthly_ml.csv,n225_mom_12m,mensuel,aucun (connu avant la clôture),False,Momentum du Nikkei sur 12 mois : P_t / P_{t-k} - 1
+dataset_monthly_ml.csv,n225_rvol_1m,mensuel,aucun (connu avant la clôture),False,"Volatilité réalisée du Nikkei sur le mois (écart-type des rendements log quotidiens, annualisé)"
+dataset_monthly_ml.csv,n225_vol_ewma,mensuel,aucun (connu avant la clôture),False,"Volatilité EWMA du Nikkei (lambda = 0,94), annualisée"
+dataset_monthly_ml.csv,n225_dist_sma200,mensuel,aucun (connu avant la clôture),False,Écart du Nikkei à sa moyenne mobile 200 séances : close / SMA - 1
+dataset_monthly_ml.csv,n225_rsi14,mensuel,aucun (connu avant la clôture),False,RSI de Wilder 14 séances
+dataset_monthly_ml.csv,sp500_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de sp500 sur le mois
+dataset_monthly_ml.csv,taiex_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de taiex sur le mois
+dataset_monthly_ml.csv,shanghai_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de shanghai sur le mois
+dataset_monthly_ml.csv,nifty50_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de nifty50 sur le mois
+dataset_monthly_ml.csv,msci_em_eem_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de msci_em_eem sur le mois
+dataset_monthly_ml.csv,topix_etf_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de topix_etf sur le mois
+dataset_monthly_ml.csv,topix_core30_etf_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de topix_core30_etf sur le mois
+dataset_monthly_ml.csv,msci_japan_etf_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de msci_japan_etf sur le mois
+dataset_monthly_ml.csv,msci_japan_small_etf_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de msci_japan_small_etf sur le mois
+dataset_monthly_ml.csv,usdjpy_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de usdjpy sur le mois
+dataset_monthly_ml.csv,eurjpy_ret_1m,mensuel,aucun (connu avant la clôture),False,Rendement de eurjpy sur le mois
+dataset_monthly_ml.csv,smb_etf_1m,mensuel,aucun (connu avant la clôture),False,Small - large Japon du mois : rendement SCJ - rendement EWJ (temps réel)
+dataset_monthly_ml.csv,eurjpy_rvol_1m,mensuel,aucun (connu avant la clôture),False,"Volatilité réalisée de l'EUR/JPY sur le mois, annualisée"
+dataset_monthly_ml.csv,ff_mkt_rf_lag2,mensuel,aucun (connu avant la clôture),False,Facteur Fama-French Japon mkt_rf du mois t-2 (délai de publication)
+dataset_monthly_ml.csv,ff_smb_lag2,mensuel,aucun (connu avant la clôture),False,Facteur Fama-French Japon smb du mois t-2 (délai de publication)
+dataset_monthly_ml.csv,ff_hml_lag2,mensuel,aucun (connu avant la clôture),False,Facteur Fama-French Japon hml du mois t-2 (délai de publication)
+dataset_monthly_ml.csv,jgb2y,mensuel,1 séance,False,"Rendement JGB 2 ans, en % (MOF)"
+dataset_monthly_ml.csv,d_jgb2y_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de jgb2y, en points de base"
+dataset_monthly_ml.csv,jgb10y,mensuel,1 séance,False,"Rendement JGB 10 ans, en % (MOF)"
+dataset_monthly_ml.csv,d_jgb10y_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de jgb10y, en points de base"
+dataset_monthly_ml.csv,jgb30y,mensuel,1 séance,False,"Rendement JGB 30 ans, en % (MOF)"
+dataset_monthly_ml.csv,d_jgb30y_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de jgb30y, en points de base"
+dataset_monthly_ml.csv,us10y,mensuel,veille calendaire,False,"Rendement à 10 ans us10y, en %"
+dataset_monthly_ml.csv,d_us10y_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de us10y, en points de base"
+dataset_monthly_ml.csv,bund10y,mensuel,veille calendaire,False,"Rendement à 10 ans bund10y, en %"
+dataset_monthly_ml.csv,d_bund10y_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de bund10y, en points de base"
+dataset_monthly_ml.csv,spread_us_jgb10y,mensuel,veille calendaire,False,"Écart de taux us_jgb10y, en points de %"
+dataset_monthly_ml.csv,d_spread_us_jgb10y_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de spread_us_jgb10y, en points de base"
+dataset_monthly_ml.csv,spread_bund_jgb10y,mensuel,veille calendaire,False,"Écart de taux bund_jgb10y, en points de %"
+dataset_monthly_ml.csv,d_spread_bund_jgb10y_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de spread_bund_jgb10y, en points de base"
+dataset_monthly_ml.csv,tona,mensuel,1 séance,False,"TONA, taux au jour le jour du yen, en % (BoJ)"
+dataset_monthly_ml.csv,d_tona_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de tona, en points de base"
+dataset_monthly_ml.csv,eur_overnight,mensuel,2 séances,False,"Taux au jour le jour de l'euro, en % (EONIA puis €STR)"
+dataset_monthly_ml.csv,d_eur_overnight_bp,mensuel,aucun (connu avant la clôture),False,"Variation sur le mois de eur_overnight, en points de base"
+dataset_monthly_ml.csv,carry_1m,mensuel,aucun (connu avant la clôture),False,"Portage mensuel de la couverture EUR/JPY : (1+i_EUR/12)/(1+i_JPY/12) - 1 (€STR, TONA)"
+dataset_monthly_ml.csv,vix,mensuel,veille calendaire,False,"VIX (CBOE), niveau"
+dataset_monthly_ml.csv,cpi_all_yoy,mensuel,aucun (connu avant la clôture),False,"CPI Japon : all_yoy (dernière publication, e-Stat)"
+dataset_monthly_ml.csv,cpi_core_yoy,mensuel,aucun (connu avant la clôture),False,"CPI Japon : core_yoy (dernière publication, e-Stat)"
+dataset_monthly_ml.csv,cpi_corecore_yoy,mensuel,aucun (connu avant la clôture),False,"CPI Japon : corecore_yoy (dernière publication, e-Stat)"
+dataset_monthly_ml.csv,tankan_large_manuf,mensuel,aucun (connu avant la clôture),False,"Tankan, DI des grandes entreprises : large_manuf (dernière publication)"
+dataset_monthly_ml.csv,tankan_large_nonmanuf,mensuel,aucun (connu avant la clôture),False,"Tankan, DI des grandes entreprises : large_nonmanuf (dernière publication)"
+dataset_monthly_ml.csv,tankan_large_manuf_fcst,mensuel,aucun (connu avant la clôture),False,"Tankan, DI des grandes entreprises : large_manuf_fcst (dernière publication)"
+dataset_monthly_ml.csv,d_vix,mensuel,aucun (connu avant la clôture),False,Variation du VIX sur le mois
+dataset_monthly_ml.csv,boj_meeting_next_month,mensuel,aucun (connu avant la clôture),False,Nombre de réunions de politique monétaire de la BoJ prévues le mois suivant
+dataset_monthly_ml.csv,news_japan_sent_1m,mensuel,aucun (connu avant la clôture),False,"Score FinBERT moyen des articles du thème japan sur le mois, dans [-1, 1]"
+dataset_monthly_ml.csv,news_japan_n_1m,mensuel,aucun (connu avant la clôture),False,Nombre d'articles du thème japan sur le mois (plafond GDELT : 250 par semaine)
+dataset_monthly_ml.csv,news_japan_neg_share_1m,mensuel,aucun (connu avant la clôture),False,"Part des articles du thème japan avec P(négatif) > 0,5 sur le mois"
+dataset_monthly_ml.csv,d_news_japan_sent_1m,mensuel,aucun (connu avant la clôture),False,Variation du score FinBERT mensuel du thème japan
+dataset_monthly_ml.csv,news_boj_sent_1m,mensuel,aucun (connu avant la clôture),False,"Score FinBERT moyen des articles du thème boj sur le mois, dans [-1, 1]"
+dataset_monthly_ml.csv,news_boj_n_1m,mensuel,aucun (connu avant la clôture),False,Nombre d'articles du thème boj sur le mois (plafond GDELT : 250 par semaine)
+dataset_monthly_ml.csv,news_boj_neg_share_1m,mensuel,aucun (connu avant la clôture),False,"Part des articles du thème boj avec P(négatif) > 0,5 sur le mois"
+dataset_monthly_ml.csv,d_news_boj_sent_1m,mensuel,aucun (connu avant la clôture),False,Variation du score FinBERT mensuel du thème boj
+dataset_monthly_ml.csv,gdelt_japan_tone_1m,mensuel,aucun (connu avant la clôture),False,Moyenne mensuelle de la série GDELT agrégée japan_tone (V1)
+dataset_monthly_ml.csv,gdelt_boj_tone_1m,mensuel,aucun (connu avant la clôture),False,Moyenne mensuelle de la série GDELT agrégée boj_tone (V1)
+dataset_monthly_ml.csv,gdelt_japan_share_1m,mensuel,aucun (connu avant la clôture),False,Moyenne mensuelle de la série GDELT agrégée japan_share (V1)
+dataset_monthly_ml.csv,gdelt_boj_share_1m,mensuel,aucun (connu avant la clôture),False,Moyenne mensuelle de la série GDELT agrégée boj_share (V1)
+dataset_monthly_ml.csv,gdelt_japan_score_1m,mensuel,aucun (connu avant la clôture),False,"Score de sentiment mensuel japan dans [-1, 1] : moyenne du score quotidien GDELT sur le mois"
+dataset_monthly_ml.csv,gdelt_boj_score_1m,mensuel,aucun (connu avant la clôture),False,"Score de sentiment mensuel boj dans [-1, 1] : moyenne du score quotidien GDELT sur le mois"
+dataset_monthly_ml.csv,news_gap_days_1m,mensuel,aucun (connu avant la clôture),False,Nombre de séances sans article dans le mois
+dataset_monthly_ml.csv,target_rn_next,mensuel,aucun (connu avant la clôture),True,Rendement du Nikkei 225 en JPY sur le mois suivant (P_{t+1}/P_t - 1)
+dataset_monthly_ml.csv,target_up_next,mensuel,aucun (connu avant la clôture),True,"1 si le Nikkei monte le mois suivant, 0 sinon"
+dataset_monthly_ml.csv,target_fx_next,mensuel,aucun (connu avant la clôture),True,Rendement du yen exprimé en euros sur le mois suivant : S_t/S_{t+1} - 1
+dataset_monthly_ml.csv,target_reur_unhedged_next,mensuel,aucun (connu avant la clôture),True,Rendement en EUR d'une position longue Nikkei non couverte (h = 0)
+dataset_monthly_ml.csv,target_reur_hedged_next,mensuel,aucun (connu avant la clôture),True,Rendement en EUR d'une position longue Nikkei couverte à 100 % (h = 1)
+dataset_monthly_ml.csv,target_short_eur_next,mensuel,aucun (connu avant la clôture),True,"Rendement en EUR d'une position vendeuse (future Nikkei, marge en EUR)"
