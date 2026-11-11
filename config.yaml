@@ -1,0 +1,28 @@
+# Configuration du projet Nikkei : un seul endroit pour les dates, les variables et les graines.
+
+data:
+  monthly: data/dataset_monthly.csv          # construit par les notebooks V1 et V2
+  dictionary: data/dictionnaire_variables.csv
+  model_table: data/processed/dataset_model.csv
+
+# Split chronologique (S1 : train on past, validate on future)
+split:
+  start: "2010-02-01"        # premier mois où toutes les variables de prix, taux et change existent
+  train_end: "2021-12-31"
+  validation_end: "2023-12-31"
+  test_end: "2026-09-30"     # le mois suivant (2026-10) est la ligne à prédire
+
+# Les 11 colonnes envoyées à la pipeline (le régime k-means est ajouté dans la pipeline, étape 2)
+features:
+  news: [news_attention_6m, news_sent_w, news_dispo]
+  price: [n225_mom_12m, n225_mom_3m, n225_vol_ewma]
+  macro: [d_jgb10y_bp, tankan_large_manuf]
+  fx: [carry_1m, eurjpy_rvol_1m]
+  regime: [n225_vol_ewma, n225_ret_1m, vix]   # variables du k-means (étape 2)
+
+targets:
+  nikkei_up: target_up_next          # 1 si le Nikkei (en yens) monte le mois suivant
+  nikkei_down: y_baisse              # classe positive des métriques : la baisse
+  hedge: y_non_couvert               # 1 si ne pas couvrir était mieux (C_t - E_{t+1} <= 0)
+
+seed: 42
