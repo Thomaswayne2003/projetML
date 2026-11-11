@@ -10,10 +10,10 @@ nbformat==5.9.2
 nbconvert==7.10.0
 ipykernel
 streamlit==1.30.0
+lightgbm==4.7.0
+optuna==5.0.0
+shap==0.49.1
 
-# Étapes suivantes (versions à figer au moment de l'installation)
-lightgbm
-optuna
-shap
+# Étape 7, plateforme (versions à figer au moment de l'installation)
 fastapi
 uvicorn
