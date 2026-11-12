@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-11 18:08",
+  "commit_du_code": "2aa4b40",
+  "modele_nikkei": "logit",
+  "fichiers_modeles": {
+    "logit": "runs/models/nikkei_logit.joblib",
+    "rf": "runs/models/nikkei_rf.joblib",
+    "lgbm": "runs/models/nikkei_lgbm.joblib"
+  },
+  "sortie_du_modele": "P(baisse) ; p_hausse = 1 - P(baisse) calibrée",
+  "platt": {
+    "logit": {
+      "a": 0.9154481615258249,
+      "c": 0.01041380261161088
+    },
+    "rf": {
+      "a": 1.5359887472351588,
+      "c": 0.1324221642348835
+    },
+    "lgbm": {
+      "a": 0.9948037455190625,
+      "c": -0.10098822029913068
+    }
+  },
+  "couts_entrainement_exces_du_cash": {
+    "B_u": 0.038925706206896546,
+    "B_d": -0.04178659265476191,
+    "S_u": -0.038852560137931036,
+    "S_d": 0.04182417268452381
+  },
+  "platt_appris_sur": "prédictions hors fold 2018-2021 (TimeSeriesSplit du notebook 02)",
+  "marge_m": 0.005,
+  "marge_fixee_a_l_avance": true,
+  "seuils": {
+    "theta_a": 0.5796711692595266,
+    "theta_v": 0.4564410505512501
+  },
+  "couverture": "toujours couvert (h = 1)",
+  "regle_choix_modele": "S1 : la logistique sauf si un modèle plus complexe la bat en PR-AUC et en log-loss calibrée sur la validation",
+  "verdict_validation": {
+    "log_loss_modele": 0.6993323665560477,
+    "log_loss_constante": 0.6805016899050879,
+    "plancher_battu": false
+  },
+  "engagement_avant_test": "évaluer une seule fois sur le test ; si le modèle y perd aussi contre la constante, recommander « toujours acheter, couvert »"
+}
