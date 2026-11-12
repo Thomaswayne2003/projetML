@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-12 09:20",
+  "commit_du_code": "75712cf",
+  "decision_figee_au_commit": "2aa4b40",
+  "nombre_d_evaluations_sur_le_test": 1,
+  "mois_test": 33,
+  "baisses_test": 12,
+  "metriques": {
+    "logistique": {
+      "log-loss": 0.7077,
+      "Brier": 0.2569,
+      "ECE": 0.183,
+      "PR-AUC": 0.4202,
+      "proba moyenne": 0.5231,
+      "fréquence observée": 0.3636
+    },
+    "Random Forest": {
+      "log-loss": 0.7875,
+      "Brier": 0.2856,
+      "ECE": 0.2434,
+      "PR-AUC": 0.3878,
+      "proba moyenne": 0.5245,
+      "fréquence observée": 0.3636
+    },
+    "LightGBM": {
+      "log-loss": 0.751,
+      "Brier": 0.27,
+      "ECE": 0.2192,
+      "PR-AUC": 0.4162,
+      "proba moyenne": 0.4862,
+      "fréquence observée": 0.3636
+    },
+    "constante (fréquence de l'entraînement)": {
+      "log-loss": 0.6571,
+      "Brier": 0.2322,
+      "ECE": 0.1437,
+      "PR-AUC": 0.3636,
+      "proba moyenne": 0.3916,
+      "fréquence observée": 0.3636
+    }
+  },
+  "actions": {
+    "neutre": 19,
+    "vendre": 10,
+    "acheter": 4
+  },
+  "performance_euros": {
+    "règle du modèle": {
+      "cumul": 0.0354,
+      "annualisé": 0.0127,
+      "perte maximale": -0.2305
+    },
+    "toujours acheter, couvert": {
+      "cumul": 0.8235,
+      "annualisé": 0.2441,
+      "perte maximale": -0.1319
+    },
+    "toujours acheter, non couvert": {
+      "cumul": 0.5792,
+      "annualisé": 0.1808,
+      "perte maximale": -0.1284
+    },
+    "toujours neutre (cash)": {
+      "cumul": 0.0757,
+      "annualisé": 0.0269,
+      "perte maximale": 0.0
+    },
+    "même exposition moyenne (-18%), sans timing": {
+      "cumul": -0.0372,
+      "annualisé": -0.0137,
+      "perte maximale": -0.1012
+    }
+  },
+  "plancher_battu": false,
+  "recommandation": "toujours acheter, couvert (engagement du notebook 03)"
+}
