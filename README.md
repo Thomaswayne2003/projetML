@@ -26,18 +26,30 @@ src/               code Python (étape 6)
 
 ## Lancer
 
+Les notebooks se lancent dans l'ordre, depuis le dossier `notebooks/` :
+
 ```bash
-jupyter nbconvert --to notebook --execute --inplace notebooks/01_cadrage_eda_variables.ipynb
+cd notebooks
+for nb in 01_cadrage_eda_variables 02_pipeline_modeles_optuna 03_calibration_seuils 03b_test_final 04_explicabilite_diagnostics; do
+  jupyter nbconvert --to notebook --execute --inplace "$nb.ipynb"
+done
 ```
+
+Le notebook 03b évalue le test : le projet ne l'a exécuté qu'une fois, après le commit qui fige la décision.
+
+## Résultat principal
+
+Sur le test 2024-2026, le modèle ne bat pas le modèle constant (log-loss 0,708 contre 0,657). Conformément à l'engagement pris avant le test, la recommandation est **« toujours acheter le Nikkei, couvert contre le yen »** (+82,3 % sur la période). Les notebooks 03b et 04 expliquent pourquoi.
 
 ## Avancement
 
 | Étape | Contenu | État |
 | --- | --- | --- |
 | 1 | Cadrage, audit des fuites, EDA, variables, split | fait |
-| 2 | Pipeline, 3 modèles, Optuna, journal des essais | à faire |
-| 3 | Métriques, calibration, seuils, couverture | à faire |
-| 4 | SHAP, permutation importance, slices | à faire |
+| 2 | Pipeline, 3 modèles, Optuna, journal des essais | fait |
+| 3 | Calibration, choix du modèle, règle de décision figée avant le test | fait |
+| 3b | Évaluation unique sur le test 2024-2026 | fait |
+| 4 | SHAP, permutation importance, slices | fait |
 | 5 | Annexe de Maths : régression logistique à la main | à faire |
 | 6 | Code en `.py` | à faire |
 | 7 | Plateforme : API et tableau de bord | à faire |
