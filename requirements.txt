@@ -14,6 +14,8 @@ lightgbm==4.7.0
 optuna==5.0.0
 shap==0.49.1
 
-# Étape 7, plateforme (versions à figer au moment de l'installation)
-fastapi
-uvicorn
+# Plateforme
+fastapi==0.162.5
+uvicorn==0.54.0
+httpx==0.28.1
+pytest==7.4.0
