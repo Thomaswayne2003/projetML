@@ -30,7 +30,7 @@ Les notebooks se lancent dans l'ordre, depuis le dossier `notebooks/` :
 
 ```bash
 cd notebooks
-for nb in 01_cadrage_eda_variables 02_pipeline_modeles_optuna 03_calibration_seuils 03b_test_final 04_explicabilite_diagnostics; do
+for nb in 01_cadrage_eda_variables 02_pipeline_modeles_optuna 03_calibration_seuils 03b_test_final 04_explicabilite_diagnostics 05_annexe_maths_logistique; do
   jupyter nbconvert --to notebook --execute --inplace "$nb.ipynb"
 done
 ```
@@ -50,7 +50,7 @@ Sur le test 2024-2026, le modèle ne bat pas le modèle constant (log-loss 0,708
 | 3 | Calibration, choix du modèle, règle de décision figée avant le test | fait |
 | 3b | Évaluation unique sur le test 2024-2026 | fait |
 | 4 | SHAP, permutation importance, slices | fait |
-| 5 | Annexe de Maths : régression logistique à la main | à faire |
+| 5 | Annexe de Maths : régression logistique à la main | fait |
 | 6 | Code en `.py` | à faire |
 | 7 | Plateforme : API et tableau de bord | à faire |
 
