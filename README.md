@@ -39,6 +39,7 @@ tests/               tests (fuites, pipeline, gradient, règle de décision, API
 notebooks/           analyses et figures, dans l'ordre des étapes (matériel complémentaire)
 runs/                journal des essais, prédictions, modèles, décision figée, évaluation du test
 figures/             figures exportées
+report/              rapport.tex/.pdf (Applied ML), annexe_maths.tex/.pdf (Maths), plan_oral.md
 ```
 
 ## Installation
@@ -116,6 +117,8 @@ proche (0,032 au lieu de 0,030).
 | 5 | Annexe de Maths : régression logistique à la main | fait |
 | 6 | Code en `.py`, tests | fait |
 | 7 | Plateforme : API et tableau de bord | fait |
+| 8 | Revue finale indépendante et corrections | fait |
+| 9 | Rapport, annexe de Maths, plan des oraux (`report/`) | fait, contributions à compléter |
 
 ## Usage d'assistants IA
 
