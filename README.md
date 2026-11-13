@@ -7,39 +7,70 @@ en euros : acheter (couvert ou non couvert contre le yen), rester neutre ou vend
 Projet commun aux cours *Applied ML: Foundations, Engineering & Evaluation* et *Mathematics & Statistics for
 Machine Learning* (Albert School, MSc 1, automne 2026).
 
+## Résultat principal
+
+Sur le test 2024-2026, le modèle ne bat pas le modèle constant (log-loss 0,708 contre 0,657). Conformément à
+l'engagement pris avant le test, la recommandation est **« toujours acheter le Nikkei, couvert contre le yen »**
+(+82,3 % sur la période). Les notebooks 03b et 04 expliquent pourquoi.
+
 ## Données
 
 - `data/dataset_monthly.csv` : une ligne par mois, de 2010 à 2026, construite par les notebooks de collecte
-  (V1 et V2). Les news n'existent qu'à partir de 2017.
+  (V1 et V2, hors de ce dépôt). Les news n'existent qu'à partir de 2017.
 - `data/dictionnaire_variables.csv` : définition, fréquence et décalage de publication de chaque colonne.
 
 ## Structure
 
 ```text
-config.yaml        dates du split, variables, graine
-data/              données mensuelles et table de modélisation (data/processed/)
-notebooks/         notebooks d'analyse, dans l'ordre des étapes
-figures/           figures exportées
-runs/              journal des essais et modèles sauvegardés
-src/               code Python (étape 6)
+config.yaml          dates du split, variables, graine
+src/                 code principal
+  config.py          chemins et configuration
+  data.py            table de modélisation : cibles, variables de news, split, audit des fuites
+  pipeline.py        pipeline scikit-learn et espaces de recherche des trois modèles
+  tune.py            Optuna + TimeSeriesSplit, journal des essais, modèles retenus
+  decision.py        calibration de Platt, seuils par espérance de gain, décision figée
+  evaluate.py        évaluation sur le test avec la décision figée
+  predict.py         signal du mois (utilisé par la plateforme)
+  logreg_scratch.py  régression logistique codée à la main (annexe de Maths)
+tests/               tests (fuites, pipeline, gradient, règle de décision)
+notebooks/           analyses et figures, dans l'ordre des étapes (matériel complémentaire)
+runs/                journal des essais, prédictions, modèles, décision figée, évaluation du test
+figures/             figures exportées
+```
+
+## Installation
+
+```bash
+pip install -r requirements.txt
 ```
 
 ## Lancer
 
-Les notebooks se lancent dans l'ordre, depuis le dossier `notebooks/` :
+Depuis la racine du dépôt :
 
 ```bash
-cd notebooks
-for nb in 01_cadrage_eda_variables 02_pipeline_modeles_optuna 03_calibration_seuils 03b_test_final 04_explicabilite_diagnostics 05_annexe_maths_logistique; do
-  jupyter nbconvert --to notebook --execute --inplace "$nb.ipynb"
-done
+python -m src.data                  # reconstruit data/processed/dataset_model.csv et passe l'audit des fuites
+python -m src.tune --sortie /tmp/runs  # refait le réglage Optuna dans un dossier à part
+python -m src.decision --verifier   # recalcule la décision et la compare à la décision figée
+python -m src.evaluate --verifier   # recalcule l'évaluation du test et la compare au fichier
+python -m src.predict               # signal du dernier mois disponible
+python -m pytest -q                 # tests
 ```
 
-Le notebook 03b évalue le test : le projet ne l'a exécuté qu'une fois, après le commit qui fige la décision.
+`src.decision` et `src.evaluate` ne réécrivent jamais les fichiers figés : la décision a été commitée avant le test
+(commit `75712cf`), et le test n'a été évalué qu'une fois (commit `6efd12c`).
 
-## Résultat principal
+## Reproductibilité
 
-Sur le test 2024-2026, le modèle ne bat pas le modèle constant (log-loss 0,708 contre 0,657). Conformément à l'engagement pris avant le test, la recommandation est **« toujours acheter le Nikkei, couvert contre le yen »** (+82,3 % sur la période). Les notebooks 03b et 04 expliquent pourquoi.
+Toutes les graines sont fixées : deux exécutions de `python -m src.tune` donnent les mêmes 200 essais et les mêmes
+prédictions. Deux sources de hasard ont été corrigées en passant des notebooks au code :
+- le solveur `saga` de la régression logistique mélange les données ; il a maintenant une graine ;
+- le Random Forest calculé en parallèle (`n_jobs=-1`) additionnait les arbres dans un ordre variable ; il tourne
+  maintenant sur un seul cœur.
+
+Les modèles de `runs/models/` sont ceux du notebook 02, figés avant le test, et ne sont pas réentraînés. Pour la
+logistique, le réglage refait par le script retrouve la même log-loss de validation croisée (0,6473) avec un C très
+proche (0,032 au lieu de 0,030).
 
 ## Avancement
 
@@ -51,7 +82,7 @@ Sur le test 2024-2026, le modèle ne bat pas le modèle constant (log-loss 0,708
 | 3b | Évaluation unique sur le test 2024-2026 | fait |
 | 4 | SHAP, permutation importance, slices | fait |
 | 5 | Annexe de Maths : régression logistique à la main | fait |
-| 6 | Code en `.py` | à faire |
+| 6 | Code en `.py`, tests | fait |
 | 7 | Plateforme : API et tableau de bord | à faire |
 
 ## Usage d'assistants IA
