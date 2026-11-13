@@ -119,7 +119,3 @@ proche (0,032 au lieu de 0,030).
 | 7 | Plateforme : API et tableau de bord | fait |
 | 8 | Revue finale indépendante et corrections | fait |
 | 9 | Rapport, annexe de Maths, plan des oraux (`report/`) | fait, contributions à compléter |
-
-## Usage d'assistants IA
-
-Ce projet a été développé avec l'aide de Claude (Anthropic). La note détaillée sera dans le rapport.
