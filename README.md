@@ -32,7 +32,10 @@ src/                 code principal
   evaluate.py        évaluation sur le test avec la décision figée
   predict.py         signal du mois (utilisé par la plateforme)
   logreg_scratch.py  régression logistique codée à la main (annexe de Maths)
-tests/               tests (fuites, pipeline, gradient, règle de décision)
+app/                 plateforme
+  api.py             API FastAPI : /signal, /explication, /historique, /evaluation, /sante
+  dashboard.py       tableau de bord Streamlit (démo de l'oral)
+tests/               tests (fuites, pipeline, gradient, règle de décision, API)
 notebooks/           analyses et figures, dans l'ordre des étapes (matériel complémentaire)
 runs/                journal des essais, prédictions, modèles, décision figée, évaluation du test
 figures/             figures exportées
@@ -56,6 +59,16 @@ python -m src.evaluate --verifier   # recalcule l'évaluation du test et la comp
 python -m src.predict               # signal du dernier mois disponible
 python -m pytest -q                 # tests
 ```
+
+## Plateforme
+
+```bash
+uvicorn app.api:app --reload            # API, documentation sur http://127.0.0.1:8000/docs
+streamlit run app/dashboard.py          # tableau de bord sur http://localhost:8501
+```
+
+Exemple : `curl "http://127.0.0.1:8000/signal?mois=2026-10"` renvoie la probabilité de hausse, le score, l'action
+de la règle et la recommandation finale.
 
 `src.decision` et `src.evaluate` ne réécrivent jamais les fichiers figés : la décision a été commitée avant le test
 (commit `75712cf`), et le test n'a été évalué qu'une fois (commit `6efd12c`).
@@ -83,7 +96,7 @@ proche (0,032 au lieu de 0,030).
 | 4 | SHAP, permutation importance, slices | fait |
 | 5 | Annexe de Maths : régression logistique à la main | fait |
 | 6 | Code en `.py`, tests | fait |
-| 7 | Plateforme : API et tableau de bord | à faire |
+| 7 | Plateforme : API et tableau de bord | fait |
 
 ## Usage d'assistants IA
 
