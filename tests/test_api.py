@@ -24,8 +24,18 @@ def test_signal_mois_inconnu_et_format():
 
 
 def test_explication_additive():
+    # SHAP linéaire : valeur de base + somme des contributions = score du modèle (log-odds de la baisse)
+    from src.data import charger_table
+    from src.config import COLONNES
+    from src.predict import _modele
     contrib = client.get("/explication", params={"mois": "2024-07"}).json()
     assert len(contrib) == 12
+    _, pipe = _modele()
+    table = charger_table()
+    z_moyen = pipe[:-1].transform(table.loc[table["bloc"] == "entraînement", COLONNES]).mean(axis=0)
+    base = pipe.named_steps["model"].decision_function(z_moyen.reshape(1, -1))[0]
+    score = pipe.decision_function(table.loc[table.index.strftime("%Y-%m") == "2024-07", COLONNES])[0]
+    assert abs(base + sum(c["contribution"] for c in contrib) - score) < 1e-3
 
 
 def test_historique_et_evaluation():

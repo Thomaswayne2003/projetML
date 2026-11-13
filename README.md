@@ -85,6 +85,25 @@ Les modèles de `runs/models/` sont ceux du notebook 02, figés avant le test, e
 logistique, le réglage refait par le script retrouve la même log-loss de validation croisée (0,6473) avec un C très
 proche (0,032 au lieu de 0,030).
 
+## Limites connues (revue finale)
+
+- **Le test n'était pas entièrement invisible avant le gel.** Le notebook 01 affichait déjà des statistiques du bloc
+  test : part de baisses, rendement moyen, portage, courbe « achat couvert ou non ». La couverture permanente et la
+  règle de repli « toujours acheter, couvert » sont les références naturelles du problème, mais elles n'ont pas été
+  choisies à l'aveugle.
+- **Les variables ont été choisies** à partir d'une analyse exploratoire de 2017-2026, qui recouvre la validation et le test.
+- **Platt est appris sur les prédictions hors fold** des hyperparamètres qu'Optuna a choisis sur ces mêmes folds :
+  ce fold de calibration n'est pas totalement indépendant. Un premier essai de Platt sur la validation (pentes
+  négatives) a été écarté après coup.
+- **Le notebook 04 réutilise le test** pour des diagnostics (borner le portage) : c'est une analyse exploratoire, pas un score.
+- **Deux commits figurent dans les fichiers figés.** Dans `runs/evaluation_test.json`, le champ
+  `decision_figee_au_commit` vaut `2aa4b40` : c'est le commit du code qui a calculé la décision. Le fichier de
+  décision lui-même a été figé par le commit `75712cf`.
+- **Le dictionnaire des variables** indique « aucun » décalage pour les colonnes `target_*`, alors que ces cibles ne
+  sont connues qu'en t+1. Elles ne sont jamais utilisées comme variables (contrôlé par l'audit de `src/data.py`).
+- **Petit échantillon** : 143 mois d'entraînement et 12 baisses dans le test. Les écarts entre modèles et entre
+  slices restent fragiles.
+
 ## Avancement
 
 | Étape | Contenu | État |

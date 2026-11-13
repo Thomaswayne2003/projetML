@@ -1,9 +1,10 @@
 """Tests rapides : fuites, pipeline, descente de gradient, décision. Lancer : python -m pytest -q"""
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.linear_model import LogisticRegression
 
-from src.config import COLONNES
+from src.config import COLONNES, FEATURES
 from src.data import audit_fuites, ajouter_blocs, ajouter_cibles, charger_mensuel, construire_table, variables_news
 from src.decision import actions, seuils
 from src.logreg_scratch import ajuster, cout, gradient
@@ -22,24 +23,36 @@ def test_variables_news_sans_regard_vers_le_futur():
     assert np.allclose(complet.loc[:"2019-12-31"].to_numpy(), coupe.to_numpy(), equal_nan=True)
 
 
-def test_audit_detecte_une_fuite():
+def _table_avec_fuite(colonne, valeurs):
     df = ajouter_blocs(ajouter_cibles(charger_mensuel()))
     df[["news_attention_6m", "news_sent_w", "news_dispo"]] = variables_news(df)
-    df["n225_ret_1m"] = df["target_rn_next"]          # fuite volontaire : le rendement du mois suivant
-    try:
+    df[colonne] = valeurs(df)
+    return df
+
+
+@pytest.mark.parametrize("colonne", ["n225_ret_1m", "vix", "carry_1m", "news_attention_6m"])
+def test_audit_detecte_une_fuite_dans_n_importe_quelle_variable(colonne):
+    # fuite volontaire : la variable recopie (à l'échelle près) le rendement du mois suivant
+    df = _table_avec_fuite(colonne, lambda d: 100 * d["target_rn_next"] + 3)
+    with pytest.raises(AssertionError):
         audit_fuites(df)
-    except AssertionError:
-        return
-    raise AssertionError("l'audit n'a pas vu la fuite")
+
+
+def test_audit_accepte_les_vraies_donnees():
+    df = _table_avec_fuite("vix", lambda d: d["vix"])
+    audit_fuites(df)
 
 
 def test_pipeline_ajuste_sur_l_entrainement_seulement():
     table = construire_table()
     train = table[table["bloc"] == "entraînement"]
+    tout = table[table["bloc"] != "à prédire"]
     pipe = construire_pipeline(LogisticRegression(max_iter=1000)).fit(train[COLONNES], train["y_baisse"])
-    moyennes = pipe.named_steps["scale"].mean_
-    sortie = pipe[:-1].transform(train[COLONNES])
-    assert np.allclose(sortie.mean(axis=0), 0, atol=1e-8) and moyennes.shape == (12,)
+    imputation = pipe.named_steps["prep"].named_transformers_["vars"].statistics_
+    assert np.allclose(imputation, train[FEATURES].median().to_numpy())             # médianes de l'entraînement
+    assert not np.allclose(imputation, tout[FEATURES].median().to_numpy())          # pas celles de toutes les données
+    sortie_brute = pipe.named_steps["prep"].transform(train[COLONNES])
+    assert np.allclose(pipe.named_steps["scale"].mean_, sortie_brute.mean(axis=0))   # standardisation de l'entraînement
 
 
 def test_gradient_et_descente():
