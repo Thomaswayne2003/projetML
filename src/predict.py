@@ -74,7 +74,11 @@ def contributions(mois: str | None = None, table: pd.DataFrame | None = None) ->
     z_moyen = prep.transform(table.loc[table["bloc"] == "entraînement", COLONNES]).mean(axis=0)
     ligne = _ligne(table, mois)
     z = prep.transform(ligne[COLONNES])[0]
-    noms = FEATURES + ["distance au régime 0", "distance au régime 1"]
+    regime = pipe.named_steps["prep"].named_transformers_["regime"]
+    vix_des_centres = regime.named_steps["scale"].inverse_transform(regime.named_steps["kmeans"].cluster_centers_)[:, -1]
+    nom_centre = ["distance au régime agité" if v == vix_des_centres.max() else "distance au régime calme"
+                  for v in vix_des_centres]   # le régime agité est celui dont le centre a le VIX le plus élevé
+    noms = FEATURES + nom_centre
     valeurs = pipe.named_steps["prep"].transform(ligne[COLONNES])[0]
     return (pd.DataFrame({"variable": noms, "valeur": valeurs, "contribution": w * (z - z_moyen)})
             .sort_values("contribution", key=np.abs, ascending=False).reset_index(drop=True))

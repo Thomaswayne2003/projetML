@@ -66,6 +66,18 @@ def audit_fuites(df: pd.DataFrame) -> None:
     coupe = variables_news(df.loc[:"2020-06-30"])
     assert np.allclose(variables_news(df).loc[:"2020-06-30"].to_numpy(), coupe.to_numpy(), equal_nan=True), \
         "les variables de news regardent le futur"
+    ecart_prix = (df["target_rn_next"] - (df["n225_close"].shift(-1) / df["n225_close"] - 1)).abs().max()
+    assert ecart_prix < 1e-5, "la cible ne correspond pas aux prix de t et t+1"
+    # Contrôle sur les valeurs, pas seulement sur les noms : aucune variable ne doit recopier une cible
+    connus = df["target_rn_next"].notna()
+    for col in FEATURES + REGIME:
+        for cible in ["target_rn_next", "target_fx_next", "y_baisse"]:
+            paire = df.loc[connus, [col, cible]].dropna()
+            if paire[col].nunique() > 2:
+                rho = abs(paire[col].corr(paire[cible], method="spearman"))
+                assert rho < 0.9, f"{col} est presque identique à {cible} (corrélation de rang {rho:.2f}) : fuite probable"
+    if "bloc" in df:
+        assert (df["bloc"] == "à prédire").sum() == 1, "il doit y avoir exactement une ligne à prédire"
 
 
 def construire_table() -> pd.DataFrame:
