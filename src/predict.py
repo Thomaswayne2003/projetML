@@ -63,6 +63,8 @@ def historique(table: pd.DataFrame | None = None, blocs=("validation", "test")) 
                          "hausse_realisee": (d["y_baisse"] == 0).astype(int),
                          "rendement_regle": rendements(act, d),
                          "rendement_achat_couvert": d["target_reur_hedged_next"],
+                         "rendement_achat_non_couvert": d["target_reur_unhedged_next"],
+                         "rendement_vente": d["target_short_eur_next"],
                          "rendement_cash": d["eur_overnight"] / 100 / 12})
 
 

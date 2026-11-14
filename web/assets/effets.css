@@ -1,0 +1,11 @@
+/* Effets communs à toutes les pages : curseur d'encre et rideau circulaire entre les pages. */
+.curseur-point, .curseur-anneau { position: fixed; left: 0; top: 0; z-index: 100; pointer-events: none; border-radius: 50%; mix-blend-mode: difference; will-change: transform; }
+.curseur-point { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff; }
+.curseur-anneau { width: 44px; height: 44px; margin: -22px 0 0 -22px; border: 1px solid #fff; transition: width .25s, height .25s, margin .25s, background .25s; }
+.curseur-anneau.survol { width: 84px; height: 84px; margin: -42px 0 0 -42px; background: rgba(255, 255, 255, .16); }
+.curseur-anneau.appui { width: 28px; height: 28px; margin: -14px 0 0 -14px; }
+html.curseur-perso, html.curseur-perso a, html.curseur-perso button, html.curseur-perso .volet { cursor: none; }
+.rideau { position: fixed; inset: 0; z-index: 90; background: #de3220; pointer-events: none; clip-path: circle(0% at 50% 50%); transition: clip-path .75s cubic-bezier(.7, 0, .2, 1); }
+.rideau.ferme { clip-path: circle(150% at var(--x, 50%) var(--y, 50%)); }
+.rideau.sans-transition { transition: none; }
+@media (hover: none), (prefers-reduced-motion: reduce) { .curseur-point, .curseur-anneau { display: none; } html.curseur-perso, html.curseur-perso a, html.curseur-perso button { cursor: auto; } .rideau { transition: none; } }

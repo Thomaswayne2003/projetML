@@ -32,9 +32,20 @@ src/                 code principal
   evaluate.py        évaluation sur le test avec la décision figée
   predict.py         signal du mois (utilisé par la plateforme)
   logreg_scratch.py  régression logistique codée à la main (annexe de Maths)
-app/                 plateforme
-  api.py             API FastAPI : /signal, /explication, /historique, /evaluation, /sante
-  dashboard.py       tableau de bord Streamlit (démo de l'oral)
+app/
+  api.py             API FastAPI : /signal, /prediction, /explication, /historique, /decision, /serie, /essais, /surface, ...
+  build_site.py      convertit les notebooks en pages HTML pour le site
+  dashboard.py       tableau de bord Streamlit (variante)
+web/                 site de présentation, en PHP
+  experience.php     accueil immersif (/) : le projet en huit chapitres, nuage de 16 000 particules 3D
+  recit.php          le récit (/recit) : tout le projet en 14 chapitres, chacun ouvert par une figure du nuage
+  index.php          dossier complet (/dossier) : même contenu, en version classique
+  notebooks.php      lecteur des six notebooks
+  api.php            relais entre le navigateur et l'API Python
+  router.php         routeur du serveur de développement de PHP
+  inc/               configuration, en-tête, pied de page
+  assets/            style, graphiques SVG, scènes 3D (Three.js en copie locale)
+  nb/                notebooks convertis en HTML par app/build_site.py
 tests/               tests (fuites, pipeline, gradient, règle de décision, API)
 notebooks/           analyses et figures, dans l'ordre des étapes (matériel complémentaire)
 runs/                journal des essais, prédictions, modèles, décision figée, évaluation du test
@@ -63,13 +74,44 @@ python -m pytest -q                 # tests
 
 ## Plateforme
 
+Le site est en PHP ; le modèle reste en Python. Deux serveurs à lancer depuis la racine du dépôt, dans deux terminaux :
+
 ```bash
-uvicorn app.api:app --reload            # API, documentation sur http://127.0.0.1:8000/docs
-streamlit run app/dashboard.py          # tableau de bord sur http://localhost:8501
+uvicorn app.api:app --port 8000
 ```
 
-Exemple : `curl "http://127.0.0.1:8000/signal?mois=2026-10"` renvoie la probabilité de hausse, le score, l'action
-de la règle et la recommandation finale.
+```bash
+PHP_CLI_SERVER_WORKERS=4 php -S localhost:8080 -t web web/router.php
+```
+
+Le site est alors sur http://localhost:8080, et la documentation de l'API sur http://127.0.0.1:8000/docs.
+PHP 8.1 ou plus récent est nécessaire (`brew install php` sur macOS).
+
+Le site a trois niveaux de lecture :
+- **l'expérience** (`/`) : huit chapitres plein écran. Un nuage de 16 000 gouttes d'encre se recompose en 3D au fil
+  du défilement : ensō, relief du Nikkei, blocs du split, surface de coût, jauge du signal, verdict, hélice du
+  changement de régime. Les chiffres viennent de l'API et de `runs/` ;
+- **le récit** (`/recit`) : tout le projet en 14 chapitres et 6 actes. Chaque chapitre s'ouvre sur une planche plein
+  écran : son titre, ce qu'il faut en retenir, et une figure dessinée par le nuage de gouttes d'encre à partir des
+  données de l'API (`web/assets/tableaux.js`) : la courbe du Nikkei, le calendrier des 201 mois, le découpage, les
+  classes, les essais Optuna, les seuils, la matrice du test, la performance en euros, les contributions, les écarts
+  mois par mois, la surface de coût. Chaque figure a ses repères et un cartel qui dit ce qu'on regarde. Une seule
+  grammaire de couleurs : indigo pour la hausse et l'achat, vermillon pour la baisse et la vente, encre pour le
+  modèle. La jauge du chapitre « Prédicteur » suit les curseurs en direct ;
+- **le dossier** (`/dossier`) : le même contenu en version classique, avec la conclusion de chaque étape :
+  - la construction du dataset : sources, délais de publication, nettoyage, cibles ;
+  - l'exploration, les trois modèles, la calibration et la règle de décision ;
+  - le test, par sous-groupe, et la projection de novembre 2026 ;
+  - le **prédicteur** : on règle l'information (volume de news, sentiment, momentum, taux) et l'API renvoie la
+    probabilité, l'action et la contribution de chaque variable ;
+  - le **simulateur** : marge, couverture, vente autorisée ou non. C'est une exploration après coup : la marge du
+    projet est restée fixée avant le test ;
+  - le **changement de régime** : des cartes qui se retournent pour comparer avant et après 2022 ;
+  - la **surface de coût en 3D** et la descente de gradient pour quatre pas ;
+- **le lecteur de notebooks** (`/notebooks`), le rapport et l'annexe en PDF.
+
+Après avoir modifié un notebook, régénérer ses pages avec `python -m app.build_site`. Une variante en tableau de
+bord Streamlit existe aussi : `streamlit run app/dashboard.py`.
 
 `src.decision` et `src.evaluate` ne réécrivent jamais les fichiers figés : la décision a été commitée avant le test
 (commit `75712cf`), et le test n'a été évalué qu'une fois (commit `6efd12c`).
