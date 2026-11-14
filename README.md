@@ -38,7 +38,7 @@ app/
   dashboard.py       tableau de bord Streamlit (variante)
 web/                 site de présentation, en PHP
   experience.php     accueil immersif (/) : le projet en huit chapitres, nuage de 16 000 particules 3D
-  recit.php          le récit (/recit) : tout le projet en 14 chapitres, chacun ouvert par une figure du nuage
+  recit.php          le récit (/recit) : tout le projet en 14 chapitres, chacun ouvert par un graphique animé
   index.php          dossier complet (/dossier) : même contenu, en version classique
   notebooks.php      lecteur des six notebooks
   api.php            relais entre le navigateur et l'API Python
@@ -91,14 +91,16 @@ Le site a trois niveaux de lecture :
 - **l'expérience** (`/`) : huit chapitres plein écran. Un nuage de 16 000 gouttes d'encre se recompose en 3D au fil
   du défilement : ensō, relief du Nikkei, blocs du split, surface de coût, jauge du signal, verdict, hélice du
   changement de régime. Les chiffres viennent de l'API et de `runs/` ;
-- **le récit** (`/recit`) : tout le projet en 14 chapitres et 6 actes. Chaque chapitre s'ouvre sur une planche plein
-  écran : son titre, ce qu'il faut en retenir, et une figure dessinée par le nuage de gouttes d'encre à partir des
-  données de l'API (`web/assets/tableaux.js`) : la courbe du Nikkei, le calendrier des 201 mois, le découpage, les
-  classes, les essais Optuna, les seuils, la matrice du test, la performance en euros, les contributions, les écarts
-  mois par mois, la surface de coût. Chaque figure a ses repères et un cartel qui dit ce qu'on regarde. Une seule
-  grammaire de couleurs : indigo pour la hausse et l'achat, vermillon pour la baisse et la vente, encre pour le
-  modèle. La jauge du chapitre « Prédicteur » suit les curseurs en direct ;
-- **le dossier** (`/dossier`) : le même contenu en version classique, avec la conclusion de chaque étape :
+- **le récit** (`/recit`) : tout le projet en 14 chapitres et 6 actes. Chaque chapitre s'ouvre sur une double page, avec
+  à gauche son titre et ce qu'il faut en retenir, à droite un graphique SVG tracé à partir des données de l'API
+  (`web/assets/recit.js`) : la courbe du Nikkei, le calendrier des 201 mois, le découpage, les classes, les essais
+  Optuna, les seuils, la matrice du test, la performance en euros, les contributions, les écarts mois par mois, les
+  courbes de niveau du coût. Les graphiques s'animent quand ils entrent à l'écran. Une seule grammaire de couleurs :
+  indigo pour la hausse et l'achat, vermillon pour la baisse et la vente, encre pour le modèle. Les graphiques du
+  détail, la surface 3D de l'annexe et le lecteur de notebooks suivent la même grammaire ; les figures des notebooks
+  s'affichent en estampes et retrouvent leurs couleurs au survol ;
+- **le dossier** (`/dossier`) : le même contenu dans un premier habillage, gardé à cette adresse mais plus lié depuis le
+  site, pour que toutes les pages visibles partagent la même identité. Il détaille, avec la conclusion de chaque étape :
   - la construction du dataset : sources, délais de publication, nettoyage, cibles ;
   - l'exploration, les trois modèles, la calibration et la règle de décision ;
   - le test, par sous-groupe, et la projection de novembre 2026 ;

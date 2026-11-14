@@ -29,28 +29,28 @@ require __DIR__ . '/inc/entete.php';
 <!-- ============ En-tête, avec la scène 3D ============ -->
 <?php if ($theme === 'encre'): ?>
 <header class="hero3d affiche" id="haut" data-chapitre="haut" data-court="Ouverture">
-  <div class="soleil-recit" aria-hidden="true"></div>
-  <span class="signe-recit" aria-hidden="true">日経</span>
   <div class="page affiche-in">
     <div class="affiche-texte">
       <p class="surtitre"><span class="sceau">序</span>Albert School · MSc 1 · Applied ML &amp; Maths for ML</p>
       <h1>Acheter, rester neutre ou vendre le <em>Nikkei&nbsp;225</em>&nbsp;?</h1>
-      <p class="chapo">Chaque fin de mois, un modèle estime la probabilité que l'indice japonais monte le mois suivant,
-        à partir des news et des marchés. Une règle en tire l'action d'un investisseur en euros, et dit s'il faut
-        couvrir le yen.</p>
+      <p class="chapo">Tous les mois, à la clôture, notre modèle estime la probabilité que l'indice japonais monte le mois
+        suivant, à partir des news et des données de marché. Une règle traduit ensuite cette probabilité en action pour
+        un investisseur en euros et précise s'il doit se couvrir contre le yen.</p>
       <dl class="reponse">
-        <div class="large"><dt>La réponse du projet</dt><dd>Toujours acheter, couvert contre le yen.</dd>
-          <p>Le modèle n'a pas battu le modèle constant sur le test. Nous tenons l'engagement écrit avant de le regarder.</p></div>
+        <div class="large"><dt>Notre réponse</dt><dd>Toujours acheter, en se couvrant contre le yen.</dd>
+          <p>Sur le test, le modèle n'a pas fait mieux que le modèle constant. Nous appliquons donc l'engagement que nous
+            avions écrit avant de regarder ces données.</p></div>
         <div><dt>Le modèle, sur le test</dt><dd><?= decimal($modele['log-loss']) ?> <small>contre <?= decimal($constante['log-loss']) ?></small></dd>
-          <p>log-loss du modèle, contre celle du modèle constant. Plus bas est meilleur.</p></div>
+          <p>Log-loss du modèle, à comparer à celle du modèle constant. La plus basse est la meilleure.</p></div>
         <div><dt>En euros, 2024-2026</dt><dd><?= signe(100 * $achat_couvert, 1, '&nbsp;%') ?> <small>contre <?= signe(100 * $regle, 1, '&nbsp;%') ?></small></dd>
-          <p>« toujours acheter, couvert », contre la règle du modèle.</p></div>
+          <p>Rendement de « toujours acheter, couvert », face à celui de la règle du modèle.</p></div>
       </dl>
       <div class="boutons">
         <a class="btn plein" href="#resultat">Lire le récit ↓</a>
         <a class="btn contour" href="#explorateur">Essayer le prédicteur</a>
       </div>
     </div>
+    <figure class="planche" data-planche="haut"><div class="dessin"></div><figcaption></figcaption></figure>
   </div>
 </header>
 <?php else: ?>
@@ -66,9 +66,9 @@ require __DIR__ . '/inc/entete.php';
     <div>
       <p class="surtitre">Albert School · MSc 1 · Applied ML &amp; Maths for ML</p>
       <h1>Acheter, rester neutre ou vendre le <em>Nikkei&nbsp;225</em>&nbsp;?</h1>
-      <p class="chapo">Chaque fin de mois, un modèle estime la probabilité que l'indice japonais monte le mois suivant,
-        à partir des news et des marchés. Une règle en tire l'action d'un investisseur en euros, et dit s'il faut
-        couvrir le yen.</p>
+      <p class="chapo">Tous les mois, à la clôture, notre modèle estime la probabilité que l'indice japonais monte le mois
+        suivant, à partir des news et des données de marché. Une règle traduit ensuite cette probabilité en action pour
+        un investisseur en euros et précise s'il doit se couvrir contre le yen.</p>
       <div class="puces">
         <span class="puce"><b>200 mois</b> · 2010 → 2026</span>
         <span class="puce"><b>13 700 articles</b> notés par FinBERT</span>
@@ -99,7 +99,7 @@ require __DIR__ . '/inc/entete.php';
         <code>uvicorn app.api:app --port 8000</code></p>
 <?php endif; ?>
       <div class="verdict"><b>Recommandation finale : toujours acheter, couvert.</b><br>
-        Sur le test, le modèle n'a pas battu le modèle constant : sa règle est montrée à titre d'analyse.</div>
+        Sur le test, le modèle n'a pas battu le modèle constant. Nous montrons sa règle à titre d'analyse.</div>
     </div>
   </div>
   <p class="page legende-3d">Relief : Nikkei 225, 2010 → 2026, échelle log ·
@@ -113,9 +113,9 @@ require __DIR__ . '/inc/entete.php';
 <section id="resultat">
   <p class="surtitre">Le résultat, sans détour</p>
   <h2>Un résultat négatif, obtenu proprement</h2>
-  <p class="chapo">Le modèle classe un peu mieux que le hasard les mois à risque, mais ses probabilités sont trop
-    pessimistes. Comme nous nous y étions engagés avant de regarder le test, nous recommandons la stratégie de
-    référence.</p>
+  <p class="chapo">Notre modèle repère les mois à risque un peu mieux que le hasard, mais il annonce des baisses bien plus
+    souvent qu'il n'en arrive. Nous nous étions engagés, avant de regarder le test, à recommander la stratégie de
+    référence dans ce cas, et c'est ce que nous faisons.</p>
   <div class="grille g4">
     <div class="carte kpi rouge relief"><b data-compte="<?= e($modele['log-loss']) ?>" data-decimales="3"><?= decimal($modele['log-loss']) ?></b><span>log-loss du modèle sur le test</span><div class="contre">contre <?= decimal($constante['log-loss']) ?> pour le modèle constant</div></div>
     <div class="carte kpi relief"><b data-compte="<?= e($modele['PR-AUC']) ?>" data-decimales="3"><?= decimal($modele['PR-AUC']) ?></b><span>PR-AUC de la classe « baisse »</span><div class="contre">contre <?= decimal($constante['PR-AUC']) ?> pour le hasard</div></div>
@@ -127,8 +127,9 @@ require __DIR__ . '/inc/entete.php';
 <section id="explorateur">
   <p class="surtitre">Prédicteur · en direct depuis le modèle</p>
   <h2>Changez l'information, le modèle répond</h2>
-  <p class="chapo">Partez d'un mois réel, puis déplacez les curseurs : volume de news, sentiment, momentum, taux.
-    Le site interroge l'API, qui recalcule la probabilité de hausse, l'action et la contribution de chaque variable.</p>
+  <p class="chapo">Choisissez un mois réel, puis déplacez les curseurs pour modifier le volume de news, le sentiment, le
+    momentum ou les taux. Le site interroge alors l'API, qui recalcule la probabilité de hausse, l'action de la règle et
+    le poids des différentes variables.</p>
   <div class="grille labo">
     <div class="carte">
       <div class="reglage">
@@ -151,13 +152,13 @@ require __DIR__ . '/inc/entete.php';
       </div>
       <div class="jauge" id="exp-jauge"></div>
       <p class="note" id="exp-suite"></p>
-      <h3 style="margin-top:18px">Pourquoi : la contribution de chaque variable</h3>
+      <h3 style="margin-top:18px">Ce qui pèse dans cette prédiction</h3>
       <p class="note">En log-odds de la baisse. <?= $theme === 'encre' ? 'Rouge' : 'Orange' ?> : pousse vers « baisse ». <?= $theme === 'encre' ? 'Bleu' : 'Vert' ?> : pousse vers « hausse ».</p>
       <div class="graphe" id="graphe-shap"></div>
     </div>
   </div>
-  <p class="note" style="margin-top:12px">Simulation « et si » : elle montre comment le modèle réagit à l'information,
-    pas ce que le marché fera. Sur le test, ce modèle n'a pas battu le modèle constant.</p>
+  <p class="note" style="margin-top:12px">Ce prédicteur montre comment le modèle réagit quand l'information change. Il ne
+    dit rien de ce que fera réellement le marché, d'autant que ce modèle n'a pas battu le modèle constant sur le test.</p>
 </section>
 <!-- ============ Construction du dataset ============ -->
 <?php
@@ -171,23 +172,23 @@ $sources = [
     ['e-Stat', "Inflation japonaise (CPI global, core, core-core)", 'le 25 du mois suivant'],
     ['Kenneth French', 'Facteurs Fama-French du Japon (taille, value)', '2 mois'],
     ['GDELT', '13 694 titres de presse sur le Japon et la Banque du Japon, depuis 2017', 'rattachés à la première séance qui clôture après leur détection'],
-    ['FinBERT', 'Score de sentiment de chaque titre : P(positif) − P(négatif)', 'calculé sur le titre, donc aucun'],
+    ['FinBERT', 'Score de sentiment des titres, égal à P(positif) − P(négatif)', 'calculé sur le titre, donc aucun'],
 ];
 $etapes_dataset = [
-    ['Collecter', "Chaque source est téléchargée et sauvegardée telle quelle dans data/raw : le projet se rejoue sans réseau."],
-    ['Nettoyer', "Une fausse séance recopiée par Yahoo un jour férié est supprimée. Un split non ajusté et un prix divisé par 10 sont corrigés sur l'ETF TOPIX. Les jours sans news sont gardés et signalés, au lieu d'être supprimés."],
-    ['Aligner', "Tout est ramené sur le calendrier de Tokyo, avec la dernière valeur connue. On propage vers l'avant, jamais vers l'arrière."],
-    ['Décaler', "Chaque série est retardée jusqu'à sa date de publication réelle. C'est la protection contre la fuite temporelle."],
-    ['Agréger', "Une ligne par mois, datée de la dernière séance : niveaux de fin de mois, rendements et variations du mois, moyennes des news."],
-    ['Construire', "Trois variables de news (volume anormal, sentiment pondéré, indicateur de présence) et les cibles du mois suivant."],
+    ['Collecter', "Nous téléchargeons toutes les sources et nous les gardons telles quelles dans data/raw, ce qui permet de rejouer le projet sans connexion."],
+    ['Nettoyer', "Une fausse séance recopiée par Yahoo un jour férié est supprimée. Un split non ajusté et un prix divisé par 10 sont corrigés sur l'ETF TOPIX. Les jours sans news sont conservés et signalés par un indicateur."],
+    ['Aligner', "Tout est ramené sur le calendrier de Tokyo. Quand une valeur manque, nous reprenons la dernière connue, sans jamais aller chercher une valeur future."],
+    ['Décaler', "Toutes les séries sont retardées jusqu'à leur date de publication réelle, pour que le modèle ne dispose d'aucune information avant le marché."],
+    ['Agréger', "Nous gardons une ligne par mois, datée de la dernière séance, avec les niveaux de fin de mois, les rendements et variations du mois et les moyennes des news."],
+    ['Construire', "Nous ajoutons trois variables de news (volume anormal, sentiment pondéré, indicateur de présence) ainsi que les cibles du mois suivant."],
     ['Contrôler', "Un audit codé vérifie la cible, l'absence de recopie d'une cible, les dates de publication et l'unicité de la ligne à prédire."],
 ];
 ?>
 <section id="dataset">
   <p class="surtitre">Construction du dataset</p>
   <h2>De douze sources à une table de 201 mois</h2>
-  <p class="chapo">Le jeu de données n'existait pas : il a été construit, source par source. Chaque série est retardée
-    jusqu'à sa date de publication, pour que le modèle ne voie jamais une information en avance.</p>
+  <p class="chapo">Ce jeu de données n'existait pas, nous l'avons construit source par source. Toutes les séries sont
+    retardées jusqu'à leur date de publication, afin que le modèle ne voie jamais une information en avance.</p>
   <div class="carte">
     <table class="tableau">
       <thead><tr><th>Source</th><th>Ce qu'on y prend</th><th>Délai appliqué</th></tr></thead>
@@ -211,29 +212,29 @@ $etapes_dataset = [
       <div class="formule">E<sub>t+1</sub> = S<sub>t</sub> / S<sub>t+1</sub> − 1 &nbsp;·&nbsp; C<sub>t</sub> = (1 + i<sup>EUR</sup>/12) / (1 + i<sup>JPY</sup>/12) − 1</div>
       <div class="formule">couvert : R<sup>N</sup> + C<sub>t</sub> + R<sup>N</sup>E &nbsp;·&nbsp; non couvert : R<sup>N</sup> + E + R<sup>N</sup>E</div>
       <p class="note">R<sup>N</sup> : rendement du Nikkei en yens. E : rendement du yen en euros. C<sub>t</sub> : portage de la
-        couverture, connu à l'avance. La classe positive est la baisse, l'événement rare et coûteux.</p>
+        couverture, connu à l'avance. Nous prenons la baisse comme classe positive, parce que c'est l'événement rare et coûteux.</p>
     </div>
     <div class="carte">
       <h3>Les news, de l'article à la variable</h3>
       <ul class="points">
         <li>13 694 titres collectés, 13 015 après suppression des reprises d'un même titre.</li>
         <li>FinBERT classe 32 % des titres en positif, 42 % en négatif, 26 % en neutre. Le score moyen vaut −0,10.</li>
-        <li>Chaque article est rattaché à la première séance de Tokyo qui clôture après sa détection (6h30 UTC).</li>
-        <li>Volume anormal : le nombre d'articles du mois comparé à sa moyenne des six mois précédents.</li>
+        <li>Les articles sont rattachés à la première séance de Tokyo qui clôture après leur détection (6h30 UTC).</li>
+        <li>Le volume anormal compare le nombre d'articles du mois à sa moyenne des six mois précédents.</li>
       </ul>
     </div>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> La table finale compte 201 mois, de février 2010 à octobre 2026. L'audit ne trouve
-    aucune fuite : la cible est exactement le rendement du mois suivant (écart 0), l'identité de la couverture tient à
-    7 × 10⁻⁷ près, et le Tankan ne change qu'à ses mois de publication.</div>
+  <div class="conclusion"><b>Conclusion.</b> La table finale compte 201 mois, de février 2010 à octobre 2026. Notre audit ne
+    trouve aucune fuite. La cible correspond exactement au rendement du mois suivant (écart 0), l'identité de la
+    couverture tient à 7 × 10⁻⁷ près et le Tankan ne change qu'à ses mois de publication.</div>
 </section>
 
 <!-- ============ Méthode ============ -->
 <section id="methode">
   <p class="surtitre">La méthode</p>
   <h2>Des données brutes à la décision, étape par étape</h2>
-  <p class="chapo">Chaque étape s'appuie sur une séance de cours et sur un notebook exécuté. Cliquez sur une étape pour
-    ouvrir son notebook.</p>
+  <p class="chapo">Les étapes suivent les séances du cours, et un notebook exécuté accompagne chacune d'elles. Un clic sur
+    une étape ouvre le notebook correspondant.</p>
 
   <div class="flux">
     <div><b>Données</b><span>12 sources, décalées à leur date de publication</span></div>
@@ -269,11 +270,11 @@ $etapes_dataset = [
     <figure class="figure"><img src="/figures/01_nikkei_split.png" alt="Nikkei 225 et découpage chronologique">
       <figcaption>Le Nikkei 225 en fin de mois et les trois blocs : entraînement (143 mois), validation (24), test (33).</figcaption></figure>
     <div class="carte">
-      <h3>Un audit des fuites codé, pas affirmé</h3>
+      <h3>Un audit des fuites vérifié par du code</h3>
       <ul class="points">
         <li>La cible du mois <i>t</i> est exactement le rendement du mois <i>t</i> + 1 (écart 0).</li>
-        <li>Chaque série est décalée jusqu'à sa date de publication : CPI au 25 du mois suivant, Tankan cinq jours après le trimestre, facteurs Fama-French à <i>t</i> − 2.</li>
-        <li>Aucune variable ne recopie une cible : le contrôle porte sur les valeurs, et un test injecte une fuite pour vérifier qu'elle est détectée.</li>
+        <li>Les séries sont décalées jusqu'à leur date de publication, par exemple le CPI au 25 du mois suivant, le Tankan cinq jours après le trimestre et les facteurs Fama-French à <i>t</i> − 2.</li>
+        <li>Aucune variable ne recopie une cible. Le contrôle porte sur les valeurs, et un test injecte volontairement une fuite pour vérifier qu'elle est bien détectée.</li>
         <li>Les variables de news sont identiques quand on coupe le futur.</li>
       </ul>
       <p class="note" style="margin-top:14px">Trois variables sont construites : le <b>volume anormal d'articles</b>, le
@@ -286,14 +287,14 @@ $etapes_dataset = [
     <div class="carte">
       <h3>Ce que l'exploration annonce</h3>
       <ul class="points">
-        <li>Le Nikkei monte 61 % des mois : « toujours hausse » est difficile à battre.</li>
-        <li>Sur l'entraînement, une seule variable est nettement liée au rendement suivant : le volume anormal d'articles (corrélation de rang −0,38).</li>
+        <li>Le Nikkei monte 61 % des mois, ce qui rend la prévision « toujours hausse » difficile à battre.</li>
+        <li>Sur l'entraînement, seul le volume anormal d'articles est nettement lié au rendement suivant (corrélation de rang −0,38).</li>
         <li>Le sentiment FinBERT ne prédit presque rien (+0,03).</li>
         <li>Rien ne prédit l'avantage de la couverture.</li>
       </ul>
     </div>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> Le marché monte 61 % des mois, les news ne couvrent que 57 des 143 mois d'entraînement, et une seule variable sort du bruit : le volume anormal d'articles. Le sentiment des news, pourtant au cœur de l'idée de départ, ne prédit presque rien.</div>
+  <div class="conclusion"><b>Conclusion.</b> Le marché monte 61 % des mois et les news ne couvrent que 57 des 143 mois d'entraînement. Seul le volume anormal d'articles se détache du bruit. Le sentiment des news, sur lequel reposait pourtant notre idée de départ, ne prédit presque rien.</div>
 </section>
 
 
@@ -301,8 +302,9 @@ $etapes_dataset = [
 <section id="modeles">
   <p class="surtitre">Les modèles</p>
   <h2>Trois modèles, un même constat</h2>
-  <p class="chapo">Régression logistique, Random Forest et LightGBM battent tous le modèle constant en validation
-    croisée. Aucun ne le bat sur la validation 2022-2023 : plus le modèle est flexible, plus l'écart est grand.</p>
+  <p class="chapo">La régression logistique, le Random Forest et LightGBM battent tous les trois le modèle constant en
+    validation croisée. Aucun n'y parvient sur la validation 2022-2023, et l'écart se creuse à mesure que le modèle
+    devient plus flexible.</p>
   <div class="grille g2">
     <div class="carte">
       <table class="tableau">
@@ -314,35 +316,35 @@ $etapes_dataset = [
           <tr><td>LightGBM</td><td class="num fort">0,584</td><td class="num">0,710</td><td class="num fort">0,524</td></tr>
         </tbody>
       </table>
-      <p class="note" style="margin-top:16px">Log-loss : plus bas = mieux. Le modèle final est choisi par la règle de
-        baseline du cours : on garde le modèle simple, sauf si un modèle plus complexe le bat clairement en classement
-        <i>et</i> en qualité des probabilités.</p>
+      <p class="note" style="margin-top:16px">Une log-loss plus basse est meilleure. Pour choisir le modèle final, nous
+        appliquons la règle de baseline du cours, qui consiste à garder le modèle simple tant qu'un modèle plus complexe
+        ne le bat pas clairement en classement <i>et</i> en qualité des probabilités.</p>
     </div>
     <figure class="figure"><img src="/figures/02_coefficients_logistiques.png" alt="Coefficients des régressions logistiques">
-      <figcaption>Ce que dit la logistique : un écart-type de plus sur le volume d'articles ou sur le momentum 12 mois
+      <figcaption>Dans la régression logistique, un écart-type de plus sur le volume d'articles ou sur le momentum 12 mois
         multiplie les odds de baisse par 1,22. Le modèle de couverture n'a aucun coefficient non nul.</figcaption></figure>
   </div>
   <figure class="figure" style="margin-top:20px"><img src="/figures/02_optuna_historique.png" alt="Historique des essais Optuna">
-    <figcaption>Les 200 essais Optuna, journalisés un par un : log-loss de chaque essai, meilleur jusqu'ici et modèle constant.</figcaption></figure>
-  <div class="conclusion"><b>Conclusion.</b> Plus un modèle est flexible, plus il s'ajuste au bruit des 48 mois de validation croisée : LightGBM y gagne 0,089 de log-loss et en perd 0,029 sur 2022-2023. La logistique est retenue par la règle de baseline. Le modèle de couverture n'a aucun signal : tous ses coefficients sont nuls.</div>
+    <figcaption>Les 200 essais Optuna, tous journalisés, avec leur log-loss, le meilleur résultat obtenu jusque-là et le niveau du modèle constant.</figcaption></figure>
+  <div class="conclusion"><b>Conclusion.</b> Un modèle plus flexible s'ajuste davantage au bruit des 48 mois de validation croisée. LightGBM y gagne 0,089 de log-loss, puis en perd 0,029 sur 2022-2023. Nous retenons donc la régression logistique, comme le veut la règle de baseline. Quant au modèle de couverture, il ne trouve aucun signal et tous ses coefficients sont nuls.</div>
 </section>
 
 
 <!-- ============ Décision ============ -->
 <section id="decision">
   <p class="surtitre">De la probabilité à l'action</p>
-  <h2>Le modèle estime, la règle décide</h2>
+  <h2>Comment une probabilité devient une action</h2>
   <div class="grille g2">
     <div class="carte">
       <h3>La formule complète</h3>
-      <p class="note">Variables standardisées <i>z</i>, poids appris par descente de gradient, calibration de Platt, puis deux seuils.</p>
+      <p class="note">Les variables sont standardisées (<i>z</i>), les poids sont appris par descente de gradient, la probabilité est calibrée par Platt puis comparée à deux seuils.</p>
       <div class="formule">p<sub>t</sub> = 1 − σ( a·(b + w<sup>⊤</sup>z<sub>t</sub>) + c ), &nbsp;&nbsp; S<sub>t</sub> = 2p<sub>t</sub> − 1</div>
       <div class="formule"><span class="droit">acheter si</span> p<sub>t</sub> ≥ θ<sub>a</sub> = (m − B<sub>d</sub>) / (B<sub>u</sub> − B<sub>d</sub>) = <span class="droit">0,580</span><br>
         <span class="droit">vendre si</span> p<sub>t</sub> ≤ θ<sub>v</sub> = (S<sub>d</sub> − m) / (S<sub>d</sub> − S<sub>u</sub>) = <span class="droit">0,456</span></div>
       <ul class="points">
-        <li>Les coûts viennent de l'entraînement : un achat couvert rapporte +3,89 % un mois de hausse et perd 4,18 % un mois de baisse.</li>
-        <li>La marge <i>m</i> = 0,5 % par mois est fixée à l'avance, pas réglée sur la validation.</li>
-        <li>Couverture : aucun signal trouvé, donc « toujours couvert ».</li>
+        <li>Les coûts sont mesurés sur l'entraînement, où un achat couvert rapporte +3,89 % un mois de hausse et perd 4,18 % un mois de baisse.</li>
+        <li>La marge <i>m</i> = 0,5 % par mois a été fixée à l'avance, sans la régler sur la validation.</li>
+        <li>Pour la couverture, nous n'avons trouvé aucun signal et nous restons donc toujours couverts.</li>
       </ul>
     </div>
     <div class="carte">
@@ -351,14 +353,15 @@ $etapes_dataset = [
         (<code>75712cf</code>) avant toute évaluation sur le test (<code>6efd12c</code>).</p>
       <div class="alerte"><b>Engagement pris à l'avance.</b> Si le modèle perd aussi contre le modèle constant sur le
         test, la recommandation sera « toujours acheter, couvert ».</div>
-      <p class="note" style="margin-top:14px">Calibration : Platt est appris sur les prédictions hors fold. Un premier
-        essai sur la validation donnait des pentes négatives, il inversait les modèles, et a été écarté.</p>
+      <p class="note" style="margin-top:14px">La calibration de Platt est apprise sur les prédictions hors fold. Un premier
+        essai sur la validation donnait des pentes négatives, ce qui inversait les modèles, et nous l'avons écarté.</p>
     </div>
   </div>
   <figure class="figure" style="margin-top:20px"><img src="/figures/03_fiabilite_brute.png" alt="Reliability diagrams">
-    <figcaption>Reliability diagrams codés à la main. Hors fold, les points suivent la diagonale ; sur la validation,
-      la courbe de la logistique descend : plus elle annonce une baisse, moins elle arrive.</figcaption></figure>
-  <div class="conclusion"><b>Conclusion.</b> Sur la validation, la logistique calibrée ne bat pas le modèle constant (log-loss 0,699 contre 0,681), et la règle évite 7 baisses sur 10 mais rate la hausse de 2023. Tout est tout de même figé avant le test, avec un engagement écrit sur la suite.</div>
+    <figcaption>Reliability diagrams codés à la main. Hors fold, les points suivent la diagonale. Sur la validation, la
+      courbe de la logistique descend, ce qui veut dire que les baisses arrivent moins souvent quand elle les annonce avec
+      plus d'assurance.</figcaption></figure>
+  <div class="conclusion"><b>Conclusion.</b> Sur la validation, la logistique calibrée ne bat pas le modèle constant (log-loss de 0,699 contre 0,681). La règle évite 7 baisses sur 10 mais elle rate la hausse de 2023. Nous avons malgré tout figé l'ensemble avant le test, en écrivant à l'avance ce que nous ferions selon le résultat.</div>
 </section>
 
 
@@ -367,7 +370,7 @@ $etapes_dataset = [
   <p class="surtitre">Le test 2024-2026</p>
   <h2>Une seule évaluation, et un engagement tenu</h2>
   <p class="chapo">La règle évite presque toutes les baisses, mais elle reste hors du marché pendant une hausse de
-    82 %. Les points sont colorés par l'action prise chaque mois.</p>
+    82 %. Sur la courbe, la couleur des points indique l'action prise ce mois-là.</p>
   <div class="carte">
     <div class="barre-outils">
       <div class="onglets" id="onglets-bloc">
@@ -406,8 +409,8 @@ $etapes_dataset = [
 <?php endforeach; ?>
         </tbody>
       </table>
-      <p class="note" style="margin-top:14px">Le modèle est <b>sur-confiant dans la baisse</b> : 52 % de baisses
-        annoncées en moyenne, 36 % observées. Nous ne ferions pas confiance à ces probabilités pour décider.</p>
+      <p class="note" style="margin-top:14px">Le modèle est <b>trop confiant dans la baisse</b>. Il en annonce 52 % en
+        moyenne alors qu'on en observe 36 %, et nous ne nous fierions pas à ces probabilités pour décider.</p>
     </div>
     <div class="carte">
       <h3>Actions et réalité du mois suivant</h3>
@@ -415,8 +418,8 @@ $etapes_dataset = [
         <thead><tr><th>Action</th><th class="num">Hausses réalisées</th><th class="num">Baisses réalisées</th></tr></thead>
         <tbody></tbody>
       </table>
-      <p class="note" style="margin-top:14px">La couverture permanente, elle, était le bon choix : +82,3 % contre
-        +57,9 % sans couverture sur le test.</p>
+      <p class="note" style="margin-top:14px">La couverture permanente, en revanche, était le bon choix, avec +82,3 % sur
+        le test contre +57,9 % sans couverture.</p>
     </div>
   </div>
   <div class="carte" style="margin-top:18px">
@@ -431,10 +434,11 @@ $etapes_dataset = [
         <tr><td>Régime agité</td><td class="num">9</td><td class="num">3</td><td class="num">0,660</td><td class="num fort">0,644</td></tr>
       </tbody>
     </table>
-    <p class="note" style="margin-top:12px">Avec 3 à 9 baisses par sous-groupe, les écarts restent fragiles. Il n'y a aucune
-      personne dans les données, donc pas d'attribut sensible : l'analyse d'équité est transposée à ces groupes de mois.</p>
+    <p class="note" style="margin-top:12px">Avec 3 à 9 baisses par sous-groupe, ces écarts restent fragiles. Nos données ne
+      concernent aucune personne et ne contiennent donc pas d'attribut sensible. Nous avons transposé l'analyse d'équité
+      à ces groupes de mois.</p>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> Le plancher n'est pas battu : le modèle ne fait mieux que le modèle constant qu'en 2024, où il détecte les six baisses de l'année. L'engagement est tenu : la recommandation est « toujours acheter, couvert ». La couverture permanente, elle, était le bon choix (+82,3 % contre +57,9 %).</div>
+  <div class="conclusion"><b>Conclusion.</b> Le modèle ne bat pas le plancher. Il ne fait mieux que le modèle constant qu'en 2024, année où il détecte les six baisses. Nous tenons donc notre engagement et nous recommandons « toujours acheter, couvert ». La couverture permanente, de son côté, était le bon choix (+82,3 % contre +57,9 %).</div>
 </section>
 
 
@@ -442,8 +446,8 @@ $etapes_dataset = [
 <section id="simulateur">
   <p class="surtitre">Simulateur · paramétrable</p>
   <h2>Et si la règle avait été réglée autrement&nbsp;?</h2>
-  <p class="chapo">Déplacez la marge, changez la couverture, interdisez la vente : les seuils, les actions et la courbe
-    se recalculent aussitôt.</p>
+  <p class="chapo">Vous pouvez déplacer la marge, changer la couverture ou interdire la vente. Les seuils, les actions et
+    la courbe se recalculent aussitôt.</p>
   <div class="grille labo">
     <div class="carte">
       <div class="reglage">
@@ -477,8 +481,8 @@ $etapes_dataset = [
 <section id="projection">
   <p class="surtitre">Projection</p>
   <h2>Ce que le modèle projette pour novembre 2026</h2>
-  <p class="chapo">Avec les données de fin octobre 2026, le dernier mois disponible, voici la sortie complète du système
-    et la façon de la lire.</p>
+  <p class="chapo">Voici ce que le système produit avec les données de fin octobre 2026, le dernier mois disponible, et
+    comment lire ce résultat.</p>
   <div class="grille g2">
     <div class="carte signal">
       <div class="entete"><span class="etiquette">Sortie du système</span><span class="mois"><?= $signal ? e(mois_lisible($signal['mois_des_donnees'])) : 'API arrêtée' ?></span></div>
@@ -496,10 +500,10 @@ $etapes_dataset = [
     <div class="carte">
       <h3>Comment le modèle arrive à ce chiffre</h3>
       <ul class="points">
-        <li><b>Volume d'articles : +0,58.</b> Deux fois plus d'articles que d'habitude en octobre. C'est le premier moteur du signal de baisse.</li>
-        <li><b>Taux japonais à 10 ans : −0,30.</b> Il a reculé de 21 points de base, ce qui pousse vers la hausse.</li>
-        <li><b>Portage : +0,14.</b> Une valeur hors du domaine d'entraînement, donc une contribution à lire avec prudence.</li>
-        <li><b>Momentum 12 mois : +0,10.</b> Le Nikkei a gagné 21 % sur un an, et le modèle parie à contre-courant.</li>
+        <li><b>Volume d'articles (+0,58).</b> Il y a eu en octobre deux fois plus d'articles que d'habitude, et c'est ce qui pousse le plus le signal vers la baisse.</li>
+        <li><b>Taux japonais à 10 ans (−0,30).</b> Il a reculé de 21 points de base, ce qui pousse vers la hausse.</li>
+        <li><b>Portage (+0,14).</b> Sa valeur sort du domaine vu à l'entraînement, cette contribution est donc à lire avec prudence.</li>
+        <li><b>Momentum 12 mois (+0,10).</b> Le Nikkei a gagné 21 % en un an et le modèle parie à contre-courant.</li>
       </ul>
       <p class="note" style="margin-top:12px">Contributions en log-odds de la baisse. Leur somme, ajoutée au niveau moyen du
         modèle puis calibrée, donne la probabilité affichée.</p>
@@ -507,20 +511,21 @@ $etapes_dataset = [
   </div>
   <figure class="figure" style="margin-top:18px"><img src="/figures/04_shap_waterfall_2026-10.png" alt="Décomposition SHAP de la prédiction d'octobre 2026">
     <figcaption>Décomposition complète de la prédiction, variable par variable (notebook 04).</figcaption></figure>
-  <div class="conclusion"><b>Conclusion.</b> La projection est fragile pour deux raisons. La moitié des vingt dernières séances
-    n'ont aucun article collecté, donc le pic d'articles d'octobre repose sur peu de jours. Et le modèle a été trop pessimiste
-    sur tout le test. Nous ne la suivons pas : la recommandation reste « acheter, couvert ».</div>
+  <div class="conclusion"><b>Conclusion.</b> Cette projection est fragile pour deux raisons. D'abord, la moitié des vingt
+    dernières séances n'ont aucun article collecté, si bien que le pic d'articles d'octobre repose sur peu de jours.
+    Ensuite, le modèle s'est montré trop pessimiste sur l'ensemble du test. Nous ne la suivons donc pas et nous
+    maintenons la recommandation « acheter, couvert ».</div>
 </section>
 
 <!-- ============ Changement de régime ============ -->
 <?php
 // Ce qui a changé après 2021 : chaque ligne devient une carte recto (avant) / verso (depuis 2022).
 $bascules = [
-    ['Portage de la couverture', '−0,4 % / an', '+2,2 % / an', "La BoJ sort des taux négatifs : couvrir le yen coûtait, cela rapporte."],
-    ["Volume d'articles et rendement du mois suivant", '−0,38', '+0,29', "Corrélation de rang : elle change de signe en 2022-2023, puis reste instable."],
+    ['Portage de la couverture', '−0,4 % / an', '+2,2 % / an', "La BoJ sort des taux négatifs. Couvrir le yen coûtait de l'argent, cela en rapporte désormais."],
+    ["Volume d'articles et rendement du mois suivant", '−0,38', '+0,29', "Cette corrélation de rang change de signe en 2022-2023, puis reste instable."],
     ['Articles sur la BoJ, par mois', '55', '73', "La normalisation monétaire occupe la presse."],
     ['Probabilité de baisse annoncée par le modèle', '40 %', '52 %', "Alors que les baisses réelles passent de 39 % à 36 % des mois."],
-    ['Variation du taux japonais à 10 ans', 'neutre', 'nuisible', "Importance par permutation : de +0,001 à −0,027 sur le test."],
+    ['Variation du taux japonais à 10 ans', 'neutre', 'nuisible', "Son importance par permutation passe de +0,001 à −0,027 sur le test."],
     ['Momentum 12 mois, lu à contre-courant', 'payant', 'perdant', "Rebonds en V jusqu'en 2021, tendance durable ensuite."],
 ];
 ?>
@@ -528,7 +533,7 @@ $bascules = [
   <p class="surtitre">Changement de régime</p>
   <h2>Ce que le modèle avait appris a changé de sens</h2>
   <p class="chapo">Le modèle a appris sur 2010-2021. Depuis 2022, la Banque du Japon normalise sa politique et plusieurs
-    relations se retournent. Basculez d'une époque à l'autre, ou cliquez sur une carte.</p>
+    relations se retournent. Les deux boutons font passer d'une époque à l'autre, et un clic retourne une carte.</p>
   <div class="onglets" id="bascule-regime">
     <button class="onglet actif" data-v="avant" type="button">Jusqu'en 2021 · entraînement</button>
     <button class="onglet" data-v="apres" type="button">Depuis 2022 · validation et test</button>
@@ -552,8 +557,8 @@ $bascules = [
       <p>Le volume d'articles annonçait des baisses jusqu'en 2021. Sa corrélation avec le rendement suivant oscille
         ensuite entre −0,5 et +0,3, quand la Banque du Japon normalise sa politique.</p></div>
     <div class="carte"><h3>Une extrapolation</h3>
-      <p>Sur le test, le portage est à 6 écarts-types de sa moyenne d'entraînement. Le modèle linéaire prolonge une
-        pente apprise sur un intervalle étroit : +0,25 de log-odds vers « baisse », chaque mois.</p></div>
+      <p>Sur le test, le portage se trouve à 6 écarts-types de sa moyenne d'entraînement. Le modèle linéaire prolonge
+        alors une pente apprise sur un intervalle étroit, ce qui ajoute tous les mois +0,25 de log-odds vers « baisse ».</p></div>
     <div class="carte"><h3>Un pari contrarien</h3>
       <p>Le momentum 12 mois, contrarien pendant les rebonds en V de 2018-2021, parie contre une tendance qui a duré
         de 2024 à 2026.</p></div>
@@ -563,16 +568,16 @@ $bascules = [
       <figcaption>En haut, la corrélation glissante sur 24 mois entre volume d'articles et rendement suivant. En bas,
         la contribution SHAP de cette variable.</figcaption></figure>
     <figure class="figure"><img src="/figures/04_shap_beeswarm_test.png" alt="SHAP global sur le test">
-      <figcaption>SHAP global sur le test : le portage, le momentum 12 mois et le JGB 10 ans poussent presque tous les
-        mois vers « baisse ».</figcaption></figure>
+      <figcaption>SHAP global sur le test. Le portage, le momentum 12 mois et le JGB 10 ans poussent vers « baisse »
+        presque tous les mois.</figcaption></figure>
   </div>
   <div class="carte" style="margin-top:20px">
     <h3>Les limites que nous déclarons</h3>
     <ul class="points">
-      <li><b>Petit échantillon</b> : 143 mois d'entraînement, 12 baisses dans le test. Les écarts entre modèles et entre slices sont fragiles.</li>
-      <li><b>Un test pas entièrement invisible</b> : l'exploration affichait déjà des statistiques du bloc test avant le gel. La couverture permanente n'a pas été choisie à l'aveugle.</li>
-      <li><b>Des variables choisies</b> à partir d'une analyse de 2017-2026, qui recouvre la validation et le test.</li>
-      <li><b>Équité</b> : aucune personne dans les données, donc aucun attribut sensible. L'analyse est transposée à des groupes de mois, sans écart au-delà du bruit.</li>
+      <li><b>Un petit échantillon.</b> Nous n'avons que 143 mois d'entraînement et 12 baisses dans le test, ce qui rend fragiles les écarts entre modèles et entre sous-groupes.</li>
+      <li><b>Un test qui n'était pas entièrement invisible.</b> Notre exploration affichait déjà des statistiques du bloc test avant le gel, et la couverture permanente n'a donc pas été choisie à l'aveugle.</li>
+      <li><b>Des variables choisies</b> à partir d'une analyse de 2017-2026, période qui recouvre la validation et le test.</li>
+      <li><b>L'équité.</b> Nos données ne concernent aucune personne et ne contiennent aucun attribut sensible. Nous avons transposé l'analyse à des groupes de mois, sans trouver d'écart au-delà du bruit.</li>
     </ul>
   </div>
 </section>
@@ -585,11 +590,11 @@ $bascules = [
   <div class="grille g2">
     <div class="carte">
       <h3>Trois dérivations</h3>
-      <p class="note">Le coût est l'opposé de la log-vraisemblance de Bernoulli :</p>
+      <p class="note">Le coût est l'opposé de la log-vraisemblance de Bernoulli.</p>
       <div class="formule">J(w, b) = − (1/m) Σ [ y log p + (1 − y) log(1 − p) ]</div>
-      <p class="note">Son gradient, par la règle de la chaîne, est l'erreur fois l'entrée :</p>
+      <p class="note">La règle de la chaîne donne son gradient, qui vaut l'erreur multipliée par l'entrée.</p>
       <div class="formule">∇<sub>w</sub> J = (1/m) X<sup>⊤</sup>(p − y)</div>
-      <p class="note">La pénalité L2 est un prior gaussien sur les poids :</p>
+      <p class="note">La pénalité L2 revient à poser un a priori gaussien sur les poids.</p>
       <div class="formule">J<sub>λ</sub> = J + λ‖w‖², &nbsp; λ = 1 / (2mτ²)</div>
     </div>
     <div class="carte">
@@ -624,11 +629,11 @@ $bascules = [
   </div>
   <div class="grille g2" style="margin-top:20px">
     <figure class="figure"><img src="/figures/05_sensibilite_pas.png" alt="Sensibilité au pas">
-      <figcaption>Sensibilité au pas α : trop petit, la descente est lente ; au-delà de la limite, elle ne converge plus.</figcaption></figure>
+      <figcaption>Sensibilité au pas α. Quand il est trop petit la descente est lente, et au-delà de la limite elle ne converge plus.</figcaption></figure>
     <figure class="figure"><img src="/figures/05_sensibilite_lambda.png" alt="Sensibilité à lambda">
-      <figcaption>Sensibilité à λ : sans pénalité, le modèle sur-apprend ; la validation croisée est minimale au λ choisi par Optuna.</figcaption></figure>
+      <figcaption>Sensibilité à λ. Sans pénalité le modèle sur-apprend, et la log-loss de validation croisée est la plus basse au λ choisi par Optuna.</figcaption></figure>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> La descente codée à la main retrouve scikit-learn, et toutes les sensibilités pointent dans le même sens : plus de régularisation, ou un arrêt plus précoce, rapproche le modèle de la constante. C'est la signature d'un signal faible et instable dans le temps.</div>
+  <div class="conclusion"><b>Conclusion.</b> Notre descente codée à la main retrouve le résultat de scikit-learn. Toutes les analyses de sensibilité vont dans le même sens, puisqu'une régularisation plus forte ou un arrêt plus précoce rapprochent le modèle de la constante. On reconnaît là un signal faible et instable dans le temps.</div>
 </section>
 
 
@@ -655,7 +660,6 @@ $bascules = [
 <script src="/assets/app.js"></script>
 <script type="module" src="/assets/scene3d.js"></script>
 <?php if ($theme === 'encre'): ?>
-<canvas id="toile-recit" aria-hidden="true"></canvas>
 <script type="module" src="/assets/recit.js"></script>
 <?php endif; ?>
 <?php require __DIR__ . '/inc/pied.php'; ?>

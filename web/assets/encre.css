@@ -7,7 +7,6 @@
   --mincho: "Hiragino Mincho ProN", "Yu Mincho", "Songti SC", serif; background: var(--papier); color: var(--encre); }
 .theme-encre::before { content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .32  0 0 0 .5 0'/></filter><rect width='220' height='220' filter='url(%23g)'/></svg>"); }
-#toile-recit { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 .theme-encre main, .theme-encre .hero3d, .theme-encre footer { position: relative; z-index: 1; }
 
 /* ----- Navigation : une barre d'encre ----- */
@@ -21,15 +20,14 @@
 /* ----- Le sceau : un carré vermillon, un signe par acte ----- */
 .sceau { display: inline-grid; place-items: center; width: 30px; height: 30px; background: #de3220; color: #fff; font: 500 18px/1 "Hiragino Mincho ProN", "Yu Mincho", "Songti SC", serif; flex: none; }
 
-/* ----- Ouverture de la page : une affiche. Le texte à gauche, la courbe du Nikkei en gouttes d'encre à droite ----- */
-.theme-encre .affiche { background: transparent; color: var(--encre); overflow: visible; min-height: 135vh; margin-top: -68px; }
+/* ----- Ouverture de la page : une affiche. Le texte à gauche, la courbe du Nikkei à droite, dans sa propre colonne ----- */
+.theme-encre .affiche { background: transparent; color: var(--encre); overflow: visible; min-height: 100vh; margin-top: -68px; }
 .theme-encre .affiche::after { display: none; }
-.affiche-in { position: sticky; top: 0; min-height: 100vh; display: grid; align-content: center; padding-top: 84px; padding-bottom: 24px; }
-.affiche-texte { width: 50%; padding-right: 36px; }
+.affiche-in { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; align-items: center; padding-top: 96px; padding-bottom: 36px; }
 .theme-encre .affiche h1 { font-size: clamp(36px, 4.3vw, 70px); font-weight: 200; letter-spacing: -.05em; line-height: .98; text-shadow: none; margin: 0; }
 .theme-encre .affiche h1 em { color: var(--vermillon); font-style: normal; }
 .theme-encre .affiche .surtitre { display: flex; align-items: center; gap: 12px; font: 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--encre); text-shadow: none; margin-bottom: 18px; }
-.theme-encre .affiche .chapo { color: var(--encre-douce); text-shadow: none; font-size: 17px; margin: 18px 0 0; max-width: 520px; }
+.theme-encre .affiche .chapo { color: var(--encre-douce); text-shadow: none; font-size: 17px; margin: 18px 0 0; max-width: 540px; }
 .reponse { display: grid; grid-template-columns: 1fr 1fr; margin: 20px 0 18px; border: 1px solid #15110e; background: rgba(247, 242, 230, .95); box-shadow: 7px 7px 0 #de3220; }
 .reponse div { padding: 14px 16px; }
 .reponse div + div { border-top: 1px solid #15110e; }
@@ -40,14 +38,15 @@
 .reponse .large dd { font-size: clamp(24px, 2.5vw, 36px); }
 .reponse dd small { font-size: 13px; letter-spacing: 0; opacity: .6; }
 .reponse p { margin: 0; font-size: 12.5px; line-height: 1.4; opacity: .75; }
-.soleil-recit { position: absolute; right: 9vw; top: 17vh; width: 46vh; height: 46vh; border-radius: 50%; background: #de3220; animation: lever 1.6s cubic-bezier(.2, 1.3, .3, 1) both; }
-.signe-recit { position: absolute; right: 2vw; top: 62vh; font: 500 44vh/1 "Hiragino Mincho ProN", "Yu Mincho", serif; color: #15110e; opacity: .035; pointer-events: none; white-space: nowrap; }
-@keyframes lever { from { transform: translateY(40vh) scale(.2); opacity: 0; } to { transform: none; opacity: 1; } }
-
-/* ----- Ouverture d'un chapitre : acte, numéro, titre, ce qu'il faut retenir. La moitié droite est laissée à la figure. ----- */
+/* ----- Ouverture d'un chapitre : à gauche l'acte, le titre et ce qu'il faut retenir ; à droite le graphique du chapitre ----- */
 .theme-encre section { padding: 0 0 70px; }
-.ouverture { min-height: 132vh; border-top: 1px solid #15110e; }
-.ouverture-in { position: sticky; top: 0; min-height: 100vh; width: 50%; display: grid; align-content: center; padding: 92px 44px 40px 0; text-align: left; }
+.ouverture { min-height: 100vh; position: relative; }
+.ouverture::before { content: ""; position: absolute; z-index: 1; left: 0; right: 0; top: -9px; height: 18px; pointer-events: none;      /* le trait de pinceau qui ouvre le chapitre */
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 18' preserveAspectRatio='none'><filter id='r' x='-2%25' y='-80%25' width='104%25' height='260%25'><feTurbulence type='fractalNoise' baseFrequency='.03 .7' numOctaves='2' seed='4'/><feDisplacementMap in='SourceGraphic' scale='6'/></filter><path filter='url(%23r)' d='M6 7 C 120 3 300 4 470 8 S 860 11 1030 9 S 1170 9 1194 10 L 1194 11 C 1100 12 900 13 690 13 S 230 15 6 13 Z' fill='%2315110e'/></svg>") no-repeat center / 100% 100%; }
+.ouverture-in::before { content: attr(data-signe); position: absolute; z-index: -1; left: 24%; bottom: 2vh; font: 500 44vh/1 var(--mincho); color: var(--encre); opacity: .045; pointer-events: none; }
+.ouverture-in { position: relative; min-height: 100vh; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 60px; align-items: center; padding: 100px 0 60px; text-align: left; }
+.ouverture.sans-planche, .ouverture.sans-planche .ouverture-in { min-height: 0; }
+.ouverture.sans-planche .ouverture-in { grid-template-columns: minmax(0, 680px); padding-bottom: 30px; }
 .acte { display: flex; align-items: center; gap: 12px; margin: 0 0 26px; font: 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
 .acte i { flex: 1; height: 1px; background: var(--encre); }
 .acte b { font: 200 44px/1 var(--sans); letter-spacing: -.05em; color: var(--vermillon); }
@@ -66,7 +65,14 @@
 .theme-encre .carte, .theme-encre .figure { background: var(--feuille); border: 1px solid var(--encre); border-radius: 0; box-shadow: 6px 6px 0 var(--encre); }
 .theme-encre .carte.plate, .theme-encre .etape { box-shadow: none; }
 .theme-encre .etape:hover, .theme-encre .ressource:hover { box-shadow: 6px 6px 0 var(--vermillon); border-color: var(--encre); }
-.theme-encre .figure img { mix-blend-mode: multiply; }                    /* les figures s'impriment sur le papier */
+.theme-encre main { counter-reset: planche; }
+.theme-encre .figure { position: relative; }
+.theme-encre .figure img { mix-blend-mode: multiply; filter: grayscale(1) contrast(1.12); transition: filter .5s; }   /* estampe : encre sur papier */
+.theme-encre .figure:hover img { filter: none; }
+.theme-encre .figure::after { content: "estampe · survoler pour les couleurs"; position: absolute; top: -1px; right: -1px; padding: 4px 8px; background: var(--encre); color: var(--papier);
+  font: 9.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: opacity .3s; }
+.theme-encre .figure:hover::after { opacity: 0; }
+.theme-encre .figure figcaption::before { counter-increment: planche; content: "Planche " counter(planche, decimal-leading-zero) " — "; color: var(--vermillon); }
 .theme-encre .figure figcaption { color: var(--encre); font: 11.5px/1.5 var(--mono); letter-spacing: .02em; }
 .theme-encre .carte.signal, .theme-encre .conclusion, .theme-encre .flux div:last-child { background: var(--encre); color: var(--papier); }
 .theme-encre .carte.signal { box-shadow: 6px 6px 0 var(--vermillon); }
@@ -74,6 +80,9 @@
 .theme-encre .verdict { background: rgba(222, 50, 32, .16); color: var(--papier); }
 .theme-encre .conclusion { border-radius: 0; font-size: 18px; line-height: 1.5; letter-spacing: -.01em; padding: 26px 30px; margin-top: 26px; box-shadow: 6px 6px 0 var(--vermillon); }
 .theme-encre .conclusion b { color: var(--vermillon); display: block; margin-bottom: 10px; }
+.theme-encre .conclusion { position: relative; }
+.theme-encre .conclusion::after { content: "結"; position: absolute; top: -18px; right: 26px; width: 46px; height: 46px; display: grid; place-items: center; rotate: -7deg;
+  background: var(--vermillon); color: #fff; font: 500 27px/1 var(--mincho); box-shadow: 0 0 0 3px var(--encre); }
 .theme-encre .kpi b { font-weight: 200; font-size: 62px; }
 .theme-encre .kpi.vert { background: var(--indigo); border-color: var(--encre); color: #fff; }
 .theme-encre .kpi.vert .contre { color: rgba(255, 255, 255, .8); }
@@ -83,7 +92,7 @@
 .theme-encre .btn.contour { background: var(--feuille); }
 .theme-encre .etape::before, .theme-encre .ressource .fleche { color: #fff; }
 .theme-encre .badge.acheter { color: #fff; background: var(--indigo); }
-.theme-encre .tableau .fort { background: linear-gradient(transparent 62%, rgba(222, 50, 32, .38) 62%, rgba(222, 50, 32, .38) 92%, transparent 92%); }
+.theme-encre .tableau .fort { background: linear-gradient(transparent 62%, rgba(38, 64, 124, .3) 62%, rgba(38, 64, 124, .3) 92%, transparent 92%); }   /* le meilleur des deux : indigo */
 .theme-encre .flux { border-color: var(--encre); background: var(--feuille); }
 .theme-encre .flux div { border-color: var(--encre); }
 .theme-encre .scene { background: rgba(21, 17, 14, .05); border: 1px solid var(--encre); }
@@ -99,59 +108,97 @@
 .theme-encre .volet .face-avant { background: var(--encre); color: var(--papier); border: 0; }
 .theme-encre .volet .face-apres { background: var(--vermillon); color: #fff; }
 
-/* Couleurs des graphiques SVG et des valeurs, ramenées à la grammaire de la page */
-.theme-encre svg [fill="#b4ff1a"], .theme-encre svg [fill="#1faa59"] { fill: #7d9bea; } .theme-encre svg [stroke="#b4ff1a"], .theme-encre svg [stroke="#1faa59"] { stroke: #7d9bea; }
+/* Couleurs des graphiques SVG et des valeurs, ramenées à la grammaire de la page :
+   indigo = hausse, achat (« toujours acheter, couvert » compris) ; vermillon = baisse, vente ; encre = le modèle. */
+.theme-encre svg [fill="#b4ff1a"], .theme-encre svg [fill="#1faa59"] { fill: #26407c; }
+.theme-encre .signal svg [fill="#b4ff1a"], .theme-encre .signal svg [fill="#1faa59"] { fill: #7d9bea; }      /* sur une carte d'encre : indigo clair */
+.theme-encre svg [stroke="#b4ff1a"], .theme-encre svg [stroke="#1faa59"], .theme-encre svg [stroke="#ff7a45"], .theme-encre svg [stroke="#c55a11"] { stroke: #26407c; }
 .theme-encre svg [stroke="#052424"] { stroke: #15110e; } .theme-encre svg [fill="#052424"] { fill: #15110e; }
-.theme-encre svg [fill="#e5484d"], .theme-encre svg [fill="#ff7a45"] { fill: #de3220; } .theme-encre svg [stroke="#e5484d"], .theme-encre svg [stroke="#ff7a45"] { stroke: #de3220; }
-.theme-encre [style*="180, 255, 26"] { color: #7d9bea !important; }
+.theme-encre svg [fill="#e5484d"], .theme-encre svg [fill="#ff7a45"] { fill: #de3220; } .theme-encre svg [stroke="#e5484d"] { stroke: #de3220; }
+.theme-encre svg [stroke="#eeeeec"] { stroke: rgba(21, 17, 14, .1); }
+.theme-encre .signal [style*="180, 255, 26"] { color: #7d9bea !important; } .theme-encre [style*="31, 170, 89"] { color: #26407c !important; }
+.theme-encre [style*="229, 72, 77"] { color: #de3220 !important; }
 .theme-encre .repartition i:first-child { background: #26407c !important; } .theme-encre .repartition i:last-child { background: #de3220 !important; }
-.theme-encre .legende i[style*="1faa59"], .theme-encre .legende i[style*="b4ff1a"] { background: #26407c !important; }
-.theme-encre .legende i[style*="e5484d"], .theme-encre .legende i[style*="ff7a45"], .theme-encre .legende i[style*="c55a11"] { background: #de3220 !important; }
-.theme-encre .legende i[style*="052424"] { background: #15110e !important; }
+.theme-encre .legende i[style*="1faa59"], .theme-encre .legende i[style*="b4ff1a"], .theme-encre .legende i[style*="c55a11"], .theme-encre .legende i[style*="ff7a45"] { background: #26407c !important; }
+.theme-encre .legende i[style*="e5484d"] { background: #de3220 !important; }
+.theme-encre .legende i[style*="052424"], .theme-encre .legende i[style*="15171f"], .theme-encre .legende i[style*="f2c14e"] { background: #15110e !important; }
 
-/* ----- Les repères : des étiquettes accrochées aux points du nuage ----- */
-#reperes { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity .25s; overflow: hidden; }
-#reperes.net { opacity: 1; transition: opacity .6s; }
-.repere { position: absolute; left: 0; top: 0; white-space: nowrap; font: 10.5px/1.25 "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .03em; color: #15110e;
-  text-shadow: 0 0 4px #f1eadb, 0 0 4px #f1eadb, 0 0 8px #f1eadb; will-change: transform; }
-.repere.fort { background: #15110e; color: #f1eadb; padding: 3px 7px; text-shadow: none; }
-.a-h { translate: -50% calc(-100% - 7px); } .a-b { translate: -50% 7px; } .a-g { translate: calc(-100% - 9px) -50%; } .a-d { translate: 9px -50%; }
-.a-hg { translate: -100% calc(-100% - 7px); } .a-hd { translate: 0 calc(-100% - 7px); } .a-bg { translate: -100% 7px; } .a-bd { translate: 0 7px; }
+/* ----- Les planches : un graphique SVG par chapitre, dans sa colonne, avec sa lecture en dessous ----- */
+.planche { margin: 0; min-width: 0; }
+.planche svg { display: block; width: 100%; height: auto; max-height: 64vh; overflow: visible; }
+.planche .et { font: 13.5px "Helvetica Neue", Helvetica, Arial, sans-serif; fill: #15110e; paint-order: stroke; stroke: #f1eadb; stroke-width: 3.5px; stroke-linejoin: round; }
+.planche .petit { font: 11px "SF Mono", ui-monospace, Menlo, monospace; fill: #6b6258; letter-spacing: .02em; }
+.planche .fort { font-weight: 600; }
+.planche .grand { font-size: 27px; font-weight: 300; letter-spacing: -.04em; }
+.planche .tres-grand { font-size: 44px; font-weight: 200; letter-spacing: -.05em; }
+.planche .et.ind { fill: #26407c; } .planche .et.ver { fill: #de3220; } .planche .et.gri { fill: #6b6258; }
+.planche .f-enc { fill: #15110e; } .planche .f-ind { fill: #26407c; } .planche .f-ver { fill: #de3220; } .planche .f-gri { fill: #b3a898; }
+.planche .c-enc, .planche .c-ind, .planche .c-ver { fill: none; stroke-width: 1.3; } .planche .c-enc { stroke: #15110e; } .planche .c-ind { stroke: #26407c; } .planche .c-ver { stroke: #de3220; }
+.planche .t-enc, .planche .t-ind, .planche .t-ver, .planche .t-gri { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.planche .t-enc { stroke: #15110e; } .planche .t-ind { stroke: #26407c; } .planche .t-ver { stroke: #de3220; } .planche .t-gri { stroke: #b3a898; }
+.planche .epais { stroke-width: 2.8; } .planche .fin { stroke-width: 1.1; } .planche .arc { stroke-width: 30; stroke-linecap: butt; }
+.planche .clair { opacity: .32; }
+.planche .grille { stroke: rgba(21, 17, 14, .13); stroke-width: 1; } .planche .axe { stroke: #15110e; stroke-width: 1.2; } .planche .tiret { stroke-dasharray: 5 5; }
+.planche .aire { fill: rgba(21, 17, 14, .09); } .planche .aire-ind { fill: rgba(38, 64, 124, .12); } .planche .voile { fill: rgba(21, 17, 14, .055); }
+.planche .zone-ver { fill: rgba(222, 50, 32, .09); } .planche .zone-ind { fill: rgba(38, 64, 124, .1); }
+.planche .niveau { fill: none; stroke: #15110e; stroke-width: 1; stroke-opacity: .45; }
+.planche .soleil { fill: #de3220; }
+.planche .aiguille line { stroke-width: 6; }
+.planche figcaption { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--encre, #15110e); }
+.planche .lecture { font: 9.5px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: #de3220; }
+.planche h4 { margin: 4px 0 4px; font-size: 17px; font-weight: 500; letter-spacing: -.02em; }
+.planche figcaption p { margin: 0 0 8px; font-size: 14px; line-height: 1.5; color: #4b433b; max-width: 600px; }
+.planche ul { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0; padding: 0; list-style: none; font: 10.5px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .03em; }
+.planche li { display: flex; align-items: center; gap: 7px; } .planche li i { width: 10px; height: 10px; flex: none; }
+.planche li i.f-enc { background: #15110e; } .planche li i.f-ind { background: #26407c; } .planche li i.f-ver { background: #de3220; } .planche li i.f-gri { background: #b3a898; }
 
-/* ----- Le cartel : ce que dessine le nuage, et ce que veulent dire les couleurs ----- */
-#cartel { position: fixed; z-index: 2; left: calc(50% + 28px); right: 34px; bottom: 22px; max-width: 560px; padding-top: 10px; border-top: 1px solid #15110e; pointer-events: none;
-  opacity: 0; translate: 0 10px; transition: opacity .45s, translate .45s; color: #15110e; }
-#cartel.visible { opacity: 1; translate: 0 0; }
-#cartel.change h4, #cartel.change .cartel-texte, #cartel.change ul { opacity: 0; }
-#cartel h4, #cartel .cartel-texte, #cartel ul { transition: opacity .25s; }
-.cartel-entete { margin: 0 0 4px; font: 9.5px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: #de3220; }
-#cartel h4 { margin: 0 0 4px; font-size: 16px; font-weight: 500; letter-spacing: -.02em; }
-.cartel-texte { margin: 0 0 8px; font-size: 12.5px; line-height: 1.45; color: #4b433b; }
-#cartel ul { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; padding: 0; list-style: none; font: 10.5px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .03em; }
-#cartel li { display: flex; align-items: center; gap: 6px; }
-#cartel li i { width: 9px; height: 9px; flex: none; }
+/* Animations des planches : rien n'est visible avant l'entrée à l'écran (classe .joue), puis chaque élément arrive à son tour (--d) */
+.planche .a-trace { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--t, 2s) cubic-bezier(.65, 0, .2, 1) var(--d, 0s); }
+.planche.joue .a-trace { stroke-dashoffset: 0; }
+.planche .a-fondu { opacity: 0; transition: opacity .7s ease var(--d, 0s); }
+.planche .a-pop { opacity: 0; transform: scale(.2); transform-box: fill-box; transform-origin: center; transition: opacity .3s ease var(--d, 0s), transform .55s cubic-bezier(.2, 1.6, .4, 1) var(--d, 0s); }
+.planche .a-tombe { opacity: 0; transform: translateY(-28px); transition: opacity .35s ease var(--d, 0s), transform .6s cubic-bezier(.3, 1.4, .5, 1) var(--d, 0s); }
+.planche .a-haut, .planche .a-bas, .planche .a-droite, .planche .a-gauche { transform-box: fill-box; transition: transform .75s cubic-bezier(.2, .9, .2, 1) var(--d, 0s); }
+.planche .a-haut { transform: scaleY(0); transform-origin: 50% 100%; } .planche .a-bas { transform: scaleY(0); transform-origin: 50% 0; }
+.planche .a-droite { transform: scaleX(0); transform-origin: 0 50%; } .planche .a-gauche { transform: scaleX(0); transform-origin: 100% 50%; }
+.planche .a-leve { opacity: 0; transform: translateY(110px) scale(.55); transform-box: fill-box; transform-origin: center; transition: opacity .6s ease, transform 1.5s cubic-bezier(.2, 1.2, .3, 1); }
+.planche.joue .a-fondu, .planche.joue .a-pop, .planche.joue .a-tombe, .planche.joue .a-leve { opacity: 1; }
+.planche.joue .a-pop, .planche.joue .a-tombe, .planche.joue .a-haut, .planche.joue .a-bas, .planche.joue .a-droite, .planche.joue .a-gauche, .planche.joue .a-leve { transform: none; }
+.planche.joue .clair { opacity: .32; }
+.planche .aiguille { transform-box: view-box; transform-origin: 320px 288px; transform: rotate(0deg); transition: transform 1.3s cubic-bezier(.3, 1.45, .5, 1) .5s; }
+.planche.joue .aiguille { transform: rotate(calc(var(--p) * 180deg)); }
 
 /* ----- Le rail : les quinze étapes de la page, sur le bord gauche ----- */
 #rail { position: fixed; z-index: 30; left: 0; top: 50%; translate: 0 -50%; display: grid; gap: 1px; }
 #rail a { display: flex; align-items: center; gap: 8px; height: 15px; padding-left: 6px; text-decoration: none; color: #15110e; }
 #rail i { width: 10px; height: 1px; background: #15110e; opacity: .4; transition: width .3s, background .3s, opacity .3s; }
-#rail a.actif i { width: 20px; height: 2px; background: #de3220; opacity: 1; }
+#rail a.actif i { width: 9px; height: 9px; border-radius: 50%; background: #de3220; opacity: 1; }
 #rail span { font: 10px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .06em; text-transform: uppercase; background: #15110e; color: #f1eadb; padding: 2px 6px; opacity: 0; transition: opacity .2s; white-space: nowrap; }
 #rail:hover span { opacity: 1; }
 #rail a:hover i { width: 20px; opacity: 1; }
+
+/* ----- Le lecteur de notebooks, dans la même identité ----- */
+body.theme-encre.page-notebooks .nav { background: rgba(21, 17, 14, .94); }
+.theme-encre .lecteur { position: relative; z-index: 1; border-top: 1px solid var(--encre); }
+.theme-encre .lecteur aside { border-right: 1px solid var(--encre); }
+.theme-encre .lecteur aside h2 { display: flex; align-items: center; gap: 12px; font-size: 38px; font-weight: 200; letter-spacing: -.05em; }
+.theme-encre .lecteur aside a.nb { border-radius: 0; border-left: 3px solid transparent; }
+.theme-encre .lecteur aside a.nb .num { color: var(--vermillon); opacity: 1; }
+.theme-encre .lecteur aside a.nb.actif { background: var(--encre); color: var(--papier); border-left-color: var(--vermillon); }
+.theme-encre .lecteur .cadre { background: #f7f2e6; }
+.theme-encre .lecteur .bandeau { border-bottom: 1px solid var(--encre); }
+.theme-encre .lecteur .bandeau a { color: var(--encre); }
 
 /* ----- Apparitions : l'encre se révèle ----- */
 .theme-encre .apparait { opacity: 1; translate: 0 34px; clip-path: inset(0 0 100% 0); transition: clip-path .9s cubic-bezier(.2, .8, .2, 1), translate .9s cubic-bezier(.2, .8, .2, 1); }
 .theme-encre .apparait.vu { translate: 0 0; clip-path: inset(-12px -12px -12px -12px); }
 
 @media (max-width: 900px) {
-  .affiche-texte, .ouverture-in { width: 100%; padding-right: 0; }
-  .theme-encre .affiche, .ouverture { min-height: 0; }
-  .affiche-in, .ouverture-in { position: static; min-height: 0; padding-top: 58vh; padding-bottom: 180px; }
-  .soleil-recit { width: 30vh; height: 30vh; top: 12vh; right: 8vw; }
-  #cartel { left: 12px; right: 12px; bottom: 8px; padding: 8px 10px; background: rgba(241, 234, 219, .95); border: 1px solid #15110e; }
-  .cartel-texte, #rail { display: none; }
-  .repere { font-size: 9px; }
+  .affiche-in, .ouverture-in { grid-template-columns: minmax(0, 1fr); gap: 34px; min-height: 0; padding-top: 110px; padding-bottom: 40px; }
+  .ouverture, .theme-encre .affiche { min-height: 0; }
+  .ouverture-in::before { left: 30%; font-size: 30vh; }
+  .planche svg { max-height: none; }
+  #rail { display: none; }
   .theme-encre .kpi b { font-size: 44px; }
 }
-@media (prefers-reduced-motion: reduce) { .soleil-recit { animation: none; } .theme-encre .apparait { clip-path: none; translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) { .planche * { transition: none !important; } .theme-encre .apparait { clip-path: none; translate: 0 0; } }

@@ -166,7 +166,8 @@ async function sceneSurface() {
 
   const N = d.axe.length, B = d.axe[N - 1], Jmin = d.optimum[2], Jmax = Math.max(...d.cout.flat());
   const H = (J) => ((J - Jmin) / (Jmax - Jmin)) * 2.5;
-  const palette = [[0, 0x2b5c9e], [0.3, 0x3fa7a0], [0.62, 0xf2c14e], [1, 0xc8324b]].map(([t, hex]) => [t, new THREE.Color(hex)]);
+  const encre = document.body.classList.contains("theme-encre");          // le récit : de l'indigo au vermillon
+  const palette = (encre ? [[0, 0x26407c], [0.35, 0x8fa0c8], [0.68, 0xdcc3ae], [1, 0xde3220]] : [[0, 0x2b5c9e], [0.3, 0x3fa7a0], [0.62, 0xf2c14e], [1, 0xc8324b]]).map(([t, hex]) => [t, new THREE.Color(hex)]);
   const teinte = (t) => {
     const k = Math.max(1, palette.findIndex(([seuil]) => t <= seuil));
     const [t0, c0] = palette[k - 1], [t1, c1] = palette[k];
@@ -229,7 +230,7 @@ async function sceneSurface() {
     trajet.clear();
     const pts = courant.points.map((p) => surSurface(p));
     trajet.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0x15171f })));
-    pts.forEach((p, i) => { const b = bille(i ? 0.03 : 0.075, i ? 0x15171f : 0xf2c14e); b.position.copy(p); trajet.add(b); });
+    pts.forEach((p, i) => { const b = bille(i ? 0.03 : 0.075, i ? 0x15171f : encre ? 0x15110e : 0xf2c14e); b.position.copy(p); trajet.add(b); });
     courant.pts = pts;
     debutAnimation = performance.now();
     choix.querySelectorAll(".onglet").forEach((o) => o.classList.toggle("actif", o === bouton));

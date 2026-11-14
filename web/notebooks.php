@@ -12,11 +12,12 @@ $disponible = is_file(__DIR__ . '/nb/' . $courant[0] . '.html');
 
 $titre = 'Notebook ' . $courant[1] . ' · Projet Nikkei';
 $page = 'notebooks';
+$theme = 'encre';
 require __DIR__ . '/inc/entete.php';
 ?>
 <div class="lecteur">
   <aside>
-    <h2>Notebooks</h2>
+    <h2><span class="sceau">入</span>Notebooks</h2>
 <?php foreach (NOTEBOOKS as [$nom, $numero, $libelle, $resume, $cours]): ?>
     <a class="nb<?= $nom === $courant[0] ? ' actif' : '' ?>" href="/notebooks?nb=<?= e($nom) ?>">
       <span class="num">Notebook <?= e($numero) ?> · <?= e($cours) ?></span>
@@ -41,6 +42,17 @@ require __DIR__ . '/inc/entete.php';
 <?php endif; ?>
   </div>
 </div>
+<script>
+// Les notebooks sont des pages HTML générées par Jupyter : on leur donne le papier et l'encre du site.
+document.querySelector(".lecteur iframe")?.addEventListener("load", (e) => {
+  const style = e.target.contentDocument.createElement("style");
+  style.textContent = `:root { --jp-layout-color0: #f7f2e6; --jp-layout-color1: #f7f2e6; --jp-cell-editor-background: #efe8d8; --jp-cell-editor-border-color: #d9cfbb;
+      --jp-content-link-color: #de3220; --jp-content-font-color1: #15110e; --jp-ui-font-color1: #15110e; --jp-border-color2: #d9cfbb; }
+    body { background: #f7f2e6 !important; } h1, h2, h3 { font-weight: 300; letter-spacing: -.03em; }
+    .jp-OutputArea-output img { mix-blend-mode: multiply; } .jp-RenderedHTMLCommon tbody tr:nth-child(odd) { background: rgba(21, 17, 14, .04); }`;
+  e.target.contentDocument.head.appendChild(style);
+});
+</script>
 <script src="/assets/effets.js"></script>
 </body>
 </html>
