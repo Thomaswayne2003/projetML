@@ -7,7 +7,8 @@
   document.body.appendChild(rideau);
   if (!calme && !document.body.hasAttribute("data-sans-rideau")) {
     rideau.classList.add("ferme", "sans-transition");
-    requestAnimationFrame(() => requestAnimationFrame(() => rideau.classList.remove("ferme", "sans-transition")));
+    void rideau.offsetWidth;                                             // le rideau est d'abord posé fermé
+    setTimeout(() => rideau.classList.remove("ferme", "sans-transition"), 60);   // puis il s'ouvre, même si l'onglet se charge en arrière-plan
   }
   addEventListener("pageshow", (e) => { if (e.persisted) rideau.classList.remove("ferme"); });
   document.addEventListener("click", (e) => {

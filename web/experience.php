@@ -15,14 +15,14 @@ $regle = $eval['performance_euros']['règle du modèle']['cumul'] ?? 0.035;
 $p = $signal['p_hausse'] ?? 0.45;
 
 $chapitres = [
-    ['Ouverture', "Acheter, rester neutre ou vendre le Nikkei\u{00A0}225\u{00A0}?", "Un signal mensuel tiré des news et des marchés, pour un investisseur en euros.", 'Faire défiler'],
-    ['Données', '201 mois de marché, 13 700 articles', "Chaque particule est un fragment du Nikkei 225, de 2010 à 2026. Les news, notées par FinBERT, commencent en 2017.", '2010 → 2026'],
-    ['Découpage', 'Le temps ne se mélange pas', "Entraînement, validation, test : trois blocs, dans l'ordre. La décision est figée par un commit avant d'ouvrir le dernier.", '143 · 24 · 33 mois'],
-    ['Apprentissage', 'Descendre la surface de coût', "Une régression logistique codée à la main : vraisemblance, gradient, prior gaussien. Elle retrouve scikit-learn à 5 × 10⁻⁶ près.", 'λ = 0,117'],
-    ['Signal', pct($p) . ' de probabilité de hausse', $signal ? 'Données de fin ' . mois_lisible($signal['mois_des_donnees']) . ". La règle du modèle dit « " . $signal['action_du_modele'] . " »." : "L'API Python est arrêtée : valeur d'exemple.", 'S = ' . signe(2 * $p - 1)],
-    ['Verdict', 'Le modèle ne bat pas le plancher', 'Log-loss ' . decimal($modele) . ' contre ' . decimal($constante) . " pour le modèle constant. Engagement tenu : la recommandation est « toujours acheter, couvert ».", signe(100 * $achat, 1, ' %') . ' contre ' . signe(100 * $regle, 1, ' %')],
+    ['Ouverture', "Acheter, rester neutre ou vendre le Nikkei\u{00A0}225\u{00A0}?", "Tous les mois, un signal tiré des news et des marchés pour aider un investisseur en euros à décider.", 'Faire défiler'],
+    ['Données', '201 mois de marché, 13 700 articles', "Le nuage dessine le Nikkei 225 de 2010 à 2026. Les news, notées par FinBERT, ne commencent qu'en 2017.", '2010 → 2026'],
+    ['Découpage', 'Le temps ne se mélange pas', "Nous avons séparé l'entraînement, la validation et le test en respectant l'ordre chronologique. La décision a été figée par un commit avant d'ouvrir le dernier bloc.", '143 · 24 · 33 mois'],
+    ['Apprentissage', 'Descendre la surface de coût', "Nous avons codé la régression logistique à la main, de la vraisemblance au gradient en passant par l'a priori gaussien. Elle retrouve scikit-learn à 5 × 10⁻⁶ près.", 'λ = 0,117'],
+    ['Signal', pct($p) . ' de probabilité de hausse', $signal ? 'Avec les données de fin ' . mois_lisible($signal['mois_des_donnees']) . ", la règle du modèle conduirait à « " . $signal['action_du_modele'] . " »." : "L'API Python est arrêtée, cette valeur est donnée à titre d'exemple.", 'S = ' . signe(2 * $p - 1)],
+    ['Verdict', 'Le modèle ne bat pas le plancher', 'Log-loss ' . decimal($modele) . ' contre ' . decimal($constante) . " pour le modèle constant. Nous tenons notre engagement et nous recommandons « toujours acheter, couvert ».", signe(100 * $achat, 1, ' %') . ' contre ' . signe(100 * $regle, 1, ' %')],
     ['Régime', "Ce qu'il avait appris a changé de sens", "Depuis 2022, la Banque du Japon normalise sa politique. Le lien entre volume de news et rendement du mois suivant se retourne.", '−0,38 → +0,29'],
-    ['Entrer', 'Tout le projet, en détail', "Le prédicteur, le simulateur, les six notebooks exécutés, le rapport et l'annexe de Maths.", ''],
+    ['Entrer', 'Tout le projet, en détail', "Vous y trouverez le prédicteur, le simulateur, les six notebooks exécutés, le rapport et l'annexe de Maths.", ''],
 ];
 ?>
 <!doctype html>
@@ -121,7 +121,6 @@ $chapitres = [
 <?php if ($i === count($chapitres) - 1): ?>
         <div class="liens">
           <a class="plein" href="/recit">Le récit complet</a>
-          <a href="/dossier">Version classique</a>
           <a href="/recit#explorateur">Prédire</a>
           <a href="/notebooks">Notebooks</a>
           <a href="/rapport.pdf" target="_blank">Rapport PDF</a>

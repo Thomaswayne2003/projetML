@@ -14,7 +14,7 @@
   <div class="nav-in">
     <a class="marque" href="/"><span class="soleil"></span>Nikkei</a>
     <div class="nav-liens" id="nav-liens">
-<?php $racine = $page === 'accueil' ? '' : '/dossier'; ?>
+<?php $racine = $page === 'accueil' ? '' : '/recit'; ?>
 <?php foreach (['resultat' => 'Résultat', 'dataset' => 'Dataset', 'methode' => 'Méthode', 'modeles' => 'Modèles', 'test' => 'Test',
                'explorateur' => 'Prédire', 'simulateur' => 'Simuler', 'projection' => 'Projection', 'regime' => 'Régime', 'maths' => 'Maths 3D'] as $ancre => $libelle): ?>
       <a href="<?= $racine ?>#<?= $ancre ?>"><?= e($libelle) ?></a>
