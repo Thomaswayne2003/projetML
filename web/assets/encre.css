@@ -1,0 +1,157 @@
+/* Le récit (/recit) : le dossier complet dans l'identité d'encre. Papier, encre, vermillon, indigo.
+   Cette feuille surcharge style.css uniquement quand le corps porte la classe .theme-encre.
+   Une seule grammaire de couleurs : indigo = hausse, achat ; vermillon = baisse, vente ; encre = le modèle, la structure. */
+.theme-encre { --papier: #f1eadb; --feuille: rgba(247, 242, 230, .95); --encre: #15110e; --encre-douce: #4b433b; --gris: #8c8276; --trait: rgba(21, 17, 14, .18); --voile: rgba(21, 17, 14, .06);
+  --vermillon: #de3220; --indigo: #26407c; --indigo-clair: #7d9bea;
+  --acide: #de3220; --sombre: #15110e; --noir: #15110e; --rouge: #de3220; --vert: #26407c; --rayon: 0px;
+  --mincho: "Hiragino Mincho ProN", "Yu Mincho", "Songti SC", serif; background: var(--papier); color: var(--encre); }
+.theme-encre::before { content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .32  0 0 0 .5 0'/></filter><rect width='220' height='220' filter='url(%23g)'/></svg>"); }
+#toile-recit { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.theme-encre main, .theme-encre .hero3d, .theme-encre footer { position: relative; z-index: 1; }
+
+/* ----- Navigation : une barre d'encre ----- */
+.theme-encre .nav { background: rgba(21, 17, 14, .94); border-radius: 0; z-index: 40; }
+.theme-encre .soleil { border-radius: 50%; background: var(--vermillon); }
+.theme-encre .nav-liens a.cta { border-radius: 0; background: var(--vermillon); color: #fff; }
+.theme-encre .nav-liens a.cta.blanc { background: var(--papier); color: var(--encre); }
+.theme-encre .nav-liens a:hover, .theme-encre .nav-liens a.actif { border-bottom-color: var(--vermillon); }
+.theme-encre .progression { background: var(--vermillon); }
+
+/* ----- Le sceau : un carré vermillon, un signe par acte ----- */
+.sceau { display: inline-grid; place-items: center; width: 30px; height: 30px; background: #de3220; color: #fff; font: 500 18px/1 "Hiragino Mincho ProN", "Yu Mincho", "Songti SC", serif; flex: none; }
+
+/* ----- Ouverture de la page : une affiche. Le texte à gauche, la courbe du Nikkei en gouttes d'encre à droite ----- */
+.theme-encre .affiche { background: transparent; color: var(--encre); overflow: visible; min-height: 135vh; margin-top: -68px; }
+.theme-encre .affiche::after { display: none; }
+.affiche-in { position: sticky; top: 0; min-height: 100vh; display: grid; align-content: center; padding-top: 84px; padding-bottom: 24px; }
+.affiche-texte { width: 50%; padding-right: 36px; }
+.theme-encre .affiche h1 { font-size: clamp(36px, 4.3vw, 70px); font-weight: 200; letter-spacing: -.05em; line-height: .98; text-shadow: none; margin: 0; }
+.theme-encre .affiche h1 em { color: var(--vermillon); font-style: normal; }
+.theme-encre .affiche .surtitre { display: flex; align-items: center; gap: 12px; font: 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--encre); text-shadow: none; margin-bottom: 18px; }
+.theme-encre .affiche .chapo { color: var(--encre-douce); text-shadow: none; font-size: 17px; margin: 18px 0 0; max-width: 520px; }
+.reponse { display: grid; grid-template-columns: 1fr 1fr; margin: 20px 0 18px; border: 1px solid #15110e; background: rgba(247, 242, 230, .95); box-shadow: 7px 7px 0 #de3220; }
+.reponse div { padding: 14px 16px; }
+.reponse div + div { border-top: 1px solid #15110e; }
+.reponse div:last-child { border-left: 1px solid #15110e; }
+.reponse .large { grid-column: 1 / -1; background: #15110e; color: #f1eadb; }
+.reponse dt { font: 10px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; opacity: .7; }
+.reponse dd { margin: 6px 0 4px; font-size: 27px; font-weight: 300; letter-spacing: -.04em; line-height: 1.05; }
+.reponse .large dd { font-size: clamp(24px, 2.5vw, 36px); }
+.reponse dd small { font-size: 13px; letter-spacing: 0; opacity: .6; }
+.reponse p { margin: 0; font-size: 12.5px; line-height: 1.4; opacity: .75; }
+.soleil-recit { position: absolute; right: 9vw; top: 17vh; width: 46vh; height: 46vh; border-radius: 50%; background: #de3220; animation: lever 1.6s cubic-bezier(.2, 1.3, .3, 1) both; }
+.signe-recit { position: absolute; right: 2vw; top: 62vh; font: 500 44vh/1 "Hiragino Mincho ProN", "Yu Mincho", serif; color: #15110e; opacity: .035; pointer-events: none; white-space: nowrap; }
+@keyframes lever { from { transform: translateY(40vh) scale(.2); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ----- Ouverture d'un chapitre : acte, numéro, titre, ce qu'il faut retenir. La moitié droite est laissée à la figure. ----- */
+.theme-encre section { padding: 0 0 70px; }
+.ouverture { min-height: 132vh; border-top: 1px solid #15110e; }
+.ouverture-in { position: sticky; top: 0; min-height: 100vh; width: 50%; display: grid; align-content: center; padding: 92px 44px 40px 0; text-align: left; }
+.acte { display: flex; align-items: center; gap: 12px; margin: 0 0 26px; font: 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+.acte i { flex: 1; height: 1px; background: var(--encre); }
+.acte b { font: 200 44px/1 var(--sans); letter-spacing: -.05em; color: var(--vermillon); }
+.theme-encre .ouverture .surtitre { text-align: left; margin: 0 0 12px; font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gris); }
+.theme-encre .ouverture h2 { text-align: left; margin: 0; font-size: clamp(32px, 3.9vw, 62px); font-weight: 200; letter-spacing: -.05em; line-height: 1; }
+.theme-encre .ouverture .chapo { text-align: left; margin: 20px 0 0; max-width: 520px; color: var(--encre-douce); font-size: 17px; line-height: 1.5; }
+.retenir { margin-top: 26px; padding: 4px 0 4px 18px; border-left: 3px solid var(--vermillon); max-width: 520px; }
+.retenir .etiquette { font: 10px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--vermillon); }
+.retenir b { display: block; margin: 6px 0 6px; font-size: clamp(30px, 3.2vw, 48px); font-weight: 200; letter-spacing: -.05em; line-height: 1; }
+.retenir b small { font-size: 15px; letter-spacing: 0; color: var(--gris); }
+.retenir p { margin: 0; font-size: 15px; line-height: 1.45; }
+.detail { display: flex; align-items: center; gap: 14px; margin: 0 0 26px; font: 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--gris); }
+.detail::after { content: ""; flex: 1; height: 1px; background: var(--trait); }
+
+/* ----- Le contenu : des feuilles de papier posées sur la page ----- */
+.theme-encre .carte, .theme-encre .figure { background: var(--feuille); border: 1px solid var(--encre); border-radius: 0; box-shadow: 6px 6px 0 var(--encre); }
+.theme-encre .carte.plate, .theme-encre .etape { box-shadow: none; }
+.theme-encre .etape:hover, .theme-encre .ressource:hover { box-shadow: 6px 6px 0 var(--vermillon); border-color: var(--encre); }
+.theme-encre .figure img { mix-blend-mode: multiply; }                    /* les figures s'impriment sur le papier */
+.theme-encre .figure figcaption { color: var(--encre); font: 11.5px/1.5 var(--mono); letter-spacing: .02em; }
+.theme-encre .carte.signal, .theme-encre .conclusion, .theme-encre .flux div:last-child { background: var(--encre); color: var(--papier); }
+.theme-encre .carte.signal { box-shadow: 6px 6px 0 var(--vermillon); }
+.theme-encre .carte.signal .note, .theme-encre .signal .etiquette, .theme-encre .signal .mois, .theme-encre .signal .proba small, .theme-encre .carte.signal .mini > span { color: #b3a898; }
+.theme-encre .verdict { background: rgba(222, 50, 32, .16); color: var(--papier); }
+.theme-encre .conclusion { border-radius: 0; font-size: 18px; line-height: 1.5; letter-spacing: -.01em; padding: 26px 30px; margin-top: 26px; box-shadow: 6px 6px 0 var(--vermillon); }
+.theme-encre .conclusion b { color: var(--vermillon); display: block; margin-bottom: 10px; }
+.theme-encre .kpi b { font-weight: 200; font-size: 62px; }
+.theme-encre .kpi.vert { background: var(--indigo); border-color: var(--encre); color: #fff; }
+.theme-encre .kpi.vert .contre { color: rgba(255, 255, 255, .8); }
+.theme-encre .btn, .theme-encre .onglets, .theme-encre .onglet, .theme-encre .badge, .theme-encre .mini, .theme-encre .formule, .theme-encre .scene,
+.theme-encre .flux, .theme-encre .etape::before, .theme-encre .ressource .fleche, .theme-encre .alerte, .theme-encre code { border-radius: 0; }
+.theme-encre .btn.plein { background: var(--vermillon); border-color: var(--vermillon); color: #fff; }
+.theme-encre .btn.contour { background: var(--feuille); }
+.theme-encre .etape::before, .theme-encre .ressource .fleche { color: #fff; }
+.theme-encre .badge.acheter { color: #fff; background: var(--indigo); }
+.theme-encre .tableau .fort { background: linear-gradient(transparent 62%, rgba(222, 50, 32, .38) 62%, rgba(222, 50, 32, .38) 92%, transparent 92%); }
+.theme-encre .flux { border-color: var(--encre); background: var(--feuille); }
+.theme-encre .flux div { border-color: var(--encre); }
+.theme-encre .scene { background: rgba(21, 17, 14, .05); border: 1px solid var(--encre); }
+.theme-encre footer { border-color: var(--encre); }
+
+/* Le changement de régime : même papier que le reste, des cartes d'encre qui se retournent en vermillon */
+.theme-encre .regime, .theme-encre .regime.est-apres { margin: 0; padding: 0 0 70px; border-radius: 0; background: transparent; color: var(--encre); }
+.theme-encre .regime .chapo { color: var(--encre-douce); }
+.theme-encre .regime .onglets { background: var(--encre); }
+.theme-encre .regime .onglet { color: #b3a898; }
+.theme-encre .regime .onglet.actif { background: var(--vermillon); color: #fff; }
+.theme-encre .volet .face { border-radius: 0; }
+.theme-encre .volet .face-avant { background: var(--encre); color: var(--papier); border: 0; }
+.theme-encre .volet .face-apres { background: var(--vermillon); color: #fff; }
+
+/* Couleurs des graphiques SVG et des valeurs, ramenées à la grammaire de la page */
+.theme-encre svg [fill="#b4ff1a"], .theme-encre svg [fill="#1faa59"] { fill: #7d9bea; } .theme-encre svg [stroke="#b4ff1a"], .theme-encre svg [stroke="#1faa59"] { stroke: #7d9bea; }
+.theme-encre svg [stroke="#052424"] { stroke: #15110e; } .theme-encre svg [fill="#052424"] { fill: #15110e; }
+.theme-encre svg [fill="#e5484d"], .theme-encre svg [fill="#ff7a45"] { fill: #de3220; } .theme-encre svg [stroke="#e5484d"], .theme-encre svg [stroke="#ff7a45"] { stroke: #de3220; }
+.theme-encre [style*="180, 255, 26"] { color: #7d9bea !important; }
+.theme-encre .repartition i:first-child { background: #26407c !important; } .theme-encre .repartition i:last-child { background: #de3220 !important; }
+.theme-encre .legende i[style*="1faa59"], .theme-encre .legende i[style*="b4ff1a"] { background: #26407c !important; }
+.theme-encre .legende i[style*="e5484d"], .theme-encre .legende i[style*="ff7a45"], .theme-encre .legende i[style*="c55a11"] { background: #de3220 !important; }
+.theme-encre .legende i[style*="052424"] { background: #15110e !important; }
+
+/* ----- Les repères : des étiquettes accrochées aux points du nuage ----- */
+#reperes { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity .25s; overflow: hidden; }
+#reperes.net { opacity: 1; transition: opacity .6s; }
+.repere { position: absolute; left: 0; top: 0; white-space: nowrap; font: 10.5px/1.25 "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .03em; color: #15110e;
+  text-shadow: 0 0 4px #f1eadb, 0 0 4px #f1eadb, 0 0 8px #f1eadb; will-change: transform; }
+.repere.fort { background: #15110e; color: #f1eadb; padding: 3px 7px; text-shadow: none; }
+.a-h { translate: -50% calc(-100% - 7px); } .a-b { translate: -50% 7px; } .a-g { translate: calc(-100% - 9px) -50%; } .a-d { translate: 9px -50%; }
+.a-hg { translate: -100% calc(-100% - 7px); } .a-hd { translate: 0 calc(-100% - 7px); } .a-bg { translate: -100% 7px; } .a-bd { translate: 0 7px; }
+
+/* ----- Le cartel : ce que dessine le nuage, et ce que veulent dire les couleurs ----- */
+#cartel { position: fixed; z-index: 2; left: calc(50% + 28px); right: 34px; bottom: 22px; max-width: 560px; padding-top: 10px; border-top: 1px solid #15110e; pointer-events: none;
+  opacity: 0; translate: 0 10px; transition: opacity .45s, translate .45s; color: #15110e; }
+#cartel.visible { opacity: 1; translate: 0 0; }
+#cartel.change h4, #cartel.change .cartel-texte, #cartel.change ul { opacity: 0; }
+#cartel h4, #cartel .cartel-texte, #cartel ul { transition: opacity .25s; }
+.cartel-entete { margin: 0 0 4px; font: 9.5px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; color: #de3220; }
+#cartel h4 { margin: 0 0 4px; font-size: 16px; font-weight: 500; letter-spacing: -.02em; }
+.cartel-texte { margin: 0 0 8px; font-size: 12.5px; line-height: 1.45; color: #4b433b; }
+#cartel ul { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; padding: 0; list-style: none; font: 10.5px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .03em; }
+#cartel li { display: flex; align-items: center; gap: 6px; }
+#cartel li i { width: 9px; height: 9px; flex: none; }
+
+/* ----- Le rail : les quinze étapes de la page, sur le bord gauche ----- */
+#rail { position: fixed; z-index: 30; left: 0; top: 50%; translate: 0 -50%; display: grid; gap: 1px; }
+#rail a { display: flex; align-items: center; gap: 8px; height: 15px; padding-left: 6px; text-decoration: none; color: #15110e; }
+#rail i { width: 10px; height: 1px; background: #15110e; opacity: .4; transition: width .3s, background .3s, opacity .3s; }
+#rail a.actif i { width: 20px; height: 2px; background: #de3220; opacity: 1; }
+#rail span { font: 10px "SF Mono", ui-monospace, Menlo, monospace; letter-spacing: .06em; text-transform: uppercase; background: #15110e; color: #f1eadb; padding: 2px 6px; opacity: 0; transition: opacity .2s; white-space: nowrap; }
+#rail:hover span { opacity: 1; }
+#rail a:hover i { width: 20px; opacity: 1; }
+
+/* ----- Apparitions : l'encre se révèle ----- */
+.theme-encre .apparait { opacity: 1; translate: 0 34px; clip-path: inset(0 0 100% 0); transition: clip-path .9s cubic-bezier(.2, .8, .2, 1), translate .9s cubic-bezier(.2, .8, .2, 1); }
+.theme-encre .apparait.vu { translate: 0 0; clip-path: inset(-12px -12px -12px -12px); }
+
+@media (max-width: 900px) {
+  .affiche-texte, .ouverture-in { width: 100%; padding-right: 0; }
+  .theme-encre .affiche, .ouverture { min-height: 0; }
+  .affiche-in, .ouverture-in { position: static; min-height: 0; padding-top: 58vh; padding-bottom: 180px; }
+  .soleil-recit { width: 30vh; height: 30vh; top: 12vh; right: 8vw; }
+  #cartel { left: 12px; right: 12px; bottom: 8px; padding: 8px 10px; background: rgba(241, 234, 219, .95); border: 1px solid #15110e; }
+  .cartel-texte, #rail { display: none; }
+  .repere { font-size: 9px; }
+  .theme-encre .kpi b { font-size: 44px; }
+}
+@media (prefers-reduced-motion: reduce) { .soleil-recit { animation: none; } .theme-encre .apparait { clip-path: none; translate: 0 0; } }
