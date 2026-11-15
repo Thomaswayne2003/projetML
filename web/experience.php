@@ -12,6 +12,11 @@ $modele = $eval['metriques']['logistique']['log-loss'] ?? 0.708;
 $constante = $eval['metriques']["constante (fréquence de l'entraînement)"]['log-loss'] ?? 0.657;
 $achat = $eval['performance_euros']['toujours acheter, couvert']['cumul'] ?? 0.823;
 $regle = $eval['performance_euros']['règle du modèle']['cumul'] ?? 0.035;
+// Le fichier figé arrondit les cumuls à 4 décimales (0,8235 s'afficherait +82,4 %) : on les recalcule mois par mois quand l'API répond.
+if ($mois_test = api_get('historique', ['bloc' => 'test'])) {
+    $achat = array_product(array_map(fn ($m) => 1 + $m['rendement_achat_couvert'], $mois_test)) - 1;
+    $regle = array_product(array_map(fn ($m) => 1 + $m['rendement_regle'], $mois_test)) - 1;
+}
 $p = $signal['p_hausse'] ?? 0.45;
 
 $chapitres = [
