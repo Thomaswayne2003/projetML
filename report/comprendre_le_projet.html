@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Comprendre le projet Nikkei et juger ses choix</title>
+<style>
+  @page { size: A4; margin: 17mm 16mm 18mm; @bottom-right { content: counter(page) " / " counter(pages); font: 8pt "SF Mono", Menlo, monospace; color: #8c8276; } @bottom-left { content: "Projet Nikkei · comprendre et juger"; font: 8pt "SF Mono", Menlo, monospace; color: #8c8276; } }
+  @page :first { margin: 0; @bottom-right { content: none; } @bottom-left { content: none; } }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  :root { --encre: #15110e; --doux: #4b433b; --gris: #8c8276; --trait: #d9cfbb; --papier: #f7f2e6; --ver: #de3220; --ind: #26407c; --mono: "SF Mono", ui-monospace, Menlo, monospace; }
+  html { font: 10.2pt/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--encre); }
+  body { margin: 0; }
+  h1, h2, h3 { font-weight: 300; letter-spacing: -.03em; line-height: 1.08; margin: 0; }
+  p { margin: 0 0 7pt; } ul { margin: 0 0 7pt; padding-left: 14pt; } li { margin-bottom: 3pt; }
+  code { font: 8.6pt var(--mono); background: var(--papier); padding: 0 3pt; }
+  .mono { font: 7.6pt var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ver); }
+
+  /* ---------- Couverture ---------- */
+  .couverture { height: 297mm; padding: 24mm 20mm 20mm; background: var(--papier); position: relative; overflow: hidden; page-break-after: always; display: flex; flex-direction: column; }
+  .couverture .soleil { position: absolute; right: -62mm; top: 30mm; width: 140mm; height: 140mm; border-radius: 50%; background: var(--ver); }
+  .couverture .signe { position: absolute; left: 14mm; bottom: -22mm; font: 500 150mm/1 "Hiragino Mincho ProN", serif; color: var(--encre); opacity: .05; }
+  .couverture > * { position: relative; }
+  .sceau { display: inline-grid; place-items: center; width: 9mm; height: 9mm; background: var(--ver); color: #fff; font: 500 15pt/1 "Hiragino Mincho ProN", serif; vertical-align: middle; margin-right: 3mm; }
+  .couverture h1 { font-size: 46pt; font-weight: 200; letter-spacing: -.05em; margin: 34mm 0 8mm; max-width: 108mm; }
+  .couverture h1 em { font-style: normal; color: var(--ver); }
+  .couverture .chapo { font-size: 13pt; line-height: 1.45; max-width: 100mm; color: var(--encre); }
+  .couverture .bas { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--encre); background: #fff; }
+  .couverture .bas div { padding: 5mm; border-left: 1px solid var(--encre); } .couverture .bas div:first-child { border-left: 0; background: var(--encre); color: var(--papier); }
+  .couverture .bas b { display: block; font-size: 19pt; font-weight: 300; letter-spacing: -.04em; line-height: 1.1; margin: 2mm 0; }
+  .couverture .bas span { font-size: 8.6pt; line-height: 1.4; display: block; opacity: .8; }
+  .couverture .bas .mono { color: inherit; opacity: .7; }
+
+  /* ---------- Sections ---------- */
+  section { page-break-before: always; }
+  section.suite { page-break-before: auto; margin-top: 12mm; }
+  .tete { display: flex; align-items: center; gap: 4mm; border-bottom: 1.4pt solid var(--encre); padding-bottom: 3mm; margin-bottom: 6mm; }
+  .tete i { font: 200 30pt/1 "Helvetica Neue", sans-serif; letter-spacing: -.05em; color: var(--ver); font-style: normal; }
+  .tete h2 { font-size: 22pt; }
+  h3 { font-size: 13pt; font-weight: 500; letter-spacing: -.02em; margin: 6mm 0 2.5mm; }
+  .clair { font-size: 11.6pt; line-height: 1.5; margin-bottom: 4mm; }
+  .clair::before, .tech::before { display: block; font: 7.6pt var(--mono); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 1.5mm; }
+  .clair::before { content: "En clair"; color: var(--ver); }
+  .tech { border-left: 2pt solid var(--encre); padding-left: 4mm; color: var(--doux); font-size: 9.6pt; margin-bottom: 4mm; }
+  .tech::before { content: "Plus techniquement"; color: var(--gris); }
+  .deux { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; break-inside: avoid; } .trois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+  .chiffres { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--encre); margin: 5mm 0; break-inside: avoid; }
+  .chiffres div { padding: 4mm; border-left: 1px solid var(--encre); } .chiffres div:first-child { border-left: 0; }
+  .chiffres b { display: block; font-size: 21pt; font-weight: 200; letter-spacing: -.05em; line-height: 1; }
+  .chiffres span { display: block; font-size: 8.4pt; line-height: 1.35; margin-top: 2mm; color: var(--doux); }
+  .chiffres .fond { background: var(--ind); color: #fff; } .chiffres .fond span { color: #dfe6f5; }
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; margin: 2mm 0 5mm; break-inside: avoid; }
+  th { font: 7.4pt var(--mono); letter-spacing: .08em; text-transform: uppercase; text-align: left; color: var(--gris); border-bottom: 1px solid var(--encre); padding: 2mm 2mm; font-weight: 400; }
+  td { padding: 2mm 2mm; border-bottom: 1px solid var(--trait); vertical-align: top; } .n { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.ref td { color: var(--gris); } td.m, tr.ref td.m { font-weight: 700; color: var(--ind); }
+  figure { margin: 3mm 0 5mm; break-inside: avoid; } figure img { width: 100%; display: block; border: 1px solid var(--trait); } figcaption { font-size: 8.4pt; color: var(--doux); margin-top: 1.5mm; } figure.moyen img { width: 78%; } figure.reduit img { width: 62%; } figure.petit img { width: 46%; } .serre td, .serre th { padding: 1.2mm 2mm; } .serre h3 { margin-top: 3mm; } .serre table { margin-bottom: 2mm; }
+  .ensemble { break-inside: avoid; }
+  .note { font-size: 8.8pt; color: var(--doux); }
+
+  /* ---------- Parcours en sept étapes ---------- */
+  .parcours { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2.4mm; margin: 3mm 0 4mm; break-inside: avoid; }
+  .parcours div { border: 1px solid var(--encre); padding: 3mm 2.4mm; position: relative; background: #fff; }
+  .parcours div:not(:last-child)::after { content: "→"; position: absolute; right: -3mm; top: 50%; translate: 0 -50%; font-size: 9pt; background: #fff; z-index: 1; }
+  .parcours i { font: 200 17pt/1 "Helvetica Neue", sans-serif; color: var(--ver); font-style: normal; display: block; }
+  .parcours b { display: block; font-size: 9pt; font-weight: 600; margin: 1.5mm 0 1mm; line-height: 1.2; } .parcours span { font-size: 7.6pt; line-height: 1.3; color: var(--doux); display: block; }
+  .parcours .gel { background: var(--encre); color: var(--papier); } .parcours .gel span { color: #cfc6b6; }
+
+  /* ---------- Les choix ---------- */
+  .choix { border: 1px solid var(--encre); margin-bottom: 4mm; break-inside: avoid; background: #fff; }
+  .choix header { display: flex; align-items: baseline; gap: 3mm; padding: 2.6mm 4mm; border-bottom: 1px solid var(--encre); background: var(--papier); }
+  .choix header i { font: 200 15pt/1 "Helvetica Neue", sans-serif; color: var(--ver); font-style: normal; min-width: 8mm; }
+  .choix header h3 { margin: 0; font-size: 11.4pt; flex: 1; }
+  .avis { font: 7.2pt var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 1mm 2.4mm; white-space: nowrap; }
+  .solide { background: var(--ind); color: #fff; } .defendable { border: 1px solid var(--encre); } .fragile { background: var(--ver); color: #fff; }
+  .choix .corps { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .choix .corps div { padding: 3mm 4mm; border-left: 1px solid var(--trait); font-size: 8.9pt; line-height: 1.42; } .choix .corps div:first-child { border-left: 0; font-size: 9.6pt; }
+  .choix .corps b { display: block; font: 7pt var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--gris); font-weight: 400; margin-bottom: 1.2mm; }
+  .choix .corps div:first-child b { color: var(--ver); }
+  .legende { display: flex; gap: 5mm; align-items: center; font-size: 8.6pt; margin: 2mm 0 5mm; }
+  .qr { break-inside: avoid; margin-bottom: 3.5mm; } .qr b { display: block; font-size: 10.2pt; font-weight: 600; margin-bottom: 1mm; } .qr p { margin: 0; color: var(--doux); }
+  .encadre { background: var(--encre); color: var(--papier); padding: 4.5mm 5mm; margin: 4mm 0; break-inside: avoid; font-size: 10.4pt; }
+  .encadre .mono { color: var(--ver); display: block; margin-bottom: 1.5mm; }
+</style>
+</head>
+<body>
+
+<div class="couverture">
+  <div class="soleil"></div><div class="signe">日経</div>
+  <p class="mono" style="color:var(--encre)"><span class="sceau">序</span>Albert School · MSc 1 · Applied ML &amp; Maths for ML · novembre 2026</p>
+  <h1>Comprendre le projet <em>Nikkei</em> et juger ses choix</h1>
+  <p class="chapo">Ce document explique le projet de bout en bout, sans supposer que vous connaissez le machine learning.
+    Il présente ensuite chacune des décisions prises, avec ses raisons, l'autre possibilité qui existait et un avis
+    critique, pour que vous puissiez vous faire votre propre opinion.</p>
+  <div class="bas">
+    <div><span class="mono">La réponse du projet</span><b>Acheter et garder, en se couvrant contre le yen</b><span>Le modèle n'a pas fait mieux qu'une prévision toute simple.</span></div>
+    <div><span class="mono">Le modèle, sur le test</span><b>0,708 contre 0,657</b><span>Erreur du modèle (log-loss), face à celle du modèle constant. La plus basse est la meilleure.</span></div>
+    <div><span class="mono">En euros, 2024-2026</span><b>+82,3 % contre +3,5 %</b><span>Acheter et garder, face à la règle tirée du modèle.</span></div>
+  </div>
+</div>
+
+<!-- ============ 1 ============ -->
+<section>
+  <div class="tete"><i>1</i><h2>Le projet en une page</h2></div>
+  <p class="clair">Nous avons voulu savoir si l'on peut deviner, à la fin d'un mois, ce que fera la Bourse japonaise le mois
+    suivant, en s'appuyant sur l'actualité et sur les chiffres des marchés. L'idée était d'en tirer un conseil simple
+    pour un épargnant européen : acheter, attendre ou vendre, et se protéger ou non contre les variations du yen.
+    La réponse est non. Notre modèle ne fait pas mieux qu'une prévision qui répéterait toujours la même chose, et le
+    meilleur conseil reste d'acheter et de garder.</p>
+  <p class="tech">Le projet est une classification binaire mensuelle. La cible vaut 1 quand le Nikkei 225 baisse le mois
+    suivant. Le modèle retenu est une régression logistique régularisée (L2), calibrée par Platt, dont la probabilité
+    est convertie en action par deux seuils issus d'un calcul d'espérance de gain en euros. Sur le test (33 mois, de
+    janvier 2024 à septembre 2026), sa log-loss vaut 0,708 contre 0,657 pour le modèle constant.</p>
+
+  <div class="chiffres">
+    <div><b>201</b><span>mois dans le jeu de données, de février 2010 à octobre 2026</span></div>
+    <div><b>13 694</b><span>titres de presse sur le Japon, notés par FinBERT, depuis 2017</span></div>
+    <div><b>11 / 12</b><span>baisses évitées par la règle sur le test, au prix de 18 hausses manquées sur 21</span></div>
+    <div class="fond"><b>+82,3 %</b><span>pour « toujours acheter, couvert » sur le test, contre +3,5 % pour la règle</span></div>
+  </div>
+
+  <h3>Pourquoi un résultat négatif reste un bon projet</h3>
+  <p>Un projet de machine learning se juge d'abord sur sa méthode. Il est très facile d'obtenir un modèle qui semble
+    excellent en le laissant, sans le vouloir, apercevoir l'avenir. Ici, trois précautions rendent le résultat crédible :
+    les données sont datées au jour où elles ont réellement été publiées, les choix ont été écrits et enregistrés avant
+    de regarder les derniers mois, et ces derniers mois n'ont été utilisés qu'une seule fois. Le projet explique enfin
+    pourquoi le modèle échoue, ce qui a autant de valeur qu'un bon score.</p>
+
+  <h3>Comment lire la suite</h3>
+  <p>Toutes les parties suivent le même ordre. Un paragraphe <b>« En clair »</b> donne l'idée avec des mots de tous les
+    jours. Un paragraphe <b>« Plus techniquement »</b> la reformule avec le vocabulaire du cours et les chiffres exacts.
+    La partie 3, la plus longue, passe en revue les dix-huit choix du projet. Les fiches se terminent toutes par un avis,
+    résumé par une étiquette :</p>
+  <div class="legende"><span class="avis solide">Solide</span> le choix résiste bien à la critique
+    <span class="avis defendable">Défendable</span> il se justifie, mais on pouvait faire autrement
+    <span class="avis fragile">Fragile</span> c'est un point faible à assumer</div>
+  <p class="note">Ces avis sont une appréciation argumentée, rédigée pour vous aider à juger. Ils peuvent se discuter, et
+    c'est précisément leur rôle.</p>
+</section>
+
+<!-- ============ 2 ============ -->
+<section>
+  <div class="tete"><i>2</i><h2>Le parcours, en sept étapes</h2></div>
+  <p class="clair">Le projet avance comme une enquête. On rassemble des indices, on vérifie qu'aucun ne vient du futur,
+    on entraîne plusieurs modèles sur le passé, on fixe une règle de décision, on la met sous clé, puis on la confronte
+    une seule fois aux mois les plus récents. On termine en cherchant à comprendre le résultat.</p>
+  <div class="parcours">
+    <div><i>1</i><b>Rassembler</b><span>Cours, taux, change et titres de presse, tirés de douze sources</span></div>
+    <div><i>2</i><b>Dater</b><span>Les séries sont retardées à leur date de publication, puis auditées</span></div>
+    <div><i>3</i><b>Découper</b><span>143 mois pour apprendre, 24 pour régler, 33 pour juger</span></div>
+    <div><i>4</i><b>Entraîner</b><span>Trois modèles, réglés par 200 essais automatiques</span></div>
+    <div><i>5</i><b>Décider</b><span>Une probabilité calibrée, puis deux seuils pour agir</span></div>
+    <div class="gel"><i>6</i><b>Figer, puis tester</b><span>Tout est enregistré avant l'unique évaluation finale</span></div>
+    <div><i>7</i><b>Expliquer</b><span>Pourquoi le modèle échoue après 2021</span></div>
+  </div>
+  <p class="tech">Ces étapes correspondent aux notebooks 01 à 05 et aux séances du cours : cadrage et fuites (S1),
+    régression logistique et régularisation (S2, S3), arbres et boosting (S4, S5), déséquilibre et seuils (S7),
+    calibration (S8), explicabilité (S9). Le code principal est en fichiers <code>.py</code> dans <code>src/</code>,
+    couvert par vingt tests automatiques.</p>
+
+  <div class="deux serre">
+    <div>
+      <h3>Ce que le modèle regarde</h3>
+      <p class="note">Le modèle ne reçoit que dix informations par mois, choisies pour rester lisibles.</p>
+      <table>
+        <tr><th>Famille</th><th>Variables</th></tr>
+        <tr><td>Presse</td><td>Volume anormal d'articles, sentiment des titres, présence ou non de news</td></tr>
+        <tr><td>Bourse</td><td>Tendance du Nikkei sur 3 et 12 mois, agitation récente (volatilité)</td></tr>
+        <tr><td>Économie</td><td>Variation du taux japonais à 10 ans, enquête Tankan</td></tr>
+        <tr><td>Change</td><td>Portage de la couverture, agitation de l'euro-yen</td></tr>
+        <tr><td>Régime</td><td>Distance à un marché « calme » et à un marché « agité » (k-means)</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Ce que le modèle doit prévoir</h3>
+      <p class="note">Deux questions sont posées tous les mois : le Nikkei va-t-il baisser, et vaut-il mieux se protéger contre le yen ?</p>
+      <table>
+        <tr><th>Cible</th><th>Définition</th></tr>
+        <tr><td>Baisse du Nikkei</td><td>y = 1 si le rendement du mois suivant, en yens, est négatif ou nul</td></tr>
+        <tr><td>Couverture</td><td>y = 1 si ne pas se couvrir aurait été préférable le mois suivant</td></tr>
+        <tr><td>Gain couvert</td><td>R<sup>N</sup> + C + R<sup>N</sup>·E, où C est le portage</td></tr>
+        <tr><td>Gain non couvert</td><td>R<sup>N</sup> + E + R<sup>N</sup>·E, où E est la variation du yen</td></tr>
+      </table>
+    </div>
+  </div>
+  <figure class="petit"><img src="../figures/01_nikkei_split.png" alt="">
+    <figcaption>Le Nikkei 225 en fin de mois et les trois périodes du découpage. Le modèle apprend sur la première, les réglages se font sur la deuxième, et la troisième sert d'examen final.</figcaption></figure>
+</section>
+
+<!-- ============ 3 ============ -->
+<section>
+  <div class="tete"><i>3</i><h2>Les dix-huit choix, un par un</h2></div>
+  <p class="clair">Un projet de ce type est une suite de décisions. Aucune n'est obligatoire, et chacune peut se
+    discuter. Les fiches qui suivent les présentent dans l'ordre où elles ont été prises.</p>
+
+  <h3>A · Poser le problème</h3>
+  <div class="choix"><header><i>1</i><h3>Prévoir le sens du mois suivant, et s'intéresser d'abord aux baisses</h3><span class="avis defendable">Défendable</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Nous ne cherchons pas à deviner de combien la Bourse va bouger. Nous demandons seulement si elle va monter ou baisser le mois prochain, en surveillant surtout les baisses, parce que ce sont elles qui coûtent cher.</div>
+      <div><b>Techniquement</b>Classification binaire à horizon d'un mois. La classe positive est la baisse (39 % des mois d'entraînement), ce qui donne un sens direct à la précision, au rappel et à la PR-AUC.</div>
+      <div><b>Autre possibilité et avis</b>On pouvait prévoir le rendement lui-même (régression) ou travailler à la semaine. Le choix mensuel colle à la décision d'un épargnant, mais il ne laisse que 200 exemples, ce qui est très peu.</div>
+    </div></div>
+  <div class="choix"><header><i>2</i><h3>Raisonner en euros, avec ou sans protection contre le yen</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Un Européen qui achète des actions japonaises gagne ou perd aussi selon l'évolution du yen. Nous avons donc mesuré les gains en euros et distingué deux façons d'acheter, avec ou sans protection contre le change.</div>
+      <div><b>Techniquement</b>Les rendements couvert et non couvert sont calculés à partir du rendement en yens, de la variation du change et du portage, lui-même tiré de l'écart de taux entre l'euro et le yen. L'identité est vérifiée à 7 × 10⁻⁷ près.</div>
+      <div><b>Autre possibilité et avis</b>On pouvait s'arrêter au rendement en yens. Raisonner en euros donne un vrai sens économique aux erreurs du modèle et rend possible une règle de décision chiffrée.</div>
+    </div></div>
+
+  <h3>B · Construire les données</h3>
+  <div class="choix"><header><i>3</i><h3>Construire le jeu de données nous-mêmes, à partir de douze sources</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Aucun fichier tout prêt n'existait. Nous avons téléchargé les cours, les taux et les titres de presse auprès de sources publiques, puis nous avons tout réuni dans un tableau d'une ligne par mois.</div>
+      <div><b>Techniquement</b>Yahoo Finance, FRED, ministère des Finances du Japon, Bundesbank, BCE, Banque du Japon, e-Stat, Kenneth French, GDELT. Les fichiers bruts sont conservés pour que tout puisse être rejoué sans connexion.</div>
+      <div><b>Autre possibilité et avis</b>Un jeu de données public aurait fait gagner du temps. Le construire a demandé du nettoyage (un prix divisé par dix, une fausse séance), mais l'enseignante a validé ce choix et il montre un vrai travail de préparation.</div>
+    </div></div>
+  <div class="choix"><header><i>4</i><h3>Dater les informations au jour où elles ont été publiées, et le vérifier par du code</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>L'inflation de mars n'est connue que fin avril. Si on la donne au modèle dès mars, il triche sans le savoir. Nous avons donc retardé toutes les séries jusqu'à leur vraie date de publication.</div>
+      <div><b>Techniquement</b>Décalages par série (inflation au 25 du mois suivant, Tankan cinq jours après le trimestre, facteurs Fama-French à t − 2). Un audit codé contrôle la cible, les dates et l'absence de recopie, et un test injecte une fuite pour s'assurer qu'elle est détectée.</div>
+      <div><b>Autre possibilité et avis</b>Beaucoup de projets se contentent d'affirmer qu'il n'y a pas de fuite. Ici, la vérification est écrite et rejouable. C'est l'un des points les plus sûrs du projet.</div>
+    </div></div>
+  <div class="choix"><header><i>5</i><h3>Miser sur la presse, alors qu'elle ne couvre qu'une partie de la période</h3><span class="avis fragile">Fragile</span></header>
+    <div class="corps">
+      <div><b>En clair</b>L'idée de départ était que l'actualité annonce les mouvements de la Bourse. Or nos articles ne commencent qu'en 2017, et le ton des titres ne prédit finalement presque rien.</div>
+      <div><b>Techniquement</b>13 694 titres GDELT notés par FinBERT. Les news ne couvrent que 57 des 143 mois d'entraînement, et un indicateur signale leur absence. Le sentiment a une corrélation de rang de +0,03 avec le rendement suivant.</div>
+      <div><b>Autre possibilité et avis</b>On pouvait se limiter à 2017-2026, ou renoncer aux news. Garder toute la période avec un indicateur est un compromis honnête, mais l'hypothèse centrale du projet repose sur peu de données.</div>
+    </div></div>
+  <div class="choix"><header><i>6</i><h3>Se limiter à dix variables, plus un repère de « régime » de marché</h3><span class="avis defendable">Défendable</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Avec si peu de mois, donner cent informations au modèle l'aurait poussé à voir des liens qui n'existent pas. Nous en avons gardé dix, faciles à expliquer, et ajouté un repère qui dit si le marché est calme ou agité.</div>
+      <div><b>Techniquement</b>Dix variables réparties en quatre familles, et les distances aux deux centres d'un k-means (k = 2) appris sur la volatilité, le rendement du mois et le VIX, à l'intérieur de la pipeline.</div>
+      <div><b>Autre possibilité et avis</b>Une sélection automatique était possible. Le choix à la main est lisible, mais il s'appuie sur une exploration de 2017-2026, qui recouvre la validation et le test. C'est une limite déclarée.</div>
+    </div></div>
+
+  <h3>C · Entraîner et choisir un modèle</h3>
+  <div class="choix"><header><i>7</i><h3>Découper le temps en trois périodes qui se suivent</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>On ne mélange jamais les mois. Le modèle apprend sur les années anciennes et il est jugé sur les plus récentes, exactement comme dans la vraie vie, où l'on ne connaît pas l'avenir.</div>
+      <div><b>Techniquement</b>Entraînement de 2010 à 2021 (143 mois), validation sur 2022-2023 (24 mois), test de janvier 2024 à septembre 2026 (33 mois). Les réglages utilisent une validation croisée temporelle à quatre plis de douze mois.</div>
+      <div><b>Autre possibilité et avis</b>Un tirage au hasard aurait donné de meilleurs scores, mais faux. Le découpage chronologique est le seul honnête. Sa faiblesse tient aux petits effectifs : 24 mois de validation, 12 baisses dans le test.</div>
+    </div></div>
+  <div class="choix"><header><i>8</i><h3>Enchaîner tous les traitements dans une seule pipeline</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Combler les valeurs manquantes ou mettre les variables à la même échelle demande des calculs. Nous les faisons uniquement sur les mois d'apprentissage, pour qu'aucune information des mois d'examen ne s'y glisse.</div>
+      <div><b>Techniquement</b>Pipeline scikit-learn : imputation par la médiane, distances k-means, standardisation, puis modèle. Tout est réajusté à l'intérieur de chaque pli de validation croisée.</div>
+      <div><b>Autre possibilité et avis</b>Standardiser une fois pour toutes sur l'ensemble des données est une erreur courante. La pipeline l'empêche par construction.</div>
+    </div></div>
+  <div class="choix"><header><i>9</i><h3>Comparer trois modèles, réglés par 200 essais automatiques</h3><span class="avis defendable">Défendable</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Nous avons mis en concurrence un modèle simple et deux modèles plus puissants, en laissant un outil chercher leurs meilleurs réglages.</div>
+      <div><b>Techniquement</b>Régression logistique, Random Forest et LightGBM, 50 essais Optuna par étude (quatre études, graine fixée), tous journalisés. Espaces de recherche volontairement étroits : arbres de profondeur 2 à 4, 4 à 8 feuilles.</div>
+      <div><b>Autre possibilité et avis</b>Beaucoup d'essais sur seulement 48 mois de validation croisée finissent par s'ajuster au hasard. C'est ce qui arrive à LightGBM, excellent en validation croisée puis décevant ensuite.</div>
+    </div></div>
+  <div class="choix"><header><i>10</i><h3>Juger la qualité des probabilités, et pas seulement le nombre de bonnes réponses</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Annoncer « hausse » tous les mois donne raison six fois sur dix sans rien prévoir. Nous avons donc évalué si le modèle sait dire à quel point il est sûr de lui.</div>
+      <div><b>Techniquement</b>Mesure principale : la log-loss, comparée à celle du modèle constant. Compléments : Brier, ECE (calibration), PR-AUC (classement des baisses), ainsi que précision et rappel de la règle.</div>
+      <div><b>Autre possibilité et avis</b>L'exactitude aurait flatté le modèle. La log-loss est exigeante, et c'est elle qui révèle l'échec. Ce choix montre le modèle tel qu'il est.</div>
+    </div></div>
+  <div class="choix"><header><i>11</i><h3>Garder le modèle le plus simple</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Un modèle compliqué doit prouver qu'il apporte vraiment quelque chose. Ce n'était pas le cas, et nous avons retenu le plus simple, qui a l'avantage d'être explicable.</div>
+      <div><b>Techniquement</b>Règle de baseline du cours : la logistique est conservée tant qu'un modèle plus complexe ne la bat pas à la fois en PR-AUC et en log-loss calibrée sur la validation. Régularisation L2 retenue, λ = 0,117.</div>
+      <div><b>Autre possibilité et avis</b>Choisir LightGBM pour son score de validation croisée (0,584) était tentant. Le test confirme que ce choix aurait été pire (0,751 contre 0,708).</div>
+    </div></div>
+
+  <h3>D · Passer de la probabilité à l'action</h3>
+  <div class="choix"><header><i>12</i><h3>Corriger les probabilités du modèle avant de s'en servir</h3><span class="avis defendable">Défendable</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Quand le modèle annonce 60 %, il faut que l'événement se produise à peu près six fois sur dix. Nous avons ajouté une correction pour rapprocher ses annonces de la réalité.</div>
+      <div><b>Techniquement</b>Calibration de Platt apprise sur les prédictions hors pli de 2018-2021 (pente a = 0,915). Les diagrammes de fiabilité sont codés à la main.</div>
+      <div><b>Autre possibilité et avis</b>Un premier essai, appris sur la validation, donnait des pentes négatives et a été écarté après coup. Les plis utilisés ont aussi servi aux réglages. La correction reste donc imparfaite, et le projet le reconnaît.</div>
+    </div></div>
+  <div class="choix"><header><i>13</i><h3>Décider avec deux seuils, calculés à partir des gains et des pertes</h3><span class="avis defendable">Défendable</span></header>
+    <div class="corps">
+      <div><b>En clair</b>On achète seulement si la chance de hausse est assez forte pour valoir le risque, on vend si elle est assez faible, et on ne fait rien entre les deux.</div>
+      <div><b>Techniquement</b>Seuils tirés de l'espérance de gain : acheter si p ≥ 0,580, vendre si p ≤ 0,456. Les gains moyens viennent de l'entraînement (+3,89 % un mois de hausse, −4,18 % un mois de baisse), avec une marge de 0,5 % par mois.</div>
+      <div><b>Autre possibilité et avis</b>Régler la marge sur la validation aurait donné une règle plus flatteuse. La fixer à l'avance est plus honnête, même si sa valeur reste arbitraire et suppose des gains moyens stables dans le temps.</div>
+    </div></div>
+  <div class="choix"><header><i>14</i><h3>Se couvrir en permanence contre le yen</h3><span class="avis fragile">Fragile</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Nous espérions aussi prévoir les mois où il vaut mieux ne pas se protéger. Le modèle n'a rien trouvé, et nous avons choisi de rester toujours protégés.</div>
+      <div><b>Techniquement</b>Le modèle de couverture n'a aucun coefficient non nul. Sur le test, la couverture permanente rapporte +82,3 % contre +57,9 % sans couverture.</div>
+      <div><b>Autre possibilité et avis</b>Le résultat donne raison à ce choix, mais il n'a pas été fait à l'aveugle : le premier notebook affichait déjà des statistiques de la période de test. C'est la principale réserve sur la procédure.</div>
+    </div></div>
+
+  <h3>E · Se juger soi-même</h3>
+  <div class="choix"><header><i>15</i><h3>Tout figer par écrit avant de regarder les derniers mois</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Avant l'examen final, nous avons enregistré le modèle, la règle et ce que nous ferions en cas d'échec. Il devenait impossible de changer d'avis après avoir vu le résultat.</div>
+      <div><b>Techniquement</b>Le fichier de décision est enregistré par le commit <code>75712cf</code>, antérieur au commit <code>6efd12c</code> de l'évaluation. Il contient l'engagement de recommander « toujours acheter, couvert » si le modèle perd contre le modèle constant.</div>
+      <div><b>Autre possibilité et avis</b>Rien n'obligeait à cette discipline. L'historique Git en apporte la preuve, et c'est sans doute l'argument le plus fort à présenter à l'oral.</div>
+    </div></div>
+  <div class="choix"><header><i>16</i><h3>N'utiliser l'examen final qu'une fois, et publier l'échec</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Si l'on repasse un examen jusqu'à le réussir, la note ne veut plus rien dire. Nous avons regardé le test une seule fois, et nous avons présenté le résultat tel qu'il est.</div>
+      <div><b>Techniquement</b>Une seule évaluation, tracée dans le fichier de résultats. Le script d'évaluation sait la recalculer pour vérification, sans jamais réécrire le fichier figé.</div>
+      <div><b>Autre possibilité et avis</b>Ajuster le modèle après coup aurait produit un meilleur chiffre et un projet sans valeur. Assumer l'échec est le bon choix scientifique.</div>
+    </div></div>
+  <div class="choix"><header><i>17</i><h3>Chercher pourquoi le modèle échoue</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Nous ne nous sommes pas arrêtés au constat. Nous avons ouvert le modèle pour voir ce qui le pousse à se tromper, mois par mois.</div>
+      <div><b>Techniquement</b>Analyse par sous-groupes (années, régimes), importance par permutation, valeurs SHAP globales et locales, courbes de dépendance partielle.</div>
+      <div><b>Autre possibilité et avis</b>Ce travail réutilise le test, à titre d'exploration et sans produire de nouveau score. La distinction est faite dans le projet, et il faut savoir l'expliquer.</div>
+    </div></div>
+  <div class="choix"><header><i>18</i><h3>Reprogrammer le modèle à la main pour l'annexe de mathématiques</h3><span class="avis solide">Solide</span></header>
+    <div class="corps">
+      <div><b>En clair</b>Pour être sûrs de comprendre ce que fait l'outil, nous avons refait ses calculs nous-mêmes et comparé les résultats.</div>
+      <div><b>Techniquement</b>Log-loss dérivée du maximum de vraisemblance, gradient (1/m)·Xᵀ(p − y) vérifié par différences finies (1,3 × 10⁻⁹), pénalité L2 lue comme un a priori gaussien (τ = 0,17), descente de gradient qui retrouve scikit-learn à 4,6 × 10⁻⁶.</div>
+      <div><b>Autre possibilité et avis</b>Une annexe purement théorique était possible. La vérification numérique relie les formules au modèle réellement utilisé, ce qui la rend plus convaincante.</div>
+    </div></div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section class="suite">
+  <div class="tete"><i>4</i><h2>Les résultats</h2></div>
+  <p class="clair">Pendant les réglages, les trois modèles semblaient faire un peu mieux qu'une prévision toute simple.
+    Cet avantage a disparu dès qu'on les a essayés sur des mois plus récents, d'abord en 2022-2023, puis lors de
+    l'examen final. La règle tirée du modèle évite presque toutes les baisses, mais elle le doit au fait qu'elle reste
+    presque toujours à l'écart du marché.</p>
+  <div class="deux">
+    <div>
+      <h3>Avant le test : les trois modèles</h3>
+      <table>
+        <tr><th>Modèle</th><th class="n">Log-loss, validation croisée</th><th class="n">Log-loss, 2022-2023</th></tr>
+        <tr class="ref"><td>Constant (référence)</td><td class="n">0,672</td><td class="n m">0,681</td></tr>
+        <tr><td><b>Logistique</b>, retenue</td><td class="n">0,647</td><td class="n">0,701</td></tr>
+        <tr><td>Random Forest</td><td class="n">0,629</td><td class="n">0,742</td></tr>
+        <tr><td>LightGBM</td><td class="n m">0,584</td><td class="n">0,710</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Le test, de 2024 à 2026</h3>
+      <table>
+        <tr><th>Modèle</th><th class="n">Log-loss</th><th class="n">Brier</th><th class="n">ECE</th><th class="n">PR-AUC</th></tr>
+        <tr><td><b>Logistique</b></td><td class="n">0,708</td><td class="n">0,257</td><td class="n">0,183</td><td class="n m">0,420</td></tr>
+        <tr><td>Random Forest</td><td class="n">0,788</td><td class="n">0,286</td><td class="n">0,243</td><td class="n">0,388</td></tr>
+        <tr><td>LightGBM</td><td class="n">0,751</td><td class="n">0,270</td><td class="n">0,219</td><td class="n">0,416</td></tr>
+        <tr class="ref"><td>Constant</td><td class="n m">0,657</td><td class="n m">0,232</td><td class="n m">0,144</td><td class="n">0,364</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="note">Dans les tableaux, la meilleure valeur de la colonne apparaît en bleu.</p>
+  <p class="tech">Le modèle classe un peu mieux que le hasard (PR-AUC de 0,420 contre 0,364), mais ses probabilités sont
+    mauvaises : il annonce 52 % de baisses en moyenne alors qu'il en arrive 36 %. La log-loss, qui punit cet excès de
+    pessimisme, le place derrière le modèle constant.</p>
+
+  <div class="deux">
+    <div>
+      <h3>Ce que la règle a fait pendant les 33 mois</h3>
+      <table>
+        <tr><th>Action</th><th class="n">Mois</th><th class="n">Suivis d'une hausse</th><th class="n">Suivis d'une baisse</th></tr>
+        <tr><td>Vendre</td><td class="n">10</td><td class="n">6</td><td class="n">4</td></tr>
+        <tr><td>Rester neutre</td><td class="n">19</td><td class="n">12</td><td class="n">7</td></tr>
+        <tr><td>Acheter</td><td class="n">4</td><td class="n">3</td><td class="n">1</td></tr>
+      </table>
+      <p class="note">En prenant « ne pas acheter » comme une alerte de baisse, le rappel vaut 11/12 (92 %) et la précision 11/29 (38 %). La règle sonne l'alarme presque tout le temps.</p>
+    </div>
+    <div>
+      <h3>En euros, pour 1 € placé</h3>
+      <table>
+        <tr><th>Stratégie</th><th class="n">Gain cumulé</th><th class="n">Pire recul</th></tr>
+        <tr><td><b>Toujours acheter, couvert</b></td><td class="n m">+82,3 %</td><td class="n">−13,2 %</td></tr>
+        <tr><td>Toujours acheter, non couvert</td><td class="n">+57,9 %</td><td class="n">−12,8 %</td></tr>
+        <tr><td>Rester en placement sans risque</td><td class="n">+7,6 %</td><td class="n">0 %</td></tr>
+        <tr><td>Règle du modèle</td><td class="n">+3,5 %</td><td class="n">−23,1 %</td></tr>
+      </table>
+      <p class="note">La règle rapporte moins que le placement sans risque, avec un recul maximal plus profond que l'achat simple.</p>
+    </div>
+  </div>
+  <figure class="moyen"><img src="../figures/03b_test_regle.png" alt="">
+    <figcaption>Le test, mois par mois : la règle du modèle face aux stratégies de référence (figure du notebook 03b).</figcaption></figure>
+</section>
+
+<!-- ============ 5 ============ -->
+<section>
+  <div class="tete"><i>5</i><h2>Pourquoi le modèle échoue</h2></div>
+  <p class="clair">Le modèle a appris dans un monde, puis on lui a demandé de prévoir dans un autre. Jusqu'en 2021, la
+    banque centrale du Japon maintenait des taux d'intérêt négatifs. À partir de 2022, elle commence à revenir à une
+    politique normale, et plusieurs habitudes du marché changent. Ce que le modèle avait appris devient alors faux,
+    un peu comme un GPS qui garderait une vieille carte après des travaux.</p>
+  <div class="trois">
+    <div><h3>Un signal de presse qui se retourne</h3><p>Jusqu'en 2021, un mois très commenté dans la presse était plutôt suivi d'une baisse. Ensuite, c'est l'inverse.</p>
+      <p class="note">Corrélation de rang entre volume d'articles et rendement suivant : −0,38 sur l'entraînement, +0,29 sur 2022-2023.</p></div>
+    <div><h3>Une valeur jamais vue</h3><p>Le coût de la protection contre le yen s'inverse et atteint des niveaux inconnus du modèle, qui prolonge alors une tendance au-delà de ce qu'il a observé.</p>
+      <p class="note">Sur le test, le portage se situe à six écarts-types de sa moyenne d'entraînement, ce qui ajoute +0,25 de log-odds vers « baisse » tous les mois.</p></div>
+    <div><h3>Un pari à contre-courant</h3><p>Le modèle a appris qu'après une forte hausse sur un an, la Bourse se reprend souvent. Or la hausse de 2024-2026 a duré.</p>
+      <p class="note">Le coefficient du momentum 12 mois est contrarien, ce qui payait pendant les rebonds de 2018-2021.</p></div>
+  </div>
+  <table>
+    <tr><th>Sous-groupe du test</th><th class="n">Mois</th><th class="n">Baisses</th><th class="n">Log-loss du modèle</th><th class="n">Log-loss du modèle constant</th></tr>
+    <tr><td>Année 2024</td><td class="n">12</td><td class="n">6</td><td class="n m">0,672</td><td class="n">0,717</td></tr>
+    <tr><td>Année 2025</td><td class="n">12</td><td class="n">3</td><td class="n">0,684</td><td class="n m">0,607</td></tr>
+    <tr><td>Année 2026</td><td class="n">9</td><td class="n">3</td><td class="n">0,787</td><td class="n m">0,644</td></tr>
+  </table>
+  <p class="tech">Le modèle ne fait mieux que le modèle constant qu'en 2024, où il repère les six baisses de l'année. Avec
+    trois à neuf baisses par sous-groupe, ces écarts restent fragiles et doivent être présentés comme des indices.</p>
+  <figure class="reduit"><img src="../figures/04_inversion_signal_news.png" alt="">
+    <figcaption>En haut, la corrélation glissante sur 24 mois entre le volume d'articles et le rendement suivant. En bas, la contribution de cette variable aux prévisions du modèle (figure du notebook 04).</figcaption></figure>
+</section>
+
+<!-- ============ 6 ============ -->
+<section>
+  <div class="tete"><i>6</i><h2>Ce qui reste fragile, et ce qu'on pourrait faire autrement</h2></div>
+  <p class="clair">Aucun projet n'est parfait, et celui-ci a l'honnêteté de lister ses faiblesses. Les connaître vous
+    permettra de répondre sans être pris de court, et de juger ce qui tient vraiment.</p>
+  <div class="deux">
+    <div>
+      <h3>Les limites que le projet déclare</h3>
+      <ul>
+        <li><b>Peu de données.</b> 143 mois pour apprendre et 12 baisses dans le test. Un seul mois de plus ou de moins peut changer un écart.</li>
+        <li><b>Un test qui n'était pas totalement caché.</b> Le premier notebook affichait des statistiques de la période de test. Le choix du modèle et des seuils n'en dépend pas, mais celui de la couverture permanente n'a pas été fait à l'aveugle.</li>
+        <li><b>Des variables choisies après coup.</b> Elles viennent d'une exploration de 2017-2026, qui recouvre la validation et le test.</li>
+        <li><b>Une calibration imparfaite.</b> Elle est apprise sur des plis qui ont aussi servi aux réglages, et un premier essai a été écarté après avoir vu son résultat.</li>
+        <li><b>Un diagnostic qui réutilise le test.</b> Il sert à comprendre, sans produire de nouveau score.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Des pistes pour aller plus loin</h3>
+      <p class="note" style="margin-bottom:3mm">Ces pistes sont des suggestions. Elles ne figurent pas dans le projet rendu.</p>
+      <ul>
+        <li><b>Réapprendre au fil du temps.</b> Réentraîner le modèle tous les mois sur une fenêtre glissante lui permettrait de suivre un changement de régime.</li>
+        <li><b>Borner les variables.</b> Limiter le portage aux valeurs vues à l'entraînement éviterait l'extrapolation.</li>
+        <li><b>Allonger l'historique des news</b>, ou tester le projet sans elles pour mesurer ce qu'elles apportent vraiment.</li>
+        <li><b>Passer à une fréquence hebdomadaire</b> pour disposer de plus d'exemples.</li>
+        <li><b>Détecter le changement de régime</b> pour suspendre le modèle quand le monde ne ressemble plus à ses données.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="encadre"><span class="mono">À retenir pour juger</span>Les points forts du projet tiennent à sa méthode : absence de
+    fuite vérifiée par du code, décision figée avant le test, test utilisé une fois, échec expliqué. Ses points faibles
+    tiennent aux données : trop peu de mois, des news trop récentes, et un marché qui a changé de régime au milieu de
+    la période.</div>
+
+  <h3>Vue d'ensemble des dix-huit avis</h3>
+  <table>
+    <tr><th>Avis</th><th class="n">Nombre</th><th>Choix concernés</th></tr>
+    <tr><td><span class="avis solide">Solide</span></td><td class="n">11</td><td>Raisonner en euros, construire les données, dater les informations, découper le temps, pipeline unique, juger les probabilités, modèle simple, figer avant le test, tester une fois, expliquer l'échec, annexe de maths</td></tr>
+    <tr><td><span class="avis defendable">Défendable</span></td><td class="n">5</td><td>Cible mensuelle, dix variables, trois modèles et 200 essais, calibration, règle à deux seuils</td></tr>
+    <tr><td><span class="avis fragile">Fragile</span></td><td class="n">2</td><td>Miser sur la presse, se couvrir en permanence sans l'avoir décidé à l'aveugle</td></tr>
+  </table>
+</section>
+
+<!-- ============ 7 ============ -->
+<section>
+  <div class="tete"><i>7</i><h2>Dix questions qu'on peut vous poser</h2></div>
+  <div class="deux">
+    <div>
+      <div class="qr"><b>Votre modèle ne marche pas. Qu'avez-vous appris ?</b><p>Que le signal recherché est faible et instable, et qu'une méthode rigoureuse permet de le démontrer. Nous savons aussi dire pourquoi : le marché a changé de régime en 2022.</p></div>
+      <div class="qr"><b>Pourquoi ne pas avoir pris LightGBM, meilleur en validation croisée ?</b><p>Un modèle complexe doit battre clairement le modèle simple. Sur 2022-2023, ses probabilités étaient moins bonnes, et le test lui donne 0,751 de log-loss contre 0,708 pour la logistique.</p></div>
+      <div class="qr"><b>Comment savez-vous qu'il n'y a pas de fuite ?</b><p>Les séries sont retardées à leur date de publication, et un audit codé le contrôle. Un test injecte même une fuite volontaire pour vérifier qu'elle est détectée.</p></div>
+      <div class="qr"><b>Le test était-il vraiment caché ?</b><p>Pour le choix du modèle et des seuils, oui, et l'ordre des commits le prouve. Le premier notebook montrait en revanche des statistiques de cette période, ce qui a pu influencer le choix de la couverture permanente. Nous le déclarons.</p></div>
+      <div class="qr"><b>Pourquoi la log-loss plutôt que l'exactitude ?</b><p>Annoncer « hausse » tous les mois donne 64 % de bonnes réponses sur le test sans rien prévoir. La log-loss mesure la qualité des probabilités, dont la règle de décision a besoin.</p></div>
+    </div>
+    <div>
+      <div class="qr"><b>Pourquoi ne pas avoir pondéré les classes ?</b><p>Optuna a essayé l'option et ne l'a pas retenue. Elle tire les probabilités vers 50 %, alors que la décision demande des probabilités bien calibrées. Le déséquilibre est traité par les seuils.</p></div>
+      <div class="qr"><b>D'où viennent les deux seuils ?</b><p>D'un calcul d'espérance de gain. On achète quand le gain attendu dépasse le placement sans risque d'au moins 0,5 % par mois, avec les gains et pertes moyens mesurés sur l'entraînement.</p></div>
+      <div class="qr"><b>La règle évite 11 baisses sur 12. N'est-ce pas un succès ?</b><p>Elle y parvient en n'achetant que 4 mois sur 33. Elle manque ainsi 18 hausses sur 21 et finit à +3,5 %, sous le placement sans risque.</p></div>
+      <div class="qr"><b>Et l'équité ?</b><p>Nos données ne concernent aucune personne et ne contiennent aucun attribut sensible. Nous avons transposé l'analyse à des groupes de mois, sans trouver d'écart au-delà du bruit.</p></div>
+      <div class="qr"><b>Que feriez-vous avec six mois de plus ?</b><p>Nous réentraînerions le modèle sur une fenêtre glissante, nous bornerions le portage aux valeurs déjà observées, et nous mesurerions ce qu'apportent vraiment les news en refaisant le projet sans elles.</p></div>
+    </div>
+  </div>
+
+  <div class="ensemble"><h3 style="margin-top:7mm">Petit lexique</h3>
+  <table>
+    <tr><th style="width:26%">Mot</th><th>Ce qu'il veut dire</th></tr>
+    <tr><td>Modèle constant</td><td>Un modèle qui annonce tous les mois la même probabilité de baisse (39 %, la fréquence de l'entraînement). Il sert de plancher à battre.</td></tr>
+    <tr><td>Log-loss</td><td>L'erreur des probabilités. Elle est d'autant plus basse que le modèle est bon, et elle punit fortement une prévision sûre d'elle qui se révèle fausse.</td></tr>
+    <tr><td>PR-AUC</td><td>La qualité du classement des mois à risque. Un classement au hasard obtient la fréquence des baisses, soit 0,364 sur le test.</td></tr>
+    <tr><td>Calibration</td><td>L'accord entre les probabilités annoncées et ce qui se produit réellement. L'ECE et le score de Brier la mesurent.</td></tr>
+    <tr><td>Fuite</td><td>Une information du futur qui se glisse dans les données d'apprentissage et fausse les résultats.</td></tr>
+    <tr><td>Couverture, portage</td><td>La protection contre les variations du yen, et ce qu'elle rapporte ou coûte tous les mois selon l'écart de taux entre l'euro et le yen.</td></tr>
+    <tr><td>Régularisation L2</td><td>Une pénalité qui empêche les poids du modèle de devenir trop grands. Elle équivaut à supposer au départ que ces poids sont proches de zéro.</td></tr>
+    <tr><td>SHAP</td><td>Une méthode qui répartit une prévision entre les variables, pour voir lesquelles l'ont poussée vers la hausse ou vers la baisse.</td></tr>
+  </table></div>
+</section>
+</body>
+</html>
