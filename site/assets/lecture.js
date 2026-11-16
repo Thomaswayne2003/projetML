@@ -62,7 +62,8 @@ function graphe(conteneur, dessiner) {
     zone.innerHTML = rendu.svg;
     zone.appendChild(bulle);
   };
-  new ResizeObserver(() => peindre()).observe(zone);
+  peindre();                                            // tout de suite, sans attendre une image du navigateur
+  new ResizeObserver(() => peindre()).observe(zone);   // puis à chaque changement de largeur
   const montrer = (e) => {
     if (!rendu?.survol) return;
     const b = zone.getBoundingClientRect();

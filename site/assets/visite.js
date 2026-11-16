@@ -452,7 +452,7 @@ function majCartel() {
 }
 function majAdresse() {
   const id = SALLES[cam.index].id;
-  history.replaceState(null, "", cam.dansSalle ? `#${id}` : location.pathname + location.search);
+  try { history.replaceState(null, "", cam.dansSalle ? `#${id}` : location.pathname + location.search); } catch (e) { /* ouvert depuis le disque */ }
   $("#vers-lecture").href = avecCours(cam.dansSalle ? `lecture.html#${id}` : "lecture.html");
 }
 

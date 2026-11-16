@@ -94,14 +94,21 @@ python -m pytest -q                 # tests
 
 ## Le site : visite et lecture
 
-Le site de présentation est dans `site/`. Il est statique : ni PHP ni API à lancer, un simple serveur de fichiers suffit.
+Le site de présentation est dans `site/`. Il est statique : ni API à lancer, ni serveur obligatoire. Trois façons de
+l'ouvrir :
+- **double-cliquer sur `Ouvrir le site.html`** : le site s'ouvre directement depuis le disque ;
+- **`php lancer.php`** (PHP 8 ou plus récent) : lance le serveur intégré de PHP et ouvre le navigateur ;
+- **double-cliquer sur `Lancer le projet.command`**, choix 1 (serveur Python).
+
+Après un changement des résultats, des notebooks ou de `site/assets/*.js`, refaire les données et les paquets :
 
 ```bash
-python -m app.export_site                       # écrit site/data/donnees.js et copie figures, notebooks et PDF
-python -m http.server 8095 --directory site     # puis http://localhost:8095
+python -m app.export_site    # site/data/donnees.js, figures, notebooks, PDF et site/assets/*.bundle.js
 ```
 
-Le double-clic sur `Lancer le projet.command` (choix 1) fait les deux.
+Les navigateurs refusent les modules JavaScript ouverts depuis le disque ; `app/export_site.py` assemble donc, pour
+chaque page, Three.js et les modules de `site/assets/` en un seul script classique (`*.bundle.js`), que les pages
+chargent. Les fichiers à modifier restent les modules ; les paquets se refont avec la commande ci-dessus.
 
 Le site a deux parcours, un par cours, choisis en haut de chaque page (`?cours=ml` ou `?cours=maths`, le choix est
 retenu d'une page à l'autre) :
