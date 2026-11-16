@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nikkei · La lecture</title>
+  <meta name="description" content="Projet Nikkei 225 : la question, les données, le modèle, la règle, le test et ses limites, avec les graphiques et les notebooks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/lecture.css">
+</head>
+<body class="lecture">
+  <header class="entete" id="entete">
+    <a class="marque" href="lecture.html#haut">Nikkei <small>225 · le projet</small></a>
+    <div class="entete-droite">
+      <nav class="modes" aria-label="Mode">
+        <a href="index.html" id="vers-visite">Visite</a>
+        <a href="lecture.html" aria-current="page">Lecture</a>
+      </nav>
+      <button class="bouton-menu" type="button" aria-expanded="false">Menu <span class="points" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+    </div>
+  </header>
+
+  <main id="haut">
+    <noscript><p style="padding:120px 0">Cette page a besoin de JavaScript pour afficher le texte et les graphiques.</p></noscript>
+  </main>
+
+  <div class="boite" id="boite" hidden role="dialog" aria-modal="true" aria-label="Figure agrandie">
+    <button type="button" id="boite-fermer">Fermer</button>
+    <figure><img alt="" id="boite-img"><figcaption id="boite-legende"></figcaption></figure>
+  </div>
+
+  <script src="data/donnees.js"></script>
+  <script type="module" src="assets/lecture.js"></script>
+</body>
+</html>
