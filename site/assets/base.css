@@ -69,7 +69,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .modes a:hover { opacity: 1; }
 .modes a[aria-current="page"] { opacity: 1; background: color-mix(in srgb, currentColor 14%, transparent); }
 
-.bouton-menu { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--sans); letter-spacing: .02em; }
+.bouton-menu { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--sans); letter-spacing: .02em; padding: 12px 8px; margin: -12px -8px; }   /* cible de clic de 36 px */
 .points { display: grid; grid-template-columns: repeat(2, 4px); gap: 4px; }
 .points i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; transition: transform .5s var(--doux); }
 .bouton-menu:hover .points i:nth-child(1) { transform: translate(2px, 2px); }
@@ -149,3 +149,42 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .marque small { display: none; }
   .modes a { padding: 8px 11px; }
 }
+
+/* ---------- choix du cours ---------- */
+.modes.cours a { font-weight: 500; }
+.modes.cours a[aria-current="page"] { background: var(--encre); color: var(--papier); opacity: 1; }
+body.visite .modes.cours a[aria-current="page"] { background: var(--ui); color: var(--ui-inverse, #f3efe8); }
+@media (max-width: 640px) {
+  .entete-droite > .modes:not(.cours) { display: none; }   /* visite et lecture restent dans le menu */
+}
+
+/* ---------- notebooks et documents d'une salle ou d'un chapitre ---------- */
+.pieces-salle { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.piece-lien {
+  width: 100%; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 12px; align-items: center;
+  text-align: left; text-decoration: none; padding: 9px 12px; border: 1px solid var(--filet); border-radius: 3px; background: var(--carte);
+  color: var(--encre); transition: border-color .3s, background .3s;
+}
+.piece-lien:hover { border-color: var(--encre-3); background: #fff; }
+.piece-lien .sur-titre { grid-column: 1; color: var(--encre-3); font-size: 9.5px; }
+.piece-lien .t { grid-column: 1; font: 400 13.5px/1.3 var(--sans); }
+.piece-lien .fleche { grid-column: 2; grid-row: 1 / 3; width: 22px; }
+.piece-lien:hover .fleche { transform: translateX(3px); }
+
+/* ---------- liseuse flottante ---------- */
+.liseuse-flottante { position: fixed; inset: 0; z-index: 75; display: grid; grid-template-rows: auto 1fr; background: rgb(20 18 16 / .6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 14px; gap: 0; }
+.liseuse-flottante[hidden] { display: none; }
+.liseuse-barre { display: flex; align-items: center; gap: 18px; background: var(--papier); color: var(--encre); padding: 12px 16px; border-radius: 4px 4px 0 0; border-bottom: 1px solid var(--filet); }
+.liseuse-titre { margin: 0; flex: 1; font: 400 20px/1.2 var(--serif); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.liseuse-titre .sur-titre { color: var(--encre-3); margin-right: 8px; font-size: 10px; vertical-align: 3px; }
+.liseuse-cabinet { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--sans); text-decoration: none; white-space: nowrap; }
+.liseuse-cabinet .fleche { width: 22px; }
+.liseuse-fermer { font: 500 12px/1 var(--sans); padding: 9px 14px; border-radius: 999px; background: var(--nuit); color: #f3efe8; }
+.liseuse-cadre { position: relative; background: #fff; border-radius: 0 0 4px 4px; overflow: hidden; }
+.liseuse-cadre iframe { border: 0; width: 100%; height: 100%; display: block; }
+.liseuse-charge { position: absolute; inset: 0; margin: 0; display: grid; place-items: center; font: 400 22px/1 var(--serif); color: var(--encre-3); pointer-events: none; transition: opacity .4s; }
+@media (max-width: 640px) { .liseuse-cabinet { display: none; } .liseuse-flottante { padding: 0; } }
+
+/* ---------- formules ---------- */
+.f { font: italic 400 1.04em/1.4 var(--texte); color: var(--encre); }
+.f sup, .f sub { font-size: .72em; line-height: 0; }

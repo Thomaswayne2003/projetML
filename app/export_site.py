@@ -57,6 +57,26 @@ def donnees_api() -> dict:
     return sortie
 
 
+LIBELLES = {
+    "news_attention_6m": "volume anormal d'articles", "news_sent_w": "tonalité des news", "news_dispo": "news disponibles",
+    "n225_mom_12m": "momentum 12 mois", "n225_mom_3m": "momentum 3 mois", "n225_vol_ewma": "volatilité lissée",
+    "d_jgb10y_bp": "variation du taux à 10 ans", "tankan_large_manuf": "Tankan", "carry_1m": "portage à un mois",
+    "eurjpy_rvol_1m": "volatilité de l'euro-yen", "kmeans0": "distance au régime 1", "kmeans1": "distance au régime 2",
+}
+
+
+def modele_final() -> dict:
+    """Coefficients de la logistique figée (parcours Maths : le prior gaussien et les poids appris)."""
+    import joblib
+
+    pipe = joblib.load(ROOT / "runs" / "models" / "nikkei_logit.joblib")
+    reg = pipe.named_steps["model"]
+    noms = [n.split("__")[-1] for n in pipe[:-1].get_feature_names_out()]
+    return {"variables": noms, "libelles": [LIBELLES.get(n, n) for n in noms],
+            "coefficients": [round(float(c), 5) for c in reg.coef_[0]], "intercept": round(float(reg.intercept_[0]), 5),
+            "C": round(float(reg.C), 6), "solveur": reg.solver}
+
+
 def copier(source: Path, destination: Path) -> int:
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
@@ -67,6 +87,7 @@ def main() -> None:
     donnees = donnees_api()
     donnees["notebooks"] = [{"nom": nom, "titre": titre} for nom, titre in NOTEBOOKS]
     donnees["figures"] = sorted(p.name for p in (ROOT / "figures").glob("*.png"))
+    donnees["modele"] = modele_final()
 
     (SITE / "data").mkdir(parents=True, exist_ok=True)
     texte = json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))
