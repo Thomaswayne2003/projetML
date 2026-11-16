@@ -80,6 +80,29 @@ def test_donnees_des_scenes_3d():
     assert min(map(min, surface["cout"])) >= surface["optimum"][2] - 1e-6      # l'optimum est bien le minimum
 
 
+def test_volatilite_et_verifications():
+    # second volet, ajouté après le test : la série couvre les mêmes 33 mois de test que le projet
+    v = client.get("/volatilite").json()
+    test = [p for p in v["serie"] if p["bloc"] == "test"]
+    assert len(test) == 33 and all(0.03 < p["prevue"] < 1 and 0 <= p["p_agite"] <= 1 for p in test)
+    assert v["serie"][-1]["bloc"] == "à prédire" and v["serie"][-1]["reelle"] is None
+    achat = v["usage"]["test_2024_2026"]["position"]["acheter_et_garder"]["cumul"]
+    assert abs(achat - client.get("/evaluation").json()["performance_euros"]["toujours acheter, couvert"]["cumul"]) < 1e-3
+    verif = client.get("/verifications").json()
+    assert verif["vingt_modeles"]["configurations"] == len(verif["vingt_modeles"]["classement_sur_le_test"]) == 40
+    assert set(verif["historique_long"]) == {"2010-02", "2000-01", "1985-01", "1971-06"}
+
+
+def test_signal_risque():
+    # signal fondé sur le risque : règle figée sur 2000-2015, série hebdomadaire de 2003 à aujourd'hui
+    s = client.get("/signal_risque").json()
+    assert s["regle"]["donnees_utilisees"].endswith("2015-12-31 uniquement")
+    bas, haut = s["regle"]["seuils_volatilite_annuelle"]
+    assert 0.05 < bas < haut < 0.6
+    assert s["serie"][0]["date"] < "2004" and {p["signal"] for p in s["serie"]} <= {0.0, 0.5, 1.0}
+    assert s["aujourd_hui"]["signal"] in {"acheter plein", "acheter à moitié", "ne pas acheter"}
+
+
 def test_pages_php_valides():
     # syntaxe des pages PHP du site, si PHP est installé
     import shutil

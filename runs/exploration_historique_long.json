@@ -1,0 +1,339 @@
+{
+  "avertissement": "Exploration après coup : le test 2024-2026 avait déjà été ouvert. Ces chiffres ne remplacent pas runs/evaluation_test.json, qui reste le résultat du projet.",
+  "date": "2026-11-16 10:20",
+  "commit_du_code": "5565228",
+  "methode": {
+    "variables": [
+      "ret_1m",
+      "mom_3m",
+      "mom_6m",
+      "mom_12m",
+      "ecart_moyenne_10m",
+      "recul_depuis_le_plus_haut_12m",
+      "vol_1m",
+      "vol_6m"
+    ],
+    "reentrainement": "chaque mois, sur tous les mois depuis la date de départ",
+    "reference": "constante apprise depuis 2010-02, identique pour tous les départs"
+  },
+  "part_de_baisses_jusqu_a_2023_%": {
+    "2010-02": 39.52095808383233,
+    "2000-01": 43.75,
+    "1985-01": 44.871794871794876,
+    "1971-06": 43.58161648177496
+  },
+  "resultats_par_depart": {
+    "2010-02": {
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "baisses": 36,
+        "mois_d_apprentissage": [
+          72,
+          166
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6691891821021592,
+            "ecart_vs_constante_2010": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 39.489515648517234
+          },
+          "logistique L2": {
+            "log_loss": 0.6661311340814623,
+            "ecart_vs_constante_2010": -0.0030580480206969128,
+            "erreur_type": 0.010105535783110122,
+            "auc": 0.5324858757062146,
+            "proba_moyenne_de_baisse_%": 38.782418901126405
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6655619327897642,
+            "ecart_vs_constante_2010": -0.0036272493123949354,
+            "erreur_type": 0.0026772193659847883,
+            "auc": 0.4722222222222222,
+            "proba_moyenne_de_baisse_%": 39.410386564383984
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6538915860950011,
+            "ecart_vs_constante_2010": -0.015297596007157991,
+            "erreur_type": 0.01312107515594608,
+            "auc": 0.5725047080979284,
+            "proba_moyenne_de_baisse_%": 39.02203546266638
+          }
+        }
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "baisses": 12,
+        "mois_d_apprentissage": [
+          167,
+          199
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6599122828250192,
+            "ecart_vs_constante_2010": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 39.5846922197388
+          },
+          "logistique L2": {
+            "log_loss": 0.6775175821468837,
+            "ecart_vs_constante_2010": 0.017605299321864564,
+            "erreur_type": 0.029186108022972272,
+            "auc": 0.5158730158730158,
+            "proba_moyenne_de_baisse_%": 44.89169666876091
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6598801023689116,
+            "ecart_vs_constante_2010": -3.218045610759227e-05,
+            "erreur_type": 0.010628091232523536,
+            "auc": 0.5357142857142857,
+            "proba_moyenne_de_baisse_%": 41.44898317559956
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6653735244776462,
+            "ecart_vs_constante_2010": 0.005461241652627032,
+            "erreur_type": 0.03688545717124052,
+            "auc": 0.5674603174603174,
+            "proba_moyenne_de_baisse_%": 43.77048142024164
+          }
+        }
+      }
+    },
+    "2000-01": {
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "baisses": 36,
+        "mois_d_apprentissage": [
+          193,
+          287
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6760651871357197,
+            "ecart_vs_constante_2010": 0.006876005033560579,
+            "erreur_type": 0.010675900463466292,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 44.6058254521519
+          },
+          "logistique L2": {
+            "log_loss": 0.6868348045559499,
+            "ecart_vs_constante_2010": 0.017645622453790834,
+            "erreur_type": 0.012553197919140778,
+            "auc": 0.41148775894538603,
+            "proba_moyenne_de_baisse_%": 44.449873774703235
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6786718900364686,
+            "ecart_vs_constante_2010": 0.00948270793430938,
+            "erreur_type": 0.010342301985113942,
+            "auc": 0.35263653483992463,
+            "proba_moyenne_de_baisse_%": 44.41796559515749
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6807616738405577,
+            "ecart_vs_constante_2010": 0.011572491738398702,
+            "erreur_type": 0.0168672114273006,
+            "auc": 0.48399246704331444,
+            "proba_moyenne_de_baisse_%": 43.97151977339128
+          }
+        }
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "baisses": 12,
+        "mois_d_apprentissage": [
+          288,
+          320
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6671942902337192,
+            "ecart_vs_constante_2010": 0.0072820074087000045,
+            "erreur_type": 0.01410114100494988,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 43.56778098806247
+          },
+          "logistique L2": {
+            "log_loss": 0.7014111445523104,
+            "ecart_vs_constante_2010": 0.041498861727291225,
+            "erreur_type": 0.029140681602851447,
+            "auc": 0.38095238095238093,
+            "proba_moyenne_de_baisse_%": 46.33831302475341
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6739828089639394,
+            "ecart_vs_constante_2010": 0.014070526138920186,
+            "erreur_type": 0.016113868912550455,
+            "auc": 0.3373015873015873,
+            "proba_moyenne_de_baisse_%": 44.09305343128654
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6607285327034818,
+            "ecart_vs_constante_2010": 0.000816249878462469,
+            "erreur_type": 0.034991721283177304,
+            "auc": 0.5357142857142858,
+            "proba_moyenne_de_baisse_%": 44.53026867356735
+          }
+        }
+      }
+    },
+    "1985-01": {
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "baisses": 36,
+        "mois_d_apprentissage": [
+          373,
+          467
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6771797984891398,
+            "ecart_vs_constante_2010": 0.00799061638698055,
+            "erreur_type": 0.012481565299194638,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 45.467331358125776
+          },
+          "logistique L2": {
+            "log_loss": 0.6873672944908958,
+            "ecart_vs_constante_2010": 0.01817811238873684,
+            "erreur_type": 0.012431148668859813,
+            "auc": 0.4227871939736346,
+            "proba_moyenne_de_baisse_%": 44.1843449377417
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6804956343822531,
+            "ecart_vs_constante_2010": 0.011306452280094144,
+            "erreur_type": 0.011393703428972715,
+            "auc": 0.37900188323917133,
+            "proba_moyenne_de_baisse_%": 44.87100651394474
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6894564768660378,
+            "ecart_vs_constante_2010": 0.020267294763878622,
+            "erreur_type": 0.018184912604378163,
+            "auc": 0.4595103578154426,
+            "proba_moyenne_de_baisse_%": 44.91218102300801
+          }
+        }
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "baisses": 12,
+        "mois_d_apprentissage": [
+          468,
+          500
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6703957201527746,
+            "ecart_vs_constante_2010": 0.010483437327755432,
+            "erreur_type": 0.018121881297186667,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 44.719060825125
+          },
+          "logistique L2": {
+            "log_loss": 0.7108607101404197,
+            "ecart_vs_constante_2010": 0.05094842731540046,
+            "erreur_type": 0.037657954244509254,
+            "auc": 0.4166666666666667,
+            "proba_moyenne_de_baisse_%": 48.06754660093493
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6802631893709353,
+            "ecart_vs_constante_2010": 0.020350906545916165,
+            "erreur_type": 0.021601394638060687,
+            "auc": 0.39682539682539686,
+            "proba_moyenne_de_baisse_%": 45.47719426553974
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6777770157716018,
+            "ecart_vs_constante_2010": 0.017864732946582522,
+            "erreur_type": 0.03276017342058622,
+            "auc": 0.4920634920634921,
+            "proba_moyenne_de_baisse_%": 45.961402675843296
+          }
+        }
+      }
+    },
+    "1971-06": {
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "baisses": 36,
+        "mois_d_apprentissage": [
+          536,
+          630
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6722017576928901,
+            "ecart_vs_constante_2010": 0.003012575590730922,
+            "erreur_type": 0.00936547850273128,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 43.89354130232727
+          },
+          "logistique L2": {
+            "log_loss": 0.6844982670424794,
+            "ecart_vs_constante_2010": 0.015309084940320137,
+            "erreur_type": 0.011444164666725647,
+            "auc": 0.4227871939736346,
+            "proba_moyenne_de_baisse_%": 43.9491220814871
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6776130458380859,
+            "ecart_vs_constante_2010": 0.00842386373592689,
+            "erreur_type": 0.009235479886913,
+            "auc": 0.38983050847457623,
+            "proba_moyenne_de_baisse_%": 43.739092952618954
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6785448025327059,
+            "ecart_vs_constante_2010": 0.00935562043054677,
+            "erreur_type": 0.015600343614748682,
+            "auc": 0.48964218455743874,
+            "proba_moyenne_de_baisse_%": 44.463696230072266
+          }
+        }
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "baisses": 12,
+        "mois_d_apprentissage": [
+          631,
+          663
+        ],
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6664682493712278,
+            "ecart_vs_constante_2010": 0.0065559665462086225,
+            "erreur_type": 0.013944535691220164,
+            "auc": 0.5,
+            "proba_moyenne_de_baisse_%": 43.49838626719652
+          },
+          "logistique L2": {
+            "log_loss": 0.692748514769807,
+            "ecart_vs_constante_2010": 0.03283623194478791,
+            "erreur_type": 0.02675596236940679,
+            "auc": 0.39682539682539686,
+            "proba_moyenne_de_baisse_%": 45.965253427671406
+          },
+          "logistique très pénalisée": {
+            "log_loss": 0.6754124529061549,
+            "ecart_vs_constante_2010": 0.015500170081135706,
+            "erreur_type": 0.01702025892504765,
+            "auc": 0.3650793650793651,
+            "proba_moyenne_de_baisse_%": 44.19599932574469
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6711876549087474,
+            "ecart_vs_constante_2010": 0.011275372083728382,
+            "erreur_type": 0.025414375643327314,
+            "auc": 0.4801587301587302,
+            "proba_moyenne_de_baisse_%": 44.4107789143735
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "figee_le": "2026-11-16 15:01",
+  "commit_du_code": "5565228",
+  "donnees_utilisees": "2000-01-01 -> 2015-12-31 uniquement",
+  "c": 0.03226375797068323,
+  "lecture_c": "part investie = 0.0323 / variance prévue, soit 100 % quand la volatilité prévue vaut 18.0%",
+  "plafond": 1.5,
+  "moyenne_longue_seances": 200,
+  "seuils_repris_de": "runs/signal_risque_regle.json",
+  "seuils": [
+    0.1999412071220772,
+    0.2698567531609378
+  ],
+  "frais": 0.0005
+}

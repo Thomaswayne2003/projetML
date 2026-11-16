@@ -147,6 +147,63 @@ def essais_optuna() -> list[dict]:
             for c, m, e, v, r in zip(journal["cible"], journal["modele"], journal["essai"], journal["cv_logloss"], journal["retenu"])]
 
 
+@app.get("/volatilite")
+def volatilite() -> dict:
+    """Second volet (ajouté après le test) : volatilité prévue et réalisée mois par mois, et chiffres de synthèse."""
+    bilan = json.loads((RUNS / "exploration_volatilite.json").read_text())
+    serie = pd.read_csv(RUNS / "exploration_volatilite_predictions.csv", parse_dates=["date"])
+    nul = lambda x: None if pd.isna(x) else round(float(x), 4)
+    points = [{"mois": d.strftime("%Y-%m"), "bloc": b, "reelle": nul(r), "prevue": nul(p), "moyenne": nul(m),
+               "p_agite": nul(pa), "agite": None if pd.isna(a) else int(a), "rendement": nul(g)}
+              for d, b, r, p, m, pa, a, g in zip(serie["date"], serie["bloc"], serie["vol_reelle"], serie["vol_prevue"],
+                                                 serie["vol_moyenne_passee"], serie["p_agite"], serie["agite"], serie["rendement_suivant"])]
+    return {"avertissement": bilan["avertissement"], "methode": bilan["methode"], "serie": points,
+            "prevision": bilan["prevision_de_la_volatilite"], "agitation": bilan["mois_agite_ou_non"],
+            "usage": bilan["usage"], "mois_prochain": bilan["mois_prochain"]}
+
+
+@app.get("/signal_risque")
+def signal_risque() -> dict:
+    """Signal d'achat fondé sur le risque prévu (après coup, règle figée sur 2000-2015) : synthèse et série hebdomadaire."""
+    bilan = json.loads((RUNS / "signal_risque.json").read_text())
+    d = pd.read_csv(RUNS / "signal_risque_journalier.csv", index_col=0, parse_dates=True)
+    garder, regle, mois = "valeur_acheter et garder", "valeur_signal risque, chaque jour (règle figée)", "valeur_signal risque, seulement en fin de mois"
+    semaines = d.resample("W-FRI").last().dropna(subset=[garder])
+    nul = lambda x: None if pd.isna(x) else round(float(x), 4)
+    serie = [{"date": t.strftime("%Y-%m-%d"), "vol": nul(v), "signal": nul(s), "garder": nul(g), "regle": nul(r), "mois": nul(m)}
+             for t, v, s, g, r, m in zip(semaines.index, semaines["volatilite_prevue"], semaines["signal"], semaines[garder], semaines[regle], semaines[mois])]
+    episodes = {}
+    for nom, (a, b) in {"crise de 2008": ("2008-09-01", "2009-03-31"), "Covid, 2020": ("2020-02-17", "2020-06-30"),
+                        "août 2024": ("2024-07-29", "2024-09-30")}.items():
+        x = d.loc[a:b]
+        episodes[nom] = {"garder": nul(x[garder].iloc[-1] / x[garder].iloc[0] - 1), "regle": nul(x[regle].iloc[-1] / x[regle].iloc[0] - 1)}
+    return {"avertissement": bilan["avertissement"], "regle": bilan["regle"], "prevision": bilan["prevision_r2_log_volatilite"],
+            "strategies": bilan["strategies"]["couvert"], "comparaisons": bilan["comparaisons"]["couvert"],
+            "aujourd_hui": bilan["aujourd_hui"], "episodes": episodes, "serie": serie}
+
+
+@app.get("/verifications")
+def verifications_apres_coup() -> dict:
+    """Résumé des trois vérifications faites après le test : vingt modèles, base journalière, historique long."""
+    modeles = json.loads((RUNS / "exploration_apres_coup.json").read_text())
+    jours = json.loads((RUNS / "exploration_journaliere.json").read_text())
+    long = json.loads((RUNS / "exploration_historique_long.json").read_text())
+    classement = sorted(({"modele": r["modele"], "fenetre": r["fenetre"], "log_loss": round(r["test_2024_2026"]["log_loss"], 4),
+                          "ecart": round(r["test_2024_2026"]["ecart_vs_constante"], 4),
+                          "erreur_type": round(r["test_2024_2026"]["erreur_type_de_l_ecart"], 4),
+                          "cumul_regle": round(r["test_2024_2026"]["cumul_regle"], 4)} for r in modeles["resultats"]),
+                        key=lambda r: r["log_loss"])
+    par_jour = {nom: {"observations": e["test_2024_2026"]["observations"],
+                      **min(({"modele": m, "ecart": round(v["ecart_vs_constante"], 4), "erreur_type": round(v["erreur_type"], 4),
+                              "auc": round(v["auc"], 3)} for m, v in e["test_2024_2026"]["modeles"].items() if m != "constante"),
+                            key=lambda v: v["ecart"])} for nom, e in jours["sens_du_marche"].items()}
+    departs = {depart: {m: round(v["log_loss"], 4) for m, v in e["test_2024_2026"]["modeles"].items()}
+               for depart, e in long["resultats_par_depart"].items()}
+    return {"avertissement": modeles["avertissement"], "vingt_modeles": {"configurations": modeles["configurations"],
+            "battent_la_constante": modeles["battent_la_constante"], "choix_sur_2016_2023": modeles["choix_sur_2016_2023"]["modele"],
+            "classement_sur_le_test": classement}, "base_journaliere": par_jour, "historique_long": departs}
+
+
 @lru_cache(maxsize=1)
 def _surface() -> dict:
     """Surface de coût d'un modèle réduit à deux variables, et trajectoires de descente de gradient.

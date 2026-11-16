@@ -1,0 +1,480 @@
+{
+  "avertissement": "Exploration après coup : le test 2024-2026 avait déjà été ouvert. Ces chiffres ne remplacent pas runs/evaluation_test.json, qui reste le résultat du projet.",
+  "date": "2026-11-16 09:55",
+  "commit_du_code": "5565228",
+  "base": {
+    "seances": 4118,
+    "debut": "2010-01-04",
+    "fin": "2026-11-09"
+  },
+  "methode": {
+    "premiere_prediction": "2016-01-01",
+    "reentrainement_toutes_les_seances": 20,
+    "fenetre": "tout le passé, en retirant les lignes dont la cible n'est pas encore connue",
+    "mesure": "sur des dates qui ne se chevauchent pas ; écart = log-loss du modèle moins celle de la constante"
+  },
+  "sens_du_marche": {
+    "lendemain, décision à la clôture de Tokyo": {
+      "horizon_seances": 1,
+      "variables": 43,
+      "avant_test_2016_2023": {
+        "observations": 1955,
+        "part_de_baisses_%": 47.05882352941176,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6916271490545023,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 52.94117647058824
+          },
+          "logistique L2": {
+            "log_loss": 0.7065337802248358,
+            "ecart_vs_constante": 0.014906631170333513,
+            "erreur_type": 0.00490821518988645,
+            "auc": 0.5058170552404957,
+            "bon_sens_%": 51.20204603580562
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6953367837410788,
+            "ecart_vs_constante": 0.0037096346865763447,
+            "erreur_type": 0.001790850307873551,
+            "auc": 0.49389939088426793,
+            "bon_sens_%": 50.127877237851656
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.6962368634024356,
+            "ecart_vs_constante": 0.0046097143479332595,
+            "erreur_type": 0.0022625069789103743,
+            "auc": 0.5031831547994119,
+            "bon_sens_%": 51.508951406649615
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6923139967624119,
+            "ecart_vs_constante": 0.000686847707909529,
+            "erreur_type": 0.0010194273613259607,
+            "auc": 0.5041461877756773,
+            "bon_sens_%": 52.327365728900254
+          }
+        }
+      },
+      "test_2024_2026": {
+        "observations": 668,
+        "part_de_baisses_%": 46.10778443113773,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6903273913702151,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 53.89221556886228
+          },
+          "logistique L2": {
+            "log_loss": 0.6947526531563895,
+            "ecart_vs_constante": 0.004425261786174243,
+            "erreur_type": 0.003618502692329319,
+            "auc": 0.492739898989899,
+            "bon_sens_%": 48.952095808383234
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.694005175185353,
+            "ecart_vs_constante": 0.003677783815137871,
+            "erreur_type": 0.0024500104869811827,
+            "auc": 0.4854166666666666,
+            "bon_sens_%": 50.59880239520959
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.6934648451712341,
+            "ecart_vs_constante": 0.003137453801018961,
+            "erreur_type": 0.0025812827173438313,
+            "auc": 0.49391233766233766,
+            "bon_sens_%": 50.74850299401198
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6907515238839305,
+            "ecart_vs_constante": 0.00042413251371535256,
+            "erreur_type": 0.0010542712853407708,
+            "auc": 0.49230699855699855,
+            "bon_sens_%": 54.49101796407185
+          }
+        }
+      }
+    },
+    "lendemain, en connaissant Wall Street du soir (piège : pas encore connu à la clôture)": {
+      "horizon_seances": 1,
+      "variables": 47,
+      "avant_test_2016_2023": {
+        "observations": 1955,
+        "part_de_baisses_%": 47.05882352941176,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6916271490545023,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 52.94117647058824
+          },
+          "logistique L2": {
+            "log_loss": 0.635520881199143,
+            "ecart_vs_constante": -0.05610626785535957,
+            "erreur_type": 0.010365496910320219,
+            "auc": 0.7134110480991389,
+            "bon_sens_%": 66.24040920716112
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6120519377661351,
+            "ecart_vs_constante": -0.07957521128836748,
+            "erreur_type": 0.0066156760097365675,
+            "auc": 0.7250273051879857,
+            "bon_sens_%": 67.21227621483375
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.6116424157230274,
+            "ecart_vs_constante": -0.0799847333314751,
+            "erreur_type": 0.006583298271764916,
+            "auc": 0.7281526990128124,
+            "bon_sens_%": 67.26342710997443
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6591760806680067,
+            "ecart_vs_constante": -0.03245106838649585,
+            "erreur_type": 0.002155173874624241,
+            "auc": 0.7124658685150178,
+            "bon_sens_%": 64.60358056265984
+          }
+        }
+      },
+      "test_2024_2026": {
+        "observations": 668,
+        "part_de_baisses_%": 46.10778443113773,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6903273913702151,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 53.89221556886228
+          },
+          "logistique L2": {
+            "log_loss": 0.6249528707204532,
+            "ecart_vs_constante": -0.06537452064976194,
+            "erreur_type": 0.013175022668942616,
+            "auc": 0.6984848484848485,
+            "bon_sens_%": 65.5688622754491
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6235522102954727,
+            "ecart_vs_constante": -0.0667751810747424,
+            "erreur_type": 0.011616954859653767,
+            "auc": 0.7019029581529581,
+            "bon_sens_%": 64.67065868263472
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.6167025013111894,
+            "ecart_vs_constante": -0.0736248900590257,
+            "erreur_type": 0.011147726721426256,
+            "auc": 0.7109758297258297,
+            "bon_sens_%": 65.86826347305389
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6586794195432925,
+            "ecart_vs_constante": -0.03164797182692257,
+            "erreur_type": 0.0037406471155825103,
+            "auc": 0.6983044733044733,
+            "bon_sens_%": 63.47305389221557
+          }
+        }
+      }
+    },
+    "séance du lendemain, décision à l'ouverture (version honnête du piège)": {
+      "horizon_seances": 1,
+      "variables": 48,
+      "avant_test_2016_2023": {
+        "observations": 1955,
+        "part_de_baisses_%": 49.87212276214834,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6933122070290696,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 49.87212276214834
+          },
+          "logistique L2": {
+            "log_loss": 0.7010199852085766,
+            "ecart_vs_constante": 0.0077077781795070275,
+            "erreur_type": 0.00541998088045635,
+            "auc": 0.5492276295133438,
+            "bon_sens_%": 53.55498721227622
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6868028920634303,
+            "ecart_vs_constante": -0.006509314965639358,
+            "erreur_type": 0.002615219996569484,
+            "auc": 0.5569178440607012,
+            "bon_sens_%": 52.890025575447574
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.6878702808878391,
+            "ecart_vs_constante": -0.0054419261412305174,
+            "erreur_type": 0.0029661913894328176,
+            "auc": 0.5607681841967557,
+            "bon_sens_%": 54.015345268542205
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.69053638557731,
+            "ecart_vs_constante": -0.0027758214517595533,
+            "erreur_type": 0.0012869269885297727,
+            "auc": 0.5472736787022501,
+            "bon_sens_%": 53.35038363171356
+          }
+        }
+      },
+      "test_2024_2026": {
+        "observations": 668,
+        "part_de_baisses_%": 51.047904191616766,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.693174617893132,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 51.047904191616766
+          },
+          "logistique L2": {
+            "log_loss": 0.6823648728128915,
+            "ecart_vs_constante": -0.010809745080240551,
+            "erreur_type": 0.006241693885415382,
+            "auc": 0.5874160366613755,
+            "bon_sens_%": 56.73652694610778
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6774046971568629,
+            "ecart_vs_constante": -0.01576992073626918,
+            "erreur_type": 0.004545292653991859,
+            "auc": 0.594258656407221,
+            "bon_sens_%": 57.33532934131736
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.678033468319439,
+            "ecart_vs_constante": -0.015141149573693072,
+            "erreur_type": 0.00486521485435883,
+            "auc": 0.6005452572484239,
+            "bon_sens_%": 57.63473053892215
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6872674319499876,
+            "ecart_vs_constante": -0.005907185943144353,
+            "erreur_type": 0.0017900191578790771,
+            "auc": 0.5856762355726546,
+            "bon_sens_%": 55.38922155688623
+          }
+        }
+      }
+    },
+    "5 séances": {
+      "horizon_seances": 5,
+      "variables": 43,
+      "avant_test_2016_2023": {
+        "observations": 391,
+        "part_de_baisses_%": 47.05882352941176,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6942709515374751,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 52.94117647058824
+          },
+          "logistique L2": {
+            "log_loss": 0.726726092847118,
+            "ecart_vs_constante": 0.03245514130964292,
+            "erreur_type": 0.013264803482285727,
+            "auc": 0.48768641041797944,
+            "bon_sens_%": 50.38363171355499
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.7068881000302314,
+            "ecart_vs_constante": 0.012617148492756306,
+            "erreur_type": 0.006438324711998206,
+            "auc": 0.46794265910523,
+            "bon_sens_%": 49.61636828644501
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.7090636342174969,
+            "ecart_vs_constante": 0.014792682680021828,
+            "erreur_type": 0.007639998423138474,
+            "auc": 0.479941188825877,
+            "bon_sens_%": 49.61636828644501
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6973786760658928,
+            "ecart_vs_constante": 0.0031077245284177376,
+            "erreur_type": 0.0034158151698064094,
+            "auc": 0.4823829027515228,
+            "bon_sens_%": 52.17391304347826
+          }
+        }
+      },
+      "test_2024_2026": {
+        "observations": 134,
+        "part_de_baisses_%": 40.298507462686565,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6768665697925201,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 59.70149253731343
+          },
+          "logistique L2": {
+            "log_loss": 0.684843321897021,
+            "ecart_vs_constante": 0.007976752104500839,
+            "erreur_type": 0.009976779456896867,
+            "auc": 0.46388888888888885,
+            "bon_sens_%": 52.23880597014925
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6799372994023616,
+            "ecart_vs_constante": 0.0030707296098414056,
+            "erreur_type": 0.009221546719830302,
+            "auc": 0.4912037037037037,
+            "bon_sens_%": 58.95522388059702
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.6812971380562423,
+            "ecart_vs_constante": 0.004430568263722054,
+            "erreur_type": 0.008696218527474887,
+            "auc": 0.47916666666666663,
+            "bon_sens_%": 57.46268656716418
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6778690657384341,
+            "ecart_vs_constante": 0.0010024959459139435,
+            "erreur_type": 0.0029854709769023616,
+            "auc": 0.4625,
+            "bon_sens_%": 59.70149253731343
+          }
+        }
+      }
+    },
+    "20 séances (un mois)": {
+      "horizon_seances": 20,
+      "variables": 43,
+      "avant_test_2016_2023": {
+        "observations": 98,
+        "part_de_baisses_%": 42.857142857142854,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6851894759293118,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 57.14285714285714
+          },
+          "logistique L2": {
+            "log_loss": 0.7654101906599551,
+            "ecart_vs_constante": 0.08022071473064336,
+            "erreur_type": 0.06880281216858057,
+            "auc": 0.5361394557823129,
+            "bon_sens_%": 58.16326530612245
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.7099231909590966,
+            "ecart_vs_constante": 0.024733715029784904,
+            "erreur_type": 0.019098588631572114,
+            "auc": 0.46173469387755106,
+            "bon_sens_%": 53.06122448979592
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.7050872208963151,
+            "ecart_vs_constante": 0.019897744967003386,
+            "erreur_type": 0.02364888453880439,
+            "auc": 0.5178571428571428,
+            "bon_sens_%": 54.08163265306123
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.6843573711337532,
+            "ecart_vs_constante": -0.0008321047955586248,
+            "erreur_type": 0.008880120208016469,
+            "auc": 0.5225340136054422,
+            "bon_sens_%": 57.14285714285714
+          }
+        }
+      },
+      "test_2024_2026": {
+        "observations": 34,
+        "part_de_baisses_%": 32.35294117647059,
+        "modeles": {
+          "constante": {
+            "log_loss": 0.6484468552557423,
+            "ecart_vs_constante": 0.0,
+            "erreur_type": 0.0,
+            "auc": 0.5,
+            "bon_sens_%": 67.64705882352942
+          },
+          "logistique L2": {
+            "log_loss": 0.6464995111930162,
+            "ecart_vs_constante": -0.001947344062726113,
+            "erreur_type": 0.028603449071921718,
+            "auc": 0.5770750988142292,
+            "bon_sens_%": 55.88235294117647
+          },
+          "LightGBM bridé": {
+            "log_loss": 0.6320372108114091,
+            "ecart_vs_constante": -0.016409644444333182,
+            "erreur_type": 0.027921705764461048,
+            "auc": 0.5612648221343873,
+            "bon_sens_%": 70.58823529411765
+          },
+          "moitié logistique, moitié LightGBM": {
+            "log_loss": 0.6360745788462245,
+            "ecart_vs_constante": -0.012372276409517808,
+            "erreur_type": 0.02439031451291365,
+            "auc": 0.5849802371541502,
+            "bon_sens_%": 70.58823529411765
+          },
+          "70 % constante + 30 % logistique": {
+            "log_loss": 0.645047934559843,
+            "ecart_vs_constante": -0.0033989206958992824,
+            "erreur_type": 0.00850030362241745,
+            "auc": 0.5573122529644269,
+            "bon_sens_%": 67.64705882352942
+          }
+        }
+      }
+    }
+  },
+  "volatilite": {
+    "prevision": {
+      "avant_test_2016_2023": {
+        "observations": 98,
+        "r2_modele": 0.23782408191751003,
+        "r2_comme_le_mois_passe": -0.10239540241158074,
+        "correlation_prevue_reelle": 0.4637673112972269
+      },
+      "test_2024_2026": {
+        "observations": 34,
+        "r2_modele": 0.1574102192509157,
+        "r2_comme_le_mois_passe": -0.20482989465454904,
+        "correlation_prevue_reelle": 0.27035056128065643
+      }
+    },
+    "dosage_sur_le_test": {
+      "note": "rendements du Nikkei en yens, sans frais ni rémunération du cash : ordre de grandeur, pas comparable au centime avec les +82,3 % en euros couverts du projet",
+      "part_investie_moyenne_%": 77.6845460833926,
+      "acheter_et_garder": {
+        "cumul": 0.9947794956998828,
+        "volatilite_annuelle": 0.2662192169100747,
+        "perte_maximale": -0.2625852595680189,
+        "rendement_par_unite_de_risque": 1.1123077899873193
+      },
+      "position_dosee": {
+        "cumul": 0.6763054359427207,
+        "volatilite_annuelle": 0.20971501454921437,
+        "perte_maximale": -0.2620501811249769,
+        "rendement_par_unite_de_risque": 1.0349883211627773
+      }
+    }
+  }
+}

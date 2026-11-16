@@ -1,0 +1,25 @@
+{
+  "figee_le": "2026-11-16 14:51",
+  "commit_du_code": "5565228",
+  "donnees_utilisees": "2000-01-01 -> 2015-12-31 uniquement",
+  "r2_hors_echantillon_2003_2015": {
+    "naïf : la volatilité du dernier mois": 0.2907968307316652,
+    "HAR : volatilité du jour, de la semaine, du mois, du trimestre": 0.3081796684946183,
+    "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses": 0.3803586598585653,
+    "GARCH(1,1) journalier": 0.24107376967940664
+  },
+  "modele": "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses",
+  "seuils_volatilite_annuelle": [
+    0.1999412071220772,
+    0.2698567531609378
+  ],
+  "lecture": "risque prévu < 20.0% : acheter plein ; entre les deux : acheter à moitié ; > 27.0% : ne pas acheter",
+  "quantiles": [
+    0.6,
+    0.9
+  ],
+  "confirmation_soirs": 3,
+  "frais_par_100_%_echange": 0.0005,
+  "horizon_seances": 20,
+  "execution": "décision le soir t, achat ou vente à la clôture de t+1"
+}
