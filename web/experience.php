@@ -1,7 +1,7 @@
 <?php
 /**
- * Accueil immersif : le projet raconté en huit chapitres par un nuage de particules 3D piloté par le défilement.
- * Les chiffres viennent de l'API Python et de runs/evaluation_test.json ; le détail est dans /dossier.
+ * Accueil immersif : le projet raconté en neuf scènes 3D, que la caméra traverse au fil du défilement (assets/monde.js).
+ * Les chiffres viennent de l'API Python et de runs/evaluation_test.json ; le détail est dans le récit (/recit).
  */
 declare(strict_types=1);
 require __DIR__ . '/inc/config.php';
@@ -18,15 +18,18 @@ if ($mois_test = api_get('historique', ['bloc' => 'test'])) {
     $regle = array_product(array_map(fn ($m) => 1 + $m['rendement_regle'], $mois_test)) - 1;
 }
 $p = $signal['p_hausse'] ?? 0.45;
+$volatilite = api_get('volatilite');
+$auc_agite = (float) ($volatilite['agitation']['test_2024_2026']['modeles']['logistique']['auc'] ?? 0.71);
 
 $chapitres = [
-    ['Ouverture', "Acheter, rester neutre ou vendre le Nikkei\u{00A0}225\u{00A0}?", "Tous les mois, un signal tiré des news et des marchés pour aider un investisseur en euros à décider.", 'Faire défiler'],
-    ['Données', '201 mois de marché, 13 700 articles', "Le nuage dessine le Nikkei 225 de 2010 à 2026. Les news, notées par FinBERT, ne commencent qu'en 2017.", '2010 → 2026'],
-    ['Découpage', 'Le temps ne se mélange pas', "Nous avons séparé l'entraînement, la validation et le test en respectant l'ordre chronologique. La décision a été figée par un commit avant d'ouvrir le dernier bloc.", '143 · 24 · 33 mois'],
-    ['Apprentissage', 'Descendre la surface de coût', "Nous avons codé la régression logistique à la main, de la vraisemblance au gradient en passant par l'a priori gaussien. Elle retrouve scikit-learn à 5 × 10⁻⁶ près.", 'λ = 0,117'],
+    ['Ouverture', "Acheter, rester neutre ou vendre le Nikkei\u{00A0}225\u{00A0}?", "Peut-on deviner ce que fera la Bourse japonaise le mois prochain ? Nous avons essayé, avec l'actualité et les chiffres des marchés.", 'Faire défiler'],
+    ['Données', '201 mois de marché, 13 700 articles', "Voici seize ans de Bourse japonaise, avec une barre par mois. Elle est bleue quand le mois suivant a monté, rouge quand il a baissé. Nous y avons ajouté des milliers de titres de presse, notés par un outil appelé FinBERT.", '2010 → 2026'],
+    ['Découpage', 'Le temps ne se mélange pas', "Les mois se rangent en trois blocs, dans l'ordre du temps. Le modèle apprend sur le premier, nous faisons nos réglages sur le deuxième, et le troisième sert d'examen final, regardé une seule fois.", '143 · 24 · 33 mois'],
+    ['Apprentissage', 'Descendre la surface de coût', "Le modèle cherche ses réglages comme cette bille, qui roule vers le fond d'un bol. Nous avons reprogrammé ce calcul (la descente de gradient) à la main, et nous retrouvons le résultat de scikit-learn à 5 × 10⁻⁶ près.", 'λ = 0,117'],
     ['Signal', pct($p) . ' de probabilité de hausse', $signal ? 'Avec les données de fin ' . mois_lisible($signal['mois_des_donnees']) . ", la règle du modèle conduirait à « " . $signal['action_du_modele'] . " »." : "L'API Python est arrêtée, cette valeur est donnée à titre d'exemple.", 'S = ' . signe(2 * $p - 1)],
-    ['Verdict', 'Le modèle ne bat pas le plancher', 'Log-loss ' . decimal($modele) . ' contre ' . decimal($constante) . " pour le modèle constant. Nous tenons notre engagement et nous recommandons « toujours acheter, couvert ».", signe(100 * $achat, 1, ' %') . ' contre ' . signe(100 * $regle, 1, ' %')],
-    ['Régime', "Ce qu'il avait appris a changé de sens", "Depuis 2022, la Banque du Japon normalise sa politique. Le lien entre volume de news et rendement du mois suivant se retourne.", '−0,38 → +0,29'],
+    ['Verdict', 'Le modèle ne fait pas mieux qu\'une prévision toute simple', "Acheter et garder a rapporté bien plus que suivre le modèle. " . 'Son erreur (log-loss) atteint ' . decimal($modele) . ' contre ' . decimal($constante) . " pour le modèle constant, et nous recommandons donc d'acheter en se couvrant contre le yen.", signe(100 * $achat, 1, ' %') . ' contre ' . signe(100 * $regle, 1, ' %')],
+    ['Régime', "Ce qu'il avait appris a changé de sens", "En 2022, la banque centrale du Japon change de politique, et la courbe pivote. Ce que le modèle avait appris sur la presse s'est alors inversé : la corrélation est passée de −0,38 à +0,29.", '−0,38 → +0,29'],
+    ['Risque', "Le sens ne se prévoit pas. L'agitation, un peu.", "Les lames montrent l'agitation du Nikkei mois après mois, en rouge quand elle a été forte. Les deux fils bleus sont ce que nous annoncions un mois plus tôt. Nous avons ajouté ce second volet après le test : il annonce le risque, sans battre « acheter et garder ».", 'AUC ' . decimal($auc_agite, 2) . ' contre 0,50'],
     ['Entrer', 'Tout le projet, en détail', "Vous y trouverez le prédicteur, le simulateur, les six notebooks exécutés, le rapport et l'annexe de Maths.", ''],
 ];
 ?>
@@ -42,7 +45,9 @@ $chapitres = [
   * { box-sizing: border-box; }
   html { scrollbar-width: none; } html::-webkit-scrollbar { display: none; }
   body { margin: 0; background: var(--papier); color: var(--encre); font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  .xp { height: <?= count($chapitres) * 100 ?>vh; }
+  html { scroll-snap-type: y proximity; }
+  .xp { height: <?= count($chapitres) * 100 ?>vh; position: relative; }
+  .arret { position: absolute; left: 0; width: 1px; height: 100vh; scroll-snap-align: start; pointer-events: none; }
   .scene { position: sticky; top: 0; height: 100vh; overflow: hidden; background: var(--papier); }
   .scene::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: multiply;   /* grain du papier */
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .4  0 0 0 0 .32  0 0 0 .5 0'/></filter><rect width='220' height='220' filter='url(%23g)'/></svg>"); }
@@ -107,13 +112,13 @@ $chapitres = [
 <div class="intro" id="intro" aria-hidden="true">
   <span class="kanji">日経</span>
   <span class="nombre" id="intro-nombre">000</span>
-  <span class="legende">Nikkei 225 · 2010 → 2026<br>16 000 gouttes d'encre</span>
+  <span class="legende">Nikkei 225 · 2010 → 2026<br>neuf scènes en 3D</span>
   <i class="trait" id="intro-trait"></i>
 </div>
 <main class="xp" id="xp">
-  <div class="scene">
+<?php foreach ($chapitres as $i => $c): ?>  <i class="arret" style="top: <?= $i * 100 ?>vh"></i>
+<?php endforeach; ?>  <div class="scene">
     <div class="signe" id="signe" aria-hidden="true">序</div>
-    <div class="soleil" id="soleil" aria-hidden="true"></div>
     <canvas id="toile" aria-hidden="true"></canvas>
     <div class="hud">
       <a class="marque" href="/"><span class="kanji">日経</span><small>Nikkei 225<br>Albert School · 2026</small></a>
@@ -125,7 +130,8 @@ $chapitres = [
         <p><?= e($texte) ?></p>
 <?php if ($i === count($chapitres) - 1): ?>
         <div class="liens">
-          <a class="plein" href="/recit">Le récit complet</a>
+          <a class="plein" href="/recit?presenter">Présenter</a>
+          <a href="/recit">Lire le récit</a>
           <a href="/recit#explorateur">Prédire</a>
           <a href="/notebooks">Notebooks</a>
           <a href="/rapport.pdf" target="_blank">Rapport PDF</a>
@@ -135,19 +141,19 @@ $chapitres = [
 <?php endif; ?>
       </section>
 <?php endforeach; ?>
-      <div class="vertical">Encre · particules · données</div>
+      <div class="vertical">Encre · volume · données</div>
       <nav class="fil" id="fil">
 <?php foreach ($chapitres as $i => [$nom]): ?>
         <button data-aller="<?= $i ?>"<?= $i === 0 ? ' class="actif"' : '' ?>><?= e($nom) ?></button>
 <?php endforeach; ?>
       </nav>
-      <div class="etat" id="etat">16 000 gouttes d'encre · faire défiler</div>
+      <div class="etat" id="etat">Neuf scènes en 3D · faire défiler</div>
       <div class="jauge-defilement"><i id="curseur"></i></div>
     </div>
   </div>
 </main>
 <script>window.PROJET = <?= json_encode(['p' => $p, 'seuils' => $signal['seuils'] ?? ['theta_v' => 0.456, 'theta_a' => 0.58], 'regle' => $regle, 'achat' => $achat, 'noms' => array_column($chapitres, 0)], JSON_UNESCAPED_UNICODE) ?>;</script>
 <script src="/assets/effets.js"></script>
-<script type="module" src="/assets/experience.js"></script>
+<script type="module" src="/assets/monde.js"></script>
 </body>
 </html>

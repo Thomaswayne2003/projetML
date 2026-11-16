@@ -1,6 +1,5 @@
-/* Projet Nikkei — scènes 3D (Three.js, copie locale : le site fonctionne sans internet).
-   1. Accueil : le Nikkei 225 de 2010 à 2026 en relief, coloré par bloc du split.
-   2. Maths : la surface de coût J(w1, w2) et la descente de gradient pour quatre pas. */
+/* Projet Nikkei — la scène 3D de l'annexe de maths (Three.js, copie locale : le site fonctionne sans internet).
+   La surface de coût J(w1, w2) et la descente de gradient pour quatre pas. */
 import * as THREE from "./three.module.min.js";
 
 const IMMOBILE = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -36,125 +35,7 @@ function boucle(rendu, scene, camera, conteneur, image) {
   if (IMMOBILE) window.addEventListener("resize", () => requestAnimationFrame(dessiner));
 }
 
-/* ------------------------------------------------------------------ 1. Accueil */
-async function sceneAccueil() {
-  const canvas = document.getElementById("scene-hero");
-  if (!canvas) return;
-  const entete = canvas.parentElement, hud = document.getElementById("hud-mois");
-  const serie = await api("serie");
-
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x000000);
-  const camera = new THREE.PerspectiveCamera(40, 2, 0.1, 400);
-  const rendu = creerRendu(canvas);
-  const SOL = -2.2;
-
-  // Ciel de coucher de soleil : un grand plan lointain, coloré selon la hauteur
-  const ciel = new THREE.PlaneGeometry(320, 80, 1, 32);
-  const etapes = [[0, 0xf08a3c], [5, 0xf3b673], [12, 0xe6cdb8], [24, 0xcfc8d8], [80, 0xbdb7cb]].map(([h, hex]) => [h, new THREE.Color(hex)]);
-  const teinteCiel = (h) => {
-    const k = Math.max(1, etapes.findIndex(([seuil]) => h <= seuil));
-    const [h0, c0] = etapes[k - 1], [h1, c1] = etapes[k];
-    return c0.clone().lerp(c1, Math.min(1, Math.max(0, (h - h0) / (h1 - h0))));
-  };
-  const couleursCiel = new Float32Array(ciel.attributes.position.count * 3);
-  for (let k = 0; k < ciel.attributes.position.count; k++) {
-    const c = teinteCiel(ciel.attributes.position.getY(k) + 40);
-    couleursCiel.set([c.r, c.g, c.b], k * 3);
-  }
-  ciel.setAttribute("color", new THREE.BufferAttribute(couleursCiel, 3));
-  const voute = new THREE.Mesh(ciel, new THREE.MeshBasicMaterial({ vertexColors: true }));
-  voute.position.set(0, SOL + 40, -70);
-  scene.add(voute);
-
-  const soleil = new THREE.Mesh(new THREE.CircleGeometry(3.4, 64), new THREE.MeshBasicMaterial({ color: 0xfff3d6 }));
-  soleil.position.set(-9, SOL + 2.2, -69);
-  const halo = new THREE.Mesh(new THREE.CircleGeometry(9, 64), new THREE.MeshBasicMaterial({ color: 0xffc27a, transparent: true, opacity: 0.35 }));
-  halo.position.set(-9, SOL + 2.2, -69.5);
-  scene.add(halo, soleil);
-
-  const sol = new THREE.Mesh(new THREE.PlaneGeometry(600, 300), new THREE.MeshBasicMaterial({ color: 0x000000 }));
-  sol.rotation.x = -Math.PI / 2;
-  sol.position.y = SOL;
-  const quadrillage = new THREE.GridHelper(120, 120, 0x242424, 0x161616);
-  quadrillage.position.y = SOL + 0.01;
-  scene.add(sol, quadrillage);
-
-  // Le relief : la courbe du Nikkei (échelle log), extrudée en profondeur, en silhouette sur le ciel
-  const n = serie.length, LARGEUR = 17, HAUTEUR = 3.9, EPAISSEUR = 1.5;
-  const logs = serie.map((d) => Math.log(d.cloture));
-  const min = Math.min(...logs), max = Math.max(...logs);
-  const X = (i) => (i / (n - 1) - 0.5) * LARGEUR;
-  const Y = (i) => ((logs[i] - min) / (max - min)) * HAUTEUR + 0.3;
-  const forme = new THREE.Shape();
-  forme.moveTo(X(0), 0);
-  for (let i = 0; i < n; i++) forme.lineTo(X(i), Y(i));
-  forme.lineTo(X(n - 1), 0);
-  forme.closePath();
-  const geometrie = new THREE.ExtrudeGeometry(forme, { depth: EPAISSEUR, bevelEnabled: false });
-  geometrie.translate(0, 0, -EPAISSEUR / 2);
-
-  const teintes = { "entraînement": 0x5b8cff, validation: 0xffb347, test: 0xb4ff1a, "à prédire": 0xb4ff1a };
-  const positions = geometrie.attributes.position, couleurs = new Float32Array(positions.count * 3), c = new THREE.Color();
-  for (let k = 0; k < positions.count; k++) {
-    const i = Math.min(n - 1, Math.max(0, Math.round((positions.getX(k) / LARGEUR + 0.5) * (n - 1))));
-    c.setHex(teintes[serie[i].bloc]).multiplyScalar(0.1 + 0.42 * positions.getY(k) / (HAUTEUR + 0.3));
-    couleurs.set([c.r, c.g, c.b], k * 3);
-  }
-  geometrie.setAttribute("color", new THREE.BufferAttribute(couleurs, 3));
-  const relief = new THREE.Mesh(geometrie, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55, metalness: 0.35 }));
-
-  const pointsCrete = serie.map((_, i) => new THREE.Vector3(X(i), Y(i) + 0.012, EPAISSEUR / 2 + 0.01));
-  const creteGeo = new THREE.BufferGeometry().setFromPoints(pointsCrete);
-  const couleursCrete = new Float32Array(n * 3);
-  serie.forEach((d, i) => { c.setHex(teintes[d.bloc]); couleursCrete.set([c.r, c.g, c.b], i * 3); });
-  creteGeo.setAttribute("color", new THREE.BufferAttribute(couleursCrete, 3));
-  const crete = new THREE.Line(creteGeo, new THREE.LineBasicMaterial({ vertexColors: true }));
-
-  // Curseur de lecture : il balaie les 201 mois et alimente l'étiquette en haut à droite
-  const balayage = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0)]),
-    new THREE.LineBasicMaterial({ color: 0xb4ff1a }));
-  const repere = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 16), new THREE.MeshBasicMaterial({ color: 0xb4ff1a }));
-  const groupe = new THREE.Group();
-  groupe.add(relief, crete, balayage, repere);
-  groupe.position.set(1.6, SOL, 0);
-  scene.add(groupe);
-
-  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-  const contreJour = new THREE.DirectionalLight(0xffc890, 3.2);
-  contreJour.position.set(-8, 5, -10);
-  const face = new THREE.DirectionalLight(0xffffff, 1.3);
-  face.position.set(4, 6, 10);
-  scene.add(contreJour, face);
-
-  const souris = { x: 0, y: 0 }, lisse = { x: 0, y: 0 };
-  entete.addEventListener("pointermove", (e) => {
-    const r = entete.getBoundingClientRect();
-    souris.x = (e.clientX - r.left) / r.width - 0.5;
-    souris.y = (e.clientY - r.top) / r.height - 0.5;
-  });
-
-  let dernier = -1;
-  boucle(rendu, scene, camera, entete, (t) => {
-    lisse.x += (souris.x - lisse.x) * 0.05;
-    lisse.y += (souris.y - lisse.y) * 0.05;
-    const defile = Math.min(1, Math.max(0, window.scrollY / Math.max(1, entete.offsetHeight)));   // 0 en haut, 1 quand l'en-tête est passé
-    camera.position.set(Math.sin(t * 0.16) * 0.8 + lisse.x * 2.0, 0.5 + defile * 3.4 - lisse.y * 0.8, 13.5 - defile * 6.5);
-    camera.lookAt(1.2, 0.25 - defile * 1.2, 0);
-    groupe.rotation.y = Math.sin(t * 0.11) * 0.06 - lisse.x * 0.1 + defile * 0.5;
-    groupe.scale.y = IMMOBILE ? 1 : 1 - Math.pow(1 - Math.min(1, t / 2.4), 3);      // le relief se dresse à l'ouverture
-    const i = IMMOBILE ? n - 1 : Math.floor((t * 14) % n);
-    if (i !== dernier) {
-      dernier = i;
-      balayage.position.set(X(i), 0, EPAISSEUR / 2 + 0.02);
-      balayage.scale.y = Y(i) + 0.9;
-      repere.position.set(X(i), Y(i), EPAISSEUR / 2 + 0.02);
-      if (hud) hud.textContent = `${serie[i].mois} // ${Math.round(serie[i].cloture).toLocaleString("fr-FR")} PTS // ${serie[i].bloc.toUpperCase()}`;
-    }
-  });
-}
-
-/* ------------------------------------------------------------------ 2. Surface de coût */
+/* ------------------------------------------------------------------ Surface de coût */
 async function sceneSurface() {
   const boite = document.getElementById("scene-surface");
   if (!boite) return;
@@ -284,7 +165,6 @@ async function sceneSurface() {
   boucle(rendu, scene, camera, boite, placer);
 }
 
-sceneAccueil().catch((erreur) => console.warn("Scène d'accueil indisponible :", erreur));
 sceneSurface().catch((erreur) => {
   const etat = document.getElementById("etat-pas");
   if (etat) etat.textContent = "Scène 3D indisponible : l'API Python ne répond pas.";

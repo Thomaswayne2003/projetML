@@ -9,7 +9,13 @@ declare(strict_types=1);
 $chemin = urldecode((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $projet = dirname(__DIR__);
 
-$pages = ['/' => 'experience.php', '/dossier' => 'index.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php'];
+$pages = ['/' => 'experience.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php'];
+// Le récit n'a qu'une version : l'ancienne adresse du dossier y mène
+if (in_array($chemin, ['/dossier', '/index.php'], true)) {
+    $suite = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+    header('Location: /recit' . ($suite ? '?' . $suite : ''), true, 302);
+    return true;
+}
 if (isset($pages[$chemin])) {
     require __DIR__ . '/' . $pages[$chemin];
     return true;

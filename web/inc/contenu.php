@@ -1,12 +1,13 @@
 <?php
 /**
- * Page d'accueil : présentation complète du projet.
+ * Le contenu du site : l'affiche d'ouverture et les seize chapitres, avec leurs tableaux, figures et outils.
+ * index.php inclut ce fichier, puis met en scène l'ouverture de chaque chapitre.
  * Les chiffres figés viennent de runs/evaluation_test.json ; le signal du mois vient de l'API Python.
  */
 declare(strict_types=1);
-require __DIR__ . '/inc/config.php';
+require __DIR__ . '/config.php';
 
-$theme = $theme ?? 'industriel';       // 'encre' pour la version /recit
+$theme = 'encre';
 $signal = api_get('signal');                 // null si l'API Python est arrêtée
 $mois = api_get('mois') ?? [];
 $eval = lire_runs('evaluation_test.json');
@@ -24,88 +25,36 @@ if ($mois_test = api_get('historique', ['bloc' => 'test'])) {
 
 $titre = 'Projet Nikkei · acheter, rester neutre ou vendre ?';
 $page = 'accueil';
-require __DIR__ . '/inc/entete.php';
+require __DIR__ . '/entete.php';
 ?>
 <!-- ============ En-tête, avec la scène 3D ============ -->
-<?php if ($theme === 'encre'): ?>
+<div id="voile" aria-hidden="true"></div>
 <header class="hero3d affiche" id="haut" data-chapitre="haut" data-court="Ouverture">
   <div class="page affiche-in">
     <div class="affiche-texte">
       <p class="surtitre"><span class="sceau">序</span>Albert School · MSc 1 · Applied ML &amp; Maths for ML</p>
       <h1>Acheter, rester neutre ou vendre le <em>Nikkei&nbsp;225</em>&nbsp;?</h1>
-      <p class="chapo">Tous les mois, à la clôture, notre modèle estime la probabilité que l'indice japonais monte le mois
-        suivant, à partir des news et des données de marché. Une règle traduit ensuite cette probabilité en action pour
-        un investisseur en euros et précise s'il doit se couvrir contre le yen.</p>
+      <p class="chapo">Peut-on deviner, à la fin d'un mois, ce que fera la Bourse japonaise le mois suivant ? Nous avons
+        essayé, en nous appuyant sur l'actualité et sur les chiffres des marchés, pour en tirer un conseil simple
+        destiné à un épargnant européen : acheter, attendre ou vendre.</p>
       <dl class="reponse">
-        <div class="large"><dt>Notre réponse</dt><dd>Toujours acheter, en se couvrant contre le yen.</dd>
-          <p>Sur le test, le modèle n'a pas fait mieux que le modèle constant. Nous appliquons donc l'engagement que nous
-            avions écrit avant de regarder ces données.</p></div>
-        <div><dt>Le modèle, sur le test</dt><dd><?= decimal($modele['log-loss']) ?> <small>contre <?= decimal($constante['log-loss']) ?></small></dd>
-          <p>Log-loss du modèle, à comparer à celle du modèle constant. La plus basse est la meilleure.</p></div>
+        <div class="large"><dt>Notre réponse, en clair</dt><dd>Mieux vaut acheter et garder, en se protégeant contre le yen.</dd>
+          <p>Notre modèle n'a pas fait mieux qu'une prévision toute simple. Nous nous étions engagés à le dire si
+            cela arrivait, et c'est ce que nous faisons.</p></div>
+        <div><dt>En termes techniques</dt><dd><?= decimal($modele['log-loss']) ?> <small>contre <?= decimal($constante['log-loss']) ?></small></dd>
+          <p>Log-loss du modèle sur le test, à comparer à celle du modèle constant. La plus basse est la meilleure.</p></div>
         <div><dt>En euros, 2024-2026</dt><dd><?= signe(100 * $achat_couvert, 1, '&nbsp;%') ?> <small>contre <?= signe(100 * $regle, 1, '&nbsp;%') ?></small></dd>
           <p>Rendement de « toujours acheter, couvert », face à celui de la règle du modèle.</p></div>
       </dl>
       <div class="boutons">
-        <a class="btn plein" href="#resultat">Lire le récit ↓</a>
+        <a class="btn plein" href="?presenter" data-presenter>Présenter ▸</a>
+        <a class="btn contour" href="#resultat">Lire le récit ↓</a>
         <a class="btn contour" href="#explorateur">Essayer le prédicteur</a>
       </div>
     </div>
     <figure class="planche" data-planche="haut"><div class="dessin"></div><figcaption></figcaption></figure>
   </div>
 </header>
-<?php else: ?>
-<header class="hero3d" id="haut">
-  <canvas id="scene-hero" aria-hidden="true"></canvas>
-  <div class="hud" aria-hidden="true">
-    <span class="hud-hg">NIKKEI 225 // 2010 → 2026</span>
-    <span class="hud-hd" id="hud-mois">—</span>
-    <span class="hud-bg">201 MOIS · 12 VARIABLES · 1 MODÈLE</span>
-    <span class="hud-bd">FAIRE DÉFILER ↓</span>
-  </div>
-  <div class="page hero">
-    <div>
-      <p class="surtitre">Albert School · MSc 1 · Applied ML &amp; Maths for ML</p>
-      <h1>Acheter, rester neutre ou vendre le <em>Nikkei&nbsp;225</em>&nbsp;?</h1>
-      <p class="chapo">Tous les mois, à la clôture, notre modèle estime la probabilité que l'indice japonais monte le mois
-        suivant, à partir des news et des données de marché. Une règle traduit ensuite cette probabilité en action pour
-        un investisseur en euros et précise s'il doit se couvrir contre le yen.</p>
-      <div class="puces">
-        <span class="puce"><b>200 mois</b> · 2010 → 2026</span>
-        <span class="puce"><b>13 700 articles</b> notés par FinBERT</span>
-        <span class="puce"><b>3 modèles</b> · 200 essais Optuna</span>
-        <span class="puce"><b>1 seule</b> évaluation sur le test</span>
-      </div>
-      <div class="boutons">
-        <a class="btn plein" href="#explorateur">Explorer le signal</a>
-        <a class="btn contour" href="/notebooks">Ouvrir les notebooks</a>
-        <a class="btn contour" href="/rapport.pdf" target="_blank">Rapport PDF</a>
-      </div>
-    </div>
-
-    <div class="carte signal verre relief">
-      <div class="entete">
-        <span class="etiquette">Signal du modèle</span>
-        <span class="mois"><?= $signal ? 'données de fin ' . e(mois_lisible($signal['mois_des_donnees'])) : 'API arrêtée' ?></span>
-      </div>
-<?php if ($signal): ?>
-      <div class="proba"><?= pct($signal['p_hausse']) ?><small>de probabilité de hausse</small></div>
-      <div class="jauge" data-jauge data-p="<?= e($signal['p_hausse']) ?>" data-tv="<?= e($signal['seuils']['theta_v']) ?>" data-ta="<?= e($signal['seuils']['theta_a']) ?>"></div>
-      <div class="duo">
-        <div class="mini"><span>Score S = 2p − 1</span><b><?= signe($signal['score']) ?></b></div>
-        <div class="mini"><span>Action de la règle</span><b><span class="badge <?= e($signal['action_du_modele']) ?>"><?= e($signal['action_du_modele']) ?></span></b></div>
-      </div>
-<?php else: ?>
-      <p class="alerte" style="margin-top:14px">L'API Python ne répond pas. Lancez-la depuis la racine du projet :<br>
-        <code>uvicorn app.api:app --port 8000</code></p>
-<?php endif; ?>
-      <div class="verdict"><b>Recommandation finale : toujours acheter, couvert.</b><br>
-        Sur le test, le modèle n'a pas battu le modèle constant. Nous montrons sa règle à titre d'analyse.</div>
-    </div>
-  </div>
-  <p class="page legende-3d">Relief : Nikkei 225, 2010 → 2026, échelle log ·
-    <i style="background:#5b8cff"></i>entraînement <i style="background:#ffb347"></i>validation <i style="background:#b4ff1a"></i>test</p>
-</header>
-<?php endif; ?>
 
 <div class="progression" id="progression"></div>
 <main class="page">
@@ -153,7 +102,7 @@ require __DIR__ . '/inc/entete.php';
       <div class="jauge" id="exp-jauge"></div>
       <p class="note" id="exp-suite"></p>
       <h3 style="margin-top:18px">Ce qui pèse dans cette prédiction</h3>
-      <p class="note">En log-odds de la baisse. <?= $theme === 'encre' ? 'Rouge' : 'Orange' ?> : pousse vers « baisse ». <?= $theme === 'encre' ? 'Bleu' : 'Vert' ?> : pousse vers « hausse ».</p>
+      <p class="note">En log-odds de la baisse. Rouge : pousse vers « baisse ». Bleu : pousse vers « hausse ».</p>
       <div class="graphe" id="graphe-shap"></div>
     </div>
   </div>
@@ -175,7 +124,7 @@ $sources = [
     ['FinBERT', 'Score de sentiment des titres, égal à P(positif) − P(négatif)', 'calculé sur le titre, donc aucun'],
 ];
 $etapes_dataset = [
-    ['Collecter', "Nous téléchargeons toutes les sources et nous les gardons telles quelles dans data/raw, ce qui permet de rejouer le projet sans connexion."],
+    ['Collecter', "Nous téléchargeons toutes les sources et nous les gardons telles quelles dans data/1_brutes, ce qui permet de rejouer le projet sans connexion."],
     ['Nettoyer', "Une fausse séance recopiée par Yahoo un jour férié est supprimée. Un split non ajusté et un prix divisé par 10 sont corrigés sur l'ETF TOPIX. Les jours sans news sont conservés et signalés par un indicateur."],
     ['Aligner', "Tout est ramené sur le calendrier de Tokyo. Quand une valeur manque, nous reprenons la dernière connue, sans jamais aller chercher une valeur future."],
     ['Décaler', "Toutes les séries sont retardées jusqu'à leur date de publication réelle, pour que le modèle ne dispose d'aucune information avant le marché."],
@@ -224,9 +173,9 @@ $etapes_dataset = [
       </ul>
     </div>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> La table finale compte 201 mois, de février 2010 à octobre 2026. Notre audit ne
-    trouve aucune fuite. La cible correspond exactement au rendement du mois suivant (écart 0), l'identité de la
-    couverture tient à 7 × 10⁻⁷ près et le Tankan ne change qu'à ses mois de publication.</div>
+  <div class="conclusion"><b>Conclusion.</b> Nous disposons d'un tableau propre de 201 mois, dans lequel le modèle ne voit jamais le futur.
+    <span class="precis">Plus précisément, la cible correspond exactement au rendement du mois suivant (écart 0), l'identité de la
+    couverture tient à 7 × 10⁻⁷ près et le Tankan ne change qu'à ses mois de publication.</span></div>
 </section>
 
 <!-- ============ Méthode ============ -->
@@ -294,7 +243,7 @@ $etapes_dataset = [
       </ul>
     </div>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> Le marché monte 61 % des mois et les news ne couvrent que 57 des 143 mois d'entraînement. Seul le volume anormal d'articles se détache du bruit. Le sentiment des news, sur lequel reposait pourtant notre idée de départ, ne prédit presque rien.</div>
+  <div class="conclusion"><b>Conclusion.</b> La Bourse monte six mois sur dix, et une seule de nos mesures semble annoncer la suite. <span class="precis">Plus précisément, le marché monte 61 % des mois, les news ne couvrent que 57 des 143 mois d'entraînement, et seul le volume anormal d'articles se détache du bruit. Le sentiment des news, sur lequel reposait pourtant notre idée de départ, ne prédit presque rien.</span></div>
 </section>
 
 
@@ -326,7 +275,7 @@ $etapes_dataset = [
   </div>
   <figure class="figure" style="margin-top:20px"><img src="/figures/02_optuna_historique.png" alt="Historique des essais Optuna">
     <figcaption>Les 200 essais Optuna, tous journalisés, avec leur log-loss, le meilleur résultat obtenu jusque-là et le niveau du modèle constant.</figcaption></figure>
-  <div class="conclusion"><b>Conclusion.</b> Un modèle plus flexible s'ajuste davantage au bruit des 48 mois de validation croisée. LightGBM y gagne 0,089 de log-loss, puis en perd 0,029 sur 2022-2023. Nous retenons donc la régression logistique, comme le veut la règle de baseline. Quant au modèle de couverture, il ne trouve aucun signal et tous ses coefficients sont nuls.</div>
+  <div class="conclusion"><b>Conclusion.</b> Les modèles les plus sophistiqués ont surtout retenu des détails du passé, et nous gardons le plus simple. <span class="precis">Plus précisément, LightGBM gagne 0,089 de log-loss en validation croisée, puis en perd 0,029 sur 2022-2023. La règle de baseline nous fait retenir la régression logistique. Quant au modèle de couverture, il ne trouve aucun signal et tous ses coefficients sont nuls.</span></div>
 </section>
 
 
@@ -361,7 +310,7 @@ $etapes_dataset = [
     <figcaption>Reliability diagrams codés à la main. Hors fold, les points suivent la diagonale. Sur la validation, la
       courbe de la logistique descend, ce qui veut dire que les baisses arrivent moins souvent quand elle les annonce avec
       plus d'assurance.</figcaption></figure>
-  <div class="conclusion"><b>Conclusion.</b> Sur la validation, la logistique calibrée ne bat pas le modèle constant (log-loss de 0,699 contre 0,681). La règle évite 7 baisses sur 10 mais elle rate la hausse de 2023. Nous avons malgré tout figé l'ensemble avant le test, en écrivant à l'avance ce que nous ferions selon le résultat.</div>
+  <div class="conclusion"><b>Conclusion.</b> Avant même l'examen final, le modèle ne convainc pas. Nous figeons tout de même nos choix, pour pouvoir le juger honnêtement. <span class="precis">Plus précisément, sur la validation, la logistique calibrée ne bat pas le modèle constant (log-loss de 0,699 contre 0,681), et la règle évite 7 baisses sur 10 mais rate la hausse de 2023.</span></div>
 </section>
 
 
@@ -438,7 +387,7 @@ $etapes_dataset = [
       concernent aucune personne et ne contiennent donc pas d'attribut sensible. Nous avons transposé l'analyse d'équité
       à ces groupes de mois.</p>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> Le modèle ne bat pas le plancher. Il ne fait mieux que le modèle constant qu'en 2024, année où il détecte les six baisses. Nous tenons donc notre engagement et nous recommandons « toujours acheter, couvert ». La couverture permanente, de son côté, était le bon choix (+82,3 % contre +57,9 %).</div>
+  <div class="conclusion"><b>Conclusion.</b> Le modèle échoue à l'examen final, et nous recommandons donc d'acheter et de garder, en se protégeant contre le yen. <span class="precis">Plus précisément, il ne fait mieux que le modèle constant qu'en 2024, année où il détecte les six baisses. La couverture permanente, de son côté, était le bon choix (+82,3 % contre +57,9 %).</span></div>
 </section>
 
 
@@ -511,10 +460,10 @@ $etapes_dataset = [
   </div>
   <figure class="figure" style="margin-top:18px"><img src="/figures/04_shap_waterfall_2026-10.png" alt="Décomposition SHAP de la prédiction d'octobre 2026">
     <figcaption>Décomposition complète de la prédiction, variable par variable (notebook 04).</figcaption></figure>
-  <div class="conclusion"><b>Conclusion.</b> Cette projection est fragile pour deux raisons. D'abord, la moitié des vingt
-    dernières séances n'ont aucun article collecté, si bien que le pic d'articles d'octobre repose sur peu de jours.
-    Ensuite, le modèle s'est montré trop pessimiste sur l'ensemble du test. Nous ne la suivons donc pas et nous
-    maintenons la recommandation « acheter, couvert ».</div>
+  <div class="conclusion"><b>Conclusion.</b> Le modèle annonce plutôt une baisse pour novembre, mais nous ne suivons pas son avis et nous
+    maintenons notre conseil d'acheter en se couvrant. <span class="precis">Plus précisément, la moitié des vingt dernières séances
+    n'ont aucun article collecté, si bien que le pic d'articles d'octobre repose sur peu de jours, et le modèle s'est
+    montré trop pessimiste sur l'ensemble du test.</span></div>
 </section>
 
 <!-- ============ Changement de régime ============ -->
@@ -633,7 +582,272 @@ $bascules = [
     <figure class="figure"><img src="/figures/05_sensibilite_lambda.png" alt="Sensibilité à lambda">
       <figcaption>Sensibilité à λ. Sans pénalité le modèle sur-apprend, et la log-loss de validation croisée est la plus basse au λ choisi par Optuna.</figcaption></figure>
   </div>
-  <div class="conclusion"><b>Conclusion.</b> Notre descente codée à la main retrouve le résultat de scikit-learn. Toutes les analyses de sensibilité vont dans le même sens, puisqu'une régularisation plus forte ou un arrêt plus précoce rapprochent le modèle de la constante. On reconnaît là un signal faible et instable dans le temps.</div>
+  <div class="conclusion"><b>Conclusion.</b> Notre calcul fait à la main retombe sur celui de l'outil standard, et tout indique que le signal recherché est faible. <span class="precis">Plus précisément, une régularisation plus forte ou un arrêt plus précoce rapprochent le modèle de la constante, ce que l'on attend d'un signal faible et instable dans le temps.</span></div>
+</section>
+
+
+<!-- ============ Vérifications après coup ============ -->
+<?php
+$verif = api_get('verifications');
+$vol = api_get('volatilite');
+$nb_battent = $verif['vingt_modeles']['battent_la_constante']['test'] ?? 3;
+$nb_essais = $verif['vingt_modeles']['battent_la_constante']['sur'] ?? 38;
+$jour = $verif['base_journaliere'] ?? [];
+$jour_cloture = $jour['lendemain, décision à la clôture de Tokyo'] ?? ['observations' => 668, 'auc' => 0.492];
+$jour_piege = $jour['lendemain, en connaissant Wall Street du soir (piège : pas encore connu à la clôture)'] ?? ['auc' => 0.711];
+$long = $verif['historique_long'] ?? [];
+$libelle_fenetre = ['croissante' => 'tout le passé', 'glissante' => '60 derniers mois'];
+?>
+<section id="verifications">
+  <p class="surtitre">Après le test · trois vérifications</p>
+  <h2>Un autre modèle aurait-il fait mieux ?</h2>
+  <p class="chapo">Une fois le résultat connu, la question s'impose. Nous y avons répondu de trois façons, en gardant en tête que ces
+    essais viennent après l'ouverture du test : ils éclairent le résultat du projet, ils ne le remplacent pas.</p>
+  <div class="grille g3">
+    <div class="carte"><h3>Vingt modèles, réentraînés chaque mois</h3>
+      <p>Régressions logistiques, forêts, LightGBM, réseau de neurones, modèles de séries temporelles… Pour prédire un mois,
+        ils n'apprennent que sur les mois précédents, puis ils réapprennent le mois suivant.</p>
+      <p class="note"><?= $nb_battent ?> essais sur <?= $nb_essais ?> passent devant la prévision constante, avec une avance
+        quatre fois plus petite que leur incertitude.</p></div>
+    <div class="carte"><h3>La base jour par jour</h3>
+      <p>Avec <?= number_format(4118, 0, ',', ' ') ?> séances au lieu de 201 mois, les modèles ont vingt fois plus d'exemples. Sur les
+        <?= (int) $jour_cloture['observations'] ?> séances du test, ils ne devinent pas mieux le sens du lendemain qu'un tirage à pile ou face.</p>
+      <p class="note">AUC de <?= decimal((float) $jour_cloture['auc'], 2) ?>, pour 0,50 au hasard. Rien non plus à 5 et à 20 séances.</p></div>
+    <div class="carte"><h3>Vingt-cinq ans d'historique</h3>
+      <p>Faire apprendre le modèle depuis 2000 plutôt que depuis 2010 n'aide pas : le Japon des années 2000 baissait plus
+        souvent, et ce qui annonçait alors une baisse annonce plutôt une hausse aujourd'hui.</p>
+      <p class="note">Log-loss de la prévision constante sur le test : <?= decimal((float) ($long['2000-01']['constante'] ?? 0.667)) ?> en partant de 2000,
+        <?= decimal((float) ($long['2010-02']['constante'] ?? 0.660)) ?> en partant de 2010.</p></div>
+  </div>
+<?php if ($verif): ?>
+  <div class="grille g2" style="margin-top:20px">
+    <div class="carte">
+      <h3>Les mieux classés sur le test, et quelques repères</h3>
+      <table class="tableau">
+        <thead><tr><th>Modèle</th><th>Apprend sur</th><th class="num">Log-loss</th><th class="num">Écart</th></tr></thead>
+        <tbody>
+<?php
+$classement = $verif['vingt_modeles']['classement_sur_le_test'];
+$reperes = ['logistique L2 (modèle du projet)|croissante', 'LightGBM (projet)|croissante', 'réseau de neurones (8 neurones)|croissante', 'Bayes naïf gaussien|croissante'];
+foreach ($classement as $rang => $ligne):
+    if ($rang >= 4 && !in_array($ligne['modele'] . '|' . $ligne['fenetre'], $reperes, true)) { continue; }
+    $constant = str_starts_with($ligne['modele'], 'constante') && $ligne['fenetre'] === 'croissante'; ?>
+          <tr<?= $constant ? ' class="repere"' : '' ?>><td><?= $constant ? '<b>Prévision constante</b>' : e(ucfirst($ligne['modele'])) ?></td><td><?= e($libelle_fenetre[$ligne['fenetre']]) ?></td>
+            <td class="num"><?= decimal((float) $ligne['log_loss']) ?></td>
+            <td class="num"><?= $constant ? 'référence' : signe((float) $ligne['ecart'], 3) . ' ± ' . decimal((float) $ligne['erreur_type']) ?></td></tr>
+<?php endforeach; ?>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">Un écart négatif veut dire « mieux que la prévision constante ». Le modèle qui paraissait le meilleur
+        sur 2016-2023 (<?= e($verif['vingt_modeles']['choix_sur_2016_2023']) ?>, sur 60 mois) finit parmi les moins bons sur le test.</p>
+    </div>
+    <div class="carte">
+      <h3>Un piège que la base journalière contenait</h3>
+      <p>Dans notre base, la ligne d'un jour donné contient la clôture de Wall Street de ce même jour. Or New York ferme plusieurs heures
+        après Tokyo. Un modèle qui lit cette colonne « devine » le lendemain <?= pct(0.66) ?> du temps, avec une information qu'il
+        n'aurait pas eue au moment de décider.</p>
+      <table class="tableau">
+        <tbody>
+          <tr><td>Décision à la clôture de Tokyo, données décalées d'un jour</td><td class="num">AUC <?= decimal((float) $jour_cloture['auc'], 2) ?></td></tr>
+          <tr><td>La même, en lisant Wall Street du soir</td><td class="num">AUC <?= decimal((float) $jour_piege['auc'], 2) ?></td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">Nous avons donc décalé d'un jour tout ce qui ne vient pas de la Bourse de Tokyo. Un signal subsiste à
+        l'ouverture du lendemain (AUC 0,59), mais l'indice ouvre avec des cours en partie périmés et nous n'avons pas de quoi le vérifier.</p>
+    </div>
+  </div>
+<?php endif; ?>
+  <div class="conclusion"><b>Conclusion.</b> Changer de modèle, le réentraîner chaque mois ou lui donner vingt fois plus de données ne change pas la réponse. <span class="precis">Plus précisément, le blocage vient de l'information disponible : des prix, des taux et des titres de presse publics sont déjà intégrés dans le cours. Continuer à essayer des variantes sur les mêmes 33 mois finirait par en trouver une qui réussit par hasard.</span></div>
+</section>
+
+
+<!-- ============ Second volet : la volatilité ============ -->
+<?php
+$vp = $vol['prevision'] ?? [];
+$va = $vol['agitation'] ?? [];
+$vu = $vol['usage'] ?? [];
+$prochain = $vol['mois_prochain'] ?? null;
+$retenue = $vol['methode']['methode_retenue_pour_l_usage'] ?? '';
+$auc_agite = (float) ($va['test_2024_2026']['modeles']['logistique']['auc'] ?? 0.707);
+$r2_vol = (float) ($vp['test_2024_2026']['methodes'][$retenue]['r2_hors_echantillon'] ?? 0.183);
+$position = $vu['test_2024_2026']['position'] ?? null;
+?>
+<section id="volatilite">
+  <p class="surtitre">Second volet · ajouté après le test</p>
+  <h2>Le sens ne se prévoit pas. L'agitation, un peu.</h2>
+  <p class="chapo">Puisque nous ne savons pas dire si le Nikkei va monter ou baisser, nous avons changé de question : le mois prochain
+    sera-t-il calme ou agité ? Les mêmes mois, le même découpage, la même discipline de réentraînement, mais une autre cible.</p>
+<?php if ($vol): ?>
+  <div class="grille g2">
+    <div class="carte">
+      <h3>Sept façons de prévoir la volatilité du mois suivant</h3>
+      <table class="tableau">
+        <thead><tr><th>Méthode</th><th class="num">R² 2016-2023</th><th class="num">R² test</th></tr></thead>
+        <tbody>
+<?php foreach ($vp['test_2024_2026']['methodes'] as $nom => $m): if ($nom === 'moyenne passée') { continue; } ?>
+          <tr><td><?= e(ucfirst($nom)) ?></td><td class="num"><?= signe((float) $vp['avant_test_2016_2023']['methodes'][$nom]['r2_hors_echantillon'], 2) ?></td>
+            <td class="num"><?= signe((float) $m['r2_hors_echantillon'], 2) ?></td></tr>
+<?php endforeach; ?>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">Le R² se lit par rapport à une prévision qui annoncerait toujours la volatilité moyenne : 0 veut dire
+        « pas mieux », 1 « parfait ». Presque toutes les méthodes sont au-dessus de zéro sur les deux périodes, ce que nous n'avons jamais
+        obtenu pour le sens du marché. Leur classement change d'une période à l'autre.</p>
+    </div>
+    <div class="carte">
+      <h3>Le mois prochain sera-t-il agité ?</h3>
+      <p class="note">Un mois est dit agité quand sa volatilité dépasse 20 % par an, la moyenne du Nikkei. La démarche est celle du projet :
+        une régression logistique, comparée à une prévision constante.</p>
+      <table class="tableau">
+        <thead><tr><th>Modèle</th><th class="num">AUC 2016-2023</th><th class="num">AUC test</th><th class="num">Écart de log-loss, test</th></tr></thead>
+        <tbody>
+<?php foreach (['logistique' => 'Régression logistique', 'LightGBM bridé' => 'LightGBM bridé'] as $cle => $nom): $t = $va['test_2024_2026']['modeles'][$cle]; ?>
+          <tr><td><?= e($nom) ?></td><td class="num"><?= decimal((float) $va['avant_test_2016_2023']['modeles'][$cle]['auc'], 2) ?></td>
+            <td class="num"><?= decimal((float) $t['auc'], 2) ?></td><td class="num"><?= signe((float) $t['ecart_vs_constante'], 3) ?> ± <?= decimal((float) $t['erreur_type']) ?></td></tr>
+<?php endforeach; ?>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">Une AUC de 0,50 correspond au hasard. Le modèle classe bien les mois, sur les deux périodes. Sur 33 mois,
+        l'avantage en log-loss reste plus petit que son incertitude : le test compte <?= (int) $va['test_2024_2026']['mois_agites'] ?> mois agités sur 33,
+        bien plus qu'avant, et les probabilités annoncées sont trop basses.</p>
+    </div>
+  </div>
+  <div class="grille g2" style="margin-top:20px">
+    <div class="carte">
+      <h3>À quoi cela sert : doser la position</h3>
+      <p class="note">On investit moins quand un mois agité est annoncé : la part placée vaut 15 % divisés par la volatilité prévue, plafonnée à 100 %.
+        Le reste attend au taux sans risque. Rendements en euros couverts, comme dans le projet.</p>
+      <table class="tableau">
+        <thead><tr><th>Sur le test</th><th class="num">Rendement</th><th class="num">Pire mois</th><th class="num">Par unité de risque</th></tr></thead>
+        <tbody>
+<?php foreach (['acheter_et_garder' => 'Acheter et garder', 'position_dosee' => 'Position dosée'] as $cle => $nom): $b = $position[$cle]; ?>
+          <tr><td><?= e($nom) ?></td><td class="num"><?= signe(100 * (float) $b['cumul'], 1, ' %') ?></td><td class="num"><?= signe(100 * (float) $b['pire_mois'], 1, ' %') ?></td>
+            <td class="num"><?= decimal((float) $b['rendement_par_unite_de_risque'], 2) ?></td></tr>
+<?php endforeach; ?>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">La position dosée perd moins dans le pire mois et gagne moins au total. Rapporté au risque pris, le résultat
+        est le même. Nous ne présentons donc pas ce dosage comme une meilleure stratégie.</p>
+    </div>
+    <div class="carte">
+      <h3>Ce que le volet annonce pour novembre 2026</h3>
+<?php if ($prochain): ?>
+      <table class="tableau">
+        <tbody>
+          <tr><td>Volatilité prévue <span class="note">(moyenne passée : <?= decimal((float) $prochain['volatilite_moyenne_passee_%'], 0) ?> %)</span></td><td class="num"><b><?= decimal((float) $prochain['volatilite_prevue_%'], 0) ?> % par an</b></td></tr>
+          <tr><td>Chance d'un mois agité</td><td class="num"><b><?= decimal((float) $prochain['probabilite_mois_agite_%'], 0) ?> %</b></td></tr>
+          <tr><td>Perte mensuelle dépassée environ une fois sur vingt</td><td class="num"><b><?= signe((float) $prochain['perte_mensuelle_depassee_1_fois_sur_20_%'], 1) ?> %</b></td></tr>
+          <tr><td>Part investie par la position dosée</td><td class="num"><b><?= decimal((float) $prochain['part_investie_conseillee_%'], 0) ?> %</b></td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">Octobre 2026 a été nerveux, d'où une chance sur deux d'un nouveau mois agité. Sur 2016-2023, le seuil
+        de perte annoncé a été dépassé <?= (int) $vu['avant_test_2016_2023']['volatilité prévue']['pertes_au_dela_du_seuil_5_%'] ?> fois pour
+        <?= decimal((float) $vu['avant_test_2016_2023']['volatilité prévue']['attendues_5_%'], 1) ?> attendues, et sur le test
+        <?= (int) $vu['test_2024_2026']['volatilité prévue']['pertes_au_dela_du_seuil_5_%'] ?> fois pour <?= decimal((float) $vu['test_2024_2026']['volatilité prévue']['attendues_5_%'], 1) ?>.
+        Une volatilité constante aurait donné les mêmes comptes : le risque annoncé est fiable, sans être plus fin.</p>
+<?php endif; ?>
+    </div>
+  </div>
+<?php else: ?>
+  <p class="note">Les chiffres de ce volet viennent de l'API Python, qui ne répond pas.</p>
+<?php endif; ?>
+  <div class="conclusion"><b>Conclusion.</b> Nous ne savons pas annoncer où va le Nikkei, mais nous savons dire, mieux que le hasard, s'il va s'agiter. <span class="precis">Plus précisément, la volatilité se prévoit avec un R² hors échantillon proche de 0,2 et les mois agités se reconnaissent avec une AUC de <?= decimal($auc_agite, 2) ?>. Cette prévision sert à annoncer le risque et à doser la position, sans battre « acheter et garder » à risque égal. Le volet a été construit après l'ouverture du test.</span></div>
+</section>
+
+
+<!-- ============ Signal d'achat fondé sur le risque ============ -->
+<?php
+$sr = api_get('signal_risque');
+$sr_regle = $sr['regle'] ?? ['seuils_volatilite_annuelle' => [0.20, 0.27], 'confirmation_soirs' => 3];
+[$sr_bas, $sr_haut] = $sr_regle['seuils_volatilite_annuelle'];
+$sr_tout = $sr['strategies']['2003-2026 (tout)'] ?? [];
+$sr_cle = 'signal risque, chaque jour (règle figée)';
+$sr_ratio_signal = (float) ($sr_tout[$sr_cle]['rendement_par_unite_de_risque'] ?? 0.37);
+$sr_ratio_garder = (float) ($sr_tout['acheter et garder']['rendement_par_unite_de_risque'] ?? 0.48);
+$sr_jour = $sr['aujourd_hui'] ?? null;
+$sr_noms = ['acheter et garder' => 'Acheter et garder', $sr_cle => 'Signal chaque jour (règle figée)',
+            'signal risque, seulement en fin de mois' => 'Signal en fin de mois', 'position dosée en continu (risque visé / risque prévu)' => 'Position dosée en continu'];
+?>
+<section id="risque">
+  <p class="surtitre">Second volet · un signal d'achat fondé sur le risque</p>
+  <h2>Acheter quand le risque est bas, depuis 2000</h2>
+  <p class="chapo">Nous ne cherchons plus à deviner la hausse ou la baisse. Chaque soir, après la clôture de Tokyo, nous prévoyons la volatilité
+    des vingt séances à venir, et ce risque prévu dit combien investir. La règle a été choisie avec les seules années 2000-2015, puis figée
+    avant de regarder 2016-2026. Elle s'ajoute au résultat du projet, elle ne le remplace pas.</p>
+<?php if ($sr): ?>
+  <div class="grille g2">
+    <div class="carte">
+      <h3>La règle, figée sur 2000-2015</h3>
+      <table class="tableau">
+        <thead><tr><th>Risque prévu pour le mois qui vient</th><th class="num">Signal</th></tr></thead>
+        <tbody>
+          <tr><td>sous <?= decimal(100 * $sr_bas, 0) ?> % par an</td><td class="num"><b>acheter plein</b></td></tr>
+          <tr><td>entre <?= decimal(100 * $sr_bas, 0) ?> et <?= decimal(100 * $sr_haut, 0) ?> %</td><td class="num"><b>acheter à moitié</b></td></tr>
+          <tr><td>au-dessus de <?= decimal(100 * $sr_haut, 0) ?> %</td><td class="num"><b>ne pas acheter</b></td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">La prévision vient d'une régression linéaire sur le logarithme de la volatilité : volatilité du Nikkei
+        sur un jour, une semaine, un mois et un trimestre, écart entre le plus haut et le plus bas, VIX, S&amp;P 500 et dollar-yen de la veille,
+        baisse récente. Un changement de niveau doit se confirmer <?= (int) $sr_regle['confirmation_soirs'] ?> soirs de suite. On achète ou on vend
+        à la clôture du lendemain, avec 0,05 % de frais. L'argent non investi rapporte l'Euribor.</p>
+    </div>
+    <div class="carte">
+      <h3>Ce qu'il a donné, en euros couverts</h3>
+      <table class="tableau">
+        <thead><tr><th>2003-2026</th><th class="num">Par an</th><th class="num">Volatilité</th><th class="num">Pire perte</th><th class="num">Par unité de risque</th></tr></thead>
+        <tbody>
+<?php foreach ($sr_noms as $cle => $nom): $b = $sr_tout[$cle] ?? null; if (!$b) { continue; } ?>
+          <tr<?= $cle === $sr_cle ? ' class="repere"' : '' ?>><td><?= e($nom) ?></td><td class="num"><?= signe((float) $b['rendement_annuel_%'], 1, ' %') ?></td>
+            <td class="num"><?= decimal((float) $b['volatilite_%'], 0) ?> %</td><td class="num"><?= signe((float) $b['perte_maximale_%'], 0, ' %') ?></td>
+            <td class="num"><?= decimal((float) $b['rendement_par_unite_de_risque'], 2) ?></td></tr>
+<?php endforeach; ?>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">Par période, le rendement par unité de risque du signal face à « acheter et garder » :
+<?php foreach (['2003-2015 (réglage)' => '2003-2015', '2016-2023' => '2016-2023', '2024-2026' => '2024-2026'] as $per => $lib):
+    $st = $sr['strategies'][$per]; ?>
+        <?= $lib ?> : <?= decimal((float) $st[$sr_cle]['rendement_par_unite_de_risque'], 2) ?> contre <?= decimal((float) $st['acheter et garder']['rendement_par_unite_de_risque'], 2) ?><?= $per === '2024-2026' ? '.' : ' ;' ?>
+<?php endforeach; ?>
+        Sur l'ensemble, l'écart vaut <?= signe((float) $sr['comparaisons']['2003-2026 (tout)']['ecart'], 2) ?> ± <?= decimal((float) $sr['comparaisons']['2003-2026 (tout)']['erreur_type'], 2) ?>.</p>
+    </div>
+  </div>
+  <div class="grille g2" style="margin-top:20px">
+    <div class="carte">
+      <h3>Trois crises, trois histoires</h3>
+      <table class="tableau">
+        <thead><tr><th>Épisode</th><th class="num">Acheter et garder</th><th class="num">Signal</th></tr></thead>
+        <tbody>
+<?php foreach ($sr['episodes'] as $nom => $x): ?>
+          <tr><td><?= e(ucfirst($nom)) ?></td><td class="num"><?= signe(100 * (float) $x['garder'], 1, ' %') ?></td><td class="num"><?= signe(100 * (float) $x['regle'], 1, ' %') ?></td></tr>
+<?php endforeach; ?>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">En 2008, la baisse a duré des mois : le signal était sorti à temps. En 2020 et en août 2024, la chute a
+        été brutale et le rebond immédiat : le signal a vendu après la chute, près du creux, et raté la remontée. Un signal fondé sur le risque
+        réagit toujours un peu après le choc.</p>
+    </div>
+    <div class="carte">
+      <h3>Le signal aujourd'hui</h3>
+<?php if ($sr_jour): ?>
+      <table class="tableau">
+        <tbody>
+          <tr><td>Date</td><td class="num"><?= e($sr_jour['date']) ?></td></tr>
+          <tr><td>Volatilité prévue pour les vingt prochaines séances</td><td class="num"><b><?= decimal((float) $sr_jour['volatilite_prevue_%'], 1) ?> % par an</b></td></tr>
+          <tr><td>Zone de risque</td><td class="num"><?= e($sr_jour['zone_du_jour']) ?></td></tr>
+          <tr class="repere"><td>Signal</td><td class="num"><b><?= e($sr_jour['signal']) ?></b></td></tr>
+        </tbody>
+      </table>
+<?php endif; ?>
+      <p class="note" style="margin-top:12px">La prévision du risque s'est dégradée avec le temps : R² hors échantillon de
+        <?= decimal((float) ($sr['prevision']['2003-2015 (réglage)'][$sr_regle['modele']] ?? 0.37), 2) ?> sur 2003-2015,
+        <?= decimal((float) ($sr['prevision']['2016-2023'][$sr_regle['modele']] ?? 0.21), 2) ?> sur 2016-2023 et proche de zéro sur 2024-2026,
+        où les secousses sont arrivées sans prévenir.</p>
+    </div>
+  </div>
+<?php else: ?>
+  <p class="note">Les chiffres de ce volet viennent de l'API Python, qui ne répond pas.</p>
+<?php endif; ?>
+  <div class="conclusion"><b>Conclusion.</b> Le signal fondé sur le risque réduit les pertes et la volatilité, surtout dans les crises longues, mais il ne fait pas gagner davantage par unité de risque. <span class="precis">Plus précisément, sur 2003-2026, son rendement par unité de risque vaut <?= decimal($sr_ratio_signal, 2) ?> contre <?= decimal($sr_ratio_garder, 2) ?> pour « acheter et garder », un écart qui reste dans l'incertitude. La version en fin de mois fait un peu mieux, mais elle n'était pas la règle figée : la choisir maintenant reviendrait à régler la règle sur les années qui servent à la juger.</span></div>
 </section>
 
 
@@ -659,8 +873,6 @@ $bascules = [
 
 <script src="/assets/app.js"></script>
 <script type="module" src="/assets/scene3d.js"></script>
-<?php if ($theme === 'encre'): ?>
 <script type="module" src="/assets/recit.js"></script>
-<?php endif; ?>
-<?php require __DIR__ . '/inc/pied.php'; ?>
+<?php require __DIR__ . '/pied.php'; ?>
 

@@ -248,6 +248,7 @@ body.page-notebooks .nav { background: rgba(5, 36, 36, .88); }
 
 /* ---------- Conclusion de chaque étape ---------- */
 .conclusion { margin-top: 18px; padding: 20px 24px; border-radius: var(--rayon); background: var(--sombre); color: #e6efef; font-size: 16px; line-height: 1.5; }
+.conclusion .precis { display: block; margin-top: 8px; font-size: 14px; opacity: .8; }
 .conclusion b { color: var(--acide); font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; margin-right: 8px; }
 .tableau td b { font-weight: 600; }
 .etape h3 { font-size: 18px; }
