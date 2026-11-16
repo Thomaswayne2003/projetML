@@ -8,7 +8,7 @@ require __DIR__ . '/inc/config.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-$routes = ['sante', 'mois', 'signal', 'explication', 'historique', 'evaluation', 'decision', 'variables', 'prediction', 'serie', 'surface', 'essais'];
+$routes = ['sante', 'mois', 'signal', 'explication', 'historique', 'evaluation', 'decision', 'variables', 'prediction', 'serie', 'surface', 'essais', 'volatilite', 'verifications', 'signal_risque'];
 $route = $_GET['route'] ?? '';
 if (!in_array($route, $routes, true)) {
     http_response_code(404);
