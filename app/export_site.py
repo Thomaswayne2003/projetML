@@ -9,6 +9,7 @@ et les deux PDF. À relancer après tout changement des résultats ou des notebo
 Puis, pour regarder le site : python -m http.server 8095 --directory site  (adresse http://localhost:8095).
 """
 import json
+import re
 import shutil
 import warnings
 from pathlib import Path
@@ -77,6 +78,58 @@ def modele_final() -> dict:
             "C": round(float(reg.C), 6), "solveur": reg.solver}
 
 
+# ---------- paquets : un script classique par page, pour ouvrir le site d'un double-clic ----------
+# Les navigateurs refusent les modules JavaScript ouverts depuis le disque (file://). On assemble donc, pour
+# chaque page, Three.js et nos modules en un seul script classique : chaque module devient une fonction qui
+# renvoie ses exports, et chaque import devient une lecture de ces exports.
+PAQUETS = {
+    "visite": ["contenu", "commun", "oeuvres", "visite"],
+    "lecture": ["contenu", "commun", "lecture"],
+    "cabinet": ["contenu", "commun", "cabinet"],
+}
+
+
+def _three() -> str:
+    code = (SITE / "vendor" / "three.module.min.js").read_text(encoding="utf-8")
+    export = re.search(r"export\s*\{([^}]*)\}\s*;?\s*$", code)
+    paires = [p.strip().split(" as ") for p in export.group(1).split(",") if p.strip()]
+    retour = ",".join(f"{(p[1] if len(p) == 2 else p[0]).strip()}:{p[0].strip()}" for p in paires)
+    return f"const __three = (() => {{\n\"use strict\";\n{code[:export.start()]}\nreturn {{{retour}}};\n}})();\n"
+
+
+def _module(nom: str) -> str:
+    code = (SITE / "assets" / f"{nom}.js").read_text(encoding="utf-8")
+    exports = []
+
+    def importer(m: re.Match) -> str:
+        quoi, source = m.group(1).strip(), Path(m.group(2)).stem
+        if source.startswith("three"):
+            return f"const {quoi.split(' as ')[1].strip()} = __three;"
+        return f"const {quoi} = __{source};"
+
+    code = re.sub(r'^import\s+(.+?)\s+from\s+"([^"]+)";\s*$', importer, code, flags=re.M)
+
+    def exporter(m: re.Match) -> str:
+        exports.append(m.group(2))
+        return f"{m.group(1)} {m.group(2)}"
+
+    code = re.sub(r"^export\s+(const|let|function|class)\s+([A-Za-z_$][\w$]*)", exporter, code, flags=re.M)
+    if re.search(r"^\s*(import|export)\b", code, flags=re.M):
+        raise SystemExit(f"assets/{nom}.js : import ou export non pris en charge par l'assemblage")
+    return f"const __{nom} = (() => {{\n\"use strict\";\n{code}\nreturn {{ {', '.join(exports)} }};\n}})();\n"
+
+
+def paquets() -> None:
+    for page, modules in PAQUETS.items():
+        morceaux = ["// Fichier écrit par python -m app.export_site à partir de assets/*.js : ne pas modifier à la main.\n"]
+        if any(m in ("oeuvres", "visite") for m in modules):
+            morceaux.append(_three())
+        morceaux += [_module(m) for m in modules]
+        sortie = SITE / "assets" / f"{page}.bundle.js"
+        sortie.write_text("".join(morceaux), encoding="utf-8")
+        print(f"site/assets/{page}.bundle.js : {sortie.stat().st_size / 1e3:.0f} ko")
+
+
 def copier(source: Path, destination: Path) -> int:
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
@@ -116,6 +169,7 @@ def main() -> None:
     vendeur = SITE / "vendor" / "three.module.min.js"
     if not vendeur.exists():
         copier(ROOT / "web" / "assets" / "three.module.min.js", vendeur)
+    paquets()
 
 
 if __name__ == "__main__":
