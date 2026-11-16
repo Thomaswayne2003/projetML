@@ -92,7 +92,30 @@ python -m src.predict               # signal du dernier mois disponible
 python -m pytest -q                 # tests
 ```
 
-## Plateforme
+## Le site : visite et lecture
+
+Le site de présentation est dans `site/`. Il est statique : ni PHP ni API à lancer, un simple serveur de fichiers suffit.
+
+```bash
+python -m app.export_site                       # écrit site/data/donnees.js et copie figures, notebooks et PDF
+python -m http.server 8095 --directory site     # puis http://localhost:8095
+```
+
+Le double-clic sur `Lancer le projet.command` (choix 1) fait les deux. Deux modes, le même contenu :
+- **la visite** (`index.html`) : une rotonde percée de sept portes rondes ; derrière chacune, une salle et une œuvre
+  construite à partir des données : le vase des 201 mois (son profil suit la clôture du Nikkei), la pile des mois (un
+  disque par mois, décalé selon son rendement), le paysage du coût (la surface de log-loss et la descente de gradient),
+  le cadran (les seuils de la règle et les probabilités du test), le cercle des 33 mois de test, la spirale de la
+  volatilité, et les volumes du cabinet. Clic pour entrer, glisser pour regarder, molette ou flèches pour changer de salle ;
+  une salle s'ouvre directement avec son adresse, par exemple `index.html#epreuve` ;
+- **la lecture** (`lecture.html`) : les sept chapitres en texte, chacun en clair puis en termes techniques, avec des
+  graphiques interactifs tirés des mêmes données, les tableaux de résultats, les figures des notebooks et les limites ;
+- **le cabinet** (`cabinet.html`) : les six notebooks exécutés, le rapport et l'annexe en PDF.
+
+Les textes communs aux deux modes sont dans `site/assets/contenu.js` ; les chiffres y sont lus dans les données, jamais
+recopiés à la main. Three.js est en copie locale (`site/vendor/`) ; seules les polices viennent de Google Fonts.
+
+## Plateforme (ancienne version)
 
 Le site est en PHP ; le modèle reste en Python. Deux serveurs à lancer depuis la racine du dépôt, dans deux terminaux :
 
