@@ -1,9 +1,9 @@
 # Configuration du projet Nikkei : un seul endroit pour les dates, les variables et les graines.
 
 data:
-  monthly: data/dataset_monthly.csv          # construit par les notebooks V1 et V2
-  dictionary: data/dictionnaire_variables.csv
-  model_table: data/processed/dataset_model.csv
+  monthly: data/2_construites/dataset_monthly.csv          # construit par les notebooks 00a et 00b
+  dictionary: data/2_construites/dictionnaire_variables.csv
+  model_table: data/3_modele/dataset_model.csv
 
 # Split chronologique (S1 : train on past, validate on future)
 split:

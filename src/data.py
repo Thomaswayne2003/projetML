@@ -1,8 +1,8 @@
 """Étape A : de la table mensuelle à la table de modélisation (notebook 01).
 
-Entrée : data/dataset_monthly.csv, construit par les notebooks de collecte V1 et V2
+Entrée : data/2_construites/dataset_monthly.csv, construit par les notebooks de collecte 00a et 00b
 (téléchargement, nettoyage, calendrier de Tokyo, décalages de publication, agrégation mensuelle).
-Sortie : data/processed/dataset_model.csv, avec les cibles, les variables construites et le bloc du split.
+Sortie : data/3_modele/dataset_model.csv, avec les cibles, les variables construites et le bloc du split.
 """
 import numpy as np
 import pandas as pd
