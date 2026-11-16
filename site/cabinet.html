@@ -41,9 +41,10 @@
   <header class="entete">
     <a class="marque" href="index.html">Nikkei <small>225 · le projet</small></a>
     <div class="entete-droite">
+      <nav class="modes cours" aria-label="Cours"><a data-cours="ml" href="?cours=ml">Applied ML</a><a data-cours="maths" href="?cours=maths">Maths</a></nav>
       <nav class="modes" aria-label="Mode">
-        <a href="index.html">Visite</a>
-        <a href="lecture.html">Lecture</a>
+        <a href="index.html" data-lien="index.html">Visite</a>
+        <a href="lecture.html" data-lien="lecture.html">Lecture</a>
       </nav>
       <button class="bouton-menu" type="button" aria-expanded="false">Menu <span class="points" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
     </div>
@@ -64,10 +65,12 @@
   </div>
   <script src="data/donnees.js"></script>
   <script type="module">
-    import { installerMenu, FLECHE } from "./assets/commun.js";
-    const nbs = window.NIKKEI.notebooks;
+    import { installerMenu, installerEntete, FLECHE } from "./assets/commun.js";
+    import { COURS } from "./assets/contenu.js";
+    // le parcours Maths met l'annexe en tête
+    const nbs = COURS === "maths" ? [...window.NIKKEI.notebooks].sort((a, b) => (b.nom.startsWith("05") ? 1 : 0) - (a.nom.startsWith("05") ? 1 : 0)) : window.NIKKEI.notebooks;
     const liste = document.getElementById("liste"), choix = document.getElementById("choix"), cadre = document.getElementById("cadre"), charge = document.getElementById("charge");
-    liste.innerHTML = nbs.map((n) => `<li><a href="?nb=${n.nom}" data-nb="${n.nom}"><span class="n">${n.nom.split("_")[0]}</span><span class="t">${n.titre}</span></a></li>`).join("");
+    liste.innerHTML = nbs.map((n) => `<li><a href="?nb=${n.nom}&cours=${COURS}" data-nb="${n.nom}"><span class="n">${n.nom.split("_")[0]}</span><span class="t">${n.titre}</span></a></li>`).join("");
     choix.innerHTML = nbs.map((n) => `<option value="${n.nom}">${n.nom.split("_")[0]} · ${n.titre}</option>`).join("");
     document.getElementById("docs").innerHTML = `<a href="docs/rapport.pdf"><span class="t">Le rapport, en PDF</span>${FLECHE}</a><a href="docs/annexe_maths.pdf"><span class="t">L'annexe de maths, en PDF</span>${FLECHE}</a>`;
     function ouvrir(nom, pousser) {
@@ -77,13 +80,14 @@
       choix.value = nom;
       liste.querySelectorAll("a").forEach((a) => a.setAttribute("aria-current", a.dataset.nb === nom ? "page" : "false"));
       document.title = `Nikkei · Notebook ${nom.split("_")[0]}`;
-      if (pousser) history.pushState(null, "", `?nb=${nom}`);
+      if (pousser) history.pushState(null, "", `?nb=${nom}&cours=${COURS}`);
     }
     cadre.addEventListener("load", () => { charge.style.opacity = 0; });
     liste.addEventListener("click", (e) => { const a = e.target.closest("a[data-nb]"); if (!a) return; e.preventDefault(); ouvrir(a.dataset.nb, true); });
     choix.addEventListener("change", () => ouvrir(choix.value, true));
     addEventListener("popstate", () => ouvrir(new URLSearchParams(location.search).get("nb"), false));
     ouvrir(new URLSearchParams(location.search).get("nb"), false);
+    installerEntete("cabinet");
     installerMenu({ page: "cabinet" });
   </script>
 </body>

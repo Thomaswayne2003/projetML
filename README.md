@@ -101,13 +101,27 @@ python -m app.export_site                       # écrit site/data/donnees.js et
 python -m http.server 8095 --directory site     # puis http://localhost:8095
 ```
 
-Le double-clic sur `Lancer le projet.command` (choix 1) fait les deux. Deux modes, le même contenu :
+Le double-clic sur `Lancer le projet.command` (choix 1) fait les deux.
+
+Le site a deux parcours, un par cours, choisis en haut de chaque page (`?cours=ml` ou `?cours=maths`, le choix est
+retenu d'une page à l'autre) :
+- **Applied ML** : la question, les données, l'apprentissage (Optuna), la règle, le test, l'agitation et le cabinet ;
+- **Maths** : l'annexe, salle par salle : le modèle (sigmoïde), le coût (log-loss), le gradient, le prior gaussien,
+  la convexité, la descente de gradient et ce que 33 mois de test peuvent prouver (erreur type, nombre de mois
+  nécessaire).
+
+Chaque salle et chaque chapitre ouvre ses notebooks et ses PDF sur place, dans une liseuse, sans quitter la page. Les
+figures des notebooks sont présentées en planches (titre, ce qu'il faut y voir, notebook d'origine) et s'ouvrent dans
+une visionneuse qui passe de l'une à l'autre.
+
+Chaque parcours se lit de deux façons, avec le même contenu :
 - **la visite** (`index.html`) : une rotonde percée de sept portes rondes ; derrière chacune, une salle et une œuvre
-  construite à partir des données : le vase des 201 mois (son profil suit la clôture du Nikkei), la pile des mois (un
-  disque par mois, décalé selon son rendement), le paysage du coût (la surface de log-loss et la descente de gradient),
-  le cadran (les seuils de la règle et les probabilités du test), le cercle des 33 mois de test, la spirale de la
-  volatilité, et les volumes du cabinet. Clic pour entrer, glisser pour regarder, molette ou flèches pour changer de salle ;
-  une salle s'ouvre directement avec son adresse, par exemple `index.html#epreuve` ;
+  construite à partir des données. Applied ML : le vase des 201 mois (son profil suit la clôture du Nikkei), la pile
+  des mois (un disque par mois, décalé selon son rendement), le champ des 150 essais Optuna, le cadran de la règle, le
+  cercle des 33 mois de test, la spirale de la volatilité et les volumes du cabinet. Maths : la sigmoïde, les deux
+  branches de la log-loss, la carte des pentes (−∇J), la cloche du prior et les douze poids appris, le paysage du coût,
+  les quatre pas de descente, et les deux colonnes (33 mois de test face aux mois qu'il faudrait). Clic pour entrer, glisser pour regarder, molette ou flèches pour changer de salle ;
+  une salle s'ouvre directement avec son adresse, par exemple `index.html?cours=maths#m-prior` ;
 - **la lecture** (`lecture.html`) : les sept chapitres en texte, chacun en clair puis en termes techniques, avec des
   graphiques interactifs tirés des mêmes données, les tableaux de résultats, les figures des notebooks et les limites ;
 - **le cabinet** (`cabinet.html`) : les six notebooks exécutés, le rapport et l'annexe en PDF.

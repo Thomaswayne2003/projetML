@@ -1,8 +1,10 @@
 // La visite : une rotonde percée de sept portes rondes ; derrière chaque porte, une salle et une œuvre faite de données.
 import * as THREE from "../vendor/three.module.min.js";
-import { SALLES, ENTREE } from "./contenu.js";
+import { SALLES, ENTREE, COURS, COURS_INFO, avecCours } from "./contenu.js";
 import { OEUVRES, seriePourTableau, boiteArrondie } from "./oeuvres.js";
-import { installerMenu, FLECHE, FLECHE_G, stocker, lire } from "./commun.js";
+import { installerMenu, installerEntete, installerLiseuse, liensPieces, FLECHE, FLECHE_G, stocker, lire } from "./commun.js";
+
+const TEINTE = COURS_INFO[COURS].rotonde;   // la rotonde change de teinte avec le cours
 
 const $ = (s) => document.querySelector(s);
 const MOUVEMENT_REDUIT = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -51,7 +53,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xcfc6ba);
+scene.background = new THREE.Color(TEINTE.fond);
 const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.05, 80);
 
 // éclairage d'ambiance : une pièce lumineuse simple, filtrée en carte d'environnement
@@ -154,7 +156,7 @@ scene.add(rotonde);
   const texRotonde = texPanneaux.clone();
   texRotonde.repeat.set(14, 1);
   texRotonde.needsUpdate = true;
-  const murMat = percer(new THREE.MeshStandardMaterial({ color: 0xd4c6b7, roughness: 0.96, side: THREE.BackSide, map: texRotonde }), `
+  const murMat = percer(new THREE.MeshStandardMaterial({ color: TEINTE.mur, roughness: 0.96, side: THREE.BackSide, map: texRotonde }), `
     bool dansTrou(vec3 p) {
       float phi = atan(p.x, -p.z);
       for (int i = 0; i < ${N}; i++) {
@@ -170,7 +172,7 @@ scene.add(rotonde);
   mur.receiveShadow = true;
   rotonde.add(mur);
 
-  const sol = new THREE.Mesh(new THREE.CircleGeometry(R + 0.05, 128), new THREE.MeshStandardMaterial({ color: 0xcdb3a4, map: texSolRotonde, roughness: 0.6, envMapIntensity: 0.5 }));
+  const sol = new THREE.Mesh(new THREE.CircleGeometry(R + 0.05, 128), new THREE.MeshStandardMaterial({ color: TEINTE.sol, map: texSolRotonde, roughness: 0.6, envMapIntensity: 0.5 }));
   sol.rotation.x = -Math.PI / 2;
   sol.receiveShadow = true;
   rotonde.add(sol);
@@ -206,12 +208,12 @@ projecteur.shadow.camera.near = 1;
 projecteur.shadow.camera.far = 14;
 scene.add(projecteur, projecteur.target);
 
-function texteTitre(texte, couleur) {
-  return texture(2048, 400, (ctx, l, h) => {
+function texteTitre(texte, couleur, l0 = 2048, h0 = 400) {
+  return texture(l0, h0, (ctx, l, h) => {
     ctx.clearRect(0, 0, l, h);
     ctx.fillStyle = couleur;
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
-    let taille = 300;
+    let taille = Math.round(h * 0.75);
     ctx.font = `400 ${taille}px "Instrument Serif", Georgia, serif`;
     while (ctx.measureText(texte).width > l * 0.94) { taille -= 8; ctx.font = `400 ${taille}px "Instrument Serif", Georgia, serif`; }
     ctx.fillText(texte, l / 2, h / 2 + taille * 0.04);
@@ -279,8 +281,8 @@ function construireSalle(salle, i) {
   portes.push(disque);
 
   // numéro gravé au-dessus de la porte
-  const num = new THREE.Mesh(new THREE.PlaneGeometry(2.15, 0.42), new THREE.MeshBasicMaterial({ map: texteTitre(salle.num, "#5d544b"), transparent: true, opacity: 0.55, depthWrite: false }));
-  num.position.set(0, YP + RP + 0.62, -(R - 0.02));
+  const num = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.6), new THREE.MeshBasicMaterial({ map: texteTitre(salle.num, "#4f4740", 512, 256), transparent: true, opacity: 0.7, depthWrite: false }));
+  num.position.set(0, YP + RP + 0.6, -(R - 0.02));
   groupe.add(num);
 
   // la salle : sol, plafond, trois murs et un mur d'entrée percé
@@ -330,7 +332,9 @@ function construireSalle(salle, i) {
   groupe.add(ombre);
 
   // le titre, entre l'œuvre et le tableau ; il apparaît quand on entre
-  const titre = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 1.25), new THREE.MeshBasicMaterial({ map: texteTitre(salle.nom, ton.texte), transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
+  const murClair = encre(ton.mur);
+  const titre = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 1.25), new THREE.MeshBasicMaterial({ map: texteTitre(salle.nom, murClair ? "#2a2622" : ton.texte), transparent: true, opacity: 0, depthWrite: false, toneMapped: false }));
+  titre.userData.opacite = murClair ? 0.55 : 0.78;
   titre.position.set(0, etat.vue?.titre ?? 3.55, ZO - 2.3);
   groupe.add(titre);
 
@@ -410,7 +414,10 @@ const encre = (hex) => {
   const c = new THREE.Color(hex), L = 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
   return (L + 0.05) / 0.0636 > 1.05 / (L + 0.05);   // contraste avec l'encre #211e1b contre contraste avec le blanc
 };
-function couleurUI(clair) { document.body.style.setProperty("--ui", clair ? "#211e1b" : "#fbf8f3"); }
+function couleurUI(clair) {
+  document.body.style.setProperty("--ui", clair ? "#211e1b" : "#fbf8f3");
+  document.body.style.setProperty("--ui-inverse", clair ? "#f3efe8" : "#211e1b");
+}
 
 function majRotonde() {
   const i = cam.index, p = (i + N - 1) % N, n = (i + 1) % N;
@@ -432,20 +439,21 @@ function majCartel() {
     <p class="oeuvre">${s.oeuvre}</p>
     <p class="clair">${s.clair}</p>
     <dl>${s.chiffres.map(([v, l]) => `<div><dt>${v}</dt><dd>${l}</dd></div>`).join("")}</dl>
-    <p class="legende">${s.legende}</p>`;
+    <p class="legende">${s.legende}</p>
+    ${liensPieces(s) ? `<div class="cartel-pieces"><p class="sur-titre">Dans le cabinet</p>${liensPieces(s)}</div>` : ""}`;
   cartel.querySelector(".cartel-replier").addEventListener("click", (e) => {
     cartel.classList.toggle("replie");
     e.currentTarget.textContent = cartel.classList.contains("replie") ? "Déplier" : "Replier";
   });
   const lien = $("#lire");
-  lien.href = `lecture.html#${s.id}`;
+  lien.href = avecCours(`lecture.html#${s.id}`);
   lien.innerHTML = `Lire le chapitre ${s.num} ${FLECHE}`;
-  $("#vers-lecture").href = `lecture.html#${s.id}`;
+  $("#vers-lecture").href = avecCours(`lecture.html#${s.id}`);
 }
 function majAdresse() {
   const id = SALLES[cam.index].id;
   history.replaceState(null, "", cam.dansSalle ? `#${id}` : location.pathname + location.search);
-  $("#vers-lecture").href = cam.dansSalle ? `lecture.html#${id}` : "lecture.html";
+  $("#vers-lecture").href = avecCours(cam.dansSalle ? `lecture.html#${id}` : "lecture.html");
 }
 
 function eclairer(i) {
@@ -479,7 +487,7 @@ async function entrer() {
   couleurUI(encre(SALLES[i].ton.mur));
   ui.classList.add("visible");
   document.body.classList.add("dans-salle");
-  tween(salles[i].titre.material, "opacity", 0.78, 1.4);
+  tween(salles[i].titre.material, "opacity", salles[i].titre.userData.opacite, 1.4);
   majAdresse();
   cam.occupe = false;
 }
@@ -557,7 +565,7 @@ canvas.addEventListener("pointercancel", finGeste);
 
 let molette = 0, moletteBloquee = 0;
 addEventListener("wheel", (e) => {
-  if (menu.estOuvert() || e.target.closest(".cartel")) return;
+  if (menu.estOuvert() || liseuse.estOuverte() || e.target.closest(".cartel")) return;
   e.preventDefault();
   const maintenant = performance.now();
   if (maintenant < moletteBloquee) return;
@@ -570,7 +578,7 @@ addEventListener("wheel", (e) => {
 }, { passive: false });
 
 addEventListener("keydown", (e) => {
-  if (menu.estOuvert() || e.target.closest("input, textarea")) return;
+  if (menu.estOuvert() || liseuse.estOuverte() || e.target.closest("input, textarea")) return;
   if (!$("#aide").hidden) fermerAide();
   if (e.key === "ArrowRight") { e.preventDefault(); voisine(1); }
   else if (e.key === "ArrowLeft") { e.preventDefault(); voisine(-1); }
@@ -587,6 +595,8 @@ $("#retour").innerHTML = `${FLECHE_G} Retour à la rotonde`;
 function fermerAide() { $("#aide").hidden = true; stocker("nikkei-aide-vue", "1"); }
 $("#aide").addEventListener("click", fermerAide);
 
+installerEntete("visite");
+const liseuse = installerLiseuse();
 const menu = installerMenu({ page: "visite", allerSalle: (id) => aller(SALLES.findIndex((s) => s.id === id)), salleActive: () => (cam.dansSalle ? SALLES[cam.index].id : null) });
 
 // ---------- boucle ----------
@@ -640,7 +650,7 @@ function instant(i) {
   cam.index = i; cam.theta = angleDe(i); cam.s = S_SALLE; cam.dansSalle = true; cam.occupe = false;
   eclairer(i); majCartel(); majRotonde();
   projecteur.intensity = 70;
-  salles.forEach((s, j) => (s.titre.material.opacity = j === i ? 0.78 : 0));
+  salles.forEach((s, j) => (s.titre.material.opacity = j === i ? s.titre.userData.opacite : 0));
   nav.classList.add("cache"); ui.classList.add("visible"); document.body.classList.add("dans-salle");
   couleurUI(encre(SALLES[i].ton.mur));
   placerCamera(); renderer.render(scene, camera);

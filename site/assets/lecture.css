@@ -121,22 +121,70 @@ td .pastille { display: inline-block; width: 8px; height: 8px; border-radius: 50
 .familles code { font: 400 11.5px/1 ui-monospace, "SF Mono", Menlo, monospace; color: var(--encre-3); }
 @media (max-width: 680px) { .chrono { grid-template-columns: 1fr; } .chrono .pivot { padding: 10px 0; } .chrono .pivot .fleche { transform: rotate(90deg); } }
 
-/* ---------- vignettes des figures des notebooks ---------- */
-.vignettes { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
-.vignettes button { display: grid; gap: 8px; text-align: left; }
-.vignettes img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; border: 1px solid var(--filet); border-radius: 2px; padding: 6px; transition: border-color .3s; }
-.vignettes button:hover img { border-color: var(--encre-3); }
-.vignettes span { font: 400 12px/1.35 var(--sans); color: var(--encre-2); }
-.boite { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 64px var(--gouttiere) 32px; background: rgb(20 18 16 / .82); }
+/* ---------- figures des notebooks : des planches ---------- */
+.figures-chapitre > .sur-titre, .pieces-chapitre > .sur-titre { color: var(--encre-3); margin: 0 0 14px; font-weight: 500; }
+.planches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 18px; }
+.planches.seule { grid-template-columns: minmax(0, 1fr); }
+.planche { margin: 0; display: grid; gap: 12px; align-content: start; }
+.planche.large { grid-column: 1 / -1; }
+.planche-image {
+  position: relative; display: block; width: 100%; cursor: zoom-in;
+  background: #fff; border: 1px solid var(--filet); border-radius: 3px; padding: clamp(10px, 1.6vw, 18px);
+  box-shadow: 0 1px 0 var(--filet), 0 14px 30px -20px rgb(40 30 20 / .4);
+  transition: transform .5s var(--doux), box-shadow .5s var(--doux);
+}
+.planche-image:hover { transform: translateY(-2px); box-shadow: 0 1px 0 var(--filet), 0 22px 40px -22px rgb(40 30 20 / .5); }
+.planche-image img { width: 100%; height: auto; }
+.loupe { position: absolute; right: 10px; bottom: 10px; font: 500 10.5px/1 var(--sans); letter-spacing: .04em; padding: 7px 10px; border-radius: 999px; background: rgb(28 27 25 / .8); color: #f3efe8; opacity: 0; transition: opacity .3s; }
+.planche-image:hover .loupe, .planche-image:focus-visible .loupe { opacity: 1; }
+.planche figcaption { display: grid; gap: 4px; padding: 0 2px; }
+.planche figcaption .sur-titre { color: var(--encre-3); font-size: 10px; }
+.planche figcaption strong { font: 400 20px/1.2 var(--serif); }
+.planche figcaption span:last-child { font: 400 13px/1.5 var(--sans); color: var(--encre-2); max-width: 46em; }
+@media (max-width: 640px) { .planches { grid-template-columns: 1fr; } }
+.galerie-groupe + .galerie-groupe { margin-top: 44px; }
+.galerie-groupe h4 { margin: 0 0 16px; padding-top: 12px; border-top: 1px solid var(--encre); font: 400 22px/1.2 var(--serif); }
+.galerie-groupe h4 .sur-titre { display: block; color: var(--encre-3); font-size: 10px; margin-bottom: 4px; }
+
+/* les notebooks d'un chapitre */
+.pieces-chapitre .pieces-salle { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+
+/* ---------- la visionneuse ---------- */
+.boite {
+  position: fixed; inset: 0; z-index: 70; display: grid; grid-template-columns: 60px minmax(0, 1fr) 60px; grid-template-rows: auto minmax(0, 1fr);
+  align-items: center; gap: 10px 8px; padding: 14px var(--gouttiere) 22px; background: rgb(20 18 16 / .95); color: #f3efe8;
+}
 .boite[hidden] { display: none; }
-.boite figure { margin: 0; max-width: min(1100px, 100%); max-height: 100%; display: grid; gap: 12px; }
-.boite img { max-height: calc(100vh - 160px); width: auto; margin: 0 auto; background: #fff; border-radius: 2px; }
-.boite figcaption { color: #f3efe8; font: 400 13px/1.4 var(--sans); text-align: center; }
-.boite button { position: absolute; top: 18px; right: var(--gouttiere); color: #f3efe8; font: 500 12px/1 var(--sans); }
+.boite-barre { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; font: 500 12px/1 var(--sans); color: #cfc7bb; }
+.boite-fermer { color: #f3efe8; font: 500 12px/1 var(--sans); padding: 10px 15px; border-radius: 999px; background: rgb(255 255 255 / .1); }
+.boite-fermer:hover { background: rgb(255 255 255 / .18); }
+.boite-nav { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #f3efe8; background: rgb(255 255 255 / .08); justify-self: center; }
+.boite-nav:hover { background: rgb(255 255 255 / .18); }
+.boite-nav[hidden] { visibility: hidden; display: grid; }
+.boite-nav .fleche { width: 24px; }
+.boite-figure { margin: 0; height: 100%; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 300px); gap: 28px; align-items: center; }
+.boite-papier { background: #fff; border-radius: 3px; padding: clamp(10px, 2vw, 26px); display: grid; place-items: center; min-height: 0; max-height: 100%; }
+.boite-papier img { max-width: 100%; max-height: calc(100vh - 150px); width: auto; height: auto; object-fit: contain; }
+.boite-figure figcaption { display: grid; gap: 10px; align-content: center; }
+.boite-figure figcaption .sur-titre { color: #b7ada0; line-height: 1.5; }
+.boite-figure figcaption strong { font: 400 28px/1.12 var(--serif); }
+.boite-texte { font: 400 14px/1.6 var(--sans); color: #d9d1c5; }
+.boite-nb { justify-self: start; display: inline-flex; gap: 10px; align-items: center; margin-top: 6px; padding: 10px 14px; border: 1px solid rgb(255 255 255 / .28); border-radius: 999px; color: #f3efe8; font: 500 12px/1 var(--sans); }
+.boite-nb:hover { background: rgb(255 255 255 / .08); }
+.boite-nb .fleche { width: 22px; }
+.boite-nb[hidden] { display: none; }
+body.boite-ouverte, body.liseuse-ouverte { overflow: hidden; }
+@media (max-width: 900px) {
+  .boite { grid-template-columns: 40px minmax(0, 1fr) 40px; padding: 12px 8px 16px; }
+  .boite-figure { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; gap: 14px; align-items: start; }
+  .boite-papier img { max-height: 56vh; }
+  .boite-nav { width: 38px; height: 38px; }
+  .boite-figure figcaption strong { font-size: 22px; }
+}
 
 /* ---------- cabinet (chapitre VII) ---------- */
 .pieces { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
-.piece { display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: 18px; border: 1px solid var(--filet); border-radius: 3px; text-decoration: none; background: var(--carte); transition: border-color .3s, transform .5s var(--doux); }
+.piece { display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: 18px; border: 1px solid var(--filet); border-radius: 3px; text-decoration: none; text-align: left; background: var(--carte); transition: border-color .3s, transform .5s var(--doux); }
 .piece:hover { border-color: var(--encre-3); transform: translateY(-2px); }
 .piece .sur-titre { color: var(--encre-3); }
 .piece strong { font: 400 21px/1.15 var(--serif); }
@@ -151,3 +199,11 @@ td .pastille { display: inline-block; width: 8px; height: 8px; border-radius: 50
 .limites span { font: 400 14px/1.6 var(--sans); color: var(--encre-2); }
 .pied { padding: 48px 0 56px; border-top: 1px solid var(--filet); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; font: 400 12px/1.5 var(--sans); color: var(--encre-3); }
 .pied a { color: var(--encre-2); }
+
+/* les douze poids du modèle, sous la cloche du prior */
+.poids { list-style: none; margin: 14px 0 0; padding: 0; columns: 2 220px; column-gap: 28px; font: 400 12.5px/1.4 var(--sans); }
+.poids li { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--filet); break-inside: avoid; color: var(--encre-2); }
+.poids b { font-weight: 500; color: var(--encre); font-variant-numeric: tabular-nums; }
+.ouverture h1 { max-width: 15ch; }
+/* dans la grille à deux colonnes, un même cadre pour toutes les figures : les rangées restent alignées */
+.planches:not(.seule) .planche:not(.large) .planche-image img { aspect-ratio: 4 / 3; object-fit: contain; }
