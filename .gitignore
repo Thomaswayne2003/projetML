@@ -7,3 +7,11 @@ report/*.aux
 report/*.log
 report/*.out
 report/*.toc
+site_statique/
+# données lourdes, refaites par les notebooks 00a et 00b (seuls les fichiers déjà suivis restent dans Git)
+data/1_brutes/
+data/archives/
+data/2_construites/*
+!data/2_construites/dataset_monthly.csv
+!data/2_construites/dictionnaire_variables.csv
+notebooks/06_annexe_news_prix/__pycache__/
