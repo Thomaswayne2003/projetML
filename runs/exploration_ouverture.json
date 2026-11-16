@@ -1,0 +1,366 @@
+{
+  "avertissement": "Exploration après coup : le test 2024-2026 avait déjà été ouvert. Ces chiffres ne remplacent pas runs/evaluation_test.json, qui reste le résultat du projet.",
+  "date": "2026-11-16 10:56",
+  "commit_du_code": "5565228",
+  "methode": {
+    "produit": "ETF Nikkei 225 coté à Tokyo (1321.T), prix non ajustés, Yahoo Finance",
+    "decision": "à l'ouverture de J+1 ; position tenue jusqu'à la clôture de J+1",
+    "variables": 48,
+    "marge_de_decision": 0.03,
+    "frais_testes_aller_retour": [
+      0.0,
+      0.0002,
+      0.0005,
+      0.001
+    ],
+    "reentrainement": "toutes les 20 séances, sur tout le passé"
+  },
+  "prevision": {
+    "avant_test_2016_2023": {
+      "observations": 1955,
+      "part_de_baisses_%": 50.946291560102296,
+      "modeles": {
+        "constante": {
+          "log_loss": 0.69352043421822,
+          "ecart_vs_constante": 0.0,
+          "erreur_type": 0.0,
+          "auc": 0.5,
+          "bon_sens_%": 50.946291560102296
+        },
+        "logistique L2": {
+          "log_loss": 0.7170086467426972,
+          "ecart_vs_constante": 0.02348821252447729,
+          "erreur_type": 0.008309850427161217,
+          "auc": 0.5291771884199992,
+          "bon_sens_%": 52.58312020460358
+        },
+        "LightGBM bridé": {
+          "log_loss": 0.6932703650919824,
+          "ecart_vs_constante": -0.0002500691262375677,
+          "erreur_type": 0.002326837145962828,
+          "auc": 0.5328749827254795,
+          "bon_sens_%": 53.196930946291566
+        },
+        "moitié logistique, moitié LightGBM": {
+          "log_loss": 0.6948098110080853,
+          "ecart_vs_constante": 0.0012893767898651972,
+          "erreur_type": 0.0030159425689635466,
+          "auc": 0.5333722795247726,
+          "bon_sens_%": 52.327365728900254
+        },
+        "70 % constante + 30 % logistique": {
+          "log_loss": 0.6924095981979166,
+          "ecart_vs_constante": -0.0011108360203033747,
+          "erreur_type": 0.001316484623031389,
+          "auc": 0.5289814105221721,
+          "bon_sens_%": 50.99744245524297
+        }
+      }
+    },
+    "test_2024_2026": {
+      "observations": 666,
+      "part_de_baisses_%": 51.35135135135135,
+      "modeles": {
+        "constante": {
+          "log_loss": 0.692944340429848,
+          "ecart_vs_constante": 0.0,
+          "erreur_type": 0.0,
+          "auc": 0.5,
+          "bon_sens_%": 51.35135135135135
+        },
+        "logistique L2": {
+          "log_loss": 0.6910576588525759,
+          "ecart_vs_constante": -0.0018866815772720805,
+          "erreur_type": 0.005073696015333286,
+          "auc": 0.5464316655837124,
+          "bon_sens_%": 54.35435435435435
+        },
+        "LightGBM bridé": {
+          "log_loss": 0.6897323152216536,
+          "ecart_vs_constante": -0.0032120252081944307,
+          "erreur_type": 0.003221588889920374,
+          "auc": 0.5470814381633095,
+          "bon_sens_%": 54.80480480480481
+        },
+        "moitié logistique, moitié LightGBM": {
+          "log_loss": 0.6891823103787106,
+          "ecart_vs_constante": -0.0037620300511374454,
+          "erreur_type": 0.0037774383233061463,
+          "auc": 0.5503212764421341,
+          "bon_sens_%": 53.453453453453456
+        },
+        "70 % constante + 30 % logistique": {
+          "log_loss": 0.6905967421033579,
+          "ecart_vs_constante": -0.002347598326490167,
+          "erreur_type": 0.0015035513312436548,
+          "auc": 0.5450779727095516,
+          "bon_sens_%": 52.85285285285285
+        }
+      }
+    }
+  },
+  "ecart_par_annee": {
+    "2016": {
+      "seances": 245,
+      "ecart_vs_constante": -0.004754831810404787,
+      "erreur_type": 0.005649798631837843
+    },
+    "2017": {
+      "seances": 247,
+      "ecart_vs_constante": 0.011302827818828073,
+      "erreur_type": 0.012533140766810278
+    },
+    "2018": {
+      "seances": 245,
+      "ecart_vs_constante": -0.002909052513780406,
+      "erreur_type": 0.007764108430815471
+    },
+    "2019": {
+      "seances": 241,
+      "ecart_vs_constante": -0.006209903431946433,
+      "erreur_type": 0.007755660568443138
+    },
+    "2020": {
+      "seances": 242,
+      "ecart_vs_constante": -0.003925717197643103,
+      "erreur_type": 0.011349354708376487
+    },
+    "2021": {
+      "seances": 245,
+      "ecart_vs_constante": 0.005041323624769861,
+      "erreur_type": 0.007803447635475703
+    },
+    "2022": {
+      "seances": 244,
+      "ecart_vs_constante": 0.006110638601300277,
+      "erreur_type": 0.00744535938064596
+    },
+    "2023": {
+      "seances": 246,
+      "ecart_vs_constante": 0.005394613798797305,
+      "erreur_type": 0.005312345196936209
+    },
+    "2024": {
+      "seances": 245,
+      "ecart_vs_constante": -0.006852573475392509,
+      "erreur_type": 0.005487929790115983
+    },
+    "2025": {
+      "seances": 241,
+      "ecart_vs_constante": -0.0029518358324536853,
+      "erreur_type": 0.006201705931696939
+    },
+    "2026": {
+      "seances": 203,
+      "ecart_vs_constante": -0.0027919200806882697,
+      "erreur_type": 0.008129627054756759
+    }
+  },
+  "controles": {
+    "correlation_saut_puis_seance_sur_l_indice": 0.21617847105065927,
+    "correlation_saut_puis_seance_sur_l_etf": -0.007543985819985204,
+    "correlation_wall_street_puis_seance_de_l_etf": NaN,
+    "correlation_wall_street_puis_saut_de_l_etf": 0.6168001181410475
+  },
+  "strategies_sur_le_test": {
+    "modèle (moitié logistique, moitié LightGBM)": {
+      "frais 0 pb": {
+        "seances_jouees": 413,
+        "part_des_seances_%": 62.01201201201201,
+        "paris_gagnants_%": 53.99515738498789,
+        "gain_moyen_par_pari_pb": 6.228849998862353,
+        "cumul": 0.27095056247109195,
+        "perte_maximale": -0.08902984474567988,
+        "rendement_par_unite_de_risque": 0.8468779098102763
+      },
+      "frais 2 pb": {
+        "seances_jouees": 413,
+        "part_des_seances_%": 62.01201201201201,
+        "paris_gagnants_%": 53.753026634382564,
+        "gain_moyen_par_pari_pb": 4.228849998862354,
+        "cumul": 0.17023115287986812,
+        "perte_maximale": -0.10279140271206622,
+        "rendement_par_unite_de_risque": 0.5752275837559898
+      },
+      "frais 5 pb": {
+        "seances_jouees": 413,
+        "part_des_seances_%": 62.01201201201201,
+        "paris_gagnants_%": 52.54237288135594,
+        "gain_moyen_par_pari_pb": 1.2288499988623487,
+        "cumul": 0.03388612409771641,
+        "perte_maximale": -0.13168900343164724,
+        "rendement_par_unite_de_risque": 0.16721549206029085
+      },
+      "frais 10 pb": {
+        "seances_jouees": 413,
+        "part_des_seances_%": 62.01201201201201,
+        "paris_gagnants_%": 48.6682808716707,
+        "gain_moyen_par_pari_pb": -3.771150001137654,
+        "cumul": -0.15904663175726874,
+        "perte_maximale": -0.19288076332651405,
+        "rendement_par_unite_de_risque": -0.5130114396213209
+      }
+    },
+    "modèle, achats seulement": {
+      "frais 0 pb": {
+        "seances_jouees": 87,
+        "part_des_seances_%": 13.063063063063062,
+        "paris_gagnants_%": 55.172413793103445,
+        "gain_moyen_par_pari_pb": 17.670539786097862,
+        "cumul": 0.15999880078615547,
+        "perte_maximale": -0.05284558267077277,
+        "rendement_par_unite_de_risque": 0.9165704130244937
+      },
+      "frais 2 pb": {
+        "seances_jouees": 87,
+        "part_des_seances_%": 13.063063063063062,
+        "paris_gagnants_%": 54.02298850574713,
+        "gain_moyen_par_pari_pb": 15.67053978609786,
+        "cumul": 0.14002006225570462,
+        "perte_maximale": -0.053802712639318684,
+        "rendement_par_unite_de_risque": 0.8147658736216001
+      },
+      "frais 5 pb": {
+        "seances_jouees": 87,
+        "part_des_seances_%": 13.063063063063062,
+        "paris_gagnants_%": 54.02298850574713,
+        "gain_moyen_par_pari_pb": 12.670539786097859,
+        "cumul": 0.1106880492510558,
+        "perte_maximale": -0.055236956646181334,
+        "rendement_par_unite_de_risque": 0.6607970602149797
+      },
+      "frais 10 pb": {
+        "seances_jouees": 87,
+        "part_des_seances_%": 13.063063063063062,
+        "paris_gagnants_%": 50.57471264367817,
+        "gain_moyen_par_pari_pb": 7.670539786097858,
+        "cumul": 0.06345038381414225,
+        "perte_maximale": -0.05839288236979501,
+        "rendement_par_unite_de_risque": 0.401507352859563
+      }
+    },
+    "règle simple : suivre Wall Street de la nuit": {
+      "frais 0 pb": {
+        "seances_jouees": 640,
+        "part_des_seances_%": 96.09609609609609,
+        "paris_gagnants_%": 43.125,
+        "gain_moyen_par_pari_pb": -6.357485436146032,
+        "cumul": -0.35342401702380455,
+        "perte_maximale": -0.37002152612722217,
+        "rendement_par_unite_de_risque": -1.0356124125432677
+      },
+      "frais 2 pb": {
+        "seances_jouees": 640,
+        "part_des_seances_%": 96.09609609609609,
+        "paris_gagnants_%": 42.8125,
+        "gain_moyen_par_pari_pb": -8.35748543614603,
+        "cumul": -0.43116815272816567,
+        "perte_maximale": -0.4448998488304218,
+        "rendement_par_unite_de_risque": -1.3613196852454859
+      },
+      "frais 5 pb": {
+        "seances_jouees": 640,
+        "part_des_seances_%": 96.09609609609609,
+        "paris_gagnants_%": 41.09375,
+        "gain_moyen_par_pari_pb": -11.357485436146037,
+        "cumul": -0.5306362801990816,
+        "perte_maximale": -0.5410071088908364,
+        "rendement_par_unite_de_risque": -1.8497442079511823
+      },
+      "frais 10 pb": {
+        "seances_jouees": 640,
+        "part_des_seances_%": 96.09609609609609,
+        "paris_gagnants_%": 39.0625,
+        "gain_moyen_par_pari_pb": -16.357485436146042,
+        "cumul": -0.659333207650266,
+        "perte_maximale": -0.6656957887446164,
+        "rendement_par_unite_de_risque": -2.6632822865984944
+      }
+    },
+    "règle simple : suivre le saut d'ouverture": {
+      "frais 0 pb": {
+        "seances_jouees": 659,
+        "part_des_seances_%": 98.94894894894894,
+        "paris_gagnants_%": 46.737481031866466,
+        "gain_moyen_par_pari_pb": -3.3543373115618826,
+        "cumul": -0.22165392647290105,
+        "perte_maximale": -0.30580848326164556,
+        "rendement_par_unite_de_risque": -0.5591252703548647
+      },
+      "frais 2 pb": {
+        "seances_jouees": 659,
+        "part_des_seances_%": 98.94894894894894,
+        "paris_gagnants_%": 46.58573596358118,
+        "gain_moyen_par_pari_pb": -5.354337311561881,
+        "cumul": -0.31781421267692633,
+        "perte_maximale": -0.3736808534160668,
+        "rendement_par_unite_de_risque": -0.8924906589229794
+      },
+      "frais 5 pb": {
+        "seances_jouees": 659,
+        "part_des_seances_%": 98.94894894894894,
+        "paris_gagnants_%": 44.764795144157816,
+        "gain_moyen_par_pari_pb": -8.354337311561887,
+        "cumul": -0.4402732483862022,
+        "perte_maximale": -0.4730317314546867,
+        "rendement_par_unite_de_risque": -1.3925137238025258
+      },
+      "frais 10 pb": {
+        "seances_jouees": 659,
+        "part_des_seances_%": 98.94894894894894,
+        "paris_gagnants_%": 41.426403641881635,
+        "gain_moyen_par_pari_pb": -13.35433731156189,
+        "cumul": -0.5975539211114024,
+        "perte_maximale": -0.6195998085144452,
+        "rendement_par_unite_de_risque": -2.225779701839263
+      }
+    },
+    "toujours acheter à l'ouverture, revendre à la clôture": {
+      "frais 0 pb": {
+        "seances_jouees": 666,
+        "part_des_seances_%": 100.0,
+        "paris_gagnants_%": 48.64864864864865,
+        "gain_moyen_par_pari_pb": 1.6937277947532858,
+        "cumul": 0.08641630234413178,
+        "perte_maximale": -0.13880247983200034,
+        "rendement_par_unite_de_risque": 0.283842662797325
+      },
+      "frais 2 pb": {
+        "seances_jouees": 666,
+        "part_des_seances_%": 100.0,
+        "paris_gagnants_%": 48.348348348348345,
+        "gain_moyen_par_pari_pb": -0.30627220524671184,
+        "cumul": -0.049073266489692124,
+        "perte_maximale": -0.19377973045097252,
+        "rendement_par_unite_de_risque": -0.05132649918560173
+      },
+      "frais 5 pb": {
+        "seances_jouees": 666,
+        "part_des_seances_%": 100.0,
+        "paris_gagnants_%": 46.546546546546544,
+        "gain_moyen_par_pari_pb": -3.306272205246718,
+        "cumul": -0.22133342976915804,
+        "perte_maximale": -0.32402382509728167,
+        "rendement_par_unite_de_risque": -0.5540802421599934
+      },
+      "frais 10 pb": {
+        "seances_jouees": 666,
+        "part_des_seances_%": 100.0,
+        "paris_gagnants_%": 43.993993993993996,
+        "gain_moyen_par_pari_pb": -8.30627220524672,
+        "cumul": -0.44199973065752374,
+        "perte_maximale": -0.49610144484827723,
+        "rendement_par_unite_de_risque": -1.3920031471173115
+      }
+    }
+  },
+  "acheter_et_garder_l_etf_sur_le_test": {
+    "seances_jouees": 666,
+    "part_des_seances_%": 100.0,
+    "paris_gagnants_%": 53.6036036036036,
+    "gain_moyen_par_pari_pb": 11.86093347655789,
+    "cumul": 1.0173862645432705,
+    "perte_maximale": -0.24959780413719002,
+    "rendement_par_unite_de_risque": 1.1613077200322137
+  }
+}

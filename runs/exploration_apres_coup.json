@@ -1,0 +1,1576 @@
+{
+  "avertissement": "Exploration après coup : le test 2024-2026 avait déjà été ouvert. Ces chiffres ne remplacent pas runs/evaluation_test.json, qui reste le résultat du projet.",
+  "date": "2026-11-16 09:37",
+  "commit_du_code": "5565228",
+  "methode": {
+    "depart_mois": 72,
+    "fenetre_glissante_mois": 60,
+    "reentrainement": "chaque mois",
+    "reference": "constante (fréquence passée), fenêtre croissante",
+    "regle": "mêmes formules que le projet, marge 0.005, coûts appris sur le passé connu à chaque mois",
+    "probabilites": "brutes, sans calibration de Platt"
+  },
+  "configurations": 40,
+  "choix_sur_2016_2023": {
+    "modele": "15 plus proches voisins",
+    "fenetre": "glissante",
+    "avant_test": {
+      "mois": 95,
+      "log_loss": 0.6624399664556593,
+      "ecart_vs_constante": -0.006749215646499887,
+      "erreur_type_de_l_ecart": 0.021335271057018903,
+      "pr_auc": 0.4282231043118719,
+      "brier": 0.23513450292397656,
+      "ece": 0.0828070175438596,
+      "actions": {
+        "acheter": 73,
+        "neutre": 13,
+        "vendre": 9
+      },
+      "cumul_regle": 0.9316055292035461,
+      "perte_maximale": -0.31306944648278956,
+      "cumul_achat_couvert": 1.186220891391757
+    },
+    "test": {
+      "mois": 33,
+      "log_loss": 0.7083665154966278,
+      "ecart_vs_constante": 0.04845423267160867,
+      "erreur_type_de_l_ecart": 0.03944529616661302,
+      "pr_auc": 0.36126821207466364,
+      "brier": 0.256969696969697,
+      "ece": 0.16565656565656572,
+      "actions": {
+        "neutre": 18,
+        "acheter": 12,
+        "vendre": 3
+      },
+      "cumul_regle": -0.03569387712738592,
+      "perte_maximale": -0.2046986753318092,
+      "cumul_achat_couvert": 0.823457220253422
+    }
+  },
+  "meilleur_sur_le_test_a_posteriori": {
+    "modele": "moyenne logistique + forêt + LightGBM",
+    "fenetre": "glissante",
+    "avant_test": {
+      "mois": 95,
+      "log_loss": 0.6905343606118756,
+      "ecart_vs_constante": 0.021345178509716393,
+      "erreur_type_de_l_ecart": 0.027965922516619487,
+      "pr_auc": 0.3877993882508192,
+      "brier": 0.2474335127289868,
+      "ece": 0.03931231570932746,
+      "actions": {
+        "acheter": 56,
+        "neutre": 23,
+        "vendre": 16
+      },
+      "cumul_regle": 0.4097865719815068,
+      "perte_maximale": -0.23044574248322824,
+      "cumul_achat_couvert": 1.186220891391757
+    },
+    "test": {
+      "mois": 33,
+      "log_loss": 0.6504307075615091,
+      "ecart_vs_constante": -0.00948157526351009,
+      "erreur_type_de_l_ecart": 0.03850579387171945,
+      "pr_auc": 0.5384984564761452,
+      "brier": 0.22862745795979178,
+      "ece": 0.09287339678234371,
+      "actions": {
+        "acheter": 23,
+        "neutre": 8,
+        "vendre": 2
+      },
+      "cumul_regle": 0.5799767458570271,
+      "perte_maximale": -0.131903,
+      "cumul_achat_couvert": 0.823457220253422
+    }
+  },
+  "battent_la_constante": {
+    "avant_test": 7,
+    "test": 3,
+    "sur": 38
+  },
+  "correlation_de_rang_avant_test_vs_test": 0.4936210131332083,
+  "resultats": [
+    {
+      "modele": "logistique L2, pénalité rechoisie chaque mois",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6672813793550558,
+        "ecart_vs_constante": -0.001907802747103305,
+        "erreur_type_de_l_ecart": 0.013295411518647738,
+        "pr_auc": 0.4016620155974181,
+        "brier": 0.23734287895041495,
+        "ece": 0.026973445000648622,
+        "actions": {
+          "acheter": 73,
+          "neutre": 19,
+          "vendre": 3
+        },
+        "cumul_regle": 0.7913985424082643,
+        "perte_maximale": -0.2025936048743462,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.668750450939764,
+        "ecart_vs_constante": 0.008838168114744947,
+        "erreur_type_de_l_ecart": 0.014835858095046272,
+        "pr_auc": 0.3545099505611185,
+        "brier": 0.2379188488595052,
+        "ece": 0.11545586912979,
+        "actions": {
+          "acheter": 26,
+          "neutre": 7
+        },
+        "cumul_regle": 0.5426335571021152,
+        "perte_maximale": -0.16085552619989918,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique L2, pénalité rechoisie chaque mois",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.682712692036694,
+        "ecart_vs_constante": 0.01352350993453494,
+        "erreur_type_de_l_ecart": 0.014452227019460343,
+        "pr_auc": 0.41782824253885076,
+        "brier": 0.24315323138070277,
+        "ece": 0.07531638244623443,
+        "actions": {
+          "acheter": 82,
+          "neutre": 13
+        },
+        "cumul_regle": 1.497964929614716,
+        "perte_maximale": -0.17520088490637276,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6647151773911684,
+        "ecart_vs_constante": 0.004802894566149197,
+        "erreur_type_de_l_ecart": 0.008684536706488876,
+        "pr_auc": 0.4171902057906967,
+        "brier": 0.2358450140390949,
+        "ece": 0.14000398154485139,
+        "actions": {
+          "acheter": 33
+        },
+        "cumul_regle": 0.823457220253422,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "constante (fréquence passée)",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6691891821021592,
+        "ecart_vs_constante": 0.0,
+        "erreur_type_de_l_ecart": 0.0,
+        "pr_auc": 0.3032250027593732,
+        "brier": 0.23804527325064154,
+        "ece": 0.05589968695348308,
+        "actions": {
+          "acheter": 95
+        },
+        "cumul_regle": 1.186220891391757,
+        "perte_maximale": -0.22874209592546502,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6599122828250192,
+        "ecart_vs_constante": 0.0,
+        "erreur_type_de_l_ecart": 0.0,
+        "pr_auc": 0.3346322851531185,
+        "brier": 0.2335135827700136,
+        "ece": 0.06663179412211223,
+        "actions": {
+          "acheter": 33
+        },
+        "cumul_regle": 0.823457220253422,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "constante (fréquence passée)",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6763215677589622,
+        "ecart_vs_constante": 0.007132385656803182,
+        "erreur_type_de_l_ecart": 0.004818009489405554,
+        "pr_auc": 0.317108137955084,
+        "brier": 0.24134210526315789,
+        "ece": 0.12298245614035089,
+        "actions": {
+          "acheter": 95
+        },
+        "cumul_regle": 1.186220891391757,
+        "perte_maximale": -0.22874209592546502,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6683413151486055,
+        "ecart_vs_constante": 0.00842903232358634,
+        "erreur_type_de_l_ecart": 0.0071348656462510195,
+        "pr_auc": 0.3244949494949495,
+        "brier": 0.2375925925925926,
+        "ece": 0.10101010101010106,
+        "actions": {
+          "acheter": 33
+        },
+        "cumul_regle": 0.823457220253422,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "AR(1) sur les rendements",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6806441969626054,
+        "ecart_vs_constante": 0.011455014860446198,
+        "erreur_type_de_l_ecart": 0.009601828037137333,
+        "pr_auc": 0.3134511709126375,
+        "brier": 0.24376115151215144,
+        "ece": 0.05724415235057495,
+        "actions": {
+          "neutre": 66,
+          "acheter": 29
+        },
+        "cumul_regle": -0.03700526963959916,
+        "perte_maximale": -0.2078637866354135,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6732112598163762,
+        "ecart_vs_constante": 0.013298976991356976,
+        "erreur_type_de_l_ecart": 0.011028462778063663,
+        "pr_auc": 0.3278492647058824,
+        "brier": 0.23993140225397325,
+        "ece": 0.13584279382165293,
+        "actions": {
+          "acheter": 29,
+          "neutre": 4
+        },
+        "cumul_regle": 0.6748076810882684,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "AR(1) sur les rendements",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6858121879395879,
+        "ecart_vs_constante": 0.016623005837428786,
+        "erreur_type_de_l_ecart": 0.012174329799472302,
+        "pr_auc": 0.3257961032768531,
+        "brier": 0.24641578473089498,
+        "ece": 0.06858756795235615,
+        "actions": {
+          "neutre": 54,
+          "acheter": 39,
+          "vendre": 2
+        },
+        "cumul_regle": 0.1009063678950366,
+        "perte_maximale": -0.17239419325111427,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6825588271645491,
+        "ecart_vs_constante": 0.022646544339529895,
+        "erreur_type_de_l_ecart": 0.01827711170994339,
+        "pr_auc": 0.3420389511398283,
+        "brier": 0.24436929491571202,
+        "ece": 0.0591877743742288,
+        "actions": {
+          "acheter": 30,
+          "neutre": 2,
+          "vendre": 1
+        },
+        "cumul_regle": 0.25875313241614095,
+        "perte_maximale": -0.20089064670548396,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "lissage exponentiel des rendements",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6904728290318258,
+        "ecart_vs_constante": 0.021283646929666805,
+        "erreur_type_de_l_ecart": 0.01099295188708428,
+        "pr_auc": 0.29967620171191967,
+        "brier": 0.24859402273122805,
+        "ece": 0.08164850042539804,
+        "actions": {
+          "neutre": 54,
+          "acheter": 40,
+          "vendre": 1
+        },
+        "cumul_regle": 0.027689562008286206,
+        "perte_maximale": -0.24475338946846126,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6738447909011618,
+        "ecart_vs_constante": 0.013932508076142568,
+        "erreur_type_de_l_ecart": 0.012735256556460984,
+        "pr_auc": 0.33050629552984145,
+        "brier": 0.2400130103274209,
+        "ece": 0.12924619750575855,
+        "actions": {
+          "acheter": 31,
+          "neutre": 2
+        },
+        "cumul_regle": 0.7130378035729752,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "lissage exponentiel des rendements",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6912982300730987,
+        "ecart_vs_constante": 0.0221090479709396,
+        "erreur_type_de_l_ecart": 0.011266370924125186,
+        "pr_auc": 0.3002381853760654,
+        "brier": 0.24900625615797803,
+        "ece": 0.10795760550823226,
+        "actions": {
+          "neutre": 54,
+          "acheter": 40,
+          "vendre": 1
+        },
+        "cumul_regle": 0.027689562008286206,
+        "perte_maximale": -0.24475338946846126,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6740425329139532,
+        "ecart_vs_constante": 0.014130250088934045,
+        "erreur_type_de_l_ecart": 0.013275505633730592,
+        "pr_auc": 0.3317140249984405,
+        "brier": 0.24007841139586816,
+        "ece": 0.10626733038824467,
+        "actions": {
+          "acheter": 31,
+          "neutre": 2
+        },
+        "cumul_regle": 0.7130378035729752,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "suivi de tendance 12 mois",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6702331465673127,
+        "ecart_vs_constante": 0.0010439644651536472,
+        "erreur_type_de_l_ecart": 0.011135588030831771,
+        "pr_auc": 0.3452421583443504,
+        "brier": 0.23850566205158832,
+        "ece": 0.019869472437454613,
+        "actions": {
+          "acheter": 50,
+          "neutre": 45
+        },
+        "cumul_regle": 0.3137744975328123,
+        "perte_maximale": -0.17520088490637264,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6616009975200507,
+        "ecart_vs_constante": 0.0016887146950316132,
+        "erreur_type_de_l_ecart": 0.015076189995989447,
+        "pr_auc": 0.33841121362308135,
+        "brier": 0.23442303027395414,
+        "ece": 0.055181865896985476,
+        "actions": {
+          "acheter": 31,
+          "neutre": 2
+        },
+        "cumul_regle": 0.730230803024263,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "suivi de tendance 12 mois",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.679501383888046,
+        "ecart_vs_constante": 0.010312201785886805,
+        "erreur_type_de_l_ecart": 0.0074995994686429,
+        "pr_auc": 0.328419147931265,
+        "brier": 0.24285634525551267,
+        "ece": 0.07503232297554269,
+        "actions": {
+          "acheter": 80,
+          "neutre": 15
+        },
+        "cumul_regle": 0.46405198508825807,
+        "perte_maximale": -0.22892192647639786,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6704921645878702,
+        "ecart_vs_constante": 0.010579881762851078,
+        "erreur_type_de_l_ecart": 0.016755068026075723,
+        "pr_auc": 0.3278350991282026,
+        "brier": 0.23878446060282424,
+        "ece": 0.06776715961130342,
+        "actions": {
+          "acheter": 18,
+          "neutre": 15
+        },
+        "cumul_regle": 0.019048949582672003,
+        "perte_maximale": -0.16192858961848844,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique L2 (modèle du projet)",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6700606073259654,
+        "ecart_vs_constante": 0.0008714252238064055,
+        "erreur_type_de_l_ecart": 0.02402444376403438,
+        "pr_auc": 0.44267315369873284,
+        "brier": 0.23792840188388428,
+        "ece": 0.06360544659430983,
+        "actions": {
+          "acheter": 61,
+          "neutre": 29,
+          "vendre": 5
+        },
+        "cumul_regle": 0.8020046429750787,
+        "perte_maximale": -0.20259360487434608,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6814253607480383,
+        "ecart_vs_constante": 0.021513077923018993,
+        "erreur_type_de_l_ecart": 0.030495935288744128,
+        "pr_auc": 0.3836072553177816,
+        "brier": 0.24425304546054272,
+        "ece": 0.11190931002855722,
+        "actions": {
+          "acheter": 18,
+          "neutre": 13,
+          "vendre": 2
+        },
+        "cumul_regle": 0.817276527142405,
+        "perte_maximale": -0.03922859999999995,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique L2 (modèle du projet)",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6745857179025496,
+        "ecart_vs_constante": 0.005396535800390427,
+        "erreur_type_de_l_ecart": 0.019548336865106347,
+        "pr_auc": 0.42239783525871455,
+        "brier": 0.2402019950502816,
+        "ece": 0.0546854997135814,
+        "actions": {
+          "acheter": 67,
+          "neutre": 27,
+          "vendre": 1
+        },
+        "cumul_regle": 0.9465974258571477,
+        "perte_maximale": -0.1757025613937232,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6750256311915327,
+        "ecart_vs_constante": 0.015113348366513577,
+        "erreur_type_de_l_ecart": 0.018427031929184965,
+        "pr_auc": 0.4733140768938394,
+        "brier": 0.240806996777295,
+        "ece": 0.13936889384612117,
+        "actions": {
+          "acheter": 21,
+          "neutre": 12
+        },
+        "cumul_regle": 0.6529308246784671,
+        "perte_maximale": -0.09903258476666643,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique L1",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6690889142078158,
+        "ecart_vs_constante": -0.00010026789434341287,
+        "erreur_type_de_l_ecart": 0.004568552511351748,
+        "pr_auc": 0.37420631438716534,
+        "brier": 0.23801393660846767,
+        "ece": 0.018975920379579955,
+        "actions": {
+          "acheter": 89,
+          "neutre": 6
+        },
+        "cumul_regle": 0.9081919108592276,
+        "perte_maximale": -0.24537050729863819,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.666577810446039,
+        "ecart_vs_constante": 0.006665527621019962,
+        "erreur_type_de_l_ecart": 0.01998008193721311,
+        "pr_auc": 0.3775123356325402,
+        "brier": 0.23693281240929517,
+        "ece": 0.07996301095029777,
+        "actions": {
+          "acheter": 21,
+          "neutre": 12
+        },
+        "cumul_regle": 0.6249829701387111,
+        "perte_maximale": -0.10191841047995998,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique L1",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6743360863136264,
+        "ecart_vs_constante": 0.005146904211467237,
+        "erreur_type_de_l_ecart": 0.004216803557236269,
+        "pr_auc": 0.3292777225027672,
+        "brier": 0.24044865396682255,
+        "ece": 0.08728468837344883,
+        "actions": {
+          "acheter": 93,
+          "neutre": 2
+        },
+        "cumul_regle": 1.047222693596301,
+        "perte_maximale": -0.22874209592546502,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6668074388232801,
+        "ecart_vs_constante": 0.0068951559982608455,
+        "erreur_type_de_l_ecart": 0.008661029584356552,
+        "pr_auc": 0.39548855767339264,
+        "brier": 0.23685572189601262,
+        "ece": 0.08002852109512197,
+        "actions": {
+          "acheter": 30,
+          "neutre": 3
+        },
+        "cumul_regle": 0.8014633323890321,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique très pénalisée",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.666274315075242,
+        "ecart_vs_constante": -0.0029148670269170123,
+        "erreur_type_de_l_ecart": 0.004044366737804723,
+        "pr_auc": 0.3715731262408554,
+        "brier": 0.23666730395871932,
+        "ece": 0.03764841617211915,
+        "actions": {
+          "acheter": 92,
+          "neutre": 3
+        },
+        "cumul_regle": 0.9794602566738413,
+        "perte_maximale": -0.22908273483309805,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.662424881861712,
+        "ecart_vs_constante": 0.0025125990366927425,
+        "erreur_type_de_l_ecart": 0.006891960539721794,
+        "pr_auc": 0.34966413463362356,
+        "brier": 0.2347456088923089,
+        "ece": 0.07320003397702744,
+        "actions": {
+          "acheter": 33
+        },
+        "cumul_regle": 0.823457220253422,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique très pénalisée",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6740713632164145,
+        "ecart_vs_constante": 0.004882181114255392,
+        "erreur_type_de_l_ecart": 0.005255782910212957,
+        "pr_auc": 0.3421312641791579,
+        "brier": 0.24029210372783869,
+        "ece": 0.0421307201887274,
+        "actions": {
+          "acheter": 94,
+          "neutre": 1
+        },
+        "cumul_regle": 1.0884391114653513,
+        "perte_maximale": -0.23486655874043938,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6692325089687344,
+        "ecart_vs_constante": 0.009320226143715174,
+        "erreur_type_de_l_ecart": 0.0078106104922327285,
+        "pr_auc": 0.3958119220484812,
+        "brier": 0.23802814020346638,
+        "ece": 0.1883145351437175,
+        "actions": {
+          "acheter": 33
+        },
+        "cumul_regle": 0.823457220253422,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique sans les news",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6756196984679624,
+        "ecart_vs_constante": 0.006430516365803296,
+        "erreur_type_de_l_ecart": 0.010638486415352331,
+        "pr_auc": 0.3562104186227485,
+        "brier": 0.2412296326678179,
+        "ece": 0.07426462617766871,
+        "actions": {
+          "acheter": 82,
+          "neutre": 12,
+          "vendre": 1
+        },
+        "cumul_regle": 0.5529512185897609,
+        "perte_maximale": -0.28222497528351365,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.699290286732592,
+        "ecart_vs_constante": 0.03937800390757277,
+        "erreur_type_de_l_ecart": 0.029958825329004825,
+        "pr_auc": 0.3134547638021292,
+        "brier": 0.25312948496397497,
+        "ece": 0.09997064832827336,
+        "actions": {
+          "neutre": 20,
+          "acheter": 12,
+          "vendre": 1
+        },
+        "cumul_regle": 0.08031663343363449,
+        "perte_maximale": -0.14755298814186046,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique sans les news",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6891321793522768,
+        "ecart_vs_constante": 0.01994299725011759,
+        "erreur_type_de_l_ecart": 0.012743250328090238,
+        "pr_auc": 0.3189847910572538,
+        "brier": 0.2473644568807627,
+        "ece": 0.15085666013269555,
+        "actions": {
+          "acheter": 76,
+          "neutre": 18,
+          "vendre": 1
+        },
+        "cumul_regle": -0.06513995407691864,
+        "perte_maximale": -0.42916925082473534,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6819668193604658,
+        "ecart_vs_constante": 0.02205453653544653,
+        "erreur_type_de_l_ecart": 0.022515412740386386,
+        "pr_auc": 0.33738339427838915,
+        "brier": 0.24442700459354194,
+        "ece": 0.08367977475139807,
+        "actions": {
+          "acheter": 17,
+          "neutre": 16
+        },
+        "cumul_regle": 0.3837255747722066,
+        "perte_maximale": -0.11148667333190221,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique, prix seuls",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6631797587623495,
+        "ecart_vs_constante": -0.006009423339809633,
+        "erreur_type_de_l_ecart": 0.006889377356259392,
+        "pr_auc": 0.41020853249656986,
+        "brier": 0.23520295541398065,
+        "ece": 0.010236139813788655,
+        "actions": {
+          "acheter": 86,
+          "neutre": 9
+        },
+        "cumul_regle": 0.8651244621383241,
+        "perte_maximale": -0.22908273483309793,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6809407946328672,
+        "ecart_vs_constante": 0.02102851180784797,
+        "erreur_type_de_l_ecart": 0.029119045097314583,
+        "pr_auc": 0.3746563952765999,
+        "brier": 0.24396129146462434,
+        "ece": 0.08293986754758881,
+        "actions": {
+          "neutre": 16,
+          "acheter": 15,
+          "vendre": 2
+        },
+        "cumul_regle": 0.28022806539347433,
+        "perte_maximale": -0.16956373778080003,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "logistique, prix seuls",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.675986338987689,
+        "ecart_vs_constante": 0.006797156885529933,
+        "erreur_type_de_l_ecart": 0.0070170853359770476,
+        "pr_auc": 0.3315813786312633,
+        "brier": 0.24118146983720704,
+        "ece": 0.04680514255413179,
+        "actions": {
+          "acheter": 91,
+          "neutre": 4
+        },
+        "cumul_regle": 1.0105147124917337,
+        "perte_maximale": -0.22874209592546502,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6820056764605927,
+        "ecart_vs_constante": 0.0220933936355736,
+        "erreur_type_de_l_ecart": 0.019351491264152892,
+        "pr_auc": 0.3275475187839115,
+        "brier": 0.24443368918862926,
+        "ece": 0.11045465763687552,
+        "actions": {
+          "acheter": 19,
+          "neutre": 14
+        },
+        "cumul_regle": 0.26661061890750903,
+        "perte_maximale": -0.11824634741172912,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "analyse discriminante linéaire",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.7405993412428821,
+        "ecart_vs_constante": 0.071410159140723,
+        "erreur_type_de_l_ecart": 0.057596152074715676,
+        "pr_auc": 0.4495299644606341,
+        "brier": 0.25929987222211703,
+        "ece": 0.13297928139812032,
+        "actions": {
+          "acheter": 57,
+          "vendre": 22,
+          "neutre": 16
+        },
+        "cumul_regle": 0.5380583066450659,
+        "perte_maximale": -0.24612061809544927,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.7223143481317033,
+        "ecart_vs_constante": 0.06240206530668406,
+        "erreur_type_de_l_ecart": 0.05685579681944952,
+        "pr_auc": 0.38329674692727456,
+        "brier": 0.26324447522294436,
+        "ece": 0.18826447848945185,
+        "actions": {
+          "neutre": 14,
+          "acheter": 11,
+          "vendre": 8
+        },
+        "cumul_regle": 0.23861554420942532,
+        "perte_maximale": -0.18832892166739723,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "analyse discriminante linéaire",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.8194930780973646,
+        "ecart_vs_constante": 0.15030389599520547,
+        "erreur_type_de_l_ecart": 0.07239932421060025,
+        "pr_auc": 0.4266491711163803,
+        "brier": 0.28484481451291266,
+        "ece": 0.1907663325209305,
+        "actions": {
+          "acheter": 58,
+          "vendre": 29,
+          "neutre": 8
+        },
+        "cumul_regle": 0.5628837210303013,
+        "perte_maximale": -0.24612061809544927,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.7270095784203203,
+        "ecart_vs_constante": 0.06709729559530121,
+        "erreur_type_de_l_ecart": 0.06266411803083023,
+        "pr_auc": 0.4921671899525151,
+        "brier": 0.2646576490152569,
+        "ece": 0.19556371189458224,
+        "actions": {
+          "neutre": 12,
+          "vendre": 11,
+          "acheter": 10
+        },
+        "cumul_regle": 0.002333067733939931,
+        "perte_maximale": -0.2088698669369079,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "Bayes naïf gaussien",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 1.8648867894007128,
+        "ecart_vs_constante": 1.1956976072985535,
+        "erreur_type_de_l_ecart": 0.27374324131766725,
+        "pr_auc": 0.3475079665044116,
+        "brier": 0.3822157325319161,
+        "ece": 0.33303377346330276,
+        "actions": {
+          "acheter": 64,
+          "vendre": 29,
+          "neutre": 2
+        },
+        "cumul_regle": -0.15977177177540935,
+        "perte_maximale": -0.3803027921821708,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.8688324314778532,
+        "ecart_vs_constante": 0.2089201486528339,
+        "erreur_type_de_l_ecart": 0.13090686253035239,
+        "pr_auc": 0.3909798534798534,
+        "brier": 0.3105571538664348,
+        "ece": 0.23590872547907127,
+        "actions": {
+          "vendre": 16,
+          "acheter": 15,
+          "neutre": 2
+        },
+        "cumul_regle": -0.1625858934488683,
+        "perte_maximale": -0.3626361654100646,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "Bayes naïf gaussien",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 2.182188175379004,
+        "ecart_vs_constante": 1.5129989932768453,
+        "erreur_type_de_l_ecart": 0.3031307658359766,
+        "pr_auc": 0.33871243052662936,
+        "brier": 0.4198295520313952,
+        "ece": 0.3952462655788752,
+        "actions": {
+          "acheter": 54,
+          "vendre": 36,
+          "neutre": 5
+        },
+        "cumul_regle": -0.3512384993209414,
+        "perte_maximale": -0.5242476480473369,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 1.146433337978413,
+        "ecart_vs_constante": 0.486521055153394,
+        "erreur_type_de_l_ecart": 0.285622643942417,
+        "pr_auc": 0.4713626379067556,
+        "brier": 0.33616775930871357,
+        "ece": 0.32716251279172676,
+        "actions": {
+          "vendre": 16,
+          "acheter": 13,
+          "neutre": 4
+        },
+        "cumul_regle": -0.3445122568870266,
+        "perte_maximale": -0.350013842449159,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "15 plus proches voisins",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6667240511250484,
+        "ecart_vs_constante": -0.0024651309771107376,
+        "erreur_type_de_l_ecart": 0.02365963354777052,
+        "pr_auc": 0.4625904335606871,
+        "brier": 0.23663157894736836,
+        "ece": 0.17122807017543862,
+        "actions": {
+          "acheter": 78,
+          "neutre": 13,
+          "vendre": 4
+        },
+        "cumul_regle": 1.236153832361476,
+        "perte_maximale": -0.2883339004983583,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6563756565900604,
+        "ecart_vs_constante": -0.00353662623495871,
+        "erreur_type_de_l_ecart": 0.03459419118578585,
+        "pr_auc": 0.4448395593869731,
+        "brier": 0.2321885521885522,
+        "ece": 0.09696969696969701,
+        "actions": {
+          "acheter": 17,
+          "neutre": 13,
+          "vendre": 3
+        },
+        "cumul_regle": 0.5354783937163328,
+        "perte_maximale": -0.19574690800259986,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "15 plus proches voisins",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6624399664556593,
+        "ecart_vs_constante": -0.006749215646499887,
+        "erreur_type_de_l_ecart": 0.021335271057018903,
+        "pr_auc": 0.4282231043118719,
+        "brier": 0.23513450292397656,
+        "ece": 0.0828070175438596,
+        "actions": {
+          "acheter": 73,
+          "neutre": 13,
+          "vendre": 9
+        },
+        "cumul_regle": 0.9316055292035461,
+        "perte_maximale": -0.31306944648278956,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.7083665154966278,
+        "ecart_vs_constante": 0.04845423267160867,
+        "erreur_type_de_l_ecart": 0.03944529616661302,
+        "pr_auc": 0.36126821207466364,
+        "brier": 0.256969696969697,
+        "ece": 0.16565656565656572,
+        "actions": {
+          "neutre": 18,
+          "acheter": 12,
+          "vendre": 3
+        },
+        "cumul_regle": -0.03569387712738592,
+        "perte_maximale": -0.2046986753318092,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "SVM à noyau gaussien",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.706454574108258,
+        "ecart_vs_constante": 0.03726539200609898,
+        "erreur_type_de_l_ecart": 0.0233816214905771,
+        "pr_auc": 0.3966507943303956,
+        "brier": 0.2526120420546295,
+        "ece": 0.0865837547841462,
+        "actions": {
+          "acheter": 76,
+          "neutre": 17,
+          "vendre": 2
+        },
+        "cumul_regle": 1.4058551635640786,
+        "perte_maximale": -0.20254845904236685,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6627910409730033,
+        "ecart_vs_constante": 0.002878758147984155,
+        "erreur_type_de_l_ecart": 0.006924118941767985,
+        "pr_auc": 0.36093258978675646,
+        "brier": 0.2348280242167493,
+        "ece": 0.050425257234726434,
+        "actions": {
+          "acheter": 33
+        },
+        "cumul_regle": 0.823457220253422,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "SVM à noyau gaussien",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.7273456289897279,
+        "ecart_vs_constante": 0.05815644688756871,
+        "erreur_type_de_l_ecart": 0.0302631766946854,
+        "pr_auc": 0.35059494804587416,
+        "brier": 0.2596120006884766,
+        "ece": 0.11339663989409146,
+        "actions": {
+          "acheter": 75,
+          "neutre": 18,
+          "vendre": 2
+        },
+        "cumul_regle": 0.6637040357302868,
+        "perte_maximale": -0.2536999809686097,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6925571621601154,
+        "ecart_vs_constante": 0.032644879335096265,
+        "erreur_type_de_l_ecart": 0.019159357412611502,
+        "pr_auc": 0.32521981247648657,
+        "brier": 0.24945798924730594,
+        "ece": 0.17340748559702854,
+        "actions": {
+          "acheter": 24,
+          "neutre": 9
+        },
+        "cumul_regle": 0.6771601489097621,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "Random Forest (projet)",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6963925319378985,
+        "ecart_vs_constante": 0.027203349835739386,
+        "erreur_type_de_l_ecart": 0.023421213353563775,
+        "pr_auc": 0.39944386430933715,
+        "brier": 0.25073454470189027,
+        "ece": 0.1186357033741692,
+        "actions": {
+          "acheter": 54,
+          "neutre": 27,
+          "vendre": 14
+        },
+        "cumul_regle": 0.2594004240723957,
+        "perte_maximale": -0.21921578551860077,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.7214097479101741,
+        "ecart_vs_constante": 0.06149746508515491,
+        "erreur_type_de_l_ecart": 0.04049370328857554,
+        "pr_auc": 0.3223269019101149,
+        "brier": 0.2637334256246347,
+        "ece": 0.09743746673909365,
+        "actions": {
+          "neutre": 15,
+          "acheter": 12,
+          "vendre": 6
+        },
+        "cumul_regle": -0.20091327281588311,
+        "perte_maximale": -0.26779775930831307,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "Random Forest (projet)",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6988686475067626,
+        "ecart_vs_constante": 0.029679465404603523,
+        "erreur_type_de_l_ecart": 0.026304259088432543,
+        "pr_auc": 0.41437159965875264,
+        "brier": 0.25180668688027247,
+        "ece": 0.11197038716330142,
+        "actions": {
+          "acheter": 54,
+          "neutre": 27,
+          "vendre": 14
+        },
+        "cumul_regle": 0.4925293919600675,
+        "perte_maximale": -0.1915216262695234,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6565048847411921,
+        "ecart_vs_constante": -0.0034073980838271734,
+        "erreur_type_de_l_ecart": 0.03765868357088826,
+        "pr_auc": 0.5239229156417645,
+        "brier": 0.23216108466755156,
+        "ece": 0.19045218200526587,
+        "actions": {
+          "acheter": 23,
+          "neutre": 7,
+          "vendre": 3
+        },
+        "cumul_regle": 0.6524811564008344,
+        "perte_maximale": -0.1319030000000001,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "Extra Trees",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6743844369553794,
+        "ecart_vs_constante": 0.005195254853220418,
+        "erreur_type_de_l_ecart": 0.0059242455872666674,
+        "pr_auc": 0.3327805918232505,
+        "brier": 0.24044626404605543,
+        "ece": 0.07074732568815238,
+        "actions": {
+          "acheter": 89,
+          "neutre": 6
+        },
+        "cumul_regle": 1.33872447287662,
+        "perte_maximale": -0.22874209592546502,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6641478955246214,
+        "ecart_vs_constante": 0.004235612699602211,
+        "erreur_type_de_l_ecart": 0.008180221832712341,
+        "pr_auc": 0.3507338508466137,
+        "brier": 0.235592729850321,
+        "ece": 0.05407879449909896,
+        "actions": {
+          "acheter": 31,
+          "neutre": 2
+        },
+        "cumul_regle": 0.9102915343322335,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "Extra Trees",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.677247107160676,
+        "ecart_vs_constante": 0.008057925058517061,
+        "erreur_type_de_l_ecart": 0.006284860493662162,
+        "pr_auc": 0.3077663656950595,
+        "brier": 0.2418503001818071,
+        "ece": 0.08007698997532015,
+        "actions": {
+          "acheter": 90,
+          "neutre": 5
+        },
+        "cumul_regle": 0.7457123609229375,
+        "perte_maximale": -0.22874209592546513,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6663250356980766,
+        "ecart_vs_constante": 0.006412752873057385,
+        "erreur_type_de_l_ecart": 0.00955592359636177,
+        "pr_auc": 0.4549274243747678,
+        "brier": 0.2365766391493112,
+        "ece": 0.11941479044623074,
+        "actions": {
+          "acheter": 29,
+          "neutre": 4
+        },
+        "cumul_regle": 0.75528914639471,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "LightGBM (projet)",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6866698724712373,
+        "ecart_vs_constante": 0.017480690369078237,
+        "erreur_type_de_l_ecart": 0.04730225401546057,
+        "pr_auc": 0.4834490646311054,
+        "brier": 0.2439853137419875,
+        "ece": 0.13314630632590613,
+        "actions": {
+          "acheter": 58,
+          "vendre": 23,
+          "neutre": 14
+        },
+        "cumul_regle": 0.8401013355026976,
+        "perte_maximale": -0.20358951719434792,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.7160212105872984,
+        "ecart_vs_constante": 0.056108927762279236,
+        "erreur_type_de_l_ecart": 0.07252761623926322,
+        "pr_auc": 0.37585208228590583,
+        "brier": 0.2615481337032294,
+        "ece": 0.17647868215697576,
+        "actions": {
+          "acheter": 16,
+          "vendre": 10,
+          "neutre": 7
+        },
+        "cumul_regle": 0.1376632915544671,
+        "perte_maximale": -0.2907706802187987,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "LightGBM (projet)",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.7862014810891277,
+        "ecart_vs_constante": 0.11701229898696869,
+        "erreur_type_de_l_ecart": 0.060352231625402646,
+        "pr_auc": 0.39439618255241626,
+        "brier": 0.28182233780175947,
+        "ece": 0.1802998801479885,
+        "actions": {
+          "acheter": 53,
+          "vendre": 29,
+          "neutre": 13
+        },
+        "cumul_regle": 0.7050532411623356,
+        "perte_maximale": -0.3313776552753839,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6872388715199523,
+        "ecart_vs_constante": 0.027326588694933072,
+        "erreur_type_de_l_ecart": 0.08895805644128055,
+        "pr_auc": 0.5349923871063578,
+        "brier": 0.23993785147361316,
+        "ece": 0.2134491842209109,
+        "actions": {
+          "acheter": 21,
+          "vendre": 7,
+          "neutre": 5
+        },
+        "cumul_regle": 0.23778979571003855,
+        "perte_maximale": -0.2215565857720001,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "gradient boosting peu profond",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6971683582846303,
+        "ecart_vs_constante": 0.02797917618247109,
+        "erreur_type_de_l_ecart": 0.030811538159564552,
+        "pr_auc": 0.4122164828333666,
+        "brier": 0.25119671945398775,
+        "ece": 0.09849042952699243,
+        "actions": {
+          "acheter": 55,
+          "vendre": 22,
+          "neutre": 18
+        },
+        "cumul_regle": 0.4509996852438576,
+        "perte_maximale": -0.23121274431236583,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6958504176163061,
+        "ecart_vs_constante": 0.035938134791287,
+        "erreur_type_de_l_ecart": 0.03480372187000178,
+        "pr_auc": 0.37571274818338785,
+        "brier": 0.2510378498146197,
+        "ece": 0.11219803083945566,
+        "actions": {
+          "acheter": 16,
+          "neutre": 14,
+          "vendre": 3
+        },
+        "cumul_regle": 0.15888424087853736,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "gradient boosting peu profond",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6891817631869834,
+        "ecart_vs_constante": 0.019992581084824126,
+        "erreur_type_de_l_ecart": 0.037251354847327466,
+        "pr_auc": 0.44959417830411563,
+        "brier": 0.24635155608155818,
+        "ece": 0.11504383555548134,
+        "actions": {
+          "acheter": 51,
+          "neutre": 24,
+          "vendre": 20
+        },
+        "cumul_regle": 0.4241844697578383,
+        "perte_maximale": -0.2760070843806959,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6871305632590367,
+        "ecart_vs_constante": 0.027218280434017552,
+        "erreur_type_de_l_ecart": 0.05038409968114375,
+        "pr_auc": 0.49982488766210875,
+        "brier": 0.24683163824489396,
+        "ece": 0.12506877531977506,
+        "actions": {
+          "acheter": 19,
+          "neutre": 9,
+          "vendre": 5
+        },
+        "cumul_regle": 0.3238987590902289,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "réseau de neurones (8 neurones)",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.9843713850757726,
+        "ecart_vs_constante": 0.3151822029736134,
+        "erreur_type_de_l_ecart": 0.12976909033238,
+        "pr_auc": 0.40373771095161015,
+        "brier": 0.30084774551309507,
+        "ece": 0.2311754275061562,
+        "actions": {
+          "acheter": 57,
+          "vendre": 29,
+          "neutre": 9
+        },
+        "cumul_regle": 0.2524146681457917,
+        "perte_maximale": -0.3557709206625197,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.8153834577868446,
+        "ecart_vs_constante": 0.1554711749618254,
+        "erreur_type_de_l_ecart": 0.09424723835743389,
+        "pr_auc": 0.35793420537389836,
+        "brier": 0.29170402010203844,
+        "ece": 0.19431488002220018,
+        "actions": {
+          "acheter": 16,
+          "neutre": 10,
+          "vendre": 7
+        },
+        "cumul_regle": 0.5348891845491246,
+        "perte_maximale": -0.18728966113267842,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "réseau de neurones (8 neurones)",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.994184966608202,
+        "ecart_vs_constante": 0.3249957845060429,
+        "erreur_type_de_l_ecart": 0.12027238040642707,
+        "pr_auc": 0.4063357771368634,
+        "brier": 0.3045345606522095,
+        "ece": 0.21389154306918418,
+        "actions": {
+          "acheter": 55,
+          "vendre": 26,
+          "neutre": 14
+        },
+        "cumul_regle": 0.29946087213901573,
+        "perte_maximale": -0.2923359472555238,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.7503657256354633,
+        "ecart_vs_constante": 0.09045344281044419,
+        "erreur_type_de_l_ecart": 0.10088296550980239,
+        "pr_auc": 0.40829244915620133,
+        "brier": 0.25980455539739256,
+        "ece": 0.16080447571549727,
+        "actions": {
+          "acheter": 16,
+          "neutre": 10,
+          "vendre": 7
+        },
+        "cumul_regle": 0.591541938893563,
+        "perte_maximale": -0.1428364118614892,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "moyenne logistique + forêt + LightGBM",
+      "fenetre": "croissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6661127108256062,
+        "ecart_vs_constante": -0.0030764712765531544,
+        "erreur_type_de_l_ecart": 0.025680691730619123,
+        "pr_auc": 0.4749882495256316,
+        "brier": 0.23578656707605936,
+        "ece": 0.029743723752201502,
+        "actions": {
+          "acheter": 62,
+          "neutre": 22,
+          "vendre": 11
+        },
+        "cumul_regle": 0.9621343954573143,
+        "perte_maximale": -0.17520088490637264,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.693486325070317,
+        "ecart_vs_constante": 0.03357404224529784,
+        "erreur_type_de_l_ecart": 0.04138987857268042,
+        "pr_auc": 0.3759801847195844,
+        "brier": 0.25062929797482536,
+        "ece": 0.0936321345993181,
+        "actions": {
+          "acheter": 18,
+          "neutre": 9,
+          "vendre": 6
+        },
+        "cumul_regle": 0.15316597672912824,
+        "perte_maximale": -0.18728966113267842,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    },
+    {
+      "modele": "moyenne logistique + forêt + LightGBM",
+      "fenetre": "glissante",
+      "avant_test_2016_2023": {
+        "mois": 95,
+        "log_loss": 0.6905343606118756,
+        "ecart_vs_constante": 0.021345178509716393,
+        "erreur_type_de_l_ecart": 0.027965922516619487,
+        "pr_auc": 0.3877993882508192,
+        "brier": 0.2474335127289868,
+        "ece": 0.03931231570932746,
+        "actions": {
+          "acheter": 56,
+          "neutre": 23,
+          "vendre": 16
+        },
+        "cumul_regle": 0.4097865719815068,
+        "perte_maximale": -0.23044574248322824,
+        "cumul_achat_couvert": 1.186220891391757
+      },
+      "test_2024_2026": {
+        "mois": 33,
+        "log_loss": 0.6504307075615091,
+        "ecart_vs_constante": -0.00948157526351009,
+        "erreur_type_de_l_ecart": 0.03850579387171945,
+        "pr_auc": 0.5384984564761452,
+        "brier": 0.22862745795979178,
+        "ece": 0.09287339678234371,
+        "actions": {
+          "acheter": 23,
+          "neutre": 8,
+          "vendre": 2
+        },
+        "cumul_regle": 0.5799767458570271,
+        "perte_maximale": -0.131903,
+        "cumul_achat_couvert": 0.823457220253422
+      }
+    }
+  ]
+}

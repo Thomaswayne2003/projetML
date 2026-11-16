@@ -1,0 +1,970 @@
+{
+  "avertissement": "Volet après coup : variantes écrites avant de voir leurs résultats, réglées sur 2000-2015, toutes publiées. Il ne remplace pas runs/evaluation_test.json.",
+  "date": "2026-11-16 15:02",
+  "commit_du_code": "5565228",
+  "reglages_figes": {
+    "figee_le": "2026-11-16 15:01",
+    "commit_du_code": "5565228",
+    "donnees_utilisees": "2000-01-01 -> 2015-12-31 uniquement",
+    "c": 0.03226375797068323,
+    "lecture_c": "part investie = 0.0323 / variance prévue, soit 100 % quand la volatilité prévue vaut 18.0%",
+    "plafond": 1.5,
+    "moyenne_longue_seances": 200,
+    "seuils_repris_de": "runs/signal_risque_regle.json",
+    "seuils": [
+      0.1999412071220772,
+      0.2698567531609378
+    ],
+    "frais": 0.0005
+  },
+  "resultats": {
+    "couvert": {
+      "2003-2015 (réglage)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 8.862022080717335,
+          "cumul_%": 184.3050352088838,
+          "volatilite_%": 24.136078716402686,
+          "rendement_par_unite_de_risque": 0.39672302571671636,
+          "perte_maximale_%": -58.914800432396476,
+          "pire_mois_%": -23.553387784935907,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 7.328795192219095,
+          "cumul_%": 138.77044745059487,
+          "volatilite_%": 15.805640740389947,
+          "rendement_par_unite_de_risque": 0.41044387424775153,
+          "perte_maximale_%": -40.81335258741409,
+          "pire_mois_%": -13.132554859057045,
+          "part_investie_moyenne_%": 74.76620445017737,
+          "changements_par_an": 8.776523702031604,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.013723061392679536,
+            "erreur_type": 0.18231119349985442,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 52.5
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.013723061392679592,
+            "erreur_type": 0.18231119349985442,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 52.5,
+            "part_fixe_%": 74.78246857879472
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 7.48927070431431,
+          "cumul_%": 143.20090177676755,
+          "volatilite_%": 18.43074989431444,
+          "rendement_par_unite_de_risque": 0.38452639713506476,
+          "perte_maximale_%": -46.103878082793315,
+          "pire_mois_%": -16.116322814987083,
+          "part_investie_moyenne_%": 93.93208428042847,
+          "changements_par_an": 218.68171557562076,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.012198595621190467,
+            "erreur_type": 0.14934405982642562,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 48.4
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.012198595621190411,
+            "erreur_type": 0.14934405982642562,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 48.4,
+            "part_fixe_%": 93.90953027423801
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 4.759706060449953,
+          "cumul_%": 77.2155088346767,
+          "volatilite_%": 16.703670849580625,
+          "rendement_par_unite_de_risque": 0.2520941977063995,
+          "perte_maximale_%": -54.060610684220435,
+          "pire_mois_%": -14.407254594895424,
+          "part_investie_moyenne_%": 79.00677200902935,
+          "changements_par_an": 12.677200902934537,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.14465215335971598,
+            "erreur_type": 0.1702119822518574,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 19.400000000000002
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.14465215335971587,
+            "erreur_type": 0.1702119822518574,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 19.400000000000002,
+            "part_fixe_%": 79.02030293264582
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 9.09083321946531,
+          "cumul_%": 191.7464085681153,
+          "volatilite_%": 17.202485817333812,
+          "rendement_par_unite_de_risque": 0.4852167624081749,
+          "perte_maximale_%": -41.90203036450912,
+          "pire_mois_%": -12.765606099136173,
+          "part_investie_moyenne_%": 78.34569493711706,
+          "changements_par_an": 3.5756207674943568,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.08850800872391756,
+            "erreur_type": 0.15744729089018056,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 71.1
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.08850800872391756,
+            "erreur_type": 0.15744729089018056,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 71.1,
+            "part_fixe_%": 78.35965194972607
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 10.971696876148474,
+          "cumul_%": 260.0489676912258,
+          "volatilite_%": 19.755722327836367,
+          "rendement_par_unite_de_risque": 0.5329933805152107,
+          "perte_maximale_%": -45.86411910516516,
+          "pire_mois_%": -13.311243971518294,
+          "part_investie_moyenne_%": 95.17957488952187,
+          "changements_par_an": 11.295711060948081,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.1362923321157572,
+            "erreur_type": 0.13245378835423258,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 84.2
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.1362923321157572,
+            "erreur_type": 0.13245378835423258,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 84.2,
+            "part_fixe_%": 95.16464962041617
+          }
+        }
+      },
+      "2016-2023": {
+        "acheter et garder": {
+          "rendement_annuel_%": 7.688907084884522,
+          "cumul_%": 77.70841797473504,
+          "volatilite_%": 19.77954816436484,
+          "rendement_par_unite_de_risque": 0.4657247624613939,
+          "perte_maximale_%": -32.18895209504547,
+          "pire_mois_%": -10.562527016473977,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 2.389672192929826,
+          "cumul_%": 20.117775162780617,
+          "volatilite_%": 15.473685619173908,
+          "rendement_par_unite_de_risque": 0.22021104004176748,
+          "perte_maximale_%": -25.991955078064798,
+          "pire_mois_%": -10.076076628199592,
+          "part_investie_moyenne_%": 85.07157464212679,
+          "changements_par_an": 9.662576687116564,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.2455765056254656,
+            "erreur_type": 0.15730865680296174,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 4.5
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.2455765056254656,
+            "erreur_type": 0.15730865680296174,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 4.5,
+            "part_fixe_%": 85.07157464212679
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 3.993553597768895,
+          "cumul_%": 35.519628880975354,
+          "volatilite_%": 18.188561734195062,
+          "rendement_par_unite_de_risque": 0.2979294876421645,
+          "perte_maximale_%": -27.31909348874668,
+          "pire_mois_%": -11.259758684697218,
+          "part_investie_moyenne_%": 106.2625618590127,
+          "changements_par_an": 204.58895705521473,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.16783818372539633,
+            "erreur_type": 0.13883308782970033,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 9.3
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.16783818372539633,
+            "erreur_type": 0.13883308782970033,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 9.3,
+            "part_fixe_%": 106.2625618590127
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 3.410551552762975,
+          "cumul_%": 29.733165031760556,
+          "volatilite_%": 15.825445304710556,
+          "rendement_par_unite_de_risque": 0.28149378332270364,
+          "perte_maximale_%": -24.703560609522178,
+          "pire_mois_%": -11.105994165201704,
+          "part_investie_moyenne_%": 87.60224948875256,
+          "changements_par_an": 10.049079754601227,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.18427809101240283,
+            "erreur_type": 0.14971191536643763,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 9.2
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.1842780910124029,
+            "erreur_type": 0.14971191536643763,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 9.2,
+            "part_fixe_%": 87.60224948875256
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 4.764662677902343,
+          "cumul_%": 43.5177112146558,
+          "volatilite_%": 16.026111782245408,
+          "rendement_par_unite_de_risque": 0.36122905287122076,
+          "perte_maximale_%": -25.065485514409414,
+          "pire_mois_%": -10.944668468592733,
+          "part_investie_moyenne_%": 83.81901840490798,
+          "changements_par_an": 3.3496932515337425,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.10452243141891654,
+            "erreur_type": 0.15849217653052303,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 25.2
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.10452243141891665,
+            "erreur_type": 0.15849217653052303,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 25.2,
+            "part_fixe_%": 83.81901840490798
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 4.237721129712746,
+          "cumul_%": 38.00906718698707,
+          "volatilite_%": 19.974658464133118,
+          "rendement_par_unite_de_risque": 0.3001697237853498,
+          "perte_maximale_%": -34.166238199114844,
+          "pire_mois_%": -13.578185786735663,
+          "part_investie_moyenne_%": 107.1210295046109,
+          "changements_par_an": 10.693251533742332,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.16559737470503882,
+            "erreur_type": 0.13667308825582447,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 12.3
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.16559737470503905,
+            "erreur_type": 0.13667308825582447,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 12.3,
+            "part_fixe_%": 107.1210295046109
+          }
+        }
+      },
+      "2024-2026": {
+        "acheter et garder": {
+          "rendement_annuel_%": 25.826496327658653,
+          "cumul_%": 89.12494360374647,
+          "volatilite_%": 26.955217877076826,
+          "rendement_par_unite_de_risque": 0.8802293788330673,
+          "perte_maximale_%": -25.30763697067445,
+          "pire_mois_%": -13.169917007373765,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 12.896038565771129,
+          "cumul_%": 39.997631557403054,
+          "volatilite_%": 19.36056595816352,
+          "rendement_par_unite_de_risque": 0.5749970415022714,
+          "perte_maximale_%": -32.66818707044177,
+          "pire_mois_%": -14.26714277808122,
+          "part_investie_moyenne_%": 75.3934191702432,
+          "changements_par_an": 10.454935622317597,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.305450906880703,
+            "erreur_type": 0.30621356586798126,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 12.2
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.3054509068807033,
+            "erreur_type": 0.30621356586798126,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 12.2,
+            "part_fixe_%": 75.3934191702432
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 18.19621385011372,
+          "cumul_%": 58.99682807307818,
+          "volatilite_%": 20.08841535840696,
+          "rendement_par_unite_de_risque": 0.7888713220270984,
+          "perte_maximale_%": -29.352136650588267,
+          "pire_mois_%": -9.034182866130758,
+          "part_investie_moyenne_%": 86.94327800544761,
+          "changements_par_an": 249.83690987124464,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.09142347611747137,
+            "erreur_type": 0.2119211293938005,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 26.900000000000002
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.09142347611747126,
+            "erreur_type": 0.2119211293938005,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 26.900000000000002,
+            "part_fixe_%": 86.94327800544761
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 11.816135679225015,
+          "cumul_%": 36.31454120097559,
+          "volatilite_%": 20.161110731840886,
+          "rendement_par_unite_de_risque": 0.5123683077883301,
+          "perte_maximale_%": -33.888985018954166,
+          "pire_mois_%": -13.620666499101796,
+          "part_investie_moyenne_%": 79.32761087267525,
+          "changements_par_an": 11.896995708154506,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.36812448752750393,
+            "erreur_type": 0.24935121502647525,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 5.2
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.36812448752750415,
+            "erreur_type": 0.24935121502647525,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 5.2,
+            "part_fixe_%": 79.32761087267525
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 21.97150815299429,
+          "cumul_%": 73.48596823886379,
+          "volatilite_%": 18.029575856228888,
+          "rendement_par_unite_de_risque": 1.031486561501973,
+          "perte_maximale_%": -17.577360400416598,
+          "pire_mois_%": -7.251828579746988,
+          "part_investie_moyenne_%": 74.53505007153076,
+          "changements_par_an": 4.686695278969958,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.1513654943066074,
+            "erreur_type": 0.2241362438695231,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 70.0
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.1513654943066074,
+            "erreur_type": 0.2241362438695231,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 70.0,
+            "part_fixe_%": 74.53505007153076
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 28.824219586063514,
+          "cumul_%": 101.88877325154486,
+          "volatilite_%": 22.774440713988945,
+          "rendement_par_unite_de_risque": 1.099193228560091,
+          "perte_maximale_%": -23.467462530296622,
+          "pire_mois_%": -10.679454975877912,
+          "part_investie_moyenne_%": 92.009207411403,
+          "changements_par_an": 12.618025751072961,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.21912064448376278,
+            "erreur_type": 0.16217631979513641,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 82.8
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.2191206444837629,
+            "erreur_type": 0.16217631979513641,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 82.8,
+            "part_fixe_%": 92.009207411403
+          }
+        }
+      },
+      "2003-2026 (tout)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 10.386347115737472,
+          "cumul_%": 855.5234802946254,
+          "volatilite_%": 23.128699891844125,
+          "rendement_par_unite_de_risque": 0.4829754418400351,
+          "perte_maximale_%": -58.914800432396476,
+          "pire_mois_%": -23.553387784935907,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 6.274875108270339,
+          "cumul_%": 301.5212560838835,
+          "volatilite_%": 16.168161107930594,
+          "rendement_par_unite_de_risque": 0.37142240269123705,
+          "perte_maximale_%": -40.81335258741409,
+          "pire_mois_%": -14.26714277808122,
+          "part_investie_moyenne_%": 78.34433634468381,
+          "changements_par_an": 9.281445448227936,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.11156273056440741,
+            "erreur_type": 0.12310764264098945,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 15.9
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.11156273056440741,
+            "erreur_type": 0.12310764264098943,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 15.9,
+            "part_fixe_%": 78.35185828412644
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 7.521097532376975,
+          "cumul_%": 424.02963144760514,
+          "volatilite_%": 18.55714601300909,
+          "rendement_par_unite_de_risque": 0.40869670834087163,
+          "perte_maximale_%": -46.103878082793315,
+          "pire_mois_%": -16.116322814987083,
+          "part_investie_moyenne_%": 97.27350863023722,
+          "changements_par_an": 217.76372480889506,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.074285186627493,
+            "erreur_type": 0.09517179101258466,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 19.6
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.07428518662749312,
+            "erreur_type": 0.09517179101258466,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 19.6,
+            "part_fixe_%": 97.26019360246566
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 5.128201765682716,
+          "cumul_%": 213.39706555867735,
+          "volatilite_%": 16.872963089014306,
+          "rendement_par_unite_de_risque": 0.29851890407407283,
+          "perte_maximale_%": -54.060610684220435,
+          "pire_mois_%": -14.407254594895424,
+          "part_investie_moyenne_%": 81.96664350243225,
+          "changements_par_an": 11.689367616400277,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.1844725628333448,
+            "erreur_type": 0.113302155531845,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 5.7
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.18447256283334484,
+            "erreur_type": 0.113302155531845,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 5.7,
+            "part_fixe_%": 81.97290725946509
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 9.069319851113345,
+          "cumul_%": 626.3992256280543,
+          "volatilite_%": 16.916383632259794,
+          "rendement_par_unite_de_risque": 0.5156425743694434,
+          "perte_maximale_%": -41.90203036450912,
+          "pire_mois_%": -12.765606099136173,
+          "part_investie_moyenne_%": 79.74287699791522,
+          "changements_par_an": 3.6337734537873523,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.03266997055839055,
+            "erreur_type": 0.10643452351818262,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 60.8
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.03266997055839066,
+            "erreur_type": 0.10643452351818262,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 60.8,
+            "part_fixe_%": 79.74991316429316
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 10.621840412867844,
+          "cumul_%": 903.1857619289133,
+          "volatilite_%": 20.219989398541365,
+          "rendement_par_unite_de_risque": 0.5316965331891637,
+          "perte_maximale_%": -45.86411910516516,
+          "pire_mois_%": -13.578185786735663,
+          "part_investie_moyenne_%": 98.85250719666384,
+          "changements_par_an": 11.251563585823488,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.04872532410108937,
+            "erreur_type": 0.08857071163019065,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 69.69999999999999
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.04872532410108937,
+            "erreur_type": 0.08857071163019065,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 69.69999999999999,
+            "part_fixe_%": 98.84318816667958
+          }
+        }
+      }
+    },
+    "non_couvert": {
+      "2003-2015 (réglage)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 7.337277682379595,
+          "cumul_%": 139.00276549401286,
+          "volatilite_%": 22.166994249125423,
+          "rendement_par_unite_de_risque": 0.3477524596759207,
+          "perte_maximale_%": -54.02931330158728,
+          "pire_mois_%": -11.662678582572406,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 5.551653610922624,
+          "cumul_%": 94.42422297760515,
+          "volatilite_%": 15.502840069168675,
+          "rendement_par_unite_de_risque": 0.30761818597114865,
+          "perte_maximale_%": -38.04680051870882,
+          "pire_mois_%": -14.460983371200753,
+          "part_investie_moyenne_%": 74.76620445017737,
+          "changements_par_an": 8.776523702031604,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.040140746452770715,
+            "erreur_type": 0.14190303858855602,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 39.800000000000004
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.040140746452770715,
+            "erreur_type": 0.141903038588556,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 39.800000000000004,
+            "part_fixe_%": 74.78246857879472
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 4.768262367788978,
+          "cumul_%": 77.39370386063476,
+          "volatilite_%": 18.263126362516243,
+          "rendement_par_unite_de_risque": 0.24597069596522286,
+          "perte_maximale_%": -42.82289299261877,
+          "pire_mois_%": -17.130024253178632,
+          "part_investie_moyenne_%": 93.93208428042847,
+          "changements_par_an": 218.68171557562076,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.10179817880050865,
+            "erreur_type": 0.12281001358295908,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 20.0
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.1017981788005087,
+            "erreur_type": 0.1228100135829591,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 20.0,
+            "part_fixe_%": 93.90953027423801
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 3.8386366174116615,
+          "cumul_%": 58.96675308877055,
+          "volatilite_%": 16.301453799648993,
+          "rendement_par_unite_de_risque": 0.19998763262384855,
+          "perte_maximale_%": -38.60932132438165,
+          "pire_mois_%": -13.378544385403757,
+          "part_investie_moyenne_%": 79.00677200902935,
+          "changements_par_an": 12.677200902934537,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.14778865816698378,
+            "erreur_type": 0.12827660275966918,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 12.7
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.14778865816698383,
+            "erreur_type": 0.12827660275966918,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 12.7,
+            "part_fixe_%": 79.02030293264582
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 7.035031767362976,
+          "cumul_%": 130.8517245489984,
+          "volatilite_%": 16.731587533827042,
+          "rendement_par_unite_de_risque": 0.3803407195401261,
+          "perte_maximale_%": -34.23054435358569,
+          "pire_mois_%": -11.575567556225664,
+          "part_investie_moyenne_%": 78.34569493711706,
+          "changements_par_an": 3.5756207674943568,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.03259351561133483,
+            "erreur_type": 0.12265501902629977,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 61.3
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.03259351561133483,
+            "erreur_type": 0.12265501902629977,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 61.3,
+            "part_fixe_%": 78.35965194972607
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 8.605773704623122,
+          "cumul_%": 176.17859962917893,
+          "volatilite_%": 19.360006134240347,
+          "rendement_par_unite_de_risque": 0.42849837230554605,
+          "perte_maximale_%": -38.42897751992154,
+          "pire_mois_%": -10.731067393242599,
+          "part_investie_moyenne_%": 95.17957488952187,
+          "changements_par_an": 11.295711060948081,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.08075893511380527,
+            "erreur_type": 0.10551398934701763,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 76.7
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.08075893511380522,
+            "erreur_type": 0.10551398934701763,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 76.7,
+            "part_fixe_%": 95.16464962041617
+          }
+        }
+      },
+      "2016-2023": {
+        "acheter et garder": {
+          "rendement_annuel_%": 5.1870202246510955,
+          "cumul_%": 48.070361123322144,
+          "volatilite_%": 18.48748182677995,
+          "rendement_par_unite_de_risque": 0.3575813132660874,
+          "perte_maximale_%": -30.191591733743383,
+          "pire_mois_%": -10.181947087588739,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 0.8500112060562781,
+          "cumul_%": 6.790441023238625,
+          "volatilite_%": 14.653553062378483,
+          "rendement_par_unite_de_risque": 0.1205811842498542,
+          "perte_maximale_%": -24.150114991877814,
+          "pire_mois_%": -8.747608694579013,
+          "part_investie_moyenne_%": 85.07157464212679,
+          "changements_par_an": 9.662576687116564,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.23706073511082254,
+            "erreur_type": 0.15807170744418572,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 4.6
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.2370607351108226,
+            "erreur_type": 0.1580717074441857,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 4.6,
+            "part_fixe_%": 85.07157464212679
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 2.5219306110788375,
+          "cumul_%": 21.327370176701677,
+          "volatilite_%": 17.16375876470534,
+          "rendement_par_unite_de_risque": 0.221998868920341,
+          "perte_maximale_%": -26.543320595365195,
+          "pire_mois_%": -8.774859568355698,
+          "part_investie_moyenne_%": 106.2625618590127,
+          "changements_par_an": 204.58895705521473,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.13561711572960097,
+            "erreur_type": 0.13769826109986902,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 13.200000000000001
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.13561711572960103,
+            "erreur_type": 0.13769826109986902,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 13.200000000000001,
+            "part_fixe_%": 106.2625618590127
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 1.8474152859808468,
+          "cumul_%": 15.267595714976402,
+          "volatilite_%": 14.946142451918416,
+          "rendement_par_unite_de_risque": 0.18696082450371426,
+          "perte_maximale_%": -22.66644349206818,
+          "pire_mois_%": -9.499470106630902,
+          "part_investie_moyenne_%": 87.60224948875256,
+          "changements_par_an": 10.049079754601227,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.17066412013727458,
+            "erreur_type": 0.15188227110093563,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 10.9
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.1706641201372743,
+            "erreur_type": 0.15188227110093563,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 10.9,
+            "part_fixe_%": 87.60224948875256
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 3.370095009064311,
+          "cumul_%": 29.339733780462417,
+          "volatilite_%": 15.000812341252228,
+          "rendement_par_unite_de_risque": 0.28568613295295353,
+          "perte_maximale_%": -20.93760335761963,
+          "pire_mois_%": -9.196757701573732,
+          "part_investie_moyenne_%": 83.81901840490798,
+          "changements_par_an": 3.3496932515337425,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.07191356547653732,
+            "erreur_type": 0.15533184242622697,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 30.9
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.07191356547653732,
+            "erreur_type": 0.15533184242622697,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 30.9,
+            "part_fixe_%": 83.81901840490798
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 2.6159431516022513,
+          "cumul_%": 22.193619378108732,
+          "volatilite_%": 18.69028851016411,
+          "rendement_par_unite_de_risque": 0.22339905709602736,
+          "perte_maximale_%": -27.307589567605195,
+          "pire_mois_%": -11.461295160407193,
+          "part_investie_moyenne_%": 107.1210295046109,
+          "changements_par_an": 10.693251533742332,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.13421656949530367,
+            "erreur_type": 0.12812627426405784,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 15.5
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.1342165694953035,
+            "erreur_type": 0.12812627426405787,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 15.5,
+            "part_fixe_%": 107.1210295046109
+          }
+        }
+      },
+      "2024-2026": {
+        "acheter et garder": {
+          "rendement_annuel_%": 17.825502328902942,
+          "cumul_%": 57.6174324746731,
+          "volatilite_%": 25.6636991577818,
+          "rendement_par_unite_de_risque": 0.654753565644334,
+          "perte_maximale_%": -22.35136774780323,
+          "pire_mois_%": -12.880999172491004,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 7.3597041035218025,
+          "cumul_%": 21.772131477273284,
+          "volatilite_%": 18.29177065194349,
+          "rendement_par_unite_de_risque": 0.3218109117576319,
+          "perte_maximale_%": -28.161961102050704,
+          "pire_mois_%": -11.438661599628752,
+          "part_investie_moyenne_%": 75.3934191702432,
+          "changements_par_an": 10.454935622317597,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.33318106612913095,
+            "erreur_type": 0.26114930627214206,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 7.5
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.3331810661291312,
+            "erreur_type": 0.26114930627214206,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 7.5,
+            "part_fixe_%": 75.3934191702432
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 10.705426448065491,
+          "cumul_%": 32.59163959902611,
+          "volatilite_%": 19.381740596959986,
+          "rendement_par_unite_de_risque": 0.4722629262969964,
+          "perte_maximale_%": -26.445176730171593,
+          "pire_mois_%": -9.194986717184694,
+          "part_investie_moyenne_%": 86.94327800544761,
+          "changements_par_an": 249.83690987124464,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.18262131651363345,
+            "erreur_type": 0.19064573090587966,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 15.7
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.18262131651363378,
+            "erreur_type": 0.1906457309058797,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 15.7,
+            "part_fixe_%": 86.94327800544761
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 5.959020286410066,
+          "cumul_%": 17.41615133762302,
+          "volatilite_%": 19.180049265784536,
+          "rendement_par_unite_de_risque": 0.2471658590076613,
+          "perte_maximale_%": -29.42119579287521,
+          "pire_mois_%": -11.067890410921999,
+          "part_investie_moyenne_%": 79.32761087267525,
+          "changements_par_an": 11.896995708154506,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.40787957040958134,
+            "erreur_type": 0.21381745398324814,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 1.3
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.40787957040958156,
+            "erreur_type": 0.2138174539832481,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 1.3,
+            "part_fixe_%": 79.32761087267525
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 14.83893191336223,
+          "cumul_%": 46.78302765242963,
+          "volatilite_%": 17.366855271334273,
+          "rendement_par_unite_de_risque": 0.7167752110262383,
+          "perte_maximale_%": -14.551537247883694,
+          "pire_mois_%": -7.589626682485351,
+          "part_investie_moyenne_%": 74.53505007153076,
+          "changements_par_an": 4.686695278969958,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.06206605759338246,
+            "erreur_type": 0.21766555036533533,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 58.5
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.06206605759338213,
+            "erreur_type": 0.21766555036533533,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 58.5,
+            "part_fixe_%": 74.53505007153076
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 20.456784433981532,
+          "cumul_%": 67.57550403359731,
+          "volatilite_%": 21.82292452795853,
+          "rendement_par_unite_de_risque": 0.8292640177817776,
+          "perte_maximale_%": -19.21464607928599,
+          "pire_mois_%": -10.450776038318764,
+          "part_investie_moyenne_%": 92.009207411403,
+          "changements_par_an": 12.618025751072961,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.17463541488323708,
+            "erreur_type": 0.15557050076120377,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 78.60000000000001
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.17463541488323675,
+            "erreur_type": 0.15557050076120377,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 78.60000000000001,
+            "part_fixe_%": 92.009207411403
+          }
+        }
+      },
+      "2003-2026 (tout)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 7.815447535195652,
+          "cumul_%": 457.79589072589334,
+          "volatilite_%": 21.464709323187,
+          "rendement_par_unite_de_risque": 0.3932146380229011,
+          "perte_maximale_%": -54.02931330158728,
+          "pire_mois_%": -12.880999172491004,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "règle figée (jour, 3 niveaux)": {
+          "rendement_annuel_%": 4.14443990480915,
+          "cumul_%": 152.8311965074687,
+          "volatilite_%": 15.588791094894367,
+          "rendement_par_unite_de_risque": 0.24919379680639692,
+          "perte_maximale_%": -38.04680051870882,
+          "pire_mois_%": -14.460983371200753,
+          "part_investie_moyenne_%": 78.34433634468381,
+          "changements_par_an": 9.281445448227936,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.1440333533438224,
+            "erreur_type": 0.10211503544342947,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 6.4
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.1440333533438225,
+            "erreur_type": 0.10211503544342947,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 6.4,
+            "part_fixe_%": 78.35185828412644
+          }
+        },
+        "A. levier en période calme (c / variance, jusqu'à 150 %)": {
+          "rendement_annuel_%": 4.697948079021397,
+          "cumul_%": 185.3731616388012,
+          "volatilite_%": 18.03679475605256,
+          "rendement_par_unite_de_risque": 0.26759727138107253,
+          "perte_maximale_%": -42.82289299261877,
+          "pire_mois_%": -17.130024253178632,
+          "part_investie_moyenne_%": 97.27350863023722,
+          "changements_par_an": 217.76372480889506,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.12562827992681874,
+            "erreur_type": 0.08372246728864031,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 6.0
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.1256282799268187,
+            "erreur_type": 0.08372246728864031,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 6.0,
+            "part_fixe_%": 97.26019360246566
+          }
+        },
+        "B. sortir lentement, revenir vite, filtre de tendance": {
+          "rendement_annuel_%": 3.4111937914016455,
+          "cumul_%": 115.15001436628194,
+          "volatilite_%": 16.237452964673242,
+          "rendement_par_unite_de_risque": 0.20210453256869157,
+          "perte_maximale_%": -38.60932132438165,
+          "pire_mois_%": -13.378544385403757,
+          "part_investie_moyenne_%": 81.96664350243225,
+          "changements_par_an": 11.689367616400277,
+          "face_a_acheter_et_garder": {
+            "ecart": -0.19112670856491906,
+            "erreur_type": 0.09165830375039016,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 2.3
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": -0.19112670856491917,
+            "erreur_type": 0.09165830375039016,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 2.3,
+            "part_fixe_%": 81.97290725946509
+          }
+        },
+        "C. décision en fin de mois": {
+          "rendement_annuel_%": 6.683112165189886,
+          "cumul_%": 338.269176202665,
+          "volatilite_%": 16.243825096104985,
+          "rendement_par_unite_de_risque": 0.3937811125815714,
+          "perte_maximale_%": -34.23054435358569,
+          "pire_mois_%": -11.575567556225664,
+          "part_investie_moyenne_%": 79.74287699791522,
+          "changements_par_an": 3.6337734537873523,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.0005665237723921912,
+            "erreur_type": 0.08734706394453952,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 48.8
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.0005665237723920802,
+            "erreur_type": 0.08734706394453952,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 48.8,
+            "part_fixe_%": 79.74991316429316
+          }
+        },
+        "D. les trois ensemble": {
+          "rendement_annuel_%": 7.880394091655063,
+          "cumul_%": 465.5214553936207,
+          "volatilite_%": 19.453162609740186,
+          "rendement_par_unite_de_risque": 0.41566776525807847,
+          "perte_maximale_%": -38.42897751992154,
+          "pire_mois_%": -11.461295160407193,
+          "part_investie_moyenne_%": 98.85250719666384,
+          "changements_par_an": 11.251563585823488,
+          "face_a_acheter_et_garder": {
+            "ecart": 0.022455077899985743,
+            "erreur_type": 0.07239273200668904,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 61.0
+          },
+          "face_a_une_part_fixe_equivalente": {
+            "ecart": 0.022455077899985687,
+            "erreur_type": 0.07239273200668904,
+            "part_des_tirages_ou_le_signal_fait_mieux_%": 61.0,
+            "part_fixe_%": 98.84318816667958
+          }
+        }
+      }
+    }
+  },
+  "aujourd_hui": {
+    "acheter et garder": 1.0,
+    "règle figée (jour, 3 niveaux)": 0.5,
+    "A. levier en période calme (c / variance, jusqu'à 150 %)": 0.5373860164953718,
+    "B. sortir lentement, revenir vite, filtre de tendance": 0.5,
+    "C. décision en fin de mois": 0.5,
+    "D. les trois ensemble": 0.5373860164953718
+  }
+}

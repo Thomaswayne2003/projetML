@@ -1,0 +1,41 @@
+% Section prête à insérer dans rapport.tex, juste avant « \section{Limites} », avec : \input{section_apres_coup}
+% Elle n'est pas encore incluse : le rapport n'a pas pu être recompilé sur cette machine (pas de LaTeX installé).
+% Tous les chiffres viennent de runs/exploration_*.json (python -m src.banc_essai, src.banc_essai_jour,
+% src.banc_essai_long, src.volatilite).
+
+\section{Après le test : vérifications et second volet}
+
+Tout ce qui suit a été fait \textbf{après} l'ouverture du test. Ces essais éclairent le résultat de la section
+précédente ; ils ne le remplacent pas, et les fichiers figés n'ont pas été modifiés.
+
+\paragraph{Un autre modèle aurait-il fait mieux ?} Nous avons réentraîné chaque mois vingt modèles (logistiques,
+forêts, LightGBM, réseau de neurones, AR(1), lissage exponentiel\ldots), sur tout le passé ou sur les 60 derniers mois.
+Sur les 33 mois du test, 3 configurations sur 38 passent sous la log-loss de la constante, avec une avance
+($-0{,}009 \pm 0{,}039$ pour la meilleure) quatre fois plus petite que son erreur type. Le modèle le mieux classé sur
+2016-2023 (15 plus proches voisins) finit parmi les moins bons sur le test. Sur la base journalière (4\,118 séances),
+l'AUC du sens du lendemain vaut 0,49 sur 668 séances de test. Faire commencer l'apprentissage en 2000 plutôt qu'en 2010
+dégrade la constante (0,667 contre 0,660). Le blocage vient donc de l'information disponible, pas du choix du modèle.
+
+\paragraph{Un piège d'horaires.} Dans la base journalière, la ligne d'un jour contient la clôture de Wall Street du
+même jour, connue après celle de Tokyo. L'utiliser telle quelle donne une AUC de 0,71, sans décision possible derrière.
+Toutes les séries étrangères ont donc été décalées d'un jour.
+
+\paragraph{Second volet : prévoir l'agitation.} Avec les mêmes mois, le même découpage et un réentraînement mensuel,
+nous avons changé de cible : la volatilité réalisée du mois suivant, et la classe « mois agité » (volatilité au-dessus
+de 20~\%).
+
+\begin{table}[H]\centering\small
+\begin{tabular}{lcc}\toprule
+ & 2016-2023 (95 mois) & Test 2024-2026 (33 mois) \\\midrule
+Volatilité : $R^2$ hors échantillon, régression (vol. 1, 3, 6 mois, VIX, rendement) & 0,23 & 0,18 \\
+Volatilité : $R^2$ hors échantillon, GARCH(1,1) & 0,03 & 0,32 \\
+Mois agité : AUC de la régression logistique & 0,73 & 0,71 \\
+Mois agité : écart de log-loss avec la constante & $-0{,}074 \pm 0{,}041$ & $-0{,}065 \pm 0{,}088$ \\\bottomrule
+\end{tabular}\end{table}
+
+Le classement des mois est stable d'une période à l'autre (AUC proche de 0,7, contre 0,5 pour le sens du marché),
+mais sur 33 mois l'avantage en log-loss reste inférieur à son erreur type, et le classement des méthodes de
+prévision change selon la période. Une position dosée selon la volatilité prévue (part investie $= 15~\%/\hat\sigma$,
+plafonnée à 100~\%) ramène le pire mois de $-13{,}2~\%$ à $-9{,}7~\%$ et le rendement de $+82{,}3~\%$ à $+67{,}7~\%$ :
+rapporté au risque, le résultat est le même (1,00 contre 0,98). Ce volet sert à annoncer le risque ; il ne fournit pas
+une stratégie meilleure que « toujours acheter, couvert ».

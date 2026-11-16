@@ -1,0 +1,541 @@
+{
+  "avertissement": "Volet construit après l'ouverture du test 2024-2026 du projet. Il s'ajoute au résultat officiel (runs/evaluation_test.json), il ne le remplace pas. Règle choisie avec les seules données 2000-2015.",
+  "date": "2026-11-16 14:51",
+  "commit_du_code": "5565228",
+  "regle": {
+    "figee_le": "2026-11-16 14:51",
+    "commit_du_code": "5565228",
+    "donnees_utilisees": "2000-01-01 -> 2015-12-31 uniquement",
+    "r2_hors_echantillon_2003_2015": {
+      "naïf : la volatilité du dernier mois": 0.2907968307316652,
+      "HAR : volatilité du jour, de la semaine, du mois, du trimestre": 0.3081796684946183,
+      "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses": 0.3803586598585653,
+      "GARCH(1,1) journalier": 0.24107376967940664
+    },
+    "modele": "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses",
+    "seuils_volatilite_annuelle": [
+      0.1999412071220772,
+      0.2698567531609378
+    ],
+    "lecture": "risque prévu < 20.0% : acheter plein ; entre les deux : acheter à moitié ; > 27.0% : ne pas acheter",
+    "quantiles": [
+      0.6,
+      0.9
+    ],
+    "confirmation_soirs": 3,
+    "frais_par_100_%_echange": 0.0005,
+    "horizon_seances": 20,
+    "execution": "décision le soir t, achat ou vente à la clôture de t+1"
+  },
+  "prevision_r2_log_volatilite": {
+    "2003-2015 (réglage)": {
+      "naïf : la volatilité du dernier mois": 0.2867920170467052,
+      "HAR : volatilité du jour, de la semaine, du mois, du trimestre": 0.3044434892232285,
+      "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses": 0.37429024769716035,
+      "GARCH(1,1) journalier": 0.24173980715559273
+    },
+    "2016-2023": {
+      "naïf : la volatilité du dernier mois": 0.16678649583237704,
+      "HAR : volatilité du jour, de la semaine, du mois, du trimestre": 0.20187828304534117,
+      "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses": 0.20975246608993448,
+      "GARCH(1,1) journalier": -0.07438511388619373
+    },
+    "2024-2026": {
+      "naïf : la volatilité du dernier mois": -0.0531282912889528,
+      "HAR : volatilité du jour, de la semaine, du mois, du trimestre": -0.022321784018193958,
+      "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses": -0.009418963293032157,
+      "GARCH(1,1) journalier": -0.018095235778324836
+    },
+    "2003-2026 (tout)": {
+      "naïf : la volatilité du dernier mois": 0.25075952835811355,
+      "HAR : volatilité du jour, de la semaine, du mois, du trimestre": 0.27399733640872315,
+      "HAR + écart haut-bas + marchés (VIX, S&P 500, dollar-yen) + baisses": 0.31557430840356304,
+      "GARCH(1,1) journalier": 0.16174533187998175
+    }
+  },
+  "strategies": {
+    "couvert": {
+      "2003-2015 (réglage)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 8.862022080717335,
+          "cumul_%": 184.3050352088838,
+          "volatilite_%": 24.136078716402686,
+          "rendement_par_unite_de_risque": 0.39672302571671636,
+          "perte_maximale_%": -58.914800432396476,
+          "pire_mois_%": -23.553387784935907,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 7.328795192219095,
+          "cumul_%": 138.77044745059487,
+          "volatilite_%": 15.805640740389947,
+          "rendement_par_unite_de_risque": 0.41044387424775153,
+          "perte_maximale_%": -40.81335258741409,
+          "pire_mois_%": -13.132554859057045,
+          "part_investie_moyenne_%": 74.76620445017737,
+          "changements_par_an": 8.776523702031604
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 6.936091045695769,
+          "cumul_%": 128.23947032111147,
+          "volatilite_%": 15.587025503610331,
+          "rendement_par_unite_de_risque": 0.3904814166986983,
+          "perte_maximale_%": -42.726142158062515,
+          "pire_mois_%": -15.48684313370453,
+          "part_investie_moyenne_%": 75.00806191551112,
+          "changements_par_an": 21.45372460496614
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 9.09083321946531,
+          "cumul_%": 191.7464085681153,
+          "volatilite_%": 17.202485817333812,
+          "rendement_par_unite_de_risque": 0.4852167624081749,
+          "perte_maximale_%": -41.90203036450912,
+          "pire_mois_%": -12.765606099136173,
+          "part_investie_moyenne_%": 78.34569493711706,
+          "changements_par_an": 3.5756207674943568
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 8.88971284825586,
+          "cumul_%": 185.19622238927096,
+          "volatilite_%": 20.787503473006453,
+          "rendement_par_unite_de_risque": 0.42549801982008484,
+          "perte_maximale_%": -51.54113196148372,
+          "pire_mois_%": -13.945758815139309,
+          "part_investie_moyenne_%": 96.19539121952106,
+          "changements_par_an": 53.55304740406321
+        }
+      },
+      "2016-2023": {
+        "acheter et garder": {
+          "rendement_annuel_%": 7.688907084884522,
+          "cumul_%": 77.70841797473504,
+          "volatilite_%": 19.77954816436484,
+          "rendement_par_unite_de_risque": 0.4657247624613939,
+          "perte_maximale_%": -32.18895209504547,
+          "pire_mois_%": -10.562527016473977,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 2.389672192929826,
+          "cumul_%": 20.117775162780617,
+          "volatilite_%": 15.473685619173908,
+          "rendement_par_unite_de_risque": 0.22021104004176748,
+          "perte_maximale_%": -25.991955078064798,
+          "pire_mois_%": -10.076076628199592,
+          "part_investie_moyenne_%": 85.07157464212679,
+          "changements_par_an": 9.662576687116564
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 2.989215693322178,
+          "cumul_%": 25.686418687268574,
+          "volatilite_%": 15.059710883569027,
+          "rendement_par_unite_de_risque": 0.2608233659791136,
+          "perte_maximale_%": -21.248250803761792,
+          "pire_mois_%": -9.87166877596124,
+          "part_investie_moyenne_%": 84.63701431492842,
+          "changements_par_an": 15.588957055214724
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 4.764662677902343,
+          "cumul_%": 43.5177112146558,
+          "volatilite_%": 16.026111782245408,
+          "rendement_par_unite_de_risque": 0.36122905287122076,
+          "perte_maximale_%": -25.065485514409414,
+          "pire_mois_%": -10.944668468592733,
+          "part_investie_moyenne_%": 83.81901840490798,
+          "changements_par_an": 3.3496932515337425
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 7.044713575770678,
+          "cumul_%": 69.62210808773818,
+          "volatilite_%": 18.549318597096292,
+          "rendement_par_unite_de_risque": 0.4517076219610753,
+          "perte_maximale_%": -26.43794418388622,
+          "pire_mois_%": -11.063061148588616,
+          "part_investie_moyenne_%": 98.33517165517817,
+          "changements_par_an": 30.533742331288344
+        }
+      },
+      "2024-2026": {
+        "acheter et garder": {
+          "rendement_annuel_%": 25.826496327658653,
+          "cumul_%": 89.12494360374647,
+          "volatilite_%": 26.955217877076826,
+          "rendement_par_unite_de_risque": 0.8802293788330673,
+          "perte_maximale_%": -25.30763697067445,
+          "pire_mois_%": -13.169917007373765,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 12.896038565771129,
+          "cumul_%": 39.997631557403054,
+          "volatilite_%": 19.36056595816352,
+          "rendement_par_unite_de_risque": 0.5749970415022714,
+          "perte_maximale_%": -32.66818707044177,
+          "pire_mois_%": -14.26714277808122,
+          "part_investie_moyenne_%": 75.3934191702432,
+          "changements_par_an": 10.454935622317597
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 14.79321443822994,
+          "cumul_%": 46.6209988514219,
+          "volatilite_%": 17.54848139858558,
+          "rendement_par_unite_de_risque": 0.709073656775028,
+          "perte_maximale_%": -26.035088629609138,
+          "pire_mois_%": -6.688443828350177,
+          "part_investie_moyenne_%": 75.25035765379113,
+          "changements_par_an": 21.27038626609442
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 21.97150815299429,
+          "cumul_%": 73.48596823886379,
+          "volatilite_%": 18.029575856228888,
+          "rendement_par_unite_de_risque": 1.031486561501973,
+          "perte_maximale_%": -17.577360400416598,
+          "pire_mois_%": -7.251828579746988,
+          "part_investie_moyenne_%": 74.53505007153076,
+          "changements_par_an": 4.686695278969958
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 21.772355024629462,
+          "cumul_%": 72.70138211040229,
+          "volatilite_%": 25.612065970835996,
+          "rendement_par_unite_de_risque": 0.7850728738623666,
+          "perte_maximale_%": -27.8343534395773,
+          "pire_mois_%": -12.899154518450818,
+          "part_investie_moyenne_%": 97.66623697468734,
+          "changements_par_an": 60.566523605150216
+        }
+      },
+      "2003-2026 (tout)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 10.386347115737472,
+          "cumul_%": 855.5234802946254,
+          "volatilite_%": 23.128699891844125,
+          "rendement_par_unite_de_risque": 0.4829754418400351,
+          "perte_maximale_%": -58.914800432396476,
+          "pire_mois_%": -23.553387784935907,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 6.274875108270339,
+          "cumul_%": 301.5212560838835,
+          "volatilite_%": 16.168161107930594,
+          "rendement_par_unite_de_risque": 0.37142240269123705,
+          "perte_maximale_%": -40.81335258741409,
+          "pire_mois_%": -14.26714277808122,
+          "part_investie_moyenne_%": 78.34433634468381,
+          "changements_par_an": 9.281445448227936
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 6.491148537022573,
+          "cumul_%": 320.6058184312013,
+          "volatilite_%": 15.662367328014515,
+          "rendement_par_unite_de_risque": 0.39107740779356054,
+          "perte_maximale_%": -42.726142158062515,
+          "pire_mois_%": -15.48684313370453,
+          "part_investie_moyenne_%": 78.30958999305074,
+          "changements_par_an": 19.48227936066713
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 9.069319851113345,
+          "cumul_%": 626.3992256280543,
+          "volatilite_%": 16.916383632259794,
+          "rendement_par_unite_de_risque": 0.5156425743694434,
+          "perte_maximale_%": -41.90203036450912,
+          "pire_mois_%": -12.765606099136173,
+          "part_investie_moyenne_%": 79.74287699791522,
+          "changements_par_an": 3.6337734537873523
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 9.739283022732659,
+          "cumul_%": 735.4530296697035,
+          "volatilite_%": 20.719298386971865,
+          "rendement_par_unite_de_risque": 0.48527069755862,
+          "perte_maximale_%": -51.54113196148372,
+          "pire_mois_%": -13.945758815139309,
+          "part_investie_moyenne_%": 97.10114725062017,
+          "changements_par_an": 46.5823488533704
+        }
+      }
+    },
+    "non_couvert": {
+      "2003-2015 (réglage)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 7.337277682379595,
+          "cumul_%": 139.00276549401286,
+          "volatilite_%": 22.166994249125423,
+          "rendement_par_unite_de_risque": 0.3477524596759207,
+          "perte_maximale_%": -54.02931330158728,
+          "pire_mois_%": -11.662678582572406,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 5.551653610922624,
+          "cumul_%": 94.42422297760515,
+          "volatilite_%": 15.502840069168675,
+          "rendement_par_unite_de_risque": 0.30761818597114865,
+          "perte_maximale_%": -38.04680051870882,
+          "pire_mois_%": -14.460983371200753,
+          "part_investie_moyenne_%": 74.76620445017737,
+          "changements_par_an": 8.776523702031604
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 5.15141052335466,
+          "cumul_%": 85.54401889440011,
+          "volatilite_%": 15.258163954285564,
+          "rendement_par_unite_de_risque": 0.28520728179793176,
+          "perte_maximale_%": -30.042705077024035,
+          "pire_mois_%": -15.983074183803136,
+          "part_investie_moyenne_%": 75.00806191551112,
+          "changements_par_an": 21.45372460496614
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 7.035031767362976,
+          "cumul_%": 130.8517245489984,
+          "volatilite_%": 16.731587533827042,
+          "rendement_par_unite_de_risque": 0.3803407195401261,
+          "perte_maximale_%": -34.23054435358569,
+          "pire_mois_%": -11.575567556225664,
+          "part_investie_moyenne_%": 78.34569493711706,
+          "changements_par_an": 3.5756207674943568
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 6.84761843521422,
+          "cumul_%": 125.92662579370493,
+          "volatilite_%": 19.913403016168484,
+          "rendement_par_unite_de_risque": 0.34010554568933765,
+          "perte_maximale_%": -49.92886897904435,
+          "pire_mois_%": -12.878534962780464,
+          "part_investie_moyenne_%": 96.19539121952106,
+          "changements_par_an": 53.55304740406321
+        }
+      },
+      "2016-2023": {
+        "acheter et garder": {
+          "rendement_annuel_%": 5.1870202246510955,
+          "cumul_%": 48.070361123322144,
+          "volatilite_%": 18.48748182677995,
+          "rendement_par_unite_de_risque": 0.3575813132660874,
+          "perte_maximale_%": -30.191591733743383,
+          "pire_mois_%": -10.181947087588739,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 0.8500112060562781,
+          "cumul_%": 6.790441023238625,
+          "volatilite_%": 14.653553062378483,
+          "rendement_par_unite_de_risque": 0.1205811842498542,
+          "perte_maximale_%": -24.150114991877814,
+          "pire_mois_%": -8.747608694579013,
+          "part_investie_moyenne_%": 85.07157464212679,
+          "changements_par_an": 9.662576687116564
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 1.3346470635397623,
+          "cumul_%": 10.83903377812816,
+          "volatilite_%": 14.26941782907071,
+          "rendement_par_unite_de_risque": 0.1535170084534135,
+          "perte_maximale_%": -20.459789648114533,
+          "pire_mois_%": -7.903310649598261,
+          "part_investie_moyenne_%": 84.63701431492842,
+          "changements_par_an": 15.588957055214724
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 3.370095009064311,
+          "cumul_%": 29.339733780462417,
+          "volatilite_%": 15.000812341252228,
+          "rendement_par_unite_de_risque": 0.28568613295295353,
+          "perte_maximale_%": -20.93760335761963,
+          "pire_mois_%": -9.196757701573732,
+          "part_investie_moyenne_%": 83.81901840490798,
+          "changements_par_an": 3.3496932515337425
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 4.3392254290496535,
+          "cumul_%": 39.05563073622276,
+          "volatilite_%": 17.310137957481356,
+          "rendement_par_unite_de_risque": 0.32309120927787494,
+          "perte_maximale_%": -24.24137588065316,
+          "pire_mois_%": -9.219628813663917,
+          "part_investie_moyenne_%": 98.33517165517817,
+          "changements_par_an": 30.533742331288344
+        }
+      },
+      "2024-2026": {
+        "acheter et garder": {
+          "rendement_annuel_%": 17.825502328902942,
+          "cumul_%": 57.6174324746731,
+          "volatilite_%": 25.6636991577818,
+          "rendement_par_unite_de_risque": 0.654753565644334,
+          "perte_maximale_%": -22.35136774780323,
+          "pire_mois_%": -12.880999172491004,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 7.3597041035218025,
+          "cumul_%": 21.772131477273284,
+          "volatilite_%": 18.29177065194349,
+          "rendement_par_unite_de_risque": 0.3218109117576319,
+          "perte_maximale_%": -28.161961102050704,
+          "pire_mois_%": -11.438661599628752,
+          "part_investie_moyenne_%": 75.3934191702432,
+          "changements_par_an": 10.454935622317597
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 8.882982910380232,
+          "cumul_%": 26.625166088493234,
+          "volatilite_%": 16.94795917013719,
+          "rendement_par_unite_de_risque": 0.4159963548856179,
+          "perte_maximale_%": -22.771122687248802,
+          "pire_mois_%": -7.568436858507377,
+          "part_investie_moyenne_%": 75.25035765379113,
+          "changements_par_an": 21.27038626609442
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 14.83893191336223,
+          "cumul_%": 46.78302765242963,
+          "volatilite_%": 17.366855271334273,
+          "rendement_par_unite_de_risque": 0.7167752110262383,
+          "perte_maximale_%": -14.551537247883694,
+          "pire_mois_%": -7.589626682485351,
+          "part_investie_moyenne_%": 74.53505007153076,
+          "changements_par_an": 4.686695278969958
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 14.680083619106398,
+          "cumul_%": 46.220540040018406,
+          "volatilite_%": 24.465903297024017,
+          "rendement_par_unite_de_risque": 0.5641938543446394,
+          "perte_maximale_%": -24.75545409009484,
+          "pire_mois_%": -12.621719590598435,
+          "part_investie_moyenne_%": 97.66623697468734,
+          "changements_par_an": 60.566523605150216
+        }
+      },
+      "2003-2026 (tout)": {
+        "acheter et garder": {
+          "rendement_annuel_%": 7.815447535195652,
+          "cumul_%": 457.79589072589334,
+          "volatilite_%": 21.464709323187,
+          "rendement_par_unite_de_risque": 0.3932146380229011,
+          "perte_maximale_%": -54.02931330158728,
+          "pire_mois_%": -12.880999172491004,
+          "part_investie_moyenne_%": 100.0,
+          "changements_par_an": 0.0
+        },
+        "signal risque, chaque jour (règle figée)": {
+          "rendement_annuel_%": 4.14443990480915,
+          "cumul_%": 152.8311965074687,
+          "volatilite_%": 15.588791094894367,
+          "rendement_par_unite_de_risque": 0.24919379680639692,
+          "perte_maximale_%": -38.04680051870882,
+          "pire_mois_%": -14.460983371200753,
+          "part_investie_moyenne_%": 78.34433634468381,
+          "changements_par_an": 9.281445448227936
+        },
+        "signal risque, chaque jour, sans confirmation": {
+          "rendement_annuel_%": 4.2792142342770845,
+          "cumul_%": 160.41123575305062,
+          "volatilite_%": 15.14718980545747,
+          "rendement_par_unite_de_risque": 0.26045384442110425,
+          "perte_maximale_%": -30.042705077024035,
+          "pire_mois_%": -15.983074183803136,
+          "part_investie_moyenne_%": 78.30958999305074,
+          "changements_par_an": 19.48227936066713
+        },
+        "signal risque, seulement en fin de mois": {
+          "rendement_annuel_%": 6.683112165189886,
+          "cumul_%": 338.269176202665,
+          "volatilite_%": 16.243825096104985,
+          "rendement_par_unite_de_risque": 0.3937811125815714,
+          "perte_maximale_%": -34.23054435358569,
+          "pire_mois_%": -11.575567556225664,
+          "part_investie_moyenne_%": 79.74287699791522,
+          "changements_par_an": 3.6337734537873523
+        },
+        "position dosée en continu (risque visé / risque prévu)": {
+          "rendement_annuel_%": 6.902982891570564,
+          "cumul_%": 359.37185070538413,
+          "volatilite_%": 19.69858650293753,
+          "rendement_par_unite_de_risque": 0.36681193896406233,
+          "perte_maximale_%": -49.92886897904435,
+          "pire_mois_%": -12.878534962780464,
+          "part_investie_moyenne_%": 97.10114725062017,
+          "changements_par_an": 46.5823488533704
+        }
+      }
+    }
+  },
+  "comparaisons": {
+    "couvert": {
+      "2003-2015 (réglage)": {
+        "ecart": 0.013723061392679536,
+        "erreur_type": 0.18231119349985442,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 52.5
+      },
+      "2016-2023": {
+        "ecart": -0.2455765056254656,
+        "erreur_type": 0.15730865680296174,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 4.5
+      },
+      "2024-2026": {
+        "ecart": -0.305450906880703,
+        "erreur_type": 0.30621356586798126,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 12.2
+      },
+      "2003-2026 (tout)": {
+        "ecart": -0.11156273056440741,
+        "erreur_type": 0.12310764264098945,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 15.9
+      }
+    },
+    "non_couvert": {
+      "2003-2015 (réglage)": {
+        "ecart": -0.040140746452770715,
+        "erreur_type": 0.14190303858855602,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 39.800000000000004
+      },
+      "2016-2023": {
+        "ecart": -0.23706073511082254,
+        "erreur_type": 0.15807170744418572,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 4.6
+      },
+      "2024-2026": {
+        "ecart": -0.33318106612913095,
+        "erreur_type": 0.26114930627214206,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 7.5
+      },
+      "2003-2026 (tout)": {
+        "ecart": -0.1440333533438224,
+        "erreur_type": 0.10211503544342947,
+        "part_des_tirages_ou_le_signal_fait_mieux_%": 6.4
+      }
+    }
+  },
+  "sensibilite": {
+    "quantiles (0.5, 0.8), confirmation 1": 0.236,
+    "quantiles (0.5, 0.8), confirmation 3": 0.368,
+    "quantiles (0.5, 0.8), confirmation 5": 0.418,
+    "quantiles (0.6, 0.9), confirmation 1": 0.392,
+    "quantiles (0.6, 0.9), confirmation 3": 0.328,
+    "quantiles (0.6, 0.9), confirmation 5": 0.491,
+    "quantiles (0.7, 0.95), confirmation 1": 0.441,
+    "quantiles (0.7, 0.95), confirmation 3": 0.336,
+    "quantiles (0.7, 0.95), confirmation 5": 0.379
+  },
+  "aujourd_hui": {
+    "date": "2026-11-16",
+    "volatilite_prevue_%": 24.5027198679092,
+    "zone_du_jour": "risque moyen",
+    "signal": "acheter à moitié"
+  }
+}

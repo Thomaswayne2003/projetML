@@ -1,0 +1,270 @@
+{
+  "avertissement": "Second volet ajouté après l'ouverture du test 2024-2026. Il ne remplace pas runs/evaluation_test.json : la réponse à la question du projet (acheter, neutre ou vendre) reste « acheter et garder ».",
+  "date": "2026-11-16 10:29",
+  "commit_du_code": "5565228",
+  "methode": {
+    "cible": "volatilité réalisée du mois suivant (écart-type des rendements journaliers, annualisé)",
+    "mois_agite": "volatilité réalisée au-dessus de 20%",
+    "variables": [
+      "lv_1m",
+      "lv_3m",
+      "lv_6m",
+      "lv_ewma",
+      "lv_vix",
+      "n225_ret_1m",
+      "boj_meeting_next_month"
+    ],
+    "reentrainement": "chaque mois, sur tout le passé connu",
+    "premiere_prediction": "2016-02-29",
+    "methode_retenue_pour_l_usage": "régression : 1, 3, 6 mois + VIX + rendement",
+    "volatilite_cible_de_la_position_dosee": 0.15
+  },
+  "prevision_de_la_volatilite": {
+    "avant_test_2016_2023": {
+      "mois": 95,
+      "methodes": {
+        "moyenne passée": {
+          "r2_hors_echantillon": 0.0,
+          "erreur_moyenne_points_de_vol": 5.219145545394774,
+          "qlike": 0.3167061908688185,
+          "correlation": 0.0
+        },
+        "comme le mois passé": {
+          "r2_hors_echantillon": -0.07852000408135207,
+          "erreur_moyenne_points_de_vol": 5.92531608252909,
+          "qlike": 0.405064247757061,
+          "correlation": 0.43041747685848597
+        },
+        "lissage exponentiel": {
+          "r2_hors_echantillon": 0.12824516253612828,
+          "erreur_moyenne_points_de_vol": 5.42712842336064,
+          "qlike": 0.2896398894943013,
+          "correlation": 0.49642769523233016
+        },
+        "régression : 1, 3 et 6 mois": {
+          "r2_hors_echantillon": 0.19626158959021334,
+          "erreur_moyenne_points_de_vol": 4.723516954242768,
+          "qlike": 0.2845292208635526,
+          "correlation": 0.38108390397494846
+        },
+        "régression : 1, 3, 6 mois + VIX + rendement": {
+          "r2_hors_echantillon": 0.23119025259780446,
+          "erreur_moyenne_points_de_vol": 4.765753417834413,
+          "qlike": 0.24866225880132733,
+          "correlation": 0.4662035668026776
+        },
+        "GARCH(1,1)": {
+          "r2_hors_echantillon": 0.024838598178893334,
+          "erreur_moyenne_points_de_vol": 5.51179648083692,
+          "qlike": 0.251112173669055,
+          "correlation": 0.39517805736987277
+        },
+        "LightGBM bridé": {
+          "r2_hors_echantillon": 0.1577628803967599,
+          "erreur_moyenne_points_de_vol": 5.012633925606308,
+          "qlike": 0.2660295647429913,
+          "correlation": 0.37709172945436364
+        }
+      }
+    },
+    "test_2024_2026": {
+      "mois": 33,
+      "methodes": {
+        "moyenne passée": {
+          "r2_hors_echantillon": 0.0,
+          "erreur_moyenne_points_de_vol": 8.36971495130935,
+          "qlike": 0.8355683530203268,
+          "correlation": 0.0
+        },
+        "comme le mois passé": {
+          "r2_hors_echantillon": 0.015588909485803604,
+          "erreur_moyenne_points_de_vol": 8.891572719784449,
+          "qlike": 0.5267020208240166,
+          "correlation": 0.3715727487998683
+        },
+        "lissage exponentiel": {
+          "r2_hors_echantillon": 0.06539358992677946,
+          "erreur_moyenne_points_de_vol": 8.583445681676602,
+          "qlike": 0.5273734115297951,
+          "correlation": 0.28208030916365334
+        },
+        "régression : 1, 3 et 6 mois": {
+          "r2_hors_echantillon": 0.2038646891492869,
+          "erreur_moyenne_points_de_vol": 7.483119778205009,
+          "qlike": 0.6142368587890257,
+          "correlation": 0.32727222870366857
+        },
+        "régression : 1, 3, 6 mois + VIX + rendement": {
+          "r2_hors_echantillon": 0.182813603672351,
+          "erreur_moyenne_points_de_vol": 7.824028737583897,
+          "qlike": 0.5915471195083267,
+          "correlation": 0.35204571614967517
+        },
+        "GARCH(1,1)": {
+          "r2_hors_echantillon": 0.31971297770238905,
+          "erreur_moyenne_points_de_vol": 7.544837491060353,
+          "qlike": 0.4130947851151788,
+          "correlation": 0.3823342859454038
+        },
+        "LightGBM bridé": {
+          "r2_hors_echantillon": 0.2105059272195805,
+          "erreur_moyenne_points_de_vol": 7.717832537633952,
+          "qlike": 0.6364178161355714,
+          "correlation": 0.3534217506258832
+        }
+      }
+    }
+  },
+  "mois_agite_ou_non": {
+    "avant_test_2016_2023": {
+      "mois": 95,
+      "mois_agites": 24,
+      "modeles": {
+        "constante": {
+          "log_loss": 0.5908098749920568,
+          "ecart_vs_constante": 0.0,
+          "erreur_type": 0.0,
+          "auc": 0.5,
+          "pr_auc": 0.2567611662305599,
+          "brier": 0.2000298037928686,
+          "ece": 0.09791939238112303
+        },
+        "logistique": {
+          "log_loss": 0.5165935451640757,
+          "ecart_vs_constante": -0.07421632982798095,
+          "erreur_type": 0.04061677260823409,
+          "auc": 0.7306338028169014,
+          "pr_auc": 0.5024245159983306,
+          "brier": 0.17324220414242028,
+          "ece": 0.07132977451442955
+        },
+        "LightGBM bridé": {
+          "log_loss": 0.5650974637674331,
+          "ecart_vs_constante": -0.025712411224623682,
+          "erreur_type": 0.04478354857611224,
+          "auc": 0.6830985915492958,
+          "pr_auc": 0.3693064302750705,
+          "brier": 0.192320518709587,
+          "ece": 0.0620095722249583
+        }
+      }
+    },
+    "test_2024_2026": {
+      "mois": 33,
+      "mois_agites": 18,
+      "modeles": {
+        "constante": {
+          "log_loss": 0.7855345872037788,
+          "ecart_vs_constante": 0.0,
+          "erreur_type": 0.0,
+          "auc": 0.5,
+          "pr_auc": 0.7862094937656083,
+          "brier": 0.29374966294389476,
+          "ece": 0.22311140484093456
+        },
+        "logistique": {
+          "log_loss": 0.7207744818253083,
+          "ecart_vs_constante": -0.06476010537847042,
+          "erreur_type": 0.08770542771150631,
+          "auc": 0.7074074074074073,
+          "pr_auc": 0.686827048224107,
+          "brier": 0.25668890015693835,
+          "ece": 0.20961746218229074
+        },
+        "LightGBM bridé": {
+          "log_loss": 0.721397934649215,
+          "ecart_vs_constante": -0.06413665255456368,
+          "erreur_type": 0.09243348509554246,
+          "auc": 0.6814814814814815,
+          "pr_auc": 0.6632703654296417,
+          "brier": 0.2554405065477228,
+          "ece": 0.17098224984878657
+        }
+      }
+    }
+  },
+  "usage": {
+    "avant_test_2016_2023": {
+      "mois": 95,
+      "volatilité prévue": {
+        "pertes_au_dela_du_seuil_5_%": 5,
+        "attendues_5_%": 4.8,
+        "pertes_au_dela_du_seuil_10_%": 8,
+        "attendues_10_%": 9.5,
+        "mois_dans_la_bande_a_1_ecart_type_%": 71.57894736842105,
+        "attendu_bande_%": 68.3
+      },
+      "volatilité constante": {
+        "pertes_au_dela_du_seuil_5_%": 5,
+        "attendues_5_%": 4.8,
+        "pertes_au_dela_du_seuil_10_%": 8,
+        "attendues_10_%": 9.5,
+        "mois_dans_la_bande_a_1_ecart_type_%": 73.68421052631578,
+        "attendu_bande_%": 68.3
+      },
+      "position": {
+        "part_investie_moyenne_%": 84.36631877647709,
+        "part_investie_minimale_%": 35.88691711146984,
+        "acheter_et_garder": {
+          "cumul": 1.186220891391757,
+          "volatilite_annuelle": 0.16167244017052185,
+          "perte_maximale": -0.22874209592546502,
+          "pire_mois": -0.10699,
+          "rendement_par_unite_de_risque": 0.6878459517057541
+        },
+        "position_dosee": {
+          "cumul": 0.8678222872721109,
+          "volatilite_annuelle": 0.13820588984648688,
+          "perte_maximale": -0.2003968835620642,
+          "pire_mois": -0.094052,
+          "rendement_par_unite_de_risque": 0.6339355630387165
+        }
+      }
+    },
+    "test_2024_2026": {
+      "mois": 33,
+      "volatilité prévue": {
+        "pertes_au_dela_du_seuil_5_%": 1,
+        "attendues_5_%": 1.7,
+        "pertes_au_dela_du_seuil_10_%": 2,
+        "attendues_10_%": 3.3,
+        "mois_dans_la_bande_a_1_ecart_type_%": 63.63636363636363,
+        "attendu_bande_%": 68.3
+      },
+      "volatilité constante": {
+        "pertes_au_dela_du_seuil_5_%": 1,
+        "attendues_5_%": 1.7,
+        "pertes_au_dela_du_seuil_10_%": 2,
+        "attendues_10_%": 3.3,
+        "mois_dans_la_bande_a_1_ecart_type_%": 60.60606060606061,
+        "attendu_bande_%": 68.3
+      },
+      "position": {
+        "part_investie_moyenne_%": 80.05756045080315,
+        "part_investie_minimale_%": 55.26453113908929,
+        "acheter_et_garder": {
+          "cumul": 0.823457220253422,
+          "volatilite_annuelle": 0.22233583126149384,
+          "perte_maximale": -0.131903,
+          "pire_mois": -0.131903,
+          "rendement_par_unite_de_risque": 0.9775122396174774
+        },
+        "position_dosee": {
+          "cumul": 0.6773586857982732,
+          "volatilite_annuelle": 0.1780384924319813,
+          "perte_maximale": -0.09709827492176315,
+          "pire_mois": -0.09709827492176316,
+          "rendement_par_unite_de_risque": 0.9994935514580622
+        }
+      }
+    }
+  },
+  "mois_prochain": {
+    "donnees_arretees_au": "2026-10-30",
+    "volatilite_prevue_%": 20.900936090786065,
+    "volatilite_moyenne_passee_%": 18.373878570683885,
+    "probabilite_mois_agite_%": 50.727876351234755,
+    "perte_mensuelle_depassee_1_fois_sur_20_%": -9.925239986926837,
+    "part_investie_conseillee_%": 71.7671205483116
+  }
+}
