@@ -1,6 +1,6 @@
 // La lecture : sept chapitres, les mêmes que les salles de la visite, avec graphiques, tableaux et figures.
 // Deux parcours : Applied ML (le projet) et Maths (l'annexe), selon le cours choisi en haut de page.
-import { D, SALLES, ENTREE, LIMITES, CHIFFRES, ECART_TEST, MATHS, COURS, COURS_INFO, FIGURES, V2_INFO, avecCours, nomNotebook, nombre, pct, dec, moisLong, moisSuivant } from "./contenu.js";
+import { D, SALLES, ENTREE, LIMITES, CHIFFRES, ECART_TEST, MATHS, COURS, COURS_INFO, FIGURES, V2_INFO, V3_INFO, avecCours, nomNotebook, nombre, pct, dec, moisLong, moisSuivant } from "./contenu.js";
 import { installerMenu, installerEntete, installerLiseuse, liensPieces, titreNotebook, FLECHE, FLECHE_G } from "./commun.js";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -11,16 +11,19 @@ const Maj = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 // ---------- figures des notebooks : des planches avec titre, légende et notebook d'origine ----------
 const FIG_CHAPITRE = {
   exploration: ["01_nikkei_split", "01_cibles_couverture", "01_correlations"],
+  dataset: ["07_bloomberg_controles"],
   apprentissage: ["02_optuna_historique", "02_coefficients_logistiques", "02_coude_kmeans"],
+  apres: ["07_test_euros", "07_optuna_v1_v2", "07_permutation_v2", "07_shap_v2_test", "07_coefficients_v1_v2", "07_stabilite_signaux",
+          "08_ecarts_log_loss", "08_regle_au_cash", "08_leviers_sharpe", "08_richesse", "08_coefficients_dans_le_temps", "08_contributions_mois_prochain"],
   regle: ["03_fiabilite_brute", "03_fiabilite_platt", "03_regle_validation"],
   epreuve: ["03b_test_probabilites", "03b_test_regle"],
-  explication: ["04_permutation", "04_shap_beeswarm_test", "04_shap_waterfall_2026-10", "04_pdp_ice_news", "04_inversion_signal_news"],
+  explication: ["04_permutation", "04_shap_beeswarm_test", "04_shap_waterfall_2026-10", "04_pdp_ice_news", "07_stabilite_signaux", "07_shap_v2_derniere"],
   "m-modele": ["02_coefficients_logistiques"],
   "m-cout": ["03b_test_probabilites"],
   "m-prior": ["05_sensibilite_lambda"],
   "m-convexite": ["05_sensibilite_depart"],
   "m-descente": ["05_sensibilite_pas", "05_sensibilite_iterations"],
-  "m-preuve": ["03b_test_regle"],
+  "m-preuve": ["03b_test_regle", "08_ecarts_log_loss"],
 };
 const existe = (n) => D.figures.includes(`${n}.png`);
 function planches(noms, groupe) {
@@ -583,6 +586,66 @@ function figContributions(boite) {
   boite.insertAdjacentHTML("beforeend", `<figcaption>Contribution au log-odds de la baisse : poids de la logistique fois la valeur standardisée de la variable, pour la prédiction faite avec les données de fin ${moisLong(D.signal.mois_des_donnees)}.</figcaption>`);
 }
 
+
+// ---------- VI. comprendre chaque décision du test, mois par mois ----------
+function figExplorateur(boite) {
+  const lib = Object.fromEntries((D.modele?.variables ?? []).map((v, i) => [v, D.modele.libelles[i]]));
+  const nomVar = (v) => Maj(lib[v] ?? v);
+  const v1 = D.explications_test ?? {}, v2 = D.v2?.shap_test?.mois ?? {};
+  const hist = { v1: Object.fromEntries(D.historique_test.map((m) => [m.date, m])),
+                 v2: Object.fromEntries((D.v2?.evaluation_test?.historique_test ?? []).map((m) => [m.date, m])) };
+  const versions = [["v1", "Première version · logistique (figée)"]].concat(Object.keys(v2).length ? [["v2", `Seconde version · ${D.v2.shap_test.modele} (après coup)`]] : []);
+  const mois = Object.keys(v1);
+  let version = "v1", choisi = mois[mois.length - 1];
+
+  const decision = (date) => {
+    const h = hist[version][date];
+    if (version === "v1") return h ? { p: h.p_hausse, action: h.action } : { p: D.signal.p_hausse, action: D.signal.action_du_modele };
+    return { p: v2[date].p_hausse, action: v2[date].action };
+  };
+  const contributions = (date) => (version === "v1"
+    ? [...(v1[date] ?? [])].map((e) => ({ nom: nomVar(e.variable), c: e.contribution }))
+    : (v2[date]?.contributions ?? []).map((e) => ({ nom: Maj(e.variable), c: e.contribution })))
+    .sort((a, b) => Math.abs(b.c) - Math.abs(a.c)).slice(0, 9);
+
+  boite.insertAdjacentHTML("beforeend", `<div class="explorateur">
+    <div class="versions" role="group" aria-label="Version du modèle">${versions.map(([k, nom]) => `<button type="button" data-version="${k}">${nom}</button>`).join("")}</div>
+    <div class="mois-puces" role="group" aria-label="Mois du test">${mois.map((d) => {
+      const h = hist.v1[d], issue = h ? (h.hausse_realisee ? "hausse" : "baisse") : "avenir";
+      const [an, m] = moisSuivant(d).split("-");
+      const court = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."][+m - 1];
+      return `<button type="button" data-mois="${d}" class="${issue}" title="${Maj(moisLong(moisSuivant(d)))}">${court} ${an.slice(2)}</button>`;
+    }).join("")}</div>
+    <div class="explorateur-corps"><div class="explorateur-resume"></div><div class="explorateur-barres"></div></div>
+    <ul class="legende"><li><i class="rond" style="--c:${C.pin}"></i>le mois a monté</li><li><i class="rond anneau" style="--c:${C.argile}"></i>le mois a baissé</li><li><i class="rond anneau" style="--c:${C["encre-3"]}"></i>à venir</li></ul>
+  </div>`);
+  const zone = boite.querySelector(".explorateur");
+
+  function afficher() {
+    zone.querySelectorAll("[data-version]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.version === version));
+    zone.querySelectorAll("[data-mois]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.mois === choisi));
+    const { p, action } = decision(choisi), h = hist.v1[choisi];
+    const suite = h ? `Le Nikkei a ${h.hausse_realisee ? "monté" : "baissé"} : ${pct(h.rendement_achat_couvert, 1, true)} pour un achat couvert.` : "Le mois n'est pas encore connu.";
+    zone.querySelector(".explorateur-resume").innerHTML = `
+      <p class="sur-titre">${Maj(moisLong(moisSuivant(choisi)))}, avec les données de fin ${moisLong(choisi)}</p>
+      <dl><div><dt>${pct(p, 1)}</dt><dd>probabilité de hausse annoncée</dd></div>
+      <div><dt class="action ${action}">${Maj(action)}</dt><dd>action de la règle</dd></div></dl>
+      <p class="suite">${suite}</p>`;
+    const items = contributions(choisi);
+    const m = Math.max(...items.map((e) => Math.abs(e.c)), 1e-6);
+    zone.querySelector(".explorateur-barres").innerHTML = `<p class="sous">Ce qui a pesé, en log-odds de la baisse${version === "v2" ? " (valeurs SHAP)" : ""}</p>
+      <ul>${items.map((e) => `<li><span>${esc(e.nom)}</span><span class="piste"><i class="${e.c > 0 ? "vers-baisse" : "vers-hausse"}" style="--l:${(Math.abs(e.c) / m) * 50}%"></i></span><b>${e.c > 0 ? "+" : "−"}${dec(Math.abs(e.c), 2)}</b></li>`).join("")}</ul>
+      <p class="note">À droite du trait, la variable pousse vers la baisse ; à gauche, vers la hausse.</p>`;
+  }
+  zone.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-version], [data-mois]");
+    if (!b) return;
+    if (b.dataset.version) version = b.dataset.version; else choisi = b.dataset.mois;
+    afficher();
+  });
+  afficher();
+}
+
 // ---------- VII. la seconde version face à la première ----------
 function tableVersions() {
   if (!V2_INFO) return "";
@@ -602,6 +665,28 @@ function tableVersions() {
     <p class="note">La première version est la seule évaluée à l'aveugle : sa décision a été commitée avant d'ouvrir le test. La seconde a été réglée et choisie par la même règle, mais après avoir vu ce test : son résultat sur 2024-2026 n'a pas valeur de preuve.</p>`;
 }
 
+// ---------- VII. les leviers d'amélioration, protocole figé, jugés sur 2010-2023 ----------
+function tableAmeliorations() {
+  if (!V3_INFO) return "";
+  const v3 = D.v3, J = V3_INFO.J, oui = '<span class="ok">oui</span>', non = '<span class="non">non</span>';
+  const sp = (m) => `${m["2010-2016"] ? "✓" : "✗"} · ${m["2017-2023"] ? "✓" : "✗"}`;
+  const probas = Object.entries(v3.probabilites[J]).map(([v, b]) => {
+    const t = v3.tests_probabilites[v];
+    return `<tr><td>${esc(v)}</td><td>${dec(b.log_loss, 4)}</td><td>${t ? `${dec(b.ecart_vs_constante, 4)} ± ${dec(b.erreur_type, 4)}` : "référence"}</td>
+      <td>${dec(b.auc, 2)}</td><td>${t ? dec(t.p_holm, 2) : ""}</td><td>${t ? sp(t.mieux_sur) : ""}</td><td>${t ? (t.retenue ? oui : non) : ""}</td></tr>`;
+  }).join("");
+  const leviers = Object.entries(v3.euros[J]).filter(([s]) => s !== "assemblage final").map(([s, b]) => {
+    const t = v3.tests_euros[s];
+    return `<tr><td>${esc(s)}</td><td>${dec(b.sharpe, 2)}</td><td>${pct(b.perte_maximale, 1, true)}</td><td>${pct(b.cumul, 0, true)}</td>
+      <td>${t ? dec(t.p_holm, 2) : "référence"}</td><td>${t ? sp(t.mieux_sur) : ""}</td><td>${t ? (t.retenu ? oui : non) : ""}</td></tr>`;
+  }).join("");
+  const a = v3.assemblage_final, mp = v3.mois_prochain;
+  return `<p class="sous">Protocole écrit et figé le ${esc(V3_INFO.fige.slice(0, 10))} avant tout calcul (empreinte SHA-256 ${esc(V3_INFO.sha.slice(0, 12))}…). Chaque variante est réapprise chaque mois sur le passé connu depuis 1999 ; réglages fixés d'avance ; une variante n'est retenue que si elle bat la référence après correction de Holm et sur les deux sous-périodes. 2024-2026, déjà vu, n'a servi à rien choisir.</p>
+    <div class="tableau-defile"><table class="leviers"><thead><tr><th>Probabilité de baisse, ${V3_INFO.mois} mois</th><th>Log-loss</th><th>Écart à la constante</th><th>AUC</th><th>p (Holm)</th><th>Mieux 2010-16 · 2017-23</th><th>Retenue</th></tr></thead><tbody>${probas}</tbody></table></div>
+    <div class="tableau-defile"><table class="leviers"><thead><tr><th>En euros, 2010-2023</th><th>Sharpe</th><th>Perte maximale</th><th>Cumul</th><th>p (Holm)</th><th>Mieux 2010-16 · 2017-23</th><th>Retenu</th></tr></thead><tbody>${leviers}</tbody></table></div>
+    <p class="note">Avec la probabilité constante, la règle du projet reste neutre ${V3_INFO.neutreConstante} mois sur ${V3_INFO.mois} : sa marge de 0,5 % par mois dépasse le gain espéré appris sur le passé. Couvrir le yen à moitié ramène la perte maximale de ${pct(V3_INFO.ref.perte_maximale, 1, true)} à ${pct(V3_INFO.moitie.perte_maximale, 1, true)}, sans gain net de Sharpe. Assemblage final : ${a.probabilite === "constante" && !a.dosage_par_la_volatilite && !a.regle_de_decision ? "la référence, probabilité constante et achat couvert" : esc(JSON.stringify(a))} ; pour ${moisLong(mp.mois_prevu)}, il ${mp.assemblage.sens === "acheter" ? "achète" : mp.assemblage.sens}, couvert à ${pct(mp.assemblage.part_couverte, 0)}.</p>`;
+}
+
 // ---------- assemblage ----------
 const tuiles = (chiffres) => `<dl class="tuiles">${chiffres.map(([v, l]) => `<div><dt>${v}</dt><dd>${l}</dd></div>`).join("")}</dl>`;
 const figure = (titre, sous, id) => `<figure class="figure" id="${id}"><h3>${titre}</h3>${sous ? `<p class="sous">${sous}</p>` : ""}</figure>`;
@@ -617,7 +702,7 @@ const FIG_MATHS = {
 };
 const FIG_ML = {
   "fig-nikkei": figNikkei, "fig-rendements": figRendements, "fig-essais": figEssais, "fig-regle": figRegle, "fig-euros": (b) => figEuros(b),
-  "fig-volatilite": figVolatilite, "fig-contributions": figContributions,
+  "fig-volatilite": figVolatilite, "fig-contributions": figContributions, "fig-explorateur": figExplorateur,
   "fig-euros-v2": (b) => figEuros(b, D.v2.evaluation_test.historique_test),
 };
 
@@ -663,7 +748,7 @@ function corps(s) {
     if (cb.tankan) part.push(`<figure class="figure"><h3>Bloomberg en référence</h3><p class="sous">Les séries exportées de Bloomberg servent à contrôler la table, une fois chacune remise à sa date de publication.</p>
       <div class="tableau-defile"><table><thead><tr><th>Série</th><th>Contrôle</th><th>Décision</th></tr></thead><tbody>
       <tr><td>Tankan des grandes industries</td><td>${cb.tankan.valeurs_identiques} trimestres identiques sur ${cb.tankan.trimestres_compares}, une fois décalés au mois de publication ; à sa date Bloomberg, ${cb.tankan.erreur_si_date_bloomberg_prise_telle_quelle}</td><td>gardé, avec son décalage</td></tr>
-      <tr><td>Inflation (IPC, sur un an)</td><td>corrélation ${dec(cb.ipc.correlations.decalage_1, 2)} avec la mesure de la table, décalée d'un mois ; ce n'est pas la même mesure</td><td>en référence ; pas une variable du modèle</td></tr>
+      <tr><td>Inflation (IPC, sur un an)</td><td>même série une fois décalée d'un mois, sa publication : corrélation ${dec(cb.ipc.correlations.decalage_1, 3)}, écart moyen ${dec(cb.ipc.ecart_moyen_points ?? 0, 2)} point, au plus ${dec(cb.ipc.ecart_max_points ?? 0, 2)} (la table la recalcule à partir de l'indice)</td><td>en référence ; pas une variable du modèle</td></tr>
       <tr><td>VIX</td><td>exporté « en euros » : ${dec(cb.vix.ratio_median_bloomberg_sur_vix, 2)} fois le VIX en médiane, de ${dec(cb.vix.ratio_min, 2)} à ${dec(cb.vix.ratio_max, 2)}</td><td>non utilisé : à réexporter sans conversion</td></tr>
       <tr><td>Calendrier des publications</td><td>${nombre(cb.calendrier.lignes)} lignes, ${cb.calendrier.couvre}</td><td>tronqué à 5 000 lignes : à réexporter par périodes</td></tr>
       </tbody></table></div></figure>`);
@@ -681,13 +766,14 @@ function corps(s) {
     const sig = D.signal;
     part.push(`<figure class="figure"><h3>Et pour ${moisLong(moisSuivant(sig.mois_des_donnees))} ?</h3><p class="sous">Avec les données de fin ${moisLong(sig.mois_des_donnees)}, le modèle annonce ${pct(sig.p_hausse, 1)} de chances de hausse : sa règle vendrait. Comme il n'a pas battu la constante, la recommandation du projet reste : ${sig.recommandation_finale.split("(")[0].trim()}.</p></figure>`);
   }
-  if (s.id === "explication") part.push(figure("Ce qui pèse dans la dernière prédiction", "Chaque barre est la contribution d'une variable au log-odds de la baisse. Les plus longues font la prédiction ; leur signe dit dans quel sens elles poussent.", "fig-contributions"));
+  if (s.id === "explication") part.push(figure("Comprendre chaque décision du test", "Choisissez un mois : la probabilité annoncée, l'action de la règle, ce qui s'est passé, et les variables qui ont fait la prédiction. La seconde version, réentraînée après coup sur 1999-2026, s'explique avec les valeurs SHAP de son LightGBM.", "fig-explorateur"));
   if (s.id === "apres") {
     part.push(`<p><span class="apres-coup">Exploration après coup</span></p>`);
     if (V2_INFO) {
       part.push(`<figure class="figure"><h3>La même méthode, sur 1999-2026</h3><p class="sous">Mêmes variables, même pipeline, même règle de choix du modèle et même découpage final ; seule l'histoire d'entraînement s'allonge, avec Bloomberg en référence.</p>${tableVersions()}</figure>`);
       part.push(figure("La seconde version, en euros", `Gain cumulé de janvier 2024 à septembre 2026 avec la règle de la seconde version (${V2_INFO.modele}).`, "fig-euros-v2"));
     }
+    if (V3_INFO) part.push(`<figure class="figure"><h3>Améliorer sans surapprendre : ${V3_INFO.retenus} levier${V3_INFO.retenus > 1 ? "s" : ""} retenu${V3_INFO.retenus > 1 ? "s" : ""} sur ${V3_INFO.tests}</h3>${tableAmeliorations()}</figure>`);
     part.push(figure("L'agitation se lit un peu à l'avance", "Volatilité annualisée du Nikkei, réalisée chaque mois et prévue à la fin du mois précédent par une régression sur les volatilités passées, le VIX et le rendement.", "fig-volatilite"));
     part.push(`<figure class="figure"><h3>Acheter quand le risque est bas, depuis 2003</h3><p class="sous">Le signal réduit la position quand le risque prévu monte. Il protège en 2008, mais vend après les chutes brutales de 2020 et d'août 2024 et rate le rebond.</p>${tableSignalRisque()}</figure>`);
   }
@@ -732,7 +818,7 @@ function page() {
         <div class="chapitre-corps"><ol>${LIMITES.map(([t, d]) => `<li><div><b>${t}</b><span>${d}</span></div></li>`).join("")}</ol></div>
       </div>
     </section>
-    <footer class="pied large"><span>${ENTREE.ecole}</span><span>Données : FRED, Banque du Japon, ministère des Finances japonais, BCE, Yahoo Finance, GDELT. <a href="${avecCours("cabinet.html")}">Notebooks</a> · <a href="docs/rapport.pdf">Rapport</a> · <a href="docs/annexe_maths.pdf">Annexe</a></span></footer>`;
+    <footer class="pied large"><span>${ENTREE.ecole}</span><span>Données : FRED, Banque du Japon, ministère des Finances japonais, BCE, Yahoo Finance, GDELT. <a href="${avecCours("cabinet.html")}">Notebooks</a> · ${(D.telechargements?.archives ?? []).map((a) => `<a href="${a.href}" download="${a.fichier}">${a.titre.toLowerCase().replace(/^./, (c) => c.toUpperCase())} (.zip)</a>`).join(" · ")} · <a href="docs/rapport.pdf">Rapport</a> · <a href="docs/annexe_maths.pdf">Annexe</a></span></footer>`;
 
   for (const [id, f] of Object.entries(FIG_ML)) { const e = document.getElementById(id); if (e) f(e); }
   for (const [, , id, f] of Object.values(FIG_MATHS)) { const e = document.getElementById(id); if (e) f(e); }

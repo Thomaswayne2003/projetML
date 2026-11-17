@@ -9,6 +9,22 @@ export function lire(cle) { try { return localStorage.getItem(cle); } catch (e) 
 
 const DOCS = { rapport: ["Le rapport Applied ML", "docs/rapport.pdf"], annexe: ["L'annexe de mathématiques", "docs/annexe_maths.pdf"] };
 export const titreNotebook = (nom) => D.notebooks.find((n) => n.nom === nom)?.titre ?? nom;
+export const BAS = '<svg class="bas" viewBox="0 0 10 12" aria-hidden="true"><path d="M5 0v10M1 6l4 4 4-4M0 11.5h10" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
+// Ce qui se télécharge : chaque notebook en .ipynb (ou son dossier en .zip), et deux archives (site/data/donnees.js)
+const TL = D.telechargements ?? { notebooks: {}, archives: [] };
+export const telechargement = (nom) => TL.notebooks[nom] ?? { href: `nb/${nom}.ipynb`, fichier: `${nom}.ipynb`, dossier: false };
+export const etiquetteNb = (nom) => (telechargement(nom).dossier ? "dossier .zip" : ".ipynb");
+export const lienIpynb = (nom, classe = "telecharger") => {
+  const t = telechargement(nom);
+  const aide = t.dossier ? `Télécharger ${nomNotebook(nom)} avec tout son dossier (${t.fichiers} fichiers : notebook, scripts, figures)` : `Télécharger ${nomNotebook(nom)} (.ipynb, à ouvrir dans Jupyter)`;
+  return `<a class="${classe}" href="${t.href}" download="${t.fichier}" title="${aide}">${etiquetteNb(nom)} ${BAS}</a>`;
+};
+const mo = (o) => `${(o / 1e6).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo`;
+export const archives = () => TL.archives;
+export const lienArchive = (cle, classe = "telecharger") => {
+  const a = TL.archives.find((x) => x.cle === cle);
+  return a ? `<a class="${classe}" href="${a.href}" download="${a.fichier}" title="${a.fichiers} fichiers, ${mo(a.octets)}">${a.titre} (.zip, ${mo(a.octets)}) ${BAS}</a>` : "";
+};
 
 // Le choix du cours (Applied ML ou Maths) et le mode (visite ou lecture) restent d'une page à l'autre.
 export function installerEntete(page) {
@@ -92,10 +108,29 @@ export function installerMenu({ page, allerSalle = null, salleActive = () => nul
 
 // Les notebooks et documents d'une salle, en boutons ; data-nb ouvre la liseuse sans quitter la page
 export function liensPieces(salle) {
-  const nbs = salle.notebooks.map((n) => `<li><button type="button" class="piece-lien" data-nb="${n}"><span class="sur-titre">${nomNotebook(n)}</span><span class="t">${titreNotebook(n)}</span>${FLECHE}</button></li>`);
+  const nbs = salle.notebooks.map((n) => `<li class="piece-nb"><button type="button" class="piece-lien" data-nb="${n}"><span class="sur-titre">${nomNotebook(n)}</span><span class="t">${titreNotebook(n)}</span>${FLECHE}</button>${lienIpynb(n, "piece-telecharger")}</li>`);
   const docs = salle.docs.map((d) => `<li><a class="piece-lien" href="${DOCS[d][1]}" target="_blank" rel="noopener"><span class="sur-titre">PDF</span><span class="t">${DOCS[d][0]}</span>${FLECHE}</a></li>`);
   if (!nbs.length && !docs.length) return "";
   return `<ul class="pieces-salle">${nbs.join("")}${docs.join("")}</ul>`;
+}
+
+// Ouvre un notebook dans un cadre et cache le voile « Ouverture… » dès que la page est lisible, sans attendre ses scripts
+// externes (MathJax) : hors ligne, l'événement load peut tarder longtemps.
+export function ouvrirDansCadre(cadre, url, cacher) {
+  const jeton = (cadre.dataset.jeton = String(Date.now() + Math.random()));
+  if (cadre.getAttribute("src") === url) { cacher(); return; }
+  cadre.src = url;
+  const debut = Date.now();
+  const verifier = () => {
+    if (cadre.dataset.jeton !== jeton) return;
+    let pret = false;
+    try {
+      const d = cadre.contentDocument;
+      pret = !!d && d.URL.endsWith(url) && d.readyState !== "loading" && !!d.body && d.body.childElementCount > 0;
+    } catch (e) { /* ouvert depuis le disque : on attend l'événement load */ }
+    if (pret || Date.now() - debut > 10000) cacher(); else setTimeout(verifier, 120);
+  };
+  setTimeout(verifier, 60);
 }
 
 // Une liseuse plein écran pour lire un notebook sans perdre sa place (salle de la visite, chapitre de la lecture)
@@ -106,7 +141,7 @@ export function installerLiseuse() {
   l.setAttribute("role", "dialog");
   l.setAttribute("aria-modal", "true");
   l.setAttribute("aria-label", "Notebook");
-  l.innerHTML = `<div class="liseuse-barre"><p class="liseuse-titre"></p><a class="liseuse-cabinet" href="#">Ouvrir dans le cabinet ${FLECHE}</a><button type="button" class="liseuse-fermer">Fermer</button></div>
+  l.innerHTML = `<div class="liseuse-barre"><p class="liseuse-titre"></p><a class="liseuse-telecharger" href="#" download>.ipynb ${BAS}</a><a class="liseuse-cabinet" href="#">Ouvrir dans le cabinet ${FLECHE}</a><button type="button" class="liseuse-fermer">Fermer</button></div>
     <div class="liseuse-cadre"><p class="liseuse-charge">Ouverture du notebook…</p><iframe title="Notebook"></iframe></div>`;
   document.body.appendChild(l);
   const cadre = l.querySelector("iframe"), charge = l.querySelector(".liseuse-charge");
@@ -123,8 +158,11 @@ export function installerLiseuse() {
     const nom = b.dataset.nb;
     l.querySelector(".liseuse-titre").innerHTML = `<span class="sur-titre">${nomNotebook(nom)}</span> ${titreNotebook(nom)}`;
     l.querySelector(".liseuse-cabinet").href = avecCours(`cabinet.html?nb=${nom}`);
+    const dl = l.querySelector(".liseuse-telecharger"), t = telechargement(nom);
+    dl.href = t.href; dl.download = t.fichier; dl.title = `Télécharger ${nomNotebook(nom)}`;
+    dl.innerHTML = `${etiquetteNb(nom)} ${BAS}`;
     charge.style.opacity = 1;
-    if (!cadre.src.endsWith(`nb/${nom}.html`)) cadre.src = `nb/${nom}.html`; else charge.style.opacity = 0;
+    ouvrirDansCadre(cadre, `nb/${nom}.html`, () => (charge.style.opacity = 0));
     l.hidden = false;
     document.body.classList.add("liseuse-ouverte");
     l.querySelector(".liseuse-fermer").focus();

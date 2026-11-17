@@ -1,8 +1,8 @@
 """Prépare le site « Visite et Lecture » (dossier site/) : données, figures, notebooks et PDF.
 
 Le site est statique : il ne demande ni PHP ni API vivante. Ce script interroge l'API en mémoire (sans serveur),
-écrit toutes les réponses dans site/data/donnees.js, puis copie à côté les figures, les notebooks convertis en HTML
-et les deux PDF. À relancer après tout changement des résultats ou des notebooks :
+écrit toutes les réponses dans site/data/donnees.js, puis copie à côté les figures, les notebooks (en HTML pour les lire,
+en .ipynb et en .zip pour les télécharger) et les deux PDF. À relancer après tout changement des résultats ou des notebooks :
 
     python -m app.export_site
 
@@ -11,7 +11,9 @@ Puis, pour regarder le site : python -m http.server 8095 --directory site  (adre
 import json
 import re
 import shutil
+import subprocess
 import warnings
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,7 +44,36 @@ NOTEBOOKS = [
     ("03b_test_final", "Évaluation unique sur le test 2024-2026"),
     ("04_explicabilite_diagnostics", "Tranches, permutation, SHAP, dépendances partielles"),
     ("05_annexe_maths_logistique", "Annexe de Maths : la régression logistique à la main"),
+    ("06_annexe_news_prix", "Annexe : signal news × signal prix, temps de réalisation, backtests, HMM"),
+    ("07_seconde_version_bloomberg", "Seconde version : 1999-2026, Bloomberg, résultats et explicabilité"),
+    ("08_ameliorations_sans_surapprentissage", "Améliorations sans surapprentissage : protocole figé, jugé sur 2010-2023"),
 ]
+# Un notebook rangé dans son propre dossier (avec ses scripts et ses figures) se télécharge avec tout son dossier.
+DOSSIERS_NB = {"06_annexe_news_prix": "notebooks/06_annexe_news_prix"}
+ARCHIVE_NOTEBOOKS = "notebooks_nikkei_225.zip"   # le dossier notebooks/ au complet
+ARCHIVE_PROJET = "projet_nikkei_225.zip"         # tout ce qu'il faut pour refaire tourner le projet
+# hors de l'archive du projet : le site lui-même, l'ancien site, les données brutes (lourdes, ou sous licence comme Bloomberg)
+HORS_PROJET = ("site/", "site_statique/", "web/", "data/1_brutes/", "data/archives/", ".claude/", "lancer.php", "Ouvrir le site.html",
+               "Lancer le projet.command")
+DATE_FIXE = (2026, 1, 1, 0, 0, 0)               # archives identiques d'un export à l'autre si rien n'a changé
+WIDGET = "application/vnd.jupyter.widget-view+json"
+NOTE_WIDGET = ('<div style="padding:12px 14px;border:1px solid #d9d2c5;border-radius:4px;background:#f7f3ec;color:#1f1d1a;'
+               'font:14px/1.5 system-ui,sans-serif"><b>Tableau de bord interactif (ipywidgets).</b> Ses curseurs ont besoin de Python : '
+               'ils ne fonctionnent pas dans cette page. Téléchargez le dossier du notebook depuis le site, puis ouvrez-le dans Jupyter.</div>')
+
+LISEZMOI_PROJET = """# Projet Nikkei 225 : version finale
+
+Cette archive contient tout le projet, sauf le site de présentation et les données brutes :
+- `notebooks/` : tous les notebooks, exécutés (le 06 avec ses scripts, ses figures et son README) ;
+- `src/`, `app/`, `tests/` : le code, l'API et les tests ;
+- `data/2_construites/`, `data/3_modele/` : les tables mensuelles et les tables de modélisation ;
+- `runs/` : journaux des essais, modèles, décisions figées, évaluations et résultats des trois étapes ;
+- `figures/`, `report/` : les figures et le rapport.
+
+Les données brutes (`data/1_brutes/`) ne sont pas incluses : elles se retéléchargent avec les notebooks 00a et 00b, et les
+exports Bloomberg ne peuvent pas être redistribués. Les notebooks se lisent tels quels, sorties comprises ; pour les
+réexécuter, voir le README.md (installation, puis python -m pytest -q).
+"""
 
 
 def donnees_api() -> dict:
@@ -57,6 +88,12 @@ def donnees_api() -> dict:
         reponse = client.get(route)
         reponse.raise_for_status()
         sortie[cle] = reponse.json()
+    # l'explication de chaque décision du test, mois par mois (première version : contributions de la logistique)
+    sortie["explications_test"] = {}
+    for mois in [m["date"] for m in sortie["historique_test"]] + [sortie["signal"]["mois_des_donnees"]]:
+        reponse = client.get(f"/explication?mois={mois}")
+        if reponse.status_code == 200:
+            sortie["explications_test"][mois] = reponse.json()
     return sortie
 
 
@@ -139,7 +176,7 @@ def version_2() -> dict:
 
     dossier = ROOT / "runs" / "v2_bloomberg"
     sortie = {}
-    for nom in ["evaluation_test", "decision_finale", "controle_bloomberg"]:
+    for nom in ["evaluation_test", "decision_finale", "controle_bloomberg", "shap_test"]:
         f = dossier / f"{nom}.json"
         if f.exists():
             sortie[nom] = json.loads(f.read_text())
@@ -154,6 +191,30 @@ def version_2() -> dict:
         j = j[j["cible"] == "nikkei"]
         sortie["essais"] = [{"modele": m, "essai": int(e), "logloss": float(l), "retenu": bool(r)}
                             for m, e, l, r in zip(j["modele"], j["essai"], j["cv_logloss"], j["retenu"])]
+    return sortie
+
+
+def version_3() -> dict:
+    """Résultats de src.ameliorations (protocole figé avant le calcul), s'ils existent."""
+    dossier = ROOT / "runs" / "v3_ameliorations"
+    if not (dossier / "resultats.json").exists():
+        return {}
+    r = json.loads((dossier / "resultats.json").read_text())
+    fige = json.loads((dossier / "protocole.json").read_text())
+    garder = ["protocole", "premiere_prevision", "mois_par_periode", "tests_probabilites", "tests_euros", "retenus",
+              "assemblage_final", "mois_prochain"]
+    sortie = {k: r[k] for k in garder}
+    sortie["probabilites"] = {per: {v: {k: b[k] for k in ["log_loss", "ecart_vs_constante", "erreur_type", "auc"]} for v, b in d.items()}
+                              for per, d in r["probabilites"].items()}
+    sortie["euros"] = {per: {s: {k: b[k] for k in ["sharpe", "cumul", "volatilite", "perte_maximale"]} for s, b in d.items()}
+                       for per, d in r["euros"].items()}
+    import pandas as pd
+
+    p = pd.read_csv(dossier / "probabilites.csv", parse_dates=["date"]).set_index("date").loc["2010":"2023"]
+    sortie["actions_2010_2023"] = {c.split(" · ", 1)[1]: {k: int(v) for k, v in p[c].value_counts().items()}
+                                   for c in p.columns if c.startswith("action · ")}
+    sortie["descriptions"] = fige["protocole"]["probabilites"] | {k: v for k, v in fige["protocole"]["leviers_euros"].items()
+                                                                  if not k.startswith("règle")}
     return sortie
 
 
@@ -201,6 +262,57 @@ def images_integrees() -> None:
     print(f"site/data/images.js : {len(images)} images")
 
 
+def ipynb(nom: str) -> Path:
+    dossier = DOSSIERS_NB.get(nom)
+    return ROOT / (dossier or "notebooks") / f"{nom}.ipynb"
+
+
+def fichiers_du_depot(prefixe: str = "") -> list[str]:
+    """Fichiers suivis par Git, ou nouveaux et non ignorés (le .gitignore écarte caches et données lourdes)."""
+    sortie = subprocess.run(["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", prefixe or "."],
+                            cwd=ROOT, capture_output=True, check=True)
+    noms = {n for n in sortie.stdout.decode().split("\0") if n}
+    return sorted(n for n in noms if (ROOT / n).is_file() and not n.endswith(".DS_Store"))
+
+
+def ecrire_zip(cible: Path, fichiers: list[tuple[str, Path | str]]) -> int:
+    """Archive déterministe : (nom dans l'archive, fichier ou texte), dates fixées, ordre trié."""
+    cible.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(cible, "w", zipfile.ZIP_DEFLATED) as z:
+        for nom, contenu in sorted(fichiers, key=lambda f: f[0]):
+            info = zipfile.ZipInfo(nom, date_time=DATE_FIXE)
+            info.compress_type, info.external_attr = zipfile.ZIP_DEFLATED, 0o644 << 16
+            z.writestr(info, contenu.read_bytes() if isinstance(contenu, Path) else contenu.encode("utf-8"))
+    return len(fichiers)
+
+
+# avertissements de bibliothèques sans rapport avec les résultats (tqdm, torch, barres de chargement)
+BRUIT = re.compile(r"TqdmWarning|IProgress not found|autonotebook import tqdm|Redirects are currently not supported|it/s\]|^\s*$")
+
+
+def pour_affichage(nb) -> None:
+    """Version HTML seulement (le .ipynb reste intact) : un tableau de bord ipywidgets, qui ne tourne pas dans une page
+    statique, est remplacé par une note ; les avertissements techniques des bibliothèques sont retirés."""
+    import nbformat
+
+    for cellule in nb.cells:
+        if "outputs" not in cellule:
+            continue
+        sorties, note = [], False
+        for o in cellule.outputs:
+            if o.get("output_type") == "stream" and o.get("name") == "stderr" and all(BRUIT.search(l) for l in o.get("text", "").splitlines() or [""]):
+                continue
+            if WIDGET in o.get("data", {}):
+                if not note:
+                    sorties.append(nbformat.v4.new_output("display_data", data={"text/html": NOTE_WIDGET,
+                                                                                "text/plain": "Tableau de bord interactif (Jupyter)"}))
+                    note = True
+                continue
+            sorties.append(o)
+        cellule.outputs = sorties
+    nb.metadata.pop("widgets", None)
+
+
 def notebook_html(nom: str) -> Path:
     """La page HTML d'un notebook : celle de web/nb, ou une conversion faite ici si elle manque."""
     source = ROOT / "web" / "nb" / f"{nom}.html"
@@ -211,11 +323,23 @@ def notebook_html(nom: str) -> Path:
 
     exporteur = HTMLExporter(template_name="lab")
     exporteur.embed_images = True
-    html, _ = exporteur.from_notebook_node(nbformat.read(ROOT / "notebooks" / f"{nom}.ipynb", as_version=4))
+    nb = nbformat.read(ipynb(nom), as_version=4)
+    pour_affichage(nb)
+    titre = dict(NOTEBOOKS)[nom]
+    html, _ = exporteur.from_notebook_node(nb, resources={"metadata": {"name": f"Notebook {nom.split('_')[0]} · {titre}"}})
     cible = SITE / "nb" / f"{nom}.html"
     cible.parent.mkdir(parents=True, exist_ok=True)
     cible.write_text(html, encoding="utf-8")
     return cible
+
+
+def alleger(page: Path) -> None:
+    """Les pages de notebooks ne doivent pas attendre un CDN pour s'afficher : require.js (inutile ici, aucun widget ni
+    sortie JavaScript) est retiré, et MathJax (les formules) se charge en différé, après le texte."""
+    html = page.read_text(encoding="utf-8")
+    html = re.sub(r'<script[^>]*src="[^"]*require(?:\.min)?\.js"[^>]*>\s*</script>\s*', "", html)
+    html = re.sub(r'<script(?![^>]*\bdefer\b)([^>]*src="[^"]*mathjax[^"]*")', r'<script defer\1', html)
+    page.write_text(html, encoding="utf-8")
 
 
 def copier(source: Path, destination: Path) -> int:
@@ -224,12 +348,39 @@ def copier(source: Path, destination: Path) -> int:
     return destination.stat().st_size
 
 
+def telechargements() -> dict:
+    """Les .ipynb, le dossier du 06, et les deux archives : écrits dans site/nb, décrits pour le site."""
+    nb = SITE / "nb"
+    sortie = {"notebooks": {}, "archives": []}
+    for nom, _ in NOTEBOOKS:
+        if nom in DOSSIERS_NB:
+            dossier = DOSSIERS_NB[nom]
+            n = ecrire_zip(nb / f"{nom}.zip", [(f[len("notebooks/"):], ROOT / f) for f in fichiers_du_depot(dossier + "/")])
+            (nb / f"{nom}.ipynb").unlink(missing_ok=True)
+            sortie["notebooks"][nom] = {"href": f"nb/{nom}.zip", "fichier": f"{nom}.zip", "dossier": True, "fichiers": n}
+        else:
+            copier(ipynb(nom), nb / f"{nom}.ipynb")
+            sortie["notebooks"][nom] = {"href": f"nb/{nom}.ipynb", "fichier": f"{nom}.ipynb", "dossier": False, "fichiers": 1}
+    tous = fichiers_du_depot("notebooks/")
+    projet = [f for f in fichiers_du_depot() if not f.startswith(HORS_PROJET)]
+    for cle, nom, titre, fichiers in [
+            ("notebooks", ARCHIVE_NOTEBOOKS, "Tous les notebooks", [(f, ROOT / f) for f in tous]),
+            ("projet", ARCHIVE_PROJET, "Le projet complet", [(f"projet_nikkei_225/{f}", ROOT / f) for f in projet]
+             + [("projet_nikkei_225/LISEZMOI.md", LISEZMOI_PROJET)])]:
+        n = ecrire_zip(nb / nom, fichiers)
+        sortie["archives"].append({"cle": cle, "href": f"nb/{nom}", "fichier": nom, "titre": titre, "fichiers": n,
+                                   "octets": (nb / nom).stat().st_size})
+    return sortie
+
+
 def main() -> None:
     donnees = donnees_api()
     donnees["notebooks"] = [{"nom": nom, "titre": titre} for nom, titre in NOTEBOOKS]
     donnees["figures"] = sorted(p.name for p in (ROOT / "figures").glob("*.png"))
     donnees["modele"] = modele_final()
     donnees["v2"] = version_2()
+    donnees["v3"] = version_3()
+    donnees["telechargements"] = telechargements()
     donnees["dataset"] = dataset()
 
     (SITE / "data").mkdir(parents=True, exist_ok=True)
@@ -248,8 +399,12 @@ def main() -> None:
     for nom, _ in NOTEBOOKS:
         source = notebook_html(nom)
         cible = SITE / "nb" / f"{nom}.html"
-        total += copier(source, cible) if source != cible else cible.stat().st_size
-    print(f"site/nb : {len(NOTEBOOKS)} notebooks, {total / 1e6:.1f} Mo")
+        if source != cible:
+            copier(source, cible)
+        alleger(cible)
+        total += cible.stat().st_size
+    print(f"site/nb : {len(NOTEBOOKS)} notebooks en HTML ({total / 1e6:.1f} Mo), à télécharger en .ipynb ou en dossier ; "
+          + " ; ".join(f"{a['fichier']} {a['fichiers']} fichiers, {a['octets'] / 1e6:.1f} Mo" for a in donnees["telechargements"]["archives"]))
 
     for pdf in ("rapport.pdf", "annexe_maths.pdf"):
         copier(ROOT / "report" / pdf, SITE / "docs" / pdf)
