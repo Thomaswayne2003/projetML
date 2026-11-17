@@ -56,13 +56,16 @@ def controle_bloomberg() -> dict:
         "erreur_si_date_bloomberg_prise_telle_quelle": f"{int((naif[communs_naif] != table[communs_naif]).sum())} trimestres "
                                                        "auraient utilisé l'enquête avant sa publication"}
 
-    # IPC : publié le mois suivant ; la table mensuelle utilise une autre mesure (indice recalculé)
+    # IPC : publié le mois suivant ; la table le recalcule à partir de l'indice, avec un mois de décalage
     ipc = _serie_bloomberg("Monthly_JNCPIYOY_INDEX_HP.xlsx")
     ipc_m = pd.Series(ipc.to_numpy(), index=ipc.index.to_period("M"))
     table_ipc = pd.Series(mensuel["cpi_all_yoy"].to_numpy(), index=mois).dropna()
     corr = {f"decalage_{k}": float(ipc_m.shift(k, freq="M").reindex(table_ipc.index).corr(table_ipc)) for k in range(3)}
-    rapport["ipc"] = {"mois_compares": int(ipc_m.index.intersection(table_ipc.index).size), "correlations": corr,
-                      "lecture": "même tendance, mais ce n'est pas la même mesure que l'IPC officiel ; l'IPC n'est pas une variable du modèle"}
+    ecart = (ipc_m.shift(1, freq="M").reindex(table_ipc.index) - table_ipc).abs().dropna()
+    rapport["ipc"] = {"mois_compares": int(len(ecart)), "correlations": corr,
+                      "ecart_moyen_points": float(ecart.mean()), "ecart_max_points": float(ecart.max()),
+                      "lecture": "même série que Bloomberg une fois décalée d'un mois (sa publication), recalculée à partir de l'indice ; "
+                                 "l'IPC n'est pas une variable du modèle"}
 
     # VIX : l'export Bloomberg a été converti en euros, ce qui n'a pas de sens pour un indice de volatilité
     vix = _serie_bloomberg("Monthly_VIX_HP.xlsx")

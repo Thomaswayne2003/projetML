@@ -1,0 +1,2284 @@
+{
+ "modele": "LightGBM",
+ "unite": "log-odds brut de la baisse",
+ "mois": {
+  "2024-01": {
+   "p_hausse": 0.506,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0033,
+     "contribution": 0.4833
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1759,
+     "contribution": -0.2143
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.092,
+     "contribution": 0.0857
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.2468,
+     "contribution": 0.0682
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.454,
+     "contribution": -0.0594
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1563,
+     "contribution": -0.047
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 12.0,
+     "contribution": -0.0368
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 3.6064,
+     "contribution": 0.0056
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 9.8,
+     "contribution": -0.0009
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.3279,
+     "contribution": -0.0004
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": 0.0035,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-02": {
+   "p_hausse": 0.4424,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0033,
+     "contribution": 0.3541
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.1327,
+     "contribution": 0.2856
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.427,
+     "contribution": 0.2256
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1696,
+     "contribution": -0.1606
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1595,
+     "contribution": -0.0916
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.1601,
+     "contribution": -0.0549
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0566,
+     "contribution": -0.0547
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 12.0,
+     "contribution": -0.0141
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 3.4905,
+     "contribution": 0.0059
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -0.5,
+     "contribution": 0.0022
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": 0.0919,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-03": {
+   "p_hausse": 0.372,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.5202,
+     "contribution": 0.4022
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0032,
+     "contribution": 0.2366
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.5324,
+     "contribution": 0.1833
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.2063,
+     "contribution": -0.1803
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.4396,
+     "contribution": 0.1504
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1755,
+     "contribution": -0.1152
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.079,
+     "contribution": 0.078
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 12.0,
+     "contribution": -0.0214
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.9036,
+     "contribution": 0.0059
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 2.1,
+     "contribution": 0.0021
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1398,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-04": {
+   "p_hausse": 0.4141,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0032,
+     "contribution": 0.4334
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0816,
+     "contribution": 0.1582
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 11.0,
+     "contribution": -0.104
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2118,
+     "contribution": 0.0879
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.3911,
+     "contribution": 0.0473
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.0585,
+     "contribution": -0.011
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.3309,
+     "contribution": -0.0099
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.2032,
+     "contribution": -0.0044
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 19.5,
+     "contribution": -0.0018
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0584,
+     "contribution": -0.0017
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1683,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-05": {
+   "p_hausse": 0.3167,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0032,
+     "contribution": 0.5533
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.5413,
+     "contribution": 0.3496
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1641,
+     "contribution": -0.119
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.094,
+     "contribution": 0.0884
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0173,
+     "contribution": 0.0595
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.2461,
+     "contribution": 0.0294
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 11.0,
+     "contribution": -0.0198
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.5912,
+     "contribution": 0.0177
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.0376,
+     "contribution": -0.0119
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 14.1,
+     "contribution": -0.0004
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0508,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-06": {
+   "p_hausse": 0.3927,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.003,
+     "contribution": 0.5533
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.763,
+     "contribution": 0.32
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1383,
+     "contribution": -0.1319
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.0312,
+     "contribution": -0.1008
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0556,
+     "contribution": -0.0599
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0195,
+     "contribution": 0.0514
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.1927,
+     "contribution": 0.0294
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 3.153,
+     "contribution": 0.0186
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 11.0,
+     "contribution": -0.0141
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 2.6,
+     "contribution": 0.0022
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.2093,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-07": {
+   "p_hausse": 0.3142,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.003,
+     "contribution": 0.591
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.7243,
+     "contribution": 0.4016
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2115,
+     "contribution": 0.1246
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -8.0,
+     "contribution": -0.0373
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.1012,
+     "contribution": -0.0362
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.0359
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0181,
+     "contribution": -0.0178
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.034,
+     "contribution": -0.0134
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.9191,
+     "contribution": -0.0104
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.1788,
+     "contribution": -0.0099
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0411,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-08": {
+   "p_hausse": 0.546,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0029,
+     "contribution": 0.2512
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.2614,
+     "contribution": 0.2449
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.8671,
+     "contribution": -0.1921
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.0973
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -9.5,
+     "contribution": -0.0462
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.113,
+     "contribution": -0.0288
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.4439,
+     "contribution": 0.0204
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0042,
+     "contribution": 0.0138
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.3768,
+     "contribution": -0.011
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.1848,
+     "contribution": -0.005
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1113,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-09": {
+   "p_hausse": 0.6866,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.2753,
+     "contribution": -0.1575
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.4599,
+     "contribution": -0.1079
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.1037
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.3831,
+     "contribution": 0.0558
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.042,
+     "contribution": 0.0395
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0027,
+     "contribution": -0.0373
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.1903,
+     "contribution": -0.0269
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.113,
+     "contribution": -0.0237
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -6.8,
+     "contribution": 0.0199
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.8558,
+     "contribution": -0.0091
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1569,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-10": {
+   "p_hausse": 0.5248,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.7673,
+     "contribution": 0.1979
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2431,
+     "contribution": 0.1419
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0005,
+     "contribution": 0.1014
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0024,
+     "contribution": -0.101
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.1033,
+     "contribution": -0.0362
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.2665,
+     "contribution": -0.0269
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.0222
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.0902,
+     "contribution": -0.0219
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.0442,
+     "contribution": -0.0125
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 11.2,
+     "contribution": 0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1896,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-11": {
+   "p_hausse": 0.4861,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0804,
+     "contribution": 0.1741
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.9153,
+     "contribution": 0.1688
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1845,
+     "contribution": 0.1669
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0114,
+     "contribution": 0.1215
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.1161,
+     "contribution": -0.1172
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0024,
+     "contribution": -0.101
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.141,
+     "contribution": -0.0329
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.0241
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.3486,
+     "contribution": -0.0063
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 10.4,
+     "contribution": 0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0969,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2024-12": {
+   "p_hausse": 0.6296,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0022,
+     "contribution": -0.1017
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1548,
+     "contribution": -0.0981
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.5063,
+     "contribution": 0.0931
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.0182,
+     "contribution": -0.0296
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.1058,
+     "contribution": -0.0289
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.9394,
+     "contribution": 0.0193
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.015
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.1922,
+     "contribution": 0.0124
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0521,
+     "contribution": 0.0099
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 5.4,
+     "contribution": -0.0002
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1304,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-01": {
+   "p_hausse": 0.4845,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.2381,
+     "contribution": 0.5203
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1535,
+     "contribution": -0.1219
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.6745,
+     "contribution": 0.0836
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.002,
+     "contribution": -0.0572
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.0906,
+     "contribution": -0.0322
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.1132,
+     "contribution": -0.0256
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 14.0,
+     "contribution": -0.015
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0126,
+     "contribution": 0.0031
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.4758,
+     "contribution": 0.0013
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 10.2,
+     "contribution": -0.0004
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": 0.0488,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-02": {
+   "p_hausse": 0.6828,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.1432,
+     "contribution": -0.1077
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0018,
+     "contribution": -0.0808
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.6289,
+     "contribution": -0.0534
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0275,
+     "contribution": 0.0347
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1787,
+     "contribution": -0.0341
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": -0.0513,
+     "contribution": -0.033
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 14.0,
+     "contribution": -0.0305
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.108,
+     "contribution": -0.0247
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.6924,
+     "contribution": -0.0073
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 17.7,
+     "contribution": 0.0007
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.037,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-03": {
+   "p_hausse": 0.6706,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.3777,
+     "contribution": -0.1244
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.0431,
+     "contribution": -0.1058
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.1072,
+     "contribution": 0.1025
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 14.0,
+     "contribution": -0.0914
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0016,
+     "contribution": -0.0756
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.222,
+     "contribution": 0.0631
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": -0.1177,
+     "contribution": -0.0306
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.1133,
+     "contribution": -0.0237
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.3266,
+     "contribution": -0.0028
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 15.3,
+     "contribution": -0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1601,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-04": {
+   "p_hausse": 0.5502,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0791,
+     "contribution": 0.1881
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.5382,
+     "contribution": -0.1381
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0891,
+     "contribution": 0.1363
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 12.0,
+     "contribution": -0.0951
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.4056,
+     "contribution": 0.0801
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -22.2,
+     "contribution": 0.0463
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": -0.0615,
+     "contribution": -0.0306
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0014,
+     "contribution": -0.0292
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.0951,
+     "contribution": -0.0192
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.7608,
+     "contribution": -0.0028
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.2688,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-05": {
+   "p_hausse": 0.6042,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.9487,
+     "contribution": 0.1343
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0014,
+     "contribution": -0.101
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0577,
+     "contribution": -0.0969
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2511,
+     "contribution": 0.0945
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": -0.0136,
+     "contribution": -0.0329
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.1463,
+     "contribution": -0.0208
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0218,
+     "contribution": -0.0144
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.429,
+     "contribution": -0.0083
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 12.0,
+     "contribution": -0.0044
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 20.3,
+     "contribution": 0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1146,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-06": {
+   "p_hausse": 0.6769,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1367,
+     "contribution": -0.2152
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.7999,
+     "contribution": 0.1561
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0012,
+     "contribution": -0.116
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1813,
+     "contribution": 0.1094
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -7.3,
+     "contribution": -0.0846
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.3283,
+     "contribution": -0.078
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0602,
+     "contribution": -0.0446
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.0228,
+     "contribution": -0.0372
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 12.0,
+     "contribution": -0.0067
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 3.0561,
+     "contribution": 0.0034
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.12,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-07": {
+   "p_hausse": 0.6582,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.2716,
+     "contribution": 0.2653
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1394,
+     "contribution": -0.1581
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0012,
+     "contribution": -0.1097
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1742,
+     "contribution": -0.1037
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.0202,
+     "contribution": -0.0618
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.0503,
+     "contribution": -0.038
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0603,
+     "contribution": -0.0277
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.0084
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.5492,
+     "contribution": -0.0006
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 10.6,
+     "contribution": -0.0002
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0893,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-08": {
+   "p_hausse": 0.6821,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.4963,
+     "contribution": 0.1854
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1252,
+     "contribution": -0.1667
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1629,
+     "contribution": -0.1386
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0012,
+     "contribution": -0.1097
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.1053,
+     "contribution": -0.0407
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.0211,
+     "contribution": -0.0303
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0662,
+     "contribution": -0.0261
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.0084
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.9572,
+     "contribution": 0.002
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 6.3,
+     "contribution": -0.0002
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0289,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-09": {
+   "p_hausse": 0.7345,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1098,
+     "contribution": -0.2667
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1392,
+     "contribution": -0.1336
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0012,
+     "contribution": -0.1097
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.7124,
+     "contribution": 0.0666
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0386,
+     "contribution": -0.044
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.1565,
+     "contribution": -0.0356
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.1849,
+     "contribution": -0.0199
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 13.0,
+     "contribution": -0.0084
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 3.1108,
+     "contribution": 0.0059
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 2.9,
+     "contribution": -0.0002
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1171,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-10": {
+   "p_hausse": 0.7051,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.2762,
+     "contribution": -0.2838
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 14.0,
+     "contribution": -0.1115
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0784,
+     "contribution": 0.1111
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.739,
+     "contribution": -0.1101
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2528,
+     "contribution": 0.0705
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0012,
+     "contribution": -0.0527
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.3411,
+     "contribution": -0.0285
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.0756,
+     "contribution": -0.0282
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 0.3,
+     "contribution": 0.0073
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 4.3959,
+     "contribution": 0.0022
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0725,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-11": {
+   "p_hausse": 0.7389,
+   "action": "acheter",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1764,
+     "contribution": -0.173
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.405,
+     "contribution": -0.1172
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.056,
+     "contribution": -0.1064
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.0012,
+     "contribution": -0.0888
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.3177,
+     "contribution": -0.0778
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2533,
+     "contribution": 0.0427
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.3153,
+     "contribution": -0.0313
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 14.0,
+     "contribution": -0.0074
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.6113,
+     "contribution": -0.0049
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 14.7,
+     "contribution": -0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.3285,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2025-12": {
+   "p_hausse": 0.393,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.3478,
+     "contribution": 0.5731
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.5303,
+     "contribution": 0.2638
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1203,
+     "contribution": -0.1508
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1834,
+     "contribution": 0.1013
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.0596
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0541,
+     "contribution": -0.043
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.2618,
+     "contribution": -0.0097
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 14.0,
+     "contribution": -0.0044
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.4974,
+     "contribution": -0.0029
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 24.5,
+     "contribution": -0.0005
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": 0.0013,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-01": {
+   "p_hausse": 0.3288,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.3638,
+     "contribution": 0.529
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0779,
+     "contribution": 0.1733
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.6707,
+     "contribution": 0.1635
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.1925,
+     "contribution": 0.1118
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.057
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 15.0,
+     "contribution": -0.0241
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.8718,
+     "contribution": 0.0064
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.3475,
+     "contribution": -0.0042
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0174,
+     "contribution": 0.0019
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 20.0,
+     "contribution": -0.0005
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1103,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-02": {
+   "p_hausse": 0.5674,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.5839,
+     "contribution": 0.4853
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1711,
+     "contribution": -0.1943
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 15.0,
+     "contribution": -0.1102
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0855,
+     "contribution": 0.1095
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.546,
+     "contribution": -0.085
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -8.4,
+     "contribution": -0.082
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2211,
+     "contribution": 0.0678
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.2052,
+     "contribution": -0.0626
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.053
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 3.3348,
+     "contribution": 0.0022
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1727,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-03": {
+   "p_hausse": 0.5694,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.4337,
+     "contribution": 0.4345
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 3.6783,
+     "contribution": -0.1537
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0458,
+     "contribution": -0.1263
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.4693,
+     "contribution": -0.1037
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.3348,
+     "contribution": 0.0313
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.455,
+     "contribution": -0.0094
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 15.0,
+     "contribution": -0.0088
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0144,
+     "contribution": 0.0085
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.001
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 20.0,
+     "contribution": -0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.3202,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-04": {
+   "p_hausse": 0.5736,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.6447,
+     "contribution": 0.4853
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.8053,
+     "contribution": -0.1531
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1118,
+     "contribution": -0.1278
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0462,
+     "contribution": -0.1064
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.1355,
+     "contribution": -0.0623
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2937,
+     "contribution": 0.0307
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 17.0,
+     "contribution": -0.0078
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.0035
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 4.1911,
+     "contribution": 0.0022
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 10.0,
+     "contribution": -0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0858,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-05": {
+   "p_hausse": 0.5736,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.7471,
+     "contribution": 0.4853
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.1582,
+     "contribution": -0.1531
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.1271,
+     "contribution": -0.1278
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0608,
+     "contribution": -0.1064
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.0558,
+     "contribution": -0.0623
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.299,
+     "contribution": 0.0307
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 17.0,
+     "contribution": -0.0078
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.0035
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 3.6156,
+     "contribution": 0.0022
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 22.4,
+     "contribution": -0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.0023,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-06": {
+   "p_hausse": 0.5606,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.7305,
+     "contribution": 0.4853
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.3721,
+     "contribution": -0.1676
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.0914,
+     "contribution": -0.1397
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0407,
+     "contribution": -0.1047
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.3701,
+     "contribution": 0.0317
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -4.8,
+     "contribution": 0.0285
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 17.0,
+     "contribution": -0.0188
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.146,
+     "contribution": -0.0128
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.0018
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.6007,
+     "contribution": 0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.121,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-07": {
+   "p_hausse": 0.5752,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.5671,
+     "contribution": 0.4345
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 2.7882,
+     "contribution": -0.1491
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0427,
+     "contribution": -0.1046
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.3317,
+     "contribution": -0.1037
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": 0.0856,
+     "contribution": -0.0339
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.3716,
+     "contribution": 0.0278
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.7259,
+     "contribution": -0.0094
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 22.0,
+     "contribution": -0.0088
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.001
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 15.7,
+     "contribution": -0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.1673,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-08": {
+   "p_hausse": 0.2805,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.4984,
+     "contribution": 0.307
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.5523,
+     "contribution": 0.208
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.9685,
+     "contribution": 0.1879
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0839,
+     "contribution": 0.1796
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2675,
+     "contribution": 0.1572
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0003,
+     "contribution": 0.1268
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.0386
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 22.0,
+     "contribution": -0.0241
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.4464,
+     "contribution": -0.0125
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 12.9,
+     "contribution": -0.0005
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": 0.0127,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-09": {
+   "p_hausse": 0.3612,
+   "action": "vendre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.4856,
+     "contribution": 0.4345
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 0.5142,
+     "contribution": 0.277
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2196,
+     "contribution": 0.1422
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0472,
+     "contribution": 0.089
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.0638
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.1016,
+     "contribution": -0.0362
+    },
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": -0.1237,
+     "contribution": -0.0284
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 22.0,
+     "contribution": -0.0222
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 2.1911,
+     "contribution": -0.0125
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": 15.2,
+     "contribution": 0.0006
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.2381,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  },
+  "2026-10": {
+   "p_hausse": 0.4812,
+   "action": "neutre",
+   "base": -0.283,
+   "contributions": [
+    {
+     "variable": "volume anormal d'articles",
+     "valeur": 0.7018,
+     "contribution": 0.5412
+    },
+    {
+     "variable": "distance au régime calme",
+     "valeur": 1.6507,
+     "contribution": -0.1351
+    },
+    {
+     "variable": "volatilité de l'euro-yen",
+     "valeur": 0.0582,
+     "contribution": -0.1208
+    },
+    {
+     "variable": "variation du taux à 10 ans",
+     "valeur": -20.6,
+     "contribution": 0.0502
+    },
+    {
+     "variable": "momentum 3 mois",
+     "valeur": -0.0167,
+     "contribution": 0.0453
+    },
+    {
+     "variable": "volatilité lissée",
+     "valeur": 0.2671,
+     "contribution": 0.0327
+    },
+    {
+     "variable": "portage à un mois",
+     "valeur": 0.001,
+     "contribution": -0.0259
+    },
+    {
+     "variable": "momentum 12 mois",
+     "valeur": 0.2076,
+     "contribution": -0.0105
+    },
+    {
+     "variable": "distance au régime agité",
+     "valeur": 1.5444,
+     "contribution": -0.0091
+    },
+    {
+     "variable": "Tankan",
+     "valeur": 24.0,
+     "contribution": -0.001
+    },
+    {
+     "variable": "tonalité des news",
+     "valeur": -0.138,
+     "contribution": 0.0
+    },
+    {
+     "variable": "news disponibles",
+     "valeur": 1.0,
+     "contribution": 0.0
+    }
+   ]
+  }
+ }
+}
