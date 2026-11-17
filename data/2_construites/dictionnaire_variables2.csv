@@ -1,0 +1,338 @@
+fichier,colonne,frequence,decalage,cible,source,premiere_date,taux_rempli,definition
+dataset_daily2.csv,n225_open,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Nikkei 225 : open (Yahoo ^N225)
+dataset_daily2.csv,n225_high,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Nikkei 225 : high (Yahoo ^N225)
+dataset_daily2.csv,n225_low,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Nikkei 225 : low (Yahoo ^N225)
+dataset_daily2.csv,n225_close,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Nikkei 225 : close (Yahoo ^N225)
+dataset_daily2.csv,n225_volume,quotidien,aucun (connu avant la clôture),False,Yahoo,2002-06-10,0.876,Nikkei 225 : volume (manquant remplacé par la veille)
+dataset_daily2.csv,n225_volume_missing,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,1 si le volume du Nikkei manquait chez Yahoo (remplacé par la veille)
+dataset_daily2.csv,n225_ret_1d,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Rendement du Nikkei sur 1 séance(s)
+dataset_daily2.csv,n225_ret_5d,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Rendement du Nikkei sur 5 séance(s)
+dataset_daily2.csv,n225_ret_20d,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Rendement du Nikkei sur 20 séance(s)
+dataset_daily2.csv,n225_ret_60d,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Rendement du Nikkei sur 60 séance(s)
+dataset_daily2.csv,n225_ret_overnight,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Rendement de la clôture de la veille à l'ouverture du jour
+dataset_daily2.csv,n225_mom_3m,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Momentum du Nikkei sur 3m (63 séances) : P_t / P_(t-k) - 1
+dataset_daily2.csv,n225_mom_6m,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Momentum du Nikkei sur 6m (126 séances) : P_t / P_(t-k) - 1
+dataset_daily2.csv,n225_mom_12m,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Momentum du Nikkei sur 12m (252 séances) : P_t / P_(t-k) - 1
+dataset_daily2.csv,n225_dist_sma20,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Écart du Nikkei à sa moyenne mobile 20 séances : close / SMA - 1
+dataset_daily2.csv,n225_dist_sma50,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Écart du Nikkei à sa moyenne mobile 50 séances : close / SMA - 1
+dataset_daily2.csv,n225_dist_sma200,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Écart du Nikkei à sa moyenne mobile 200 séances : close / SMA - 1
+dataset_daily2.csv,n225_vol_20d,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,"Volatilité réalisée du Nikkei sur 20 séances, annualisée"
+dataset_daily2.csv,n225_vol_60d,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,"Volatilité réalisée du Nikkei sur 60 séances, annualisée"
+dataset_daily2.csv,n225_vol_ewma,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,"Volatilité EWMA du Nikkei (lambda = 0,94), annualisée"
+dataset_daily2.csv,n225_drawdown_252d,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Recul du Nikkei depuis son plus haut des 252 dernières séances
+dataset_daily2.csv,n225_rsi14,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,RSI de Wilder 14 séances
+dataset_daily2.csv,n225_macd,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,"MACD (12, 26) divisé par le prix"
+dataset_daily2.csv,n225_macd_hist,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,"Histogramme du MACD (12, 26, 9) divisé par le prix"
+dataset_daily2.csv,n225_bb_pctb,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,"Position dans les bandes de Bollinger (20 j, 2 sigma)"
+dataset_daily2.csv,n225_atr14_pct,quotidien,aucun (connu avant la clôture),False,Yahoo,1999-01-04,1.0,Average True Range 14 j (Wilder) divisé par le prix
+dataset_daily2.csv,topix_etf,quotidien,aucun (connu avant la clôture),False,Yahoo 1306.T,2009-01-05,0.64,"ETF TOPIX (1306.T), cours non ajusté, corrigé des erreurs d'échelle"
+dataset_daily2.csv,nikkei_etf,quotidien,aucun (connu avant la clôture),False,Yahoo 1321.T,2009-01-05,0.64,"ETF Nikkei 225 (1321.T), cours non ajusté, corrigé des erreurs d'échelle"
+dataset_daily2.csv,topix_core30_etf,quotidien,aucun (connu avant la clôture),False,Yahoo 1311.T,2008-01-04,0.676,"ETF TOPIX Core30 (1311.T), cours non ajusté, corrigé des erreurs d'échelle"
+dataset_daily2.csv,taiex,quotidien,aucun (connu avant la clôture),False,Yahoo ^TWII,1999-01-04,1.0,Indice TAIEX (Taïwan)
+dataset_daily2.csv,shanghai,quotidien,veille calendaire,False,Yahoo 000001.SS,1999-01-04,1.0,Indice composite de Shanghai
+dataset_daily2.csv,hang_seng,quotidien,veille calendaire,False,Yahoo ^HSI,1999-01-04,1.0,Indice Hang Seng
+dataset_daily2.csv,kospi,quotidien,veille calendaire,False,Yahoo ^KS11,1999-01-04,1.0,Indice KOSPI (Corée)
+dataset_daily2.csv,nifty50,quotidien,veille calendaire,False,Yahoo ^NSEI,2007-09-18,0.686,Indice Nifty 50 (Inde)
+dataset_daily2.csv,asx200,quotidien,veille calendaire,False,Yahoo ^AXJO,1999-01-04,1.0,Indice S&P/ASX 200 (Australie)
+dataset_daily2.csv,sp500,quotidien,veille calendaire,False,Yahoo ^GSPC,1999-01-04,1.0,Indice S&P 500
+dataset_daily2.csv,nasdaq,quotidien,veille calendaire,False,Yahoo ^IXIC,1999-01-04,1.0,Indice Nasdaq Composite
+dataset_daily2.csv,russell2000,quotidien,veille calendaire,False,Yahoo ^RUT,1999-01-04,1.0,Indice Russell 2000
+dataset_daily2.csv,sox,quotidien,veille calendaire,False,Yahoo ^SOX,1999-01-04,1.0,Indice PHLX Semiconductor (SOX)
+dataset_daily2.csv,msci_em_eem,quotidien,veille calendaire,False,Yahoo EEM,2003-04-15,0.846,"ETF EEM, proxy du MSCI Emerging Markets (USD)"
+dataset_daily2.csv,msci_japan_etf,quotidien,veille calendaire,False,Yahoo EWJ,1999-01-04,1.0,"ETF iShares MSCI Japan (EWJ), USD"
+dataset_daily2.csv,msci_japan_small_etf,quotidien,veille calendaire,False,Yahoo SCJ,2007-12-28,0.676,"ETF iShares MSCI Japan Small-Cap (SCJ), USD"
+dataset_daily2.csv,msci_japan_value_etf,quotidien,veille calendaire,False,Yahoo EWJV,2019-03-08,0.275,"ETF iShares MSCI Japan Value (EWJV), USD"
+dataset_daily2.csv,us_hy_etf,quotidien,veille calendaire,False,Yahoo HYG,2007-04-12,0.702,ETF obligations américaines à haut rendement (HYG)
+dataset_daily2.csv,us_ig_etf,quotidien,veille calendaire,False,Yahoo LQD,2002-07-31,0.871,ETF obligations américaines investment grade (LQD)
+dataset_daily2.csv,us_tsy20_etf,quotidien,veille calendaire,False,Yahoo TLT,2002-07-31,0.871,ETF Treasuries 20 ans et plus (TLT)
+dataset_daily2.csv,eurostoxx50,quotidien,veille calendaire,False,Yahoo ^STOXX50E,2007-04-02,0.703,Indice Euro Stoxx 50
+dataset_daily2.csv,dax,quotidien,veille calendaire,False,Yahoo ^GDAXI,1999-01-04,1.0,Indice DAX
+dataset_daily2.csv,ftse100,quotidien,veille calendaire,False,Yahoo ^FTSE,1999-01-04,1.0,Indice FTSE 100
+dataset_daily2.csv,vix,quotidien,veille calendaire,False,Yahoo ^VIX,1999-01-04,1.0,"VIX (CBOE), niveau"
+dataset_daily2.csv,vxn,quotidien,veille calendaire,False,Yahoo ^VXN,2001-01-24,0.926,"VXN, volatilité implicite du Nasdaq 100"
+dataset_daily2.csv,vix3m,quotidien,veille calendaire,False,Yahoo ^VIX3M,2006-07-18,0.728,VIX à 3 mois (CBOE)
+dataset_daily2.csv,move,quotidien,veille calendaire,False,Yahoo ^MOVE,2002-11-13,0.861,Indice MOVE (volatilité implicite des Treasuries)
+dataset_daily2.csv,us3m,quotidien,veille calendaire,False,Yahoo ^IRX,1999-01-04,1.0,"Rendement des T-bills à 13 semaines, en % en %"
+dataset_daily2.csv,us5y,quotidien,veille calendaire,False,Yahoo ^FVX,1999-01-04,1.0,"Rendement à 5 ans américain, en % en %"
+dataset_daily2.csv,us10y,quotidien,veille calendaire,False,Yahoo ^TNX,1999-01-04,1.0,"Rendement à 10 ans américain, en % en %"
+dataset_daily2.csv,us30y,quotidien,veille calendaire,False,Yahoo ^TYX,1999-01-04,1.0,"Rendement à 30 ans américain, en % en %"
+dataset_daily2.csv,usdjpy,quotidien,veille calendaire,False,Yahoo JPY=X,1999-01-04,1.0,Taux de change USD/JPY (yens pour un dollar)
+dataset_daily2.csv,eurusd,quotidien,veille calendaire,False,Yahoo EURUSD=X,1999-01-05,1.0,"Taux de change EUR/USD (Yahoo, BCE avant décembre 2003)"
+dataset_daily2.csv,audjpy,quotidien,veille calendaire,False,Yahoo AUDJPY=X,2003-12-02,0.823,Taux de change AUD/JPY
+dataset_daily2.csv,usdcny,quotidien,veille calendaire,False,Yahoo CNY=X,2001-06-26,0.911,Taux de change USD/CNY
+dataset_daily2.csv,dxy,quotidien,veille calendaire,False,Yahoo DX-Y.NYB,1999-01-04,1.0,Indice du dollar (DXY)
+dataset_daily2.csv,wti,quotidien,veille calendaire,False,Yahoo CL=F,2000-08-24,0.941,"Pétrole WTI, contrat le plus proche (USD)"
+dataset_daily2.csv,brent,quotidien,veille calendaire,False,Yahoo BZ=F,2007-07-31,0.691,"Pétrole Brent, contrat le plus proche (USD)"
+dataset_daily2.csv,gold,quotidien,veille calendaire,False,Yahoo GC=F,2000-08-31,0.94,"Or, contrat le plus proche (USD)"
+dataset_daily2.csv,copper,quotidien,veille calendaire,False,Yahoo HG=F,2000-08-31,0.94,"Cuivre, contrat le plus proche (USD)"
+dataset_daily2.csv,eurjpy,quotidien,veille calendaire,False,Yahoo EURJPY=X (BCE avant 2003),1999-01-05,1.0,Taux de change EUR/JPY (yens pour un euro)
+dataset_daily2.csv,sp500_ret_1d,quotidien,veille calendaire,False,Yahoo ^GSPC,1999-01-04,1.0,Rendement sur une séance de sp500
+dataset_daily2.csv,nasdaq_ret_1d,quotidien,veille calendaire,False,Yahoo ^IXIC,1999-01-04,1.0,Rendement sur une séance de nasdaq
+dataset_daily2.csv,russell2000_ret_1d,quotidien,veille calendaire,False,Yahoo ^RUT,1999-01-04,1.0,Rendement sur une séance de russell2000
+dataset_daily2.csv,sox_ret_1d,quotidien,veille calendaire,False,Yahoo ^SOX,1999-01-04,1.0,Rendement sur une séance de sox
+dataset_daily2.csv,eurostoxx50_ret_1d,quotidien,veille calendaire,False,Yahoo ^STOXX50E,2007-04-03,0.703,Rendement sur une séance de eurostoxx50
+dataset_daily2.csv,dax_ret_1d,quotidien,veille calendaire,False,Yahoo ^GDAXI,1999-01-04,1.0,Rendement sur une séance de dax
+dataset_daily2.csv,ftse100_ret_1d,quotidien,veille calendaire,False,Yahoo ^FTSE,1999-01-04,1.0,Rendement sur une séance de ftse100
+dataset_daily2.csv,hang_seng_ret_1d,quotidien,veille calendaire,False,Yahoo ^HSI,1999-01-04,1.0,Rendement sur une séance de hang_seng
+dataset_daily2.csv,shanghai_ret_1d,quotidien,veille calendaire,False,Yahoo 000001.SS,1999-01-04,1.0,Rendement sur une séance de shanghai
+dataset_daily2.csv,kospi_ret_1d,quotidien,veille calendaire,False,Yahoo ^KS11,1999-01-04,1.0,Rendement sur une séance de kospi
+dataset_daily2.csv,nifty50_ret_1d,quotidien,veille calendaire,False,Yahoo ^NSEI,2007-09-19,0.686,Rendement sur une séance de nifty50
+dataset_daily2.csv,asx200_ret_1d,quotidien,veille calendaire,False,Yahoo ^AXJO,1999-01-04,1.0,Rendement sur une séance de asx200
+dataset_daily2.csv,taiex_ret_1d,quotidien,aucun (connu avant la clôture),False,Yahoo ^TWII,1999-01-04,1.0,Rendement sur une séance de taiex
+dataset_daily2.csv,msci_em_eem_ret_1d,quotidien,veille calendaire,False,Yahoo EEM,2003-04-16,0.846,Rendement sur une séance de msci_em_eem
+dataset_daily2.csv,msci_japan_etf_ret_1d,quotidien,veille calendaire,False,Yahoo EWJ,1999-01-04,1.0,Rendement sur une séance de msci_japan_etf
+dataset_daily2.csv,topix_etf_ret_1d,quotidien,aucun (connu avant la clôture),False,Yahoo 1306.T,2009-01-06,0.64,Rendement sur une séance de topix_etf
+dataset_daily2.csv,usdjpy_ret_1d,quotidien,veille calendaire,False,Yahoo JPY=X,1999-01-04,1.0,Rendement sur une séance de usdjpy
+dataset_daily2.csv,eurjpy_ret_1d,quotidien,veille calendaire,False,Yahoo EURJPY=X (BCE avant 2003),1999-01-06,1.0,Rendement sur une séance de eurjpy
+dataset_daily2.csv,eurusd_ret_1d,quotidien,veille calendaire,False,Yahoo EURUSD=X,1999-01-06,1.0,Rendement sur une séance de eurusd
+dataset_daily2.csv,audjpy_ret_1d,quotidien,veille calendaire,False,Yahoo AUDJPY=X,2003-12-03,0.823,Rendement sur une séance de audjpy
+dataset_daily2.csv,dxy_ret_1d,quotidien,veille calendaire,False,Yahoo DX-Y.NYB,1999-01-04,1.0,Rendement sur une séance de dxy
+dataset_daily2.csv,wti_ret_1d,quotidien,veille calendaire,False,Yahoo CL=F,2000-08-25,0.941,Rendement sur une séance de wti
+dataset_daily2.csv,brent_ret_1d,quotidien,veille calendaire,False,Yahoo BZ=F,2007-08-01,0.691,Rendement sur une séance de brent
+dataset_daily2.csv,gold_ret_1d,quotidien,veille calendaire,False,Yahoo GC=F,2000-09-01,0.94,Rendement sur une séance de gold
+dataset_daily2.csv,copper_ret_1d,quotidien,veille calendaire,False,Yahoo HG=F,2000-09-01,0.94,Rendement sur une séance de copper
+dataset_daily2.csv,us_hy_etf_ret_1d,quotidien,veille calendaire,False,Yahoo HYG,2007-04-13,0.702,Rendement sur une séance de us_hy_etf
+dataset_daily2.csv,us_ig_etf_ret_1d,quotidien,veille calendaire,False,Yahoo LQD,2002-08-01,0.871,Rendement sur une séance de us_ig_etf
+dataset_daily2.csv,us_tsy20_etf_ret_1d,quotidien,veille calendaire,False,Yahoo TLT,2002-08-01,0.871,Rendement sur une séance de us_tsy20_etf
+dataset_daily2.csv,smb_etf_ret_1d,quotidien,veille calendaire,False,"Yahoo SCJ, EWJ",2008-01-04,0.676,Small - large Japon sur 1 jour : rendement SCJ - rendement EWJ
+dataset_daily2.csv,smb_etf_ret_20d,quotidien,veille calendaire,False,"Yahoo SCJ, EWJ",2008-02-01,0.673,Small - large Japon sur 20 jours : rendement SCJ - rendement EWJ
+dataset_daily2.csv,eurjpy_rvol_20d,quotidien,veille calendaire,False,Yahoo,1999-02-03,0.997,"Volatilité réalisée de l'EUR/JPY sur 20 séances, annualisée"
+dataset_daily2.csv,usdjpy_rvol_20d,quotidien,veille calendaire,False,Yahoo,1999-01-04,1.0,"Volatilité réalisée de l'USD/JPY sur 20 séances, annualisée"
+dataset_daily2.csv,vix_term,quotidien,veille calendaire,False,Yahoo,2006-07-18,0.728,Structure par terme du VIX : VIX / VIX 3 mois (> 1 = stress)
+dataset_daily2.csv,copper_gold,quotidien,veille calendaire,False,Yahoo,2000-08-31,0.94,Ratio cuivre / or (cycle mondial)
+dataset_daily2.csv,jgb1y,quotidien,1 séance,False,MoF (jgbcme),1999-01-04,1.0,"Rendement JGB 1 ans, en % (MoF)"
+dataset_daily2.csv,jgb2y,quotidien,1 séance,False,MoF (jgbcme),1999-01-04,1.0,"Rendement JGB 2 ans, en % (MoF)"
+dataset_daily2.csv,jgb5y,quotidien,1 séance,False,MoF (jgbcme),1999-01-04,1.0,"Rendement JGB 5 ans, en % (MoF)"
+dataset_daily2.csv,jgb10y,quotidien,1 séance,False,MoF (jgbcme),1999-01-04,1.0,"Rendement JGB 10 ans, en % (MoF)"
+dataset_daily2.csv,jgb20y,quotidien,1 séance,False,MoF (jgbcme),1999-01-04,1.0,"Rendement JGB 20 ans, en % (MoF)"
+dataset_daily2.csv,jgb30y,quotidien,1 séance,False,MoF (jgbcme),1999-09-03,0.976,"Rendement JGB 30 ans, en % (MoF)"
+dataset_daily2.csv,jgb40y,quotidien,1 séance,False,MoF (jgbcme),2007-11-07,0.681,"Rendement JGB 40 ans, en % (MoF)"
+dataset_daily2.csv,bund2y,quotidien,veille calendaire,False,Bundesbank,1999-01-04,1.0,"Rendement à 2 ans des emprunts fédéraux allemands, en %"
+dataset_daily2.csv,bund10y,quotidien,veille calendaire,False,Bundesbank,1999-01-04,1.0,"Rendement à 10 ans des emprunts fédéraux allemands, en %"
+dataset_daily2.csv,tona,quotidien,1 séance,False,BoJ (STRDCLUCON),1999-01-04,1.0,"TONA, taux d'appel au jour le jour non garanti du yen, en % (BoJ)"
+dataset_daily2.csv,eur_overnight,quotidien,2 séances,False,BCE,1999-01-06,1.0,"Taux au jour le jour de l'euro, en % (EONIA jusqu'en septembre 2019, puis €STR)"
+dataset_daily2.csv,ecb_deposit_rate,quotidien,veille calendaire,False,BCE,1999-01-04,1.0,"Taux de la facilité de dépôt de la BCE, en %"
+dataset_daily2.csv,spread_us_jgb10y,quotidien,veille calendaire,False,"Yahoo, MoF",1999-01-04,1.0,"Écart de taux 10 ans États-Unis - Japon, en points de %"
+dataset_daily2.csv,spread_bund_jgb10y,quotidien,veille calendaire,False,"Bundesbank, MoF",1999-01-04,1.0,"Écart de taux 10 ans Allemagne - Japon, en points de %"
+dataset_daily2.csv,jgb_slope_10y2y,quotidien,1 séance,False,MoF,1999-01-04,1.0,Pente JGB 10 ans - 2 ans
+dataset_daily2.csv,jgb_slope_30y10y,quotidien,1 séance,False,MoF,1999-09-03,0.976,Pente JGB 30 ans - 10 ans
+dataset_daily2.csv,us_slope_10y3m,quotidien,veille calendaire,False,Yahoo,1999-01-04,1.0,Pente américaine 10 ans - 3 mois
+dataset_daily2.csv,carry_1m,quotidien,2 séances,False,"BCE, BoJ",1999-01-06,1.0,"Portage mensuel de la couverture EUR/JPY : (1+i_EUR/12)/(1+i_JPY/12) - 1 (€STR, TONA)"
+dataset_daily2.csv,yen_index,quotidien,1 séance,False,BoJ (FXERD39),1999-01-05,1.0,Indice du yen de la BoJ (base 100 au 4 janvier 1999)
+dataset_daily2.csv,tankan_large_manuf,quotidien,date de publication,False,BoJ (Tankan),1999-01-04,1.0,"Tankan, DI des grandes entreprises : large_manuf (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_daily2.csv,tankan_large_nonmanuf,quotidien,date de publication,False,BoJ (Tankan),1999-01-04,1.0,"Tankan, DI des grandes entreprises : large_nonmanuf (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_daily2.csv,tankan_large_manuf_fcst,quotidien,date de publication,False,BoJ (Tankan),1999-01-04,1.0,"Tankan, DI des grandes entreprises : large_manuf_fcst (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_daily2.csv,tankan_large_nonmanuf_fcst,quotidien,date de publication,False,BoJ (Tankan),1999-01-04,1.0,"Tankan, DI des grandes entreprises : large_nonmanuf_fcst (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_daily2.csv,monetary_base_yoy,quotidien,date de publication,False,BoJ (MABS1AN11),1999-01-04,1.0,"Base monétaire, glissement annuel en % (publiée vers le 2e jour ouvré du mois suivant)"
+dataset_daily2.csv,m2_yoy,quotidien,date de publication,False,BoJ (MAM1NAM2M2MO),2004-05-17,0.807,"Masse monétaire M2, glissement annuel en % (depuis 2004)"
+dataset_daily2.csv,cgpi_yoy,quotidien,date de publication,False,BoJ (PRCG20_2200000000),1999-01-04,1.0,"Prix à la production (CGPI), glissement annuel en %"
+dataset_daily2.csv,reer,quotidien,date de publication,False,BoJ (FX180110002),1999-01-04,1.0,Taux de change effectif réel du yen (2020 = 100)
+dataset_daily2.csv,reer_yoy,quotidien,date de publication,False,BoJ,1999-01-04,1.0,"Taux de change effectif réel du yen, glissement annuel en %"
+dataset_daily2.csv,neer,quotidien,date de publication,False,BoJ (FX180110001),1999-01-04,1.0,Taux de change effectif nominal du yen (2020 = 100)
+dataset_daily2.csv,cpi_all_yoy_oecd,quotidien,date de publication,False,"OCDE (Japon, CPI tous postes)",1999-01-04,1.0,"CPI Japon tous postes, glissement annuel en % (OCDE, s'arrête en juin 2021)"
+dataset_daily2.csv,cli_jpn,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,"Indicateur avancé composite de l'OCDE (JPN, amplitude ajustée, 100 = tendance)"
+dataset_daily2.csv,d_cli_jpn,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,Variation sur un mois du CLI de l'OCDE (JPN)
+dataset_daily2.csv,cli_usa,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,"Indicateur avancé composite de l'OCDE (USA, amplitude ajustée, 100 = tendance)"
+dataset_daily2.csv,d_cli_usa,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,Variation sur un mois du CLI de l'OCDE (USA)
+dataset_daily2.csv,cli_chn,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,"Indicateur avancé composite de l'OCDE (CHN, amplitude ajustée, 100 = tendance)"
+dataset_daily2.csv,d_cli_chn,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,Variation sur un mois du CLI de l'OCDE (CHN)
+dataset_daily2.csv,cli_g20,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,"Indicateur avancé composite de l'OCDE (G20, amplitude ajustée, 100 = tendance)"
+dataset_daily2.csv,d_cli_g20,quotidien,date de publication,False,OCDE (CLI),1999-01-04,1.0,Variation sur un mois du CLI de l'OCDE (G20)
+dataset_daily2.csv,epu_japan,quotidien,date de publication,False,policyuncertainty.com,1999-01-04,1.0,"Indice d'incertitude de politique économique du Japon (Baker, Bloom, Davis)"
+dataset_daily2.csv,gpr_japan,quotidien,date de publication,False,Caldara et Iacoviello,1999-01-04,1.0,Indice de risque géopolitique du Japon (mensuel)
+dataset_daily2.csv,gpr_daily,quotidien,2 jours calendaires,False,Caldara et Iacoviello,1999-01-04,1.0,Indice quotidien de risque géopolitique mondial (GPRD)
+dataset_daily2.csv,gpr_daily_acts,quotidien,2 jours calendaires,False,Caldara et Iacoviello,1999-01-04,1.0,Indice quotidien de risque géopolitique mondial (GPRD_ACT)
+dataset_daily2.csv,gpr_daily_threats,quotidien,2 jours calendaires,False,Caldara et Iacoviello,1999-01-04,1.0,Indice quotidien de risque géopolitique mondial (GPRD_THREAT)
+dataset_daily2.csv,gpr_daily_20d,quotidien,2 jours calendaires,False,Caldara et Iacoviello,1999-01-04,1.0,Moyenne sur 20 séances de l'indice quotidien de risque géopolitique
+dataset_daily2.csv,epu_us_daily,quotidien,2 jours calendaires,False,policyuncertainty.com,1999-01-04,1.0,Indice quotidien d'incertitude de politique économique américaine
+dataset_daily2.csv,epu_us_daily_20d,quotidien,2 jours calendaires,False,policyuncertainty.com,1999-01-04,1.0,Moyenne sur 20 séances de l'indice quotidien EPU américain
+dataset_daily2.csv,boj_meeting_day,quotidien,aucun (connu avant la clôture),False,BoJ,1999-01-04,1.0,1 si la séance est le dernier jour d'une réunion de politique monétaire de la BoJ
+dataset_daily2.csv,boj_days_to_next,quotidien,aucun (connu avant la clôture),False,BoJ,1999-01-04,1.0,Jours calendaires jusqu'à la prochaine réunion de la BoJ (0 le jour même)
+dataset_daily2.csv,boj_days_since_last,quotidien,aucun (connu avant la clôture),False,BoJ,1999-01-04,1.0,Jours calendaires depuis la dernière réunion de la BoJ (avant ce jour)
+dataset_daily2.csv,target_ret_next_1d,quotidien,cible (connue en t+k),True,Yahoo,1999-01-04,1.0,Rendement du Nikkei de la clôture t à la clôture t+1
+dataset_daily2.csv,target_ret_next_5d,quotidien,cible (connue en t+k),True,Yahoo,1999-01-04,0.999,Rendement du Nikkei de la clôture t à la clôture t+5
+dataset_daily2.csv,target_ret_next_20d,quotidien,cible (connue en t+k),True,Yahoo,1999-01-04,0.997,Rendement du Nikkei de la clôture t à la clôture t+20
+dataset_daily2.csv,target_up_next_1d,quotidien,cible (connue en t+1),True,Yahoo,1999-01-04,1.0,1 si le Nikkei monte le lendemain
+dataset_daily2.csv,target_rvol_next_20d,quotidien,cible (connue en t+20),True,Yahoo,1999-01-04,0.997,"Volatilité réalisée du Nikkei sur les 20 séances suivantes, annualisée"
+dataset_monthly2.csv,n225_close,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Nikkei 225 : clôture du dernier jour du mois
+dataset_monthly2.csv,n225_ret_1m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Rendement du Nikkei sur le mois
+dataset_monthly2.csv,n225_mom_3m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Momentum du Nikkei sur 3 mois : P_t / P_(t-3) - 1
+dataset_monthly2.csv,n225_mom_6m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Momentum du Nikkei sur 6 mois : P_t / P_(t-6) - 1
+dataset_monthly2.csv,n225_mom_12m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Momentum du Nikkei sur 12 mois : P_t / P_(t-12) - 1
+dataset_monthly2.csv,n225_rvol_1m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,"Volatilité réalisée du Nikkei sur le mois (écart-type des rendements log quotidiens, annualisé)"
+dataset_monthly2.csv,n225_vol_ewma,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,"Volatilité EWMA du Nikkei (lambda = 0,94), annualisée"
+dataset_monthly2.csv,n225_dist_sma200,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Écart du Nikkei à sa moyenne mobile 200 séances : close / SMA - 1
+dataset_monthly2.csv,n225_rsi14,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,RSI de Wilder 14 séances
+dataset_monthly2.csv,n225_drawdown_252d,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Recul du Nikkei depuis son plus haut des 252 dernières séances
+dataset_monthly2.csv,n225_vol_60d,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,"Volatilité réalisée du Nikkei sur 60 séances, annualisée"
+dataset_monthly2.csv,sp500_ret_1m,mensuel,veille calendaire,False,Yahoo ^GSPC,1999-01-29,1.0,Rendement de sp500 sur le mois (Indice S&P 500)
+dataset_monthly2.csv,nasdaq_ret_1m,mensuel,veille calendaire,False,Yahoo ^IXIC,1999-01-29,1.0,Rendement de nasdaq sur le mois (Indice Nasdaq Composite)
+dataset_monthly2.csv,russell2000_ret_1m,mensuel,veille calendaire,False,Yahoo ^RUT,1999-01-29,1.0,Rendement de russell2000 sur le mois (Indice Russell 2000)
+dataset_monthly2.csv,sox_ret_1m,mensuel,veille calendaire,False,Yahoo ^SOX,1999-01-29,1.0,Rendement de sox sur le mois (Indice PHLX Semiconductor (SOX))
+dataset_monthly2.csv,eurostoxx50_ret_1m,mensuel,veille calendaire,False,Yahoo ^STOXX50E,2007-05-31,0.701,Rendement de eurostoxx50 sur le mois (Indice Euro Stoxx 50)
+dataset_monthly2.csv,dax_ret_1m,mensuel,veille calendaire,False,Yahoo ^GDAXI,1999-01-29,1.0,Rendement de dax sur le mois (Indice DAX)
+dataset_monthly2.csv,ftse100_ret_1m,mensuel,veille calendaire,False,Yahoo ^FTSE,1999-01-29,1.0,Rendement de ftse100 sur le mois (Indice FTSE 100)
+dataset_monthly2.csv,taiex_ret_1m,mensuel,aucun (connu avant la clôture),False,Yahoo ^TWII,1999-01-29,1.0,Rendement de taiex sur le mois (Indice TAIEX (Taïwan))
+dataset_monthly2.csv,shanghai_ret_1m,mensuel,veille calendaire,False,Yahoo 000001.SS,1999-01-29,1.0,Rendement de shanghai sur le mois (Indice composite de Shanghai)
+dataset_monthly2.csv,hang_seng_ret_1m,mensuel,veille calendaire,False,Yahoo ^HSI,1999-01-29,1.0,Rendement de hang_seng sur le mois (Indice Hang Seng)
+dataset_monthly2.csv,kospi_ret_1m,mensuel,veille calendaire,False,Yahoo ^KS11,1999-01-29,1.0,Rendement de kospi sur le mois (Indice KOSPI (Corée))
+dataset_monthly2.csv,nifty50_ret_1m,mensuel,veille calendaire,False,Yahoo ^NSEI,2007-10-31,0.686,Rendement de nifty50 sur le mois (Indice Nifty 50 (Inde))
+dataset_monthly2.csv,asx200_ret_1m,mensuel,veille calendaire,False,Yahoo ^AXJO,1999-01-29,1.0,Rendement de asx200 sur le mois (Indice S&P/ASX 200 (Australie))
+dataset_monthly2.csv,msci_em_eem_ret_1m,mensuel,veille calendaire,False,Yahoo EEM,2003-05-30,0.844,"Rendement de msci_em_eem sur le mois (ETF EEM, proxy du MSCI Emerging Markets (USD))"
+dataset_monthly2.csv,topix_etf_ret_1m,mensuel,aucun (connu avant la clôture),False,Yahoo 1306.T,2009-02-27,0.638,"Rendement de topix_etf sur le mois (ETF TOPIX (1306.T), cours non ajusté, corrigé des erreurs d'échelle)"
+dataset_monthly2.csv,topix_core30_etf_ret_1m,mensuel,aucun (connu avant la clôture),False,Yahoo 1311.T,2008-02-29,0.674,"Rendement de topix_core30_etf sur le mois (ETF TOPIX Core30 (1311.T), cours non ajusté, corrigé des erreurs d'échelle)"
+dataset_monthly2.csv,nikkei_etf_ret_1m,mensuel,aucun (connu avant la clôture),False,Yahoo 1321.T,2009-02-27,0.638,"Rendement de nikkei_etf sur le mois (ETF Nikkei 225 (1321.T), cours non ajusté, corrigé des erreurs d'échelle)"
+dataset_monthly2.csv,msci_japan_etf_ret_1m,mensuel,veille calendaire,False,Yahoo EWJ,1999-01-29,1.0,"Rendement de msci_japan_etf sur le mois (ETF iShares MSCI Japan (EWJ), USD)"
+dataset_monthly2.csv,msci_japan_small_etf_ret_1m,mensuel,veille calendaire,False,Yahoo SCJ,2008-01-31,0.677,"Rendement de msci_japan_small_etf sur le mois (ETF iShares MSCI Japan Small-Cap (SCJ), USD)"
+dataset_monthly2.csv,msci_japan_value_etf_ret_1m,mensuel,veille calendaire,False,Yahoo EWJV,2019-04-26,0.272,"Rendement de msci_japan_value_etf sur le mois (ETF iShares MSCI Japan Value (EWJV), USD)"
+dataset_monthly2.csv,us_hy_etf_ret_1m,mensuel,veille calendaire,False,Yahoo HYG,2007-05-31,0.701,Rendement de us_hy_etf sur le mois (ETF obligations américaines à haut rendement (HYG))
+dataset_monthly2.csv,us_ig_etf_ret_1m,mensuel,veille calendaire,False,Yahoo LQD,2002-08-30,0.871,Rendement de us_ig_etf sur le mois (ETF obligations américaines investment grade (LQD))
+dataset_monthly2.csv,us_tsy20_etf_ret_1m,mensuel,veille calendaire,False,Yahoo TLT,2002-08-30,0.871,Rendement de us_tsy20_etf sur le mois (ETF Treasuries 20 ans et plus (TLT))
+dataset_monthly2.csv,usdjpy_ret_1m,mensuel,veille calendaire,False,Yahoo JPY=X,1999-01-29,1.0,Rendement de usdjpy sur le mois (Taux de change USD/JPY (yens pour un dollar))
+dataset_monthly2.csv,eurjpy_ret_1m,mensuel,veille calendaire,False,Yahoo EURJPY=X (BCE avant 2003),1999-02-26,0.997,Rendement de eurjpy sur le mois (eurjpy)
+dataset_monthly2.csv,eurusd_ret_1m,mensuel,veille calendaire,False,Yahoo EURUSD=X,1999-02-26,0.997,"Rendement de eurusd sur le mois (Taux de change EUR/USD (Yahoo, BCE avant décembre 2003))"
+dataset_monthly2.csv,audjpy_ret_1m,mensuel,veille calendaire,False,Yahoo AUDJPY=X,2004-01-30,0.82,Rendement de audjpy sur le mois (Taux de change AUD/JPY)
+dataset_monthly2.csv,usdcny_ret_1m,mensuel,veille calendaire,False,Yahoo CNY=X,2001-07-31,0.91,Rendement de usdcny sur le mois (Taux de change USD/CNY)
+dataset_monthly2.csv,dxy_ret_1m,mensuel,veille calendaire,False,Yahoo DX-Y.NYB,1999-01-29,1.0,Rendement de dxy sur le mois (Indice du dollar (DXY))
+dataset_monthly2.csv,wti_ret_1m,mensuel,veille calendaire,False,Yahoo CL=F,2000-09-29,0.94,"Rendement de wti sur le mois (Pétrole WTI, contrat le plus proche (USD))"
+dataset_monthly2.csv,brent_ret_1m,mensuel,veille calendaire,False,Yahoo BZ=F,2007-08-31,0.692,"Rendement de brent sur le mois (Pétrole Brent, contrat le plus proche (USD))"
+dataset_monthly2.csv,gold_ret_1m,mensuel,veille calendaire,False,Yahoo GC=F,2000-09-29,0.94,"Rendement de gold sur le mois (Or, contrat le plus proche (USD))"
+dataset_monthly2.csv,copper_ret_1m,mensuel,veille calendaire,False,Yahoo HG=F,2000-09-29,0.94,"Rendement de copper sur le mois (Cuivre, contrat le plus proche (USD))"
+dataset_monthly2.csv,smb_etf_1m,mensuel,veille calendaire,False,Yahoo,2008-01-31,0.677,Small - large Japon du mois : rendement SCJ - rendement EWJ
+dataset_monthly2.csv,value_etf_1m,mensuel,veille calendaire,False,Yahoo,2019-04-26,0.272,Value - marché Japon du mois : rendement EWJV - rendement EWJ (depuis 2019)
+dataset_monthly2.csv,eurjpy_rvol_1m,mensuel,veille calendaire,False,Yahoo,1999-01-29,1.0,"Volatilité réalisée de l'EUR/JPY sur le mois, annualisée"
+dataset_monthly2.csv,usdjpy_rvol_1m,mensuel,veille calendaire,False,Yahoo,1999-01-29,1.0,"Volatilité réalisée de l'USD/JPY sur le mois, annualisée"
+dataset_monthly2.csv,jgb1y,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Rendement JGB 1 ans, en % (MoF)"
+dataset_monthly2.csv,d_jgb1y_bp,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Variation sur le mois de jgb1y, en points de base"
+dataset_monthly2.csv,jgb2y,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Rendement JGB 2 ans, en % (MoF)"
+dataset_monthly2.csv,d_jgb2y_bp,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Variation sur le mois de jgb2y, en points de base"
+dataset_monthly2.csv,jgb5y,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Rendement JGB 5 ans, en % (MoF)"
+dataset_monthly2.csv,d_jgb5y_bp,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Variation sur le mois de jgb5y, en points de base"
+dataset_monthly2.csv,jgb10y,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Rendement JGB 10 ans, en % (MoF)"
+dataset_monthly2.csv,d_jgb10y_bp,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Variation sur le mois de jgb10y, en points de base"
+dataset_monthly2.csv,jgb20y,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Rendement JGB 20 ans, en % (MoF)"
+dataset_monthly2.csv,d_jgb20y_bp,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Variation sur le mois de jgb20y, en points de base"
+dataset_monthly2.csv,jgb30y,mensuel,1 séance,False,MoF (jgbcme),1999-09-30,0.976,"Rendement JGB 30 ans, en % (MoF)"
+dataset_monthly2.csv,d_jgb30y_bp,mensuel,1 séance,False,MoF (jgbcme),1999-10-29,0.973,"Variation sur le mois de jgb30y, en points de base"
+dataset_monthly2.csv,jgb40y,mensuel,1 séance,False,MoF (jgbcme),2007-11-30,0.683,"Rendement JGB 40 ans, en % (MoF)"
+dataset_monthly2.csv,d_jgb40y_bp,mensuel,1 séance,False,MoF (jgbcme),2007-12-28,0.68,"Variation sur le mois de jgb40y, en points de base"
+dataset_monthly2.csv,us3m,mensuel,veille calendaire,False,Yahoo ^IRX,1999-01-29,1.0,"Rendement des T-bills à 13 semaines, en % en %"
+dataset_monthly2.csv,d_us3m_bp,mensuel,veille calendaire,False,Yahoo ^IRX,1999-01-29,1.0,"Variation sur le mois de us3m, en points de base"
+dataset_monthly2.csv,us5y,mensuel,veille calendaire,False,Yahoo ^FVX,1999-01-29,1.0,"Rendement à 5 ans américain, en % en %"
+dataset_monthly2.csv,d_us5y_bp,mensuel,veille calendaire,False,Yahoo ^FVX,1999-01-29,1.0,"Variation sur le mois de us5y, en points de base"
+dataset_monthly2.csv,us10y,mensuel,veille calendaire,False,Yahoo ^TNX,1999-01-29,1.0,"Rendement à 10 ans américain, en % en %"
+dataset_monthly2.csv,d_us10y_bp,mensuel,veille calendaire,False,Yahoo ^TNX,1999-01-29,1.0,"Variation sur le mois de us10y, en points de base"
+dataset_monthly2.csv,us30y,mensuel,veille calendaire,False,Yahoo ^TYX,1999-01-29,1.0,"Rendement à 30 ans américain, en % en %"
+dataset_monthly2.csv,d_us30y_bp,mensuel,veille calendaire,False,Yahoo ^TYX,1999-01-29,1.0,"Variation sur le mois de us30y, en points de base"
+dataset_monthly2.csv,bund2y,mensuel,veille calendaire,False,Bundesbank,1999-01-29,1.0,"Rendement à 2 ans des emprunts fédéraux allemands, en %"
+dataset_monthly2.csv,d_bund2y_bp,mensuel,veille calendaire,False,Bundesbank,1999-01-29,1.0,"Variation sur le mois de bund2y, en points de base"
+dataset_monthly2.csv,bund10y,mensuel,veille calendaire,False,Bundesbank,1999-01-29,1.0,"Rendement à 10 ans des emprunts fédéraux allemands, en %"
+dataset_monthly2.csv,d_bund10y_bp,mensuel,veille calendaire,False,Bundesbank,1999-01-29,1.0,"Variation sur le mois de bund10y, en points de base"
+dataset_monthly2.csv,spread_us_jgb10y,mensuel,veille calendaire,False,"Yahoo, MoF",1999-01-29,1.0,"Écart de taux 10 ans États-Unis - Japon, en points de %"
+dataset_monthly2.csv,d_spread_us_jgb10y_bp,mensuel,veille calendaire,False,"Yahoo, MoF",1999-01-29,1.0,"Variation sur le mois de spread_us_jgb10y, en points de base"
+dataset_monthly2.csv,spread_bund_jgb10y,mensuel,veille calendaire,False,"Bundesbank, MoF",1999-01-29,1.0,"Écart de taux 10 ans Allemagne - Japon, en points de %"
+dataset_monthly2.csv,d_spread_bund_jgb10y_bp,mensuel,veille calendaire,False,"Bundesbank, MoF",1999-01-29,1.0,"Variation sur le mois de spread_bund_jgb10y, en points de base"
+dataset_monthly2.csv,jgb_slope_10y2y,mensuel,1 séance,False,MoF,1999-01-29,1.0,Pente JGB 10 ans - 2 ans
+dataset_monthly2.csv,d_jgb_slope_10y2y_bp,mensuel,1 séance,False,MoF,1999-01-29,1.0,"Variation sur le mois de jgb_slope_10y2y, en points de base"
+dataset_monthly2.csv,jgb_slope_30y10y,mensuel,1 séance,False,MoF,1999-09-30,0.976,Pente JGB 30 ans - 10 ans
+dataset_monthly2.csv,d_jgb_slope_30y10y_bp,mensuel,1 séance,False,MoF,1999-10-29,0.973,"Variation sur le mois de jgb_slope_30y10y, en points de base"
+dataset_monthly2.csv,us_slope_10y3m,mensuel,veille calendaire,False,Yahoo,1999-01-29,1.0,Pente américaine 10 ans - 3 mois
+dataset_monthly2.csv,d_us_slope_10y3m_bp,mensuel,veille calendaire,False,Yahoo,1999-01-29,1.0,"Variation sur le mois de us_slope_10y3m, en points de base"
+dataset_monthly2.csv,tona,mensuel,1 séance,False,BoJ (STRDCLUCON),1999-01-29,1.0,"TONA, taux d'appel au jour le jour non garanti du yen, en % (BoJ)"
+dataset_monthly2.csv,d_tona_bp,mensuel,1 séance,False,BoJ (STRDCLUCON),1999-01-29,1.0,"Variation sur le mois de tona, en points de base"
+dataset_monthly2.csv,eur_overnight,mensuel,2 séances,False,BCE,1999-01-29,1.0,"Taux au jour le jour de l'euro, en % (EONIA jusqu'en septembre 2019, puis €STR)"
+dataset_monthly2.csv,d_eur_overnight_bp,mensuel,2 séances,False,BCE,1999-02-26,0.997,"Variation sur le mois de eur_overnight, en points de base"
+dataset_monthly2.csv,ecb_deposit_rate,mensuel,veille calendaire,False,BCE,1999-01-29,1.0,"Taux de la facilité de dépôt de la BCE, en %"
+dataset_monthly2.csv,d_ecb_deposit_rate_bp,mensuel,veille calendaire,False,BCE,1999-02-26,0.997,"Variation sur le mois de ecb_deposit_rate, en points de base"
+dataset_monthly2.csv,carry_1m,mensuel,2 séances,False,"BCE, BoJ",1999-01-29,1.0,"Portage mensuel de la couverture EUR/JPY : (1+i_EUR/12)/(1+i_JPY/12) - 1 (€STR, TONA)"
+dataset_monthly2.csv,vix,mensuel,veille calendaire,False,Yahoo ^VIX,1999-01-29,1.0,"VIX (CBOE), niveau"
+dataset_monthly2.csv,vxn,mensuel,veille calendaire,False,Yahoo ^VXN,2001-01-31,0.928,"VXN, volatilité implicite du Nasdaq 100"
+dataset_monthly2.csv,vix3m,mensuel,veille calendaire,False,Yahoo ^VIX3M,2006-07-31,0.731,VIX à 3 mois (CBOE)
+dataset_monthly2.csv,move,mensuel,veille calendaire,False,Yahoo ^MOVE,2002-11-29,0.862,Indice MOVE (volatilité implicite des Treasuries)
+dataset_monthly2.csv,vix_term,mensuel,veille calendaire,False,Yahoo,2006-07-31,0.731,Structure par terme du VIX : VIX / VIX 3 mois (> 1 = stress)
+dataset_monthly2.csv,copper_gold,mensuel,veille calendaire,False,Yahoo,2000-08-31,0.943,Ratio cuivre / or (cycle mondial)
+dataset_monthly2.csv,yen_index,mensuel,1 séance,False,BoJ (FXERD39),1999-01-29,1.0,Indice du yen de la BoJ (base 100 au 4 janvier 1999)
+dataset_monthly2.csv,usdjpy,mensuel,veille calendaire,False,Yahoo JPY=X,1999-01-29,1.0,Taux de change USD/JPY (yens pour un dollar)
+dataset_monthly2.csv,eurjpy,mensuel,veille calendaire,False,Yahoo EURJPY=X (BCE avant 2003),1999-01-29,1.0,Taux de change EUR/JPY (yens pour un euro)
+dataset_monthly2.csv,d_vix,mensuel,veille calendaire,False,Yahoo ^VIX,1999-01-29,1.0,Variation de vix sur le mois
+dataset_monthly2.csv,d_move,mensuel,veille calendaire,False,Yahoo ^MOVE,2002-12-30,0.859,Variation de move sur le mois
+dataset_monthly2.csv,gpr_1m,mensuel,2 jours calendaires,False,Caldara et Iacoviello,1999-01-29,1.0,Moyenne sur le mois de l'indice quotidien gpr_daily
+dataset_monthly2.csv,epu_us_1m,mensuel,2 jours calendaires,False,policyuncertainty.com,1999-01-29,1.0,Moyenne sur le mois de l'indice quotidien epu_us_daily
+dataset_monthly2.csv,tankan_large_manuf,mensuel,date de publication,False,BoJ (Tankan),1999-01-29,1.0,"Tankan, DI des grandes entreprises : large_manuf (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_monthly2.csv,tankan_large_nonmanuf,mensuel,date de publication,False,BoJ (Tankan),1999-01-29,1.0,"Tankan, DI des grandes entreprises : large_nonmanuf (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_monthly2.csv,tankan_large_manuf_fcst,mensuel,date de publication,False,BoJ (Tankan),1999-01-29,1.0,"Tankan, DI des grandes entreprises : large_manuf_fcst (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_monthly2.csv,tankan_large_nonmanuf_fcst,mensuel,date de publication,False,BoJ (Tankan),1999-01-29,1.0,"Tankan, DI des grandes entreprises : large_nonmanuf_fcst (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_monthly2.csv,monetary_base_yoy,mensuel,date de publication,False,BoJ (MABS1AN11),1999-01-29,1.0,"Base monétaire, glissement annuel en % (publiée vers le 2e jour ouvré du mois suivant)"
+dataset_monthly2.csv,m2_yoy,mensuel,date de publication,False,BoJ (MAM1NAM2M2MO),2004-05-31,0.808,"Masse monétaire M2, glissement annuel en % (depuis 2004)"
+dataset_monthly2.csv,cgpi_yoy,mensuel,date de publication,False,BoJ (PRCG20_2200000000),1999-01-29,1.0,"Prix à la production (CGPI), glissement annuel en %"
+dataset_monthly2.csv,reer,mensuel,date de publication,False,BoJ (FX180110002),1999-01-29,1.0,Taux de change effectif réel du yen (2020 = 100)
+dataset_monthly2.csv,reer_yoy,mensuel,date de publication,False,BoJ,1999-01-29,1.0,"Taux de change effectif réel du yen, glissement annuel en %"
+dataset_monthly2.csv,neer,mensuel,date de publication,False,BoJ (FX180110001),1999-01-29,1.0,Taux de change effectif nominal du yen (2020 = 100)
+dataset_monthly2.csv,cpi_all_yoy_oecd,mensuel,date de publication,False,"OCDE (Japon, CPI tous postes)",1999-01-29,1.0,"CPI Japon tous postes, glissement annuel en % (OCDE, s'arrête en juin 2021)"
+dataset_monthly2.csv,cli_jpn,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,"Indicateur avancé composite de l'OCDE (JPN, amplitude ajustée, 100 = tendance)"
+dataset_monthly2.csv,cli_usa,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,"Indicateur avancé composite de l'OCDE (USA, amplitude ajustée, 100 = tendance)"
+dataset_monthly2.csv,cli_chn,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,"Indicateur avancé composite de l'OCDE (CHN, amplitude ajustée, 100 = tendance)"
+dataset_monthly2.csv,cli_g20,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,"Indicateur avancé composite de l'OCDE (G20, amplitude ajustée, 100 = tendance)"
+dataset_monthly2.csv,d_cli_jpn,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,Variation sur un mois du CLI de l'OCDE (JPN)
+dataset_monthly2.csv,d_cli_usa,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,Variation sur un mois du CLI de l'OCDE (USA)
+dataset_monthly2.csv,d_cli_chn,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,Variation sur un mois du CLI de l'OCDE (CHN)
+dataset_monthly2.csv,d_cli_g20,mensuel,date de publication,False,OCDE (CLI),1999-01-29,1.0,Variation sur un mois du CLI de l'OCDE (G20)
+dataset_monthly2.csv,epu_japan,mensuel,date de publication,False,policyuncertainty.com,1999-01-29,1.0,"Indice d'incertitude de politique économique du Japon (Baker, Bloom, Davis)"
+dataset_monthly2.csv,gpr_japan,mensuel,date de publication,False,Caldara et Iacoviello,1999-01-29,1.0,Indice de risque géopolitique du Japon (mensuel)
+dataset_monthly2.csv,boj_meeting_this_month,mensuel,aucun (connu avant la clôture),False,BoJ,1999-01-29,1.0,Nombre de réunions de politique monétaire de la BoJ dans le mois
+dataset_monthly2.csv,boj_meeting_next_month,mensuel,aucun (connu avant la clôture),False,BoJ,1999-01-29,1.0,Nombre de réunions de politique monétaire de la BoJ prévues le mois suivant
+dataset_monthly2.csv,month,mensuel,aucun (connu avant la clôture),False,calendrier,1999-01-29,1.0,Mois de l'année (1 à 12)
+dataset_monthly2.csv,ff_mkt_rf_lag2,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2010-01-29,0.605,Facteur Fama-French Japon mkt_rf du mois t-2 (délai de publication) ; vide avant 2010
+dataset_monthly2.csv,ff_smb_lag2,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2010-01-29,0.605,Facteur Fama-French Japon smb du mois t-2 (délai de publication) ; vide avant 2010
+dataset_monthly2.csv,ff_hml_lag2,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2010-01-29,0.605,Facteur Fama-French Japon hml du mois t-2 (délai de publication) ; vide avant 2010
+dataset_monthly2.csv,nikkei_vi,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2023-01-31,0.138,nikkei_vi (repris de dataset_monthly.csv) ; vide avant 2010
+dataset_monthly2.csv,cpi_all_yoy,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2010-01-29,0.605,"CPI Japon : all_yoy (dernière publication, e-Stat) ; vide avant 2010"
+dataset_monthly2.csv,cpi_core_yoy,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2010-01-29,0.605,"CPI Japon : core_yoy (dernière publication, e-Stat) ; vide avant 2010"
+dataset_monthly2.csv,cpi_corecore_yoy,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2010-01-29,0.605,"CPI Japon : corecore_yoy (dernière publication, e-Stat) ; vide avant 2010"
+dataset_monthly2.csv,news_japan_sent_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,"Score FinBERT moyen des articles du thème japan sur le mois, dans [-1, 1] ; vide avant 2010"
+dataset_monthly2.csv,news_japan_n_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,Nombre d'articles du thème japan sur le mois (plafond GDELT : 250 par semaine) ; vide avant 2010
+dataset_monthly2.csv,news_japan_neg_share_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,"Part des articles du thème japan avec P(négatif) > 0,5 sur le mois ; vide avant 2010"
+dataset_monthly2.csv,d_news_japan_sent_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-02-28,0.35,Variation du score FinBERT mensuel du thème japan ; vide avant 2010
+dataset_monthly2.csv,news_boj_sent_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,"Score FinBERT moyen des articles du thème boj sur le mois, dans [-1, 1] ; vide avant 2010"
+dataset_monthly2.csv,news_boj_n_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,Nombre d'articles du thème boj sur le mois (plafond GDELT : 250 par semaine) ; vide avant 2010
+dataset_monthly2.csv,news_boj_neg_share_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,"Part des articles du thème boj avec P(négatif) > 0,5 sur le mois ; vide avant 2010"
+dataset_monthly2.csv,d_news_boj_sent_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-02-28,0.35,Variation du score FinBERT mensuel du thème boj ; vide avant 2010
+dataset_monthly2.csv,gdelt_japan_tone_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,Moyenne mensuelle de la série GDELT agrégée japan_tone (V1) ; vide avant 2010
+dataset_monthly2.csv,gdelt_boj_tone_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,Moyenne mensuelle de la série GDELT agrégée boj_tone (V1) ; vide avant 2010
+dataset_monthly2.csv,gdelt_japan_share_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,Moyenne mensuelle de la série GDELT agrégée japan_share (V1) ; vide avant 2010
+dataset_monthly2.csv,gdelt_boj_share_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,Moyenne mensuelle de la série GDELT agrégée boj_share (V1) ; vide avant 2010
+dataset_monthly2.csv,gdelt_japan_score_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-04-28,0.344,"Score de sentiment mensuel japan dans [-1, 1] : moyenne du score quotidien GDELT sur le mois ; vide avant 2010"
+dataset_monthly2.csv,gdelt_boj_score_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-04-28,0.344,"Score de sentiment mensuel boj dans [-1, 1] : moyenne du score quotidien GDELT sur le mois ; vide avant 2010"
+dataset_monthly2.csv,news_gap_days_1m,mensuel,repris de la v1,False,dataset_monthly.csv (v1),2017-01-31,0.353,Nombre de séances sans article dans le mois ; vide avant 2010
+dataset_monthly2.csv,cpi_all_yoy_long,mensuel,date de publication,False,"OCDE avant 2010, e-Stat (v1) ensuite",1999-01-29,1.0,"CPI Japon tous postes, glissement annuel en % : OCDE (publié le 28 du mois suivant) jusqu'en 2009, puis la colonne cpi_all_yoy de la v1. Série raccordée"
+dataset_monthly2.csv,target_rn_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,Rendement du Nikkei 225 en JPY sur le mois suivant (P_{t+1}/P_t - 1)
+dataset_monthly2.csv,target_up_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,"1 si le Nikkei monte le mois suivant, 0 sinon"
+dataset_monthly2.csv,target_fx_next,mensuel,cible (connue en t+1),True,Yahoo EURJPY=X,1999-01-29,0.997,Rendement du yen exprimé en euros sur le mois suivant : S_t/S_{t+1} - 1
+dataset_monthly2.csv,target_reur_unhedged_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,Rendement en EUR d'une position longue Nikkei non couverte (h = 0)
+dataset_monthly2.csv,target_reur_hedged_next,mensuel,cible (connue en t+1),True,"Yahoo, BCE, BoJ",1999-01-29,0.997,Rendement en EUR d'une position longue Nikkei couverte à 100 % (h = 1)
+dataset_monthly2.csv,target_short_eur_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,"Rendement en EUR d'une position vendeuse (future Nikkei, marge en EUR)"
+dataset_monthly2.csv,target_rvol_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,"Volatilité réalisée du Nikkei le mois suivant, annualisée"
+dataset_model2.csv,news_attention_6m,mensuel,aucun,False,src.data (v1),2017-04-28,0.344,Volume anormal d'articles : log(n) - moyenne des 6 mois précédents
+dataset_model2.csv,news_sent_w,mensuel,aucun,False,src.data (v1),2017-01-31,0.353,Sentiment FinBERT moyen pondéré par le nombre d'articles (japan + boj)
+dataset_model2.csv,news_dispo,mensuel,aucun,False,src.data (v1),1999-01-29,1.0,1 si les variables de news existent pour ce mois
+dataset_model2.csv,n225_mom_12m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Momentum du Nikkei sur 12 mois : P_t / P_(t-12) - 1
+dataset_model2.csv,n225_mom_3m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Momentum du Nikkei sur 3 mois : P_t / P_(t-3) - 1
+dataset_model2.csv,n225_vol_ewma,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,"Volatilité EWMA du Nikkei (lambda = 0,94), annualisée"
+dataset_model2.csv,d_jgb10y_bp,mensuel,1 séance,False,MoF (jgbcme),1999-01-29,1.0,"Variation sur le mois de jgb10y, en points de base"
+dataset_model2.csv,tankan_large_manuf,mensuel,date de publication,False,BoJ (Tankan),1999-01-29,1.0,"Tankan, DI des grandes entreprises : large_manuf (dernière publication, connue le 1er jour du mois qui suit la fin du trimestre d'enquête)"
+dataset_model2.csv,carry_1m,mensuel,2 séances,False,"BCE, BoJ",1999-01-29,1.0,"Portage mensuel de la couverture EUR/JPY : (1+i_EUR/12)/(1+i_JPY/12) - 1 (€STR, TONA)"
+dataset_model2.csv,eurjpy_rvol_1m,mensuel,veille calendaire,False,Yahoo,1999-01-29,1.0,"Volatilité réalisée de l'EUR/JPY sur le mois, annualisée"
+dataset_model2.csv,n225_ret_1m,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Rendement du Nikkei sur le mois
+dataset_model2.csv,vix,mensuel,veille calendaire,False,Yahoo ^VIX,1999-01-29,1.0,"VIX (CBOE), niveau"
+dataset_model2.csv,y_baisse,mensuel,cible (connue en t+1),True,src.data (v1),1999-01-29,0.997,1 si le Nikkei baisse le mois suivant
+dataset_model2.csv,y_non_couvert,mensuel,cible (connue en t+1),True,src.data (v1),1999-01-29,0.997,1 si ne pas couvrir le yen était mieux (C_t - E_{t+1} <= 0)
+dataset_model2.csv,target_up_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,"1 si le Nikkei monte le mois suivant, 0 sinon"
+dataset_model2.csv,target_rn_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,Rendement du Nikkei 225 en JPY sur le mois suivant (P_{t+1}/P_t - 1)
+dataset_model2.csv,target_fx_next,mensuel,cible (connue en t+1),True,Yahoo EURJPY=X,1999-01-29,0.997,Rendement du yen exprimé en euros sur le mois suivant : S_t/S_{t+1} - 1
+dataset_model2.csv,target_reur_unhedged_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,Rendement en EUR d'une position longue Nikkei non couverte (h = 0)
+dataset_model2.csv,target_reur_hedged_next,mensuel,cible (connue en t+1),True,"Yahoo, BCE, BoJ",1999-01-29,0.997,Rendement en EUR d'une position longue Nikkei couverte à 100 % (h = 1)
+dataset_model2.csv,target_short_eur_next,mensuel,cible (connue en t+1),True,Yahoo,1999-01-29,0.997,"Rendement en EUR d'une position vendeuse (future Nikkei, marge en EUR)"
+dataset_model2.csv,eur_overnight,mensuel,2 séances,False,BCE,1999-01-29,1.0,"Taux au jour le jour de l'euro, en % (EONIA jusqu'en septembre 2019, puis €STR)"
+dataset_model2.csv,boj_meeting_next_month,mensuel,aucun (connu avant la clôture),False,BoJ,1999-01-29,1.0,Nombre de réunions de politique monétaire de la BoJ prévues le mois suivant
+dataset_model2.csv,n225_close,mensuel,aucun (connu avant la clôture),False,Yahoo,1999-01-29,1.0,Nikkei 225 : clôture du dernier jour du mois
+dataset_model2.csv,bloc,mensuel,aucun,False,src.data (v1),1999-01-29,1.0,Bloc du split chronologique

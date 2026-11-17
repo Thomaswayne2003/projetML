@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-17 17:46",
+  "commit_du_code": "0f9ada2",
+  "configuration": "config_bloomberg.yaml",
+  "modele_nikkei": "lgbm",
+  "fichiers_modeles": {
+    "logit": "runs/v2_bloomberg/models/nikkei_logit.joblib",
+    "rf": "runs/v2_bloomberg/models/nikkei_rf.joblib",
+    "lgbm": "runs/v2_bloomberg/models/nikkei_lgbm.joblib"
+  },
+  "sortie_du_modele": "P(baisse) ; p_hausse = 1 - P(baisse) calibrée",
+  "platt": {
+    "logit": {
+      "a": 0.909786872745836,
+      "c": -0.13248769635839724
+    },
+    "rf": {
+      "a": 1.1800208967011356,
+      "c": 0.04693520999833927
+    },
+    "lgbm": {
+      "a": 1.1973483030904326,
+      "c": -0.02537925322636054
+    }
+  },
+  "couts_entrainement_exces_du_cash": {
+    "B_u": 0.04023143401273885,
+    "B_d": -0.04611087411764706,
+    "S_u": -0.04125198649044586,
+    "S_d": 0.04469036826890756
+  },
+  "marge_m": 0.005,
+  "seuils": {
+    "theta_a": 0.5919563099988513,
+    "theta_v": 0.4618254687114902
+  },
+  "couverture": "toujours couvert (h = 1)",
+  "regle_choix_modele": "la logistique sauf si un modèle plus complexe la bat en PR-AUC et en log-loss calibrée sur la validation",
+  "validation": {
+    "pr_auc": {
+      "logit": 0.4016351377380789,
+      "rf": 0.46157329598506064,
+      "lgbm": 0.5612724826772815,
+      "moyenne": 0.49275302205609106
+    },
+    "log_loss_calibree": {
+      "logit": 0.7313497133652085,
+      "rf": 0.7144441537938219,
+      "lgbm": 0.6803070720847281,
+      "moyenne": 0.7019670192138535
+    },
+    "log_loss_constante": 0.6796226904674998,
+    "plancher_battu": false
+  },
+  "mois_entrainement": 276,
+  "premier_mois": "1999-01-29"
+}

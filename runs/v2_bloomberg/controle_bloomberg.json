@@ -1,0 +1,45 @@
+{
+  "tankan": {
+    "trimestres_compares": 112,
+    "valeurs_identiques": 112,
+    "regle": "valeur de l'enquête du trimestre utilisée à partir du mois suivant sa date Bloomberg",
+    "erreur_si_date_bloomberg_prise_telle_quelle": "99 trimestres auraient utilisé l'enquête avant sa publication"
+  },
+  "ipc": {
+    "mois_compares": 201,
+    "correlations": {
+      "decalage_0": 0.9682643637221644,
+      "decalage_1": 0.9979765731579079,
+      "decalage_2": 0.9690355787280627
+    },
+    "lecture": "même tendance, mais ce n'est pas la même mesure que l'IPC officiel ; l'IPC n'est pas une variable du modèle"
+  },
+  "vix": {
+    "mois_compares": 334,
+    "ratio_median_bloomberg_sur_vix": 0.8563123565861241,
+    "ratio_min": 0.5993942636986301,
+    "ratio_max": 1.2381917554423343,
+    "decision": "non utilisé : export « EUR, as exported », converti au taux de change ; le VIX en points (Cboe) de la table est gardé"
+  },
+  "calendrier": {
+    "lignes": 5002,
+    "couvre": "1999-01-13 → 2006-12-27",
+    "limite": "export tronqué à 5 000 lignes : à refaire par périodes pour couvrir 2007-2026",
+    "publications": {
+      "tankan": {
+        "publications": 32,
+        "premiere": "1999-04-05",
+        "derniere": "2006-12-15",
+        "jour_du_mois_median": 3.0,
+        "publiees_en_decembre": 8
+      },
+      "ipc": {
+        "publications": 64,
+        "premiere": "2001-09-28",
+        "derniere": "2006-12-26",
+        "jour_du_mois_median": 27.0,
+        "publiees_en_decembre": 7
+      }
+    }
+  }
+}
