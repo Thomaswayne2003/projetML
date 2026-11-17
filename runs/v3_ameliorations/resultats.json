@@ -1,0 +1,1117 @@
+{
+  "avertissement": "Troisième étape, après l'ouverture du test 2024-2026 par la V1 et la V2. Le protocole a été figé avant le calcul (protocole.json) ; 2024-2026 est montré à titre indicatif seulement.",
+  "date": "2026-11-17 18:32",
+  "commit_du_code": "45cbf77",
+  "protocole": {
+    "fichier": "runs/v3_ameliorations/protocole.json",
+    "sha256": "127b06538b4fec21a3d49dc6076acb8d279126201ba955fc5039b452026f26d3",
+    "fige_le": "2026-11-17 18:31:29"
+  },
+  "premiere_prevision": "2010-01-29",
+  "mois_par_periode": {
+    "2010-2023 (jugement)": 168,
+    "2010-2016": 84,
+    "2017-2023": 84,
+    "2024-2026 (déjà vu, indicatif)": 33
+  },
+  "probabilites": {
+    "2010-2023 (jugement)": {
+      "constante": {
+        "mois": 168,
+        "log_loss": 0.6794351171651387,
+        "ecart_vs_constante": 0.0,
+        "erreur_type": 0.0,
+        "p_unilaterale": 1.0,
+        "brier": 0.24315951584997642,
+        "auc": 0.46098714349046843,
+        "pr_auc": 0.38245165358131417,
+        "proba_moyenne": 0.44738595159950867,
+        "frequence_observee": 0.39880952380952384
+      },
+      "logistique du projet": {
+        "mois": 168,
+        "log_loss": 0.6824581010737579,
+        "ecart_vs_constante": 0.003022983908619276,
+        "erreur_type": 0.02048443062597501,
+        "p_unilaterale": 0.5586607924752633,
+        "brier": 0.2433333654540828,
+        "auc": 0.5192847642973253,
+        "pr_auc": 0.44595718204118645,
+        "proba_moyenne": 0.4080301405414429,
+        "frequence_observee": 0.39880952380952384
+      },
+      "logistique très pénalisée": {
+        "mois": 168,
+        "log_loss": 0.6754423722655875,
+        "ecart_vs_constante": -0.0039927448995511474,
+        "erreur_type": 0.0048158531430154165,
+        "p_unilaterale": 0.2035285492910595,
+        "brier": 0.2412147473306782,
+        "auc": 0.4926850894044628,
+        "pr_auc": 0.4126900479363291,
+        "proba_moyenne": 0.43359497818536613,
+        "frequence_observee": 0.39880952380952384
+      },
+      "logistique du projet, mélangée à la constante": {
+        "mois": 168,
+        "log_loss": 0.6725836800559664,
+        "ecart_vs_constante": -0.006851437109172256,
+        "erreur_type": 0.008957558191367869,
+        "p_unilaterale": 0.22217216700520398,
+        "brier": 0.23986642545779158,
+        "auc": 0.5110093098862125,
+        "pr_auc": 0.43597930440866683,
+        "proba_moyenne": 0.4277080460704758,
+        "frequence_observee": 0.39880952380952384
+      },
+      "logistique économique": {
+        "mois": 168,
+        "log_loss": 0.6785262955816723,
+        "ecart_vs_constante": -0.0009088215834662939,
+        "erreur_type": 0.008670496100621171,
+        "p_unilaterale": 0.45826022673451866,
+        "brier": 0.2428074840595447,
+        "auc": 0.5077582385104182,
+        "pr_auc": 0.389198128453485,
+        "proba_moyenne": 0.4153251963068429,
+        "frequence_observee": 0.39880952380952384
+      },
+      "logistique économique, mélangée à la constante": {
+        "mois": 168,
+        "log_loss": 0.6774136807256473,
+        "ecart_vs_constante": -0.002021436439491291,
+        "erreur_type": 0.0042730857440747795,
+        "p_unilaterale": 0.318084310364423,
+        "brier": 0.2422006726437061,
+        "auc": 0.49903945618442436,
+        "pr_auc": 0.38681790326681087,
+        "proba_moyenne": 0.4313555739531758,
+        "frequence_observee": 0.39880952380952384
+      },
+      "ridge sur le rendement": {
+        "mois": 168,
+        "log_loss": 0.6873637775367334,
+        "ecart_vs_constante": 0.007928660371594707,
+        "erreur_type": 0.009342004203879284,
+        "p_unilaterale": 0.8019788976266644,
+        "brier": 0.24720367286634276,
+        "auc": 0.4876607063691444,
+        "pr_auc": 0.3839623605800121,
+        "proba_moyenne": 0.44855806498740286,
+        "frequence_observee": 0.39880952380952384
+      }
+    },
+    "2010-2016": {
+      "constante": {
+        "mois": 84,
+        "log_loss": 0.6855739801192946,
+        "ecart_vs_constante": 0.0,
+        "erreur_type": 0.0,
+        "p_unilaterale": 1.0,
+        "brier": 0.24621476542954074,
+        "auc": 0.4271137026239067,
+        "pr_auc": 0.3845618146125902,
+        "proba_moyenne": 0.4601729406833779,
+        "frequence_observee": 0.4166666666666667
+      },
+      "logistique du projet": {
+        "mois": 84,
+        "log_loss": 0.6915372182502727,
+        "ecart_vs_constante": 0.005963238130978213,
+        "erreur_type": 0.015126010775977562,
+        "p_unilaterale": 0.6532970869870114,
+        "brier": 0.2489265077130547,
+        "auc": 0.45364431486880463,
+        "pr_auc": 0.4031664223904554,
+        "proba_moyenne": 0.4124124259522677,
+        "frequence_observee": 0.4166666666666667
+      },
+      "logistique très pénalisée": {
+        "mois": 84,
+        "log_loss": 0.6860239241488243,
+        "ecart_vs_constante": 0.0004499440295298228,
+        "erreur_type": 0.0037275019974842816,
+        "p_unilaterale": 0.5480393402060295,
+        "brier": 0.24643038056173483,
+        "auc": 0.44198250728862976,
+        "pr_auc": 0.3792662893037458,
+        "proba_moyenne": 0.4477434243491751,
+        "frequence_observee": 0.4166666666666667
+      },
+      "logistique du projet, mélangée à la constante": {
+        "mois": 84,
+        "log_loss": 0.6861835529952623,
+        "ecart_vs_constante": 0.0006095728759677858,
+        "erreur_type": 0.007361219824314739,
+        "p_unilaterale": 0.5329981652758874,
+        "brier": 0.24649141710717964,
+        "auc": 0.4501457725947522,
+        "pr_auc": 0.3901386897724172,
+        "proba_moyenne": 0.4362926833178229,
+        "frequence_observee": 0.4166666666666667
+      },
+      "logistique économique": {
+        "mois": 84,
+        "log_loss": 0.6923662608472647,
+        "ecart_vs_constante": 0.00679228072797009,
+        "erreur_type": 0.008639337245990102,
+        "p_unilaterale": 0.7841259822908189,
+        "brier": 0.2495177895352982,
+        "auc": 0.4571428571428572,
+        "pr_auc": 0.39449604043865744,
+        "proba_moyenne": 0.4527609601420022,
+        "frequence_observee": 0.4166666666666667
+      },
+      "logistique économique, mélangée à la constante": {
+        "mois": 84,
+        "log_loss": 0.6881908929607883,
+        "ecart_vs_constante": 0.002616912841493683,
+        "erreur_type": 0.004250418942995953,
+        "p_unilaterale": 0.7309482876760303,
+        "brier": 0.24750526468524622,
+        "auc": 0.4507288629737609,
+        "pr_auc": 0.38589288247720077,
+        "proba_moyenne": 0.45646695041269014,
+        "frequence_observee": 0.4166666666666667
+      },
+      "ridge sur le rendement": {
+        "mois": 84,
+        "log_loss": 0.7071572400559387,
+        "ecart_vs_constante": 0.021583259936644256,
+        "erreur_type": 0.012703488501791984,
+        "p_unilaterale": 0.9553406527132371,
+        "brier": 0.2568998966496648,
+        "auc": 0.43615160349854226,
+        "pr_auc": 0.383690257866553,
+        "proba_moyenne": 0.46964974075657134,
+        "frequence_observee": 0.4166666666666667
+      }
+    },
+    "2017-2023": {
+      "constante": {
+        "mois": 84,
+        "log_loss": 0.6732962542109827,
+        "ecart_vs_constante": 0.0,
+        "erreur_type": 0.0,
+        "p_unilaterale": 1.0,
+        "brier": 0.24010426627041206,
+        "auc": 0.3635817307692308,
+        "pr_auc": 0.31529821048349904,
+        "proba_moyenne": 0.43459896251563956,
+        "frequence_observee": 0.38095238095238093
+      },
+      "logistique du projet": {
+        "mois": 84,
+        "log_loss": 0.673378983897243,
+        "ecart_vs_constante": 8.272968626033259e-05,
+        "erreur_type": 0.03820411240718673,
+        "p_unilaterale": 0.5008638950578829,
+        "brier": 0.2377402231951109,
+        "auc": 0.5685096153846153,
+        "pr_auc": 0.48837801845757667,
+        "proba_moyenne": 0.4036478551306182,
+        "frequence_observee": 0.38095238095238093
+      },
+      "logistique très pénalisée": {
+        "mois": 84,
+        "log_loss": 0.6648608203823506,
+        "ecart_vs_constante": -0.008435433828632119,
+        "erreur_type": 0.00888587344073544,
+        "p_unilaterale": 0.17123190471876742,
+        "brier": 0.23599911409962157,
+        "auc": 0.5132211538461539,
+        "pr_auc": 0.44251595836626356,
+        "proba_moyenne": 0.41944653202155696,
+        "frequence_observee": 0.38095238095238093
+      },
+      "logistique du projet, mélangée à la constante": {
+        "mois": 84,
+        "log_loss": 0.6589838071166705,
+        "ecart_vs_constante": -0.014312447094312297,
+        "erreur_type": 0.016351021812154407,
+        "p_unilaterale": 0.19069873174193724,
+        "brier": 0.23324143380840356,
+        "auc": 0.5594951923076923,
+        "pr_auc": 0.4824140502081684,
+        "proba_moyenne": 0.4191234088231287,
+        "frequence_observee": 0.38095238095238093
+      },
+      "logistique économique": {
+        "mois": 84,
+        "log_loss": 0.6646863303160802,
+        "ecart_vs_constante": -0.008609923894902675,
+        "erreur_type": 0.01504839808027764,
+        "p_unilaterale": 0.2836105630550353,
+        "brier": 0.23609717858379117,
+        "auc": 0.5594951923076923,
+        "pr_auc": 0.42503384873721595,
+        "proba_moyenne": 0.3778894324716836,
+        "frequence_observee": 0.38095238095238093
+      },
+      "logistique économique, mélangée à la constante": {
+        "mois": 84,
+        "log_loss": 0.6666364684905064,
+        "ecart_vs_constante": -0.006659785720476268,
+        "erreur_type": 0.0074089507787652355,
+        "p_unilaterale": 0.18435728281171065,
+        "brier": 0.23689608060216594,
+        "auc": 0.5294471153846154,
+        "pr_auc": 0.39812871160897395,
+        "proba_moyenne": 0.4062441974936616,
+        "frequence_observee": 0.38095238095238093
+      },
+      "ridge sur le rendement": {
+        "mois": 84,
+        "log_loss": 0.667570315017528,
+        "ecart_vs_constante": -0.005725939193454846,
+        "erreur_type": 0.013613368058776094,
+        "p_unilaterale": 0.33701939650052093,
+        "brier": 0.2375074490830208,
+        "auc": 0.5108173076923077,
+        "pr_auc": 0.39771421755248687,
+        "proba_moyenne": 0.4274663892182344,
+        "frequence_observee": 0.38095238095238093
+      }
+    },
+    "2024-2026 (déjà vu, indicatif)": {
+      "constante": {
+        "mois": 33,
+        "log_loss": 0.6652427125353157,
+        "ecart_vs_constante": 0.0,
+        "erreur_type": 0.0,
+        "p_unilaterale": 1.0,
+        "brier": 0.23611904782407003,
+        "auc": 0.42460317460317454,
+        "pr_auc": 0.3517704178766822,
+        "proba_moyenne": 0.4286177936906238,
+        "frequence_observee": 0.36363636363636365
+      },
+      "logistique du projet": {
+        "mois": 33,
+        "log_loss": 0.6744262396736703,
+        "ecart_vs_constante": 0.009183527138354578,
+        "erreur_type": 0.026668452041339354,
+        "p_unilaterale": 0.6347119204833358,
+        "brier": 0.24081432293975402,
+        "auc": 0.5357142857142857,
+        "pr_auc": 0.4156456351858579,
+        "proba_moyenne": 0.4537095272174193,
+        "frequence_observee": 0.36363636363636365
+      },
+      "logistique très pénalisée": {
+        "mois": 33,
+        "log_loss": 0.6639123163645729,
+        "ecart_vs_constante": -0.001330396170742827,
+        "erreur_type": 0.006183994670338671,
+        "p_unilaterale": 0.41483087717351075,
+        "brier": 0.23547850250297675,
+        "auc": 0.5317460317460319,
+        "pr_auc": 0.42713366300683764,
+        "proba_moyenne": 0.43023473989245414,
+        "frequence_observee": 0.36363636363636365
+      },
+      "logistique du projet, mélangée à la constante": {
+        "mois": 33,
+        "log_loss": 0.6669868412061083,
+        "ecart_vs_constante": 0.0017441286707925037,
+        "erreur_type": 0.013192191315792523,
+        "p_unilaterale": 0.5525905761025927,
+        "brier": 0.2370332889525367,
+        "auc": 0.5357142857142857,
+        "pr_auc": 0.4154092906480428,
+        "proba_moyenne": 0.4411636604540215,
+        "frequence_observee": 0.36363636363636365
+      },
+      "logistique économique": {
+        "mois": 33,
+        "log_loss": 0.6751284591992261,
+        "ecart_vs_constante": 0.009885746663910318,
+        "erreur_type": 0.01658808101737461,
+        "p_unilaterale": 0.7243972918125366,
+        "brier": 0.2410574122899802,
+        "auc": 0.47619047619047616,
+        "pr_auc": 0.36095034504348233,
+        "proba_moyenne": 0.43198507639152156,
+        "frequence_observee": 0.36363636363636365
+      },
+      "logistique économique, mélangée à la constante": {
+        "mois": 33,
+        "log_loss": 0.6690737893014843,
+        "ecart_vs_constante": 0.003831076766168683,
+        "erreur_type": 0.00819319189403729,
+        "p_unilaterale": 0.6799620588971436,
+        "brier": 0.23802572483718532,
+        "auc": 0.4722222222222222,
+        "pr_auc": 0.358660967754105,
+        "proba_moyenne": 0.43030143504107266,
+        "frequence_observee": 0.36363636363636365
+      },
+      "ridge sur le rendement": {
+        "mois": 33,
+        "log_loss": 0.6670273707290938,
+        "ecart_vs_constante": 0.0017846581937781176,
+        "erreur_type": 0.009534254310319824,
+        "p_unilaterale": 0.5742417469037862,
+        "brier": 0.23700440912629184,
+        "auc": 0.5317460317460317,
+        "pr_auc": 0.4416613950251471,
+        "proba_moyenne": 0.44267078213658895,
+        "frequence_observee": 0.36363636363636365
+      }
+    }
+  },
+  "tests_probabilites": {
+    "logistique du projet": {
+      "ecart_vs_constante": 0.003022983908619276,
+      "erreur_type": 0.02048443062597501,
+      "p_unilaterale": 0.5586607924752633,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": false
+      },
+      "retenue": false
+    },
+    "logistique très pénalisée": {
+      "ecart_vs_constante": -0.0039927448995511474,
+      "erreur_type": 0.0048158531430154165,
+      "p_unilaterale": 0.2035285492910595,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": true
+      },
+      "retenue": false
+    },
+    "logistique du projet, mélangée à la constante": {
+      "ecart_vs_constante": -0.006851437109172256,
+      "erreur_type": 0.008957558191367869,
+      "p_unilaterale": 0.22217216700520398,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": true
+      },
+      "retenue": false
+    },
+    "logistique économique": {
+      "ecart_vs_constante": -0.0009088215834662939,
+      "erreur_type": 0.008670496100621171,
+      "p_unilaterale": 0.45826022673451866,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": true
+      },
+      "retenue": false
+    },
+    "logistique économique, mélangée à la constante": {
+      "ecart_vs_constante": -0.002021436439491291,
+      "erreur_type": 0.0042730857440747795,
+      "p_unilaterale": 0.318084310364423,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": true
+      },
+      "retenue": false
+    },
+    "ridge sur le rendement": {
+      "ecart_vs_constante": 0.007928660371594707,
+      "erreur_type": 0.009342004203879284,
+      "p_unilaterale": 0.8019788976266644,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": true
+      },
+      "retenue": false
+    }
+  },
+  "euros": {
+    "2010-2023 (jugement)": {
+      "achat couvert, toujours": {
+        "mois": 168,
+        "cumul": 2.1917764305247904,
+        "annualise": 0.08643142434633089,
+        "volatilite": 0.1735739984956371,
+        "sharpe": 0.5571557201026347,
+        "perte_maximale": -0.2553138491454805,
+        "pire_mois": -0.129543
+      },
+      "achat non couvert": {
+        "mois": 168,
+        "cumul": 1.7872169164631582,
+        "annualise": 0.07596442438839435,
+        "volatilite": 0.14835357692132523,
+        "sharpe": 0.5579986676511016,
+        "perte_maximale": -0.19442628749229385,
+        "pire_mois": -0.123353
+      },
+      "couverture à moitié": {
+        "mois": 168,
+        "cumul": 2.0374990795075414,
+        "annualise": 0.08259356089170011,
+        "volatilite": 0.15319806079322987,
+        "sharpe": 0.5858783870258968,
+        "perte_maximale": -0.1905802609068742,
+        "pire_mois": -0.10073265
+      },
+      "couvert seulement si le carry est positif": {
+        "mois": 168,
+        "cumul": 1.9388567828977843,
+        "annualise": 0.08004366994761103,
+        "volatilite": 0.1654602316369441,
+        "sharpe": 0.5398134977123962,
+        "perte_maximale": -0.2553138491454805,
+        "pire_mois": -0.129543
+      },
+      "achat couvert, dosé par la volatilité": {
+        "mois": 168,
+        "cumul": 1.4439131344515785,
+        "annualise": 0.06590969366818822,
+        "volatilite": 0.14196316068378426,
+        "sharpe": 0.5108133840290667,
+        "perte_maximale": -0.21622126680900244,
+        "pire_mois": -0.10900586977942685
+      },
+      "règle : constante": {
+        "mois": 168,
+        "cumul": 0.023609874522277474,
+        "annualise": 0.001668209352329697,
+        "volatilite": 0.002866061452148768,
+        "sharpe": 0.0,
+        "perte_maximale": -0.029682080436884584,
+        "pire_mois": -0.0004874999999999999
+      },
+      "règle : logistique du projet": {
+        "mois": 168,
+        "cumul": 0.8962296147521314,
+        "annualise": 0.0467653827388852,
+        "volatilite": 0.13212188008398523,
+        "sharpe": 0.399791856527261,
+        "perte_maximale": -0.32723575740050626,
+        "pire_mois": -0.129543
+      },
+      "règle : logistique très pénalisée": {
+        "mois": 168,
+        "cumul": 0.3439334278250925,
+        "annualise": 0.021338821049598167,
+        "volatilite": 0.07426302225114421,
+        "sharpe": 0.29914749713184113,
+        "perte_maximale": -0.19387923527951478,
+        "pire_mois": -0.10727
+      },
+      "règle : logistique du projet, mélangée à la constante": {
+        "mois": 168,
+        "cumul": 0.38164934734732103,
+        "annualise": 0.02335995085098852,
+        "volatilite": 0.09707306608106521,
+        "sharpe": 0.2693929735593045,
+        "perte_maximale": -0.2875719530669959,
+        "pire_mois": -0.10677
+      },
+      "règle : logistique économique": {
+        "mois": 168,
+        "cumul": 1.171976343641059,
+        "annualise": 0.056966147404345246,
+        "volatilite": 0.12213844405399761,
+        "sharpe": 0.5030265703950051,
+        "perte_maximale": -0.20667325131244874,
+        "pire_mois": -0.10677
+      },
+      "règle : logistique économique, mélangée à la constante": {
+        "mois": 168,
+        "cumul": 0.4938372896986989,
+        "annualise": 0.02908260082774916,
+        "volatilite": 0.0949458312037647,
+        "sharpe": 0.332711819262857,
+        "perte_maximale": -0.20211832680241182,
+        "pire_mois": -0.10727
+      },
+      "règle : ridge sur le rendement": {
+        "mois": 168,
+        "cumul": 0.5175432204793953,
+        "annualise": 0.030240569399668793,
+        "volatilite": 0.11517931208409991,
+        "sharpe": 0.30086326769511246,
+        "perte_maximale": -0.2156574515848546,
+        "pire_mois": -0.0967581
+      },
+      "assemblage final": {
+        "mois": 168,
+        "cumul": 2.1917764305247904,
+        "annualise": 0.08643142434633089,
+        "volatilite": 0.1735739984956371,
+        "sharpe": 0.5571557201026347,
+        "perte_maximale": -0.2553138491454805,
+        "pire_mois": -0.129543
+      }
+    },
+    "2010-2016": {
+      "achat couvert, toujours": {
+        "mois": 84,
+        "cumul": 0.7063035752283411,
+        "annualise": 0.07932167856188976,
+        "volatilite": 0.18588402769180698,
+        "sharpe": 0.4950067792426597,
+        "perte_maximale": -0.2553138491454805,
+        "pire_mois": -0.129543
+      },
+      "achat non couvert": {
+        "mois": 84,
+        "cumul": 0.9199553956147752,
+        "annualise": 0.09766587497273238,
+        "volatilite": 0.1492343609581712,
+        "sharpe": 0.6883957836253071,
+        "perte_maximale": -0.15050221101875505,
+        "pire_mois": -0.123353
+      },
+      "couverture à moitié": {
+        "mois": 84,
+        "cumul": 0.8356408365328356,
+        "annualise": 0.09064637106820728,
+        "volatilite": 0.15619393908267468,
+        "sharpe": 0.6233333906522281,
+        "perte_maximale": -0.18760349585125258,
+        "pire_mois": -0.10048185000000001
+      },
+      "couvert seulement si le carry est positif": {
+        "mois": 84,
+        "cumul": 0.7522388421908852,
+        "annualise": 0.08342547551918211,
+        "volatilite": 0.17682395366817702,
+        "sharpe": 0.5319538733304902,
+        "perte_maximale": -0.2553138491454805,
+        "pire_mois": -0.129543
+      },
+      "achat couvert, dosé par la volatilité": {
+        "mois": 84,
+        "cumul": 0.45587415279794863,
+        "annualise": 0.05512376539425423,
+        "volatilite": 0.14410449330604577,
+        "sharpe": 0.4326450221514279,
+        "perte_maximale": -0.21622126680900244,
+        "pire_mois": -0.10900586977942685
+      },
+      "règle : constante": {
+        "mois": 84,
+        "cumul": 0.012493187935175953,
+        "annualise": 0.0017752584818362394,
+        "volatilite": 0.001092141273132746,
+        "sharpe": 0.0,
+        "perte_maximale": -0.004473819297857284,
+        "pire_mois": -0.00029499999999999996
+      },
+      "règle : logistique du projet": {
+        "mois": 84,
+        "cumul": 0.0583482809130651,
+        "annualise": 0.008134257221292351,
+        "volatilite": 0.1405984995084892,
+        "sharpe": 0.11564282120713004,
+        "perte_maximale": -0.32723575740050626,
+        "pire_mois": -0.129543
+      },
+      "règle : logistique très pénalisée": {
+        "mois": 84,
+        "cumul": 0.012493187935175953,
+        "annualise": 0.0017752584818362394,
+        "volatilite": 0.001092141273132746,
+        "sharpe": 0.0,
+        "perte_maximale": -0.004473819297857284,
+        "pire_mois": -0.00029499999999999996
+      },
+      "règle : logistique du projet, mélangée à la constante": {
+        "mois": 84,
+        "cumul": -0.00210288784874868,
+        "annualise": -0.0003006836459018558,
+        "volatilite": 0.0858903008986456,
+        "sharpe": 0.01859397551847675,
+        "perte_maximale": -0.2875719530669959,
+        "pire_mois": -0.104779
+      },
+      "règle : logistique économique": {
+        "mois": 84,
+        "cumul": 0.19257092018227806,
+        "annualise": 0.02547792622567191,
+        "volatilite": 0.08279272596807259,
+        "sharpe": 0.32347265184324575,
+        "perte_maximale": -0.20667325131244874,
+        "pire_mois": -0.104779
+      },
+      "règle : logistique économique, mélangée à la constante": {
+        "mois": 84,
+        "cumul": 0.04721495538215392,
+        "annualise": 0.006612368212647768,
+        "volatilite": 0.027270172391410455,
+        "sharpe": 0.18922202728614565,
+        "perte_maximale": -0.052019111778320304,
+        "pire_mois": -0.0269273
+      },
+      "règle : ridge sur le rendement": {
+        "mois": 84,
+        "cumul": 0.1998017847731548,
+        "annualise": 0.02636387481025837,
+        "volatilite": 0.12482756059600587,
+        "sharpe": 0.2558023488111859,
+        "perte_maximale": -0.2156574515848546,
+        "pire_mois": -0.0967581
+      },
+      "assemblage final": {
+        "mois": 84,
+        "cumul": 0.7063035752283411,
+        "annualise": 0.07932167856188976,
+        "volatilite": 0.18588402769180698,
+        "sharpe": 0.4950067792426597,
+        "perte_maximale": -0.2553138491454805,
+        "pire_mois": -0.129543
+      }
+    },
+    "2017-2023": {
+      "achat couvert, toujours": {
+        "mois": 84,
+        "cumul": 0.8705794659649926,
+        "annualise": 0.09358800369867226,
+        "volatilite": 0.1614394058775999,
+        "sharpe": 0.628579982983686,
+        "perte_maximale": -0.22874209592546524,
+        "pire_mois": -0.10699
+      },
+      "achat non couvert": {
+        "mois": 84,
+        "cumul": 0.45170920263524295,
+        "annualise": 0.054692023270020984,
+        "volatilite": 0.14813247559842155,
+        "sharpe": 0.42380403973544367,
+        "perte_maximale": -0.19442628749229374,
+        "pire_mois": -0.0954986
+      },
+      "couverture à moitié": {
+        "mois": 84,
+        "cumul": 0.6547349672416196,
+        "annualise": 0.0746002088067057,
+        "volatilite": 0.15104654149546026,
+        "sharpe": 0.5437588488322086,
+        "perte_maximale": -0.19058026090687408,
+        "pire_mois": -0.10073265
+      },
+      "couvert seulement si le carry est positif": {
+        "mois": 84,
+        "cumul": 0.6772010254168466,
+        "annualise": 0.07667242034798494,
+        "volatilite": 0.15431465386932322,
+        "sharpe": 0.5483007136510917,
+        "perte_maximale": -0.19442628749229374,
+        "pire_mois": -0.0954986
+      },
+      "achat couvert, dosé par la volatilité": {
+        "mois": 84,
+        "cumul": 0.6786568603850711,
+        "annualise": 0.07680588033317193,
+        "volatilite": 0.14059616436900116,
+        "sharpe": 0.5885715533312845,
+        "perte_maximale": -0.2082181693616133,
+        "pire_mois": -0.094052
+      },
+      "règle : constante": {
+        "mois": 84,
+        "cumul": 0.010979517412628148,
+        "annualise": 0.001561171662031846,
+        "volatilite": 0.003915738545566912,
+        "sharpe": 0.0,
+        "perte_maximale": -0.0250363682941257,
+        "pire_mois": -0.0004874999999999999
+      },
+      "règle : logistique du projet": {
+        "mois": 84,
+        "cumul": 0.7916877165579215,
+        "annualise": 0.08687683079096797,
+        "volatilite": 0.12300533316521725,
+        "sharpe": 0.7268097898970981,
+        "perte_maximale": -0.205876567637288,
+        "pire_mois": -0.10677
+      },
+      "règle : logistique très pénalisée": {
+        "mois": 84,
+        "cumul": 0.32735058747984147,
+        "annualise": 0.04128443835179518,
+        "volatilite": 0.10494323205504244,
+        "sharpe": 0.4233810148406091,
+        "perte_maximale": -0.19387923527951456,
+        "pire_mois": -0.10727
+      },
+      "règle : logistique du projet, mélangée à la constante": {
+        "mois": 84,
+        "cumul": 0.38456092368960104,
+        "annualise": 0.04758057935371407,
+        "volatilite": 0.10715496544352937,
+        "sharpe": 0.4732817767347765,
+        "perte_maximale": -0.2048696582508409,
+        "pire_mois": -0.10677
+      },
+      "règle : logistique économique": {
+        "mois": 84,
+        "cumul": 0.8212554967457073,
+        "annualise": 0.08942124270838003,
+        "volatilite": 0.1515307102754649,
+        "sharpe": 0.6342497061837303,
+        "perte_maximale": -0.1989125025274926,
+        "pire_mois": -0.10677
+      },
+      "règle : logistique économique, mélangée à la constante": {
+        "mois": 84,
+        "cumul": 0.42648582511272726,
+        "annualise": 0.05205442806827043,
+        "volatilite": 0.13144802887838578,
+        "sharpe": 0.4412659895032186,
+        "perte_maximale": -0.20211832680241193,
+        "pire_mois": -0.10727
+      },
+      "règle : ridge sur le rendement": {
+        "mois": 84,
+        "cumul": 0.2648282739188581,
+        "annualise": 0.03413190671112787,
+        "volatilite": 0.1054006151871974,
+        "sharpe": 0.3544995949402987,
+        "perte_maximale": -0.20217797681282246,
+        "pire_mois": -0.094552
+      },
+      "assemblage final": {
+        "mois": 84,
+        "cumul": 0.8705794659649926,
+        "annualise": 0.09358800369867226,
+        "volatilite": 0.1614394058775999,
+        "sharpe": 0.628579982983686,
+        "perte_maximale": -0.22874209592546524,
+        "pire_mois": -0.10699
+      }
+    },
+    "2024-2026 (déjà vu, indicatif)": {
+      "achat couvert, toujours": {
+        "mois": 33,
+        "cumul": 0.823457220253422,
+        "annualise": 0.2441453467656609,
+        "volatilite": 0.22233583126149384,
+        "sharpe": 0.9752778804602654,
+        "perte_maximale": -0.131903,
+        "pire_mois": -0.131903
+      },
+      "achat non couvert": {
+        "mois": 33,
+        "cumul": 0.5792012861957321,
+        "annualise": 0.18075307949590091,
+        "volatilite": 0.21160992766603068,
+        "sharpe": 0.76479465481751,
+        "perte_maximale": -0.12840700000000005,
+        "pire_mois": -0.128407
+      },
+      "couverture à moitié": {
+        "mois": 33,
+        "cumul": 0.7004133558119325,
+        "annualise": 0.21293632560603437,
+        "volatilite": 0.21356061997010498,
+        "sharpe": 0.8865077239651923,
+        "perte_maximale": -0.13015500000000002,
+        "pire_mois": -0.130155
+      },
+      "couvert seulement si le carry est positif": {
+        "mois": 33,
+        "cumul": 0.823457220253422,
+        "annualise": 0.2441453467656609,
+        "volatilite": 0.22233583126149384,
+        "sharpe": 0.9752778804602654,
+        "perte_maximale": -0.131903,
+        "pire_mois": -0.131903
+      },
+      "achat couvert, dosé par la volatilité": {
+        "mois": 33,
+        "cumul": 0.5866804299230037,
+        "annualise": 0.18278350720310366,
+        "volatilite": 0.16306058608880172,
+        "sharpe": 0.9479130515553927,
+        "perte_maximale": -0.09440524201652967,
+        "pire_mois": -0.08902284162659665
+      },
+      "règle : constante": {
+        "mois": 33,
+        "cumul": -0.010490589886727575,
+        "annualise": -0.0038275666727999313,
+        "volatilite": 0.1308097684268808,
+        "sharpe": -0.1676409792397522,
+        "perte_maximale": -0.13240300000000005,
+        "pire_mois": -0.132403
+      },
+      "règle : logistique du projet": {
+        "mois": 33,
+        "cumul": 0.4588126238790218,
+        "annualise": 0.14719220267334832,
+        "volatilite": 0.16314011070912324,
+        "sharpe": 0.7617229021449121,
+        "perte_maximale": -0.16219374306718337,
+        "pire_mois": -0.132403
+      },
+      "règle : logistique très pénalisée": {
+        "mois": 33,
+        "cumul": 0.24875904989655684,
+        "annualise": 0.08413444988847663,
+        "volatilite": 0.17289403065030853,
+        "sharpe": 0.3976564092651675,
+        "perte_maximale": -0.16219374306718348,
+        "pire_mois": -0.132403
+      },
+      "règle : logistique du projet, mélangée à la constante": {
+        "mois": 33,
+        "cumul": 0.2843873809887201,
+        "annualise": 0.09528169386616714,
+        "volatilite": 0.16512539376704954,
+        "sharpe": 0.4706054053363144,
+        "perte_maximale": -0.16219374306718348,
+        "pire_mois": -0.132403
+      },
+      "règle : logistique économique": {
+        "mois": 33,
+        "cumul": 0.47887784521909005,
+        "annualise": 0.15290511156808506,
+        "volatilite": 0.13534008945419648,
+        "sharpe": 0.9215415800202924,
+        "perte_maximale": -0.09692105582547994,
+        "pire_mois": -0.0612161
+      },
+      "règle : logistique économique, mélangée à la constante": {
+        "mois": 33,
+        "cumul": 0.31712473623829984,
+        "annualise": 0.1053522334964645,
+        "volatilite": 0.114471826566142,
+        "sharpe": 0.6949336582444617,
+        "perte_maximale": -0.0532492610413936,
+        "pire_mois": -0.0442963
+      },
+      "règle : ridge sur le rendement": {
+        "mois": 33,
+        "cumul": 0.251574512006399,
+        "annualise": 0.08502264874241217,
+        "volatilite": 0.11230222829346746,
+        "sharpe": 0.5414899116439075,
+        "perte_maximale": -0.044296299999999955,
+        "pire_mois": -0.0442963
+      },
+      "assemblage final": {
+        "mois": 33,
+        "cumul": 0.823457220253422,
+        "annualise": 0.2441453467656609,
+        "volatilite": 0.22233583126149384,
+        "sharpe": 0.9752778804602654,
+        "perte_maximale": -0.131903,
+        "pire_mois": -0.131903
+      }
+    }
+  },
+  "tests_euros": {
+    "achat non couvert": {
+      "ecart": 0.0008429475484669213,
+      "ic_90": [
+        -0.2769712199887076,
+        0.2796631056153664
+      ],
+      "p_unilaterale": 0.4964,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": true,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "couverture à moitié": {
+      "ecart": 0.028722666923262086,
+      "ic_90": [
+        -0.09592377431045712,
+        0.15337877642070832
+      ],
+      "p_unilaterale": 0.3448,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": true,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "couvert seulement si le carry est positif": {
+      "ecart": -0.017342222390238526,
+      "ic_90": [
+        -0.19626677438090365,
+        0.16383446623188033
+      ],
+      "p_unilaterale": 0.5732,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": true,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "achat couvert, dosé par la volatilité": {
+      "ecart": -0.04634233607356797,
+      "ic_90": [
+        -0.11671917165544486,
+        0.01986628171404046
+      ],
+      "p_unilaterale": 0.8734,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "règle : constante": {
+      "ecart": -0.5571557201026347,
+      "ic_90": [
+        -1.0027794470184987,
+        -0.1575050151068887
+      ],
+      "p_unilaterale": 0.9932,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "règle : logistique du projet": {
+      "ecart": -0.15736386357537369,
+      "ic_90": [
+        -0.492184503343204,
+        0.20121838266520445
+      ],
+      "p_unilaterale": 0.7802,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": true
+      },
+      "retenu": false
+    },
+    "règle : logistique très pénalisée": {
+      "ecart": -0.25800822297079357,
+      "ic_90": [
+        -0.7928427184384174,
+        0.25213389700930605
+      ],
+      "p_unilaterale": 0.7906,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "règle : logistique du projet, mélangée à la constante": {
+      "ecart": -0.2877627465433302,
+      "ic_90": [
+        -0.657139154567194,
+        0.11050112372045995
+      ],
+      "p_unilaterale": 0.8832,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "règle : logistique économique": {
+      "ecart": -0.05412914970762961,
+      "ic_90": [
+        -0.3432256970337429,
+        0.2289684355725025
+      ],
+      "p_unilaterale": 0.637,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": true
+      },
+      "retenu": false
+    },
+    "règle : logistique économique, mélangée à la constante": {
+      "ecart": -0.22444390083977772,
+      "ic_90": [
+        -0.6861649379654181,
+        0.17822600303169142
+      ],
+      "p_unilaterale": 0.8072,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": false
+      },
+      "retenu": false
+    },
+    "règle : ridge sur le rendement": {
+      "ecart": -0.25629245240752224,
+      "ic_90": [
+        -0.7539087771619326,
+        0.18412275111441567
+      ],
+      "p_unilaterale": 0.8248,
+      "p_holm": 1.0,
+      "mieux_sur": {
+        "2010-2016": false,
+        "2017-2023": false
+      },
+      "retenu": false
+    }
+  },
+  "retenus": {
+    "probabilites": [],
+    "euros": []
+  },
+  "assemblage_final": {
+    "probabilite": "constante",
+    "couverture": "achat couvert, toujours",
+    "dosage_par_la_volatilite": false,
+    "regle_de_decision": false
+  },
+  "mois_prochain": {
+    "donnees_arretees_au": "2026-10-30",
+    "mois_prevu": "2026-11",
+    "probabilites_de_baisse": {
+      "constante": 0.42342342342342343,
+      "logistique du projet": 0.6018607950586462,
+      "logistique très pénalisée": 0.46824357501244,
+      "logistique du projet, mélangée à la constante": 0.5126421092410348,
+      "logistique économique": 0.44824141633589665,
+      "logistique économique, mélangée à la constante": 0.43583241987966004,
+      "ridge sur le rendement": 0.4677017924279691
+    },
+    "assemblage": {
+      "probabilite_utilisee": "constante",
+      "p_baisse": 0.42342342342342343,
+      "sens": "acheter",
+      "part_couverte": 1.0,
+      "part_investie": 1.0,
+      "volatilite_recente": 0.267115,
+      "carry_1m": 0.00100897
+    }
+  },
+  "coefficients_derniers": {
+    "logistique économique": {
+      "n225_mom_12m": 0.11563063466796372,
+      "jgb_slope_10y2y": 0.07077325174894401,
+      "us_slope_10y3m": 0.13127015984786133,
+      "d_cli_jpn": -0.17168367566951356,
+      "vix": -0.0043003721369725785,
+      "n225_vol_ewma": 0.025881812881925148,
+      "constante": -0.31175204990985605
+    },
+    "ridge sur le rendement": {
+      "n225_mom_12m": -0.0009809917129360033,
+      "jgb_slope_10y2y": -0.0026717056543839822,
+      "us_slope_10y3m": -0.003826907686785813,
+      "d_cli_jpn": 0.009133654057720101,
+      "vix": -0.0009262690067972475,
+      "n225_vol_ewma": 0.003387013932174209,
+      "constante": 0.005967764858858859
+    }
+  }
+}
