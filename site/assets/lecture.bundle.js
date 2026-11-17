@@ -11,6 +11,7 @@ const nf = (d) => new Intl.NumberFormat("fr-FR", { minimumFractionDigits: d, max
 const nombre = (x, d = 0) => nf(d).format(x);
 const pct = (x, d = 1, signe = false) =>
   (signe && x > 0 ? "+" : x < 0 ? "−" : "") + nf(d).format(Math.abs(x * 100)) + " %";
+const Maj = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 const dec = (x, d = 3) => (x < 0 ? "−" : "") + nf(d).format(Math.abs(x));
 const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 const moisLong = (am) => { const [a, m] = am.split("-").map(Number); return `${MOIS[m - 1]} ${a}`; };
@@ -73,114 +74,121 @@ const RISQUE = {
 
 // ---------- les sept salles ----------
 // ton : couleurs de la salle (murs, sol, lumière), pour la visite ; les mêmes servent d'accent dans la lecture
+// ---------- parcours Applied ML : les étapes du projet, dans l'ordre des notebooks ----------
+const DS = D.dataset ?? {};
+const V2 = D.v2 ?? {};
+const CB = V2.controle_bloomberg ?? {};
+const E2 = V2.evaluation_test;
+const CONST2 = "constante (fréquence de l'entraînement)";
+const serieV2 = V2.serie ?? D.serie;
+const blocsV2 = ["entraînement", "validation", "test"].map((b) => serieV2.filter((m) => m.bloc === b).length);
+const baissesEntrainement = (() => {   // part des mois en baisse sur l'entraînement, d'après les clôtures
+  const s = serieV2; let n = 0, b = 0;
+  for (let i = 1; i < s.length; i++) if (s[i - 1].bloc === "entraînement") { n++; if (s[i].cloture <= s[i - 1].cloture) b++; }
+  return n ? b / n : null;
+})();
+const LIBELLES_VAR = Object.fromEntries((D.modele?.variables ?? []).map((v, i) => [v, D.modele.libelles[i]]));
+const libelleVar = (v) => LIBELLES_VAR[v] ?? v.replace("distance au régime", "distance au régime").replace(/_/g, " ");
+const contribs = [...(D.explication ?? [])].sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution));
+const V2_INFO = E2 ? {
+  modele: E2.modele, mois: E2.mois_entrainement,
+  ll: E2.metriques[E2.modele]["log-loss"], llConst: E2.metriques[CONST2]["log-loss"],
+  llLogit: E2.metriques["logistique"]["log-loss"], llLogitVal: V2.decision_finale.validation.log_loss_calibree.logit,
+  ecart: E2.ecart_log_loss, regle: E2.performance_euros["règle du modèle"].cumul,
+  couvert: E2.performance_euros["toujours acheter, couvert"].cumul, actions: E2.actions,
+} : null;
+
 const SALLES_ML = [
   {
-    id: "question", num: "I", nom: "La question",
-    notebooks: ["01_cadrage_eda_variables"], docs: ["rapport"],
-    titre: "Acheter, rester neutre ou vendre",
-    oeuvre: "Le vase des 201 mois",
-    legende: "Son profil suit la clôture mensuelle du Nikkei, de février 2010 (au pied) à octobre 2026 (au col). Deux sillons marquent le début de la validation et celui du test.",
-    clair: "Chaque fin de mois, un investisseur en euros se demande quoi faire du Nikkei 225 le mois suivant : acheter, rester neutre ou vendre et, s'il achète, se couvrir ou non contre le yen. Un modèle estime la probabilité que l'indice monte, puis une règle en tire l'action.",
-    technique: `La cible vaut 1 si le Nikkei, en yens, monte le mois suivant. Le découpage suit le temps : entraînement de 2010 à 2021 (${CHIFFRES.moisEntrainement} mois), validation 2022-2023 (${CHIFFRES.moisValidation} mois), test 2024-2026 (${CHIFFRES.moisTest} mois), ouvert une seule fois. La métrique principale est la log-loss, comparée à une prévision constante qui annonce toujours la fréquence des hausses de l'entraînement.`,
+    id: "dataset", num: "I", nom: "Le dataset", kanji: "集",
+    notebooks: ["00a_collecte_V1", "00b_collecte_V2"], docs: [],
+    titre: "Construire la table, mois par mois",
+    oeuvre: "La pile des mois",
+    legende: `Un disque par mois, de ${moisLong(serieV2[0].mois)} (en bas) à ${moisLong(serieV2[serieV2.length - 1].mois)} (en haut). Chaque disque est décalé selon le rendement du mois : la pile se tord dans les mois agités. Les disques foncés sont les mois de baisse.`,
+    clair: "Tout commence par la table. Chaque ligne est une fin de mois, chaque colonne une information que l'on connaissait vraiment ce jour-là : prix, taux, change, conjoncture, incertitude et news, rassemblés depuis 1999, ramenés au calendrier de Tokyo et décalés jusqu'à leur publication. À ce stade, la table ne sert qu'à explorer.",
+    technique: `${nombre(DS.colonnes ?? 0)} colonnes mensuelles et ${nombre(DS.variables_journalieres ?? 0)} journalières, ${nombre(DS.mois ?? serieV2.length)} mois de ${DS.premier_mois ?? ""} à ${DS.dernier_mois ?? ""}. Sources : Yahoo Finance pour les marchés, ministère des Finances pour la courbe des taux japonais, Banque du Japon pour le Tankan, les agrégats et le change, BCE et Bundesbank, OCDE pour les indicateurs avancés et l'inflation, indices d'incertitude et de risque géopolitique, news GDELT notées par FinBERT. Chaque colonne porte son décalage de publication dans le dictionnaire des variables. Bloomberg sert de référence : une fois décalé à sa date de publication, le Tankan de la table coïncide avec Bloomberg sur ${CB.tankan?.valeurs_identiques ?? "—"} trimestres sur ${CB.tankan?.trimestres_compares ?? "—"} ; pris à sa date Bloomberg, il aurait été utilisé avant d'être publié. L'export Bloomberg du VIX, converti en euros, n'est pas utilisé, et le calendrier des publications, tronqué à 5 000 lignes, ne couvre que 1999-2006.`,
     chiffres: [
-      [nombre(CHIFFRES.moisTotal), "mois, de 2010 à 2026"],
-      [`${CHIFFRES.moisEntrainement} · ${CHIFFRES.moisValidation} · ${CHIFFRES.moisTest}`, "entraînement · validation · test"],
-      [pct(CHIFFRES.baissesTest / CHIFFRES.moisTest, 0), "de mois en baisse sur le test"],
+      [nombre(DS.mois ?? serieV2.length), `mois, de ${(DS.premier_mois ?? "").slice(0, 4)} à ${(DS.dernier_mois ?? "").slice(0, 4)}`],
+      [nombre(DS.colonnes ?? 0), "colonnes mensuelles"],
+      [`${CB.tankan?.valeurs_identiques ?? "—"}/${CB.tankan?.trimestres_compares ?? "—"}`, "trimestres de Tankan identiques à Bloomberg"],
     ],
     ton: { mur: "#2f3a3a", sol: "#b9b1a5", ciel: "#dfe6e4", texte: "#f3efe8", accent: "#9fb5ae" },
   },
   {
-    id: "donnees", num: "II", nom: "Les données",
+    id: "exploration", num: "II", nom: "L'exploration", kanji: "探",
     notebooks: ["01_cadrage_eda_variables"], docs: [],
-    titre: "Ce qu'on savait vraiment à la fin du mois",
-    oeuvre: "La pile des mois",
-    legende: "Un disque par mois. Chacun est décalé selon le rendement du mois : la pile se tord dans les mois agités. Les disques foncés sont les mois de baisse.",
-    clair: "Prix, taux, change, conjoncture japonaise et news : des articles GDELT dont la tonalité est notée par FinBERT. Une variable n'entre dans le modèle qu'à la date où elle était réellement publiée, et un audit écrit en code vérifie qu'aucune ligne n'utilise d'information venue après.",
-    technique: "Dix variables, plus un régime de marché appris par k-means dans la pipeline. News : volume anormal d'articles sur six mois, tonalité pondérée, disponibilité. Prix : momentum à 12 et 3 mois, volatilité lissée. Macro : variation du taux japonais à 10 ans, Tankan des grandes entreprises (celui de décembre est daté de janvier, par prudence). Change : portage à un mois et volatilité de l'euro-yen. Le décalage de publication de chaque colonne est écrit dans le dictionnaire des variables ; l'audit contrôle les valeurs, pas seulement les noms de colonnes.",
+    titre: "Regarder avant de modéliser",
+    oeuvre: `Le vase des ${serieV2.length} mois`,
+    legende: `Son profil suit la clôture mensuelle du Nikkei, de ${moisLong(serieV2[0].mois)} (au pied) à ${moisLong(serieV2[serieV2.length - 1].mois)} (au col). Deux sillons marquent le début de la validation et celui du test.`,
+    clair: "Avant tout modèle, on regarde : la trajectoire du Nikkei, la part des mois en baisse, ce qui bouge ensemble, et comment couper le temps. L'exploration fixe la cible, les variables candidates, les références sans compétence et le découpage.",
+    technique: `La cible vaut 1 si le Nikkei, en yens, baisse le mois suivant : c'est la classe positive des métriques. Découpage dans l'ordre du temps : entraînement jusqu'en 2021, validation 2022-2023, test 2024-2026, ouvert une seule fois. Deux références sans compétence : la prévision constante (la fréquence des baisses de l'entraînement) et « toujours acheter ». Dix variables sont retenues, plus un régime de marché appris par k-means. Réserve : elles ont été choisies sur une exploration de 2017-2026, qui recouvre la validation et le test.`,
     chiffres: [
+      [`${blocsV2[0]} · ${blocsV2[1]} · ${blocsV2[2]}`, "mois d'entraînement · validation · test"],
+      [baissesEntrainement == null ? "—" : pct(baissesEntrainement, 0), "de mois en baisse sur l'entraînement"],
       ["10 + 1", "variables, plus un régime k-means"],
-      ["5", "familles : news, prix, taux, conjoncture, change"],
-      [moisLong(D.serie.find((m) => m.news).mois).replace(/^\w/, (c) => c.toUpperCase()), "premier mois avec des news"],
     ],
     ton: { mur: "#cbb796", sol: "#a8957a", ciel: "#fbf4e8", texte: "#fffaf2", accent: "#7d6a4f" },
   },
   {
-    id: "apprentissage", num: "III", nom: "L'apprentissage",
+    id: "apprentissage", num: "III", nom: "L'apprentissage", kanji: "学",
     notebooks: ["02_pipeline_modeles_optuna"], docs: [],
     titre: "Trois modèles, deux cents essais",
     oeuvre: "Le champ des essais",
     legende: "Une tige par essai Optuna, en trois rangées : logistique, forêt aléatoire, LightGBM. Plus la tige est haute, plus la log-loss de validation croisée est basse. La tige teintée est l'essai retenu.",
-    clair: "Une régression logistique, une forêt aléatoire et un LightGBM, réglés par Optuna sur des plis qui respectent l'ordre du temps. La logistique, la plus simple, est retenue. L'annexe de maths la refait à la main, de la vraisemblance jusqu'à la descente de gradient.",
-    technique: `Pipeline scikit-learn : imputation, standardisation, régime k-means, modèle. ${CHIFFRES.essais} essais Optuna sur la cible principale (50 par modèle), avec un découpage TimeSeriesSplit ; la logistique retenue obtient ${dec(CHIFFRES.llCV)} de log-loss en validation croisée. Calibration de Platt sur les prédictions hors pli. Annexe : gradient (1/m)·Xᵀ(p − y), hessienne, convexité stricte, et une descente qui converge pour un pas α < 2/L.`,
-    chiffres: [
-      ["3", "modèles comparés"],
-      [nombre(CHIFFRES.essais), "essais Optuna"],
-      [dec(CHIFFRES.llCV), "log-loss de la logistique en validation croisée"],
-    ],
+    clair: "Une régression logistique, une forêt aléatoire et un LightGBM, réglés par Optuna sur des plis qui respectent l'ordre du temps. Tout ce qui apprend un paramètre, imputation et régimes compris, reste dans la pipeline.",
+    technique: `Pipeline scikit-learn : imputation, standardisation, régime k-means, modèle. ${CHIFFRES.essais} essais Optuna sur la cible principale (50 par modèle), avec un découpage TimeSeriesSplit ; la logistique retenue obtient ${dec(CHIFFRES.llCV)} de log-loss en validation croisée. Calibration de Platt sur les prédictions hors pli. Le meilleur de cinquante essais est toujours flatteur : le LightGBM paraît excellent en validation croisée et fait pire que la logistique sur le test.`,
+    chiffres: [["3", "modèles comparés"], [nombre(CHIFFRES.essais), "essais Optuna"], [dec(CHIFFRES.llCV), "log-loss de la logistique en validation croisée"]],
     ton: { mur: "#a26a52", sol: "#8c6b5c", ciel: "#fae9de", texte: "#fff5ee", accent: "#f0c7b0" },
   },
   {
-    id: "regle", num: "IV", nom: "La règle",
+    id: "regle", num: "IV", nom: "La règle", kanji: "律",
     notebooks: ["03_calibration_seuils"], docs: [],
     titre: "D'une probabilité à une action",
     oeuvre: "Le cadran",
     legende: "Le cadran va de 0 à 100 % de probabilité de hausse. À gauche la zone « vendre », au centre « neutre », à droite « acheter ». Le style pointe la prévision pour " + moisLong(moisSuivant(CHIFFRES.moisDernier)) + ".",
     clair: `Le modèle donne une probabilité de hausse. La règle compare le gain espéré d'un achat et d'une vente à une marge de ${pct(CHIFFRES.marge, 1)} : au-dessus de ${pct(CHIFFRES.thetaA, 0)}, acheter ; sous ${pct(CHIFFRES.thetaV, 0)}, vendre ; entre les deux, rester neutre. Les seuils ont été figés et commités avant d'ouvrir le test.`,
     technique: `Les gains moyens viennent de l'entraînement : un achat rapporte ${pct(D.decision.couts.B_u, 1, true)} un mois de hausse et ${pct(D.decision.couts.B_d, 1, true)} un mois de baisse ; une vente fait l'inverse. Acheter si p·B_u + (1 − p)·B_d dépasse la marge, vendre si p·S_u + (1 − p)·S_d la dépasse. D'où les seuils θ_achat = ${dec(CHIFFRES.thetaA)} et θ_vente = ${dec(CHIFFRES.thetaV)}. Calibration de Platt : a = ${dec(D.decision.platt.a)}, c = ${dec(D.decision.platt.c)}. Couverture : toujours couvert. Décision figée au commit 75712cf. Sans signal, la même règle appliquée à la prévision constante achète tous les mois.`,
-    chiffres: [
-      [pct(CHIFFRES.thetaA, 1), "seuil d'achat"],
-      [pct(CHIFFRES.thetaV, 1), "seuil de vente"],
-      [pct(CHIFFRES.marge, 1), "marge exigée"],
-    ],
+    chiffres: [[pct(CHIFFRES.thetaA, 1), "seuil d'achat"], [pct(CHIFFRES.thetaV, 1), "seuil de vente"], [pct(CHIFFRES.marge, 1), "marge exigée"]],
     ton: { mur: "#8d9883", sol: "#7a7f70", ciel: "#f1f3e9", texte: "#fbfcf6", accent: "#e3e8d5" },
   },
   {
-    id: "epreuve", num: "V", nom: "L'épreuve",
-    notebooks: ["03b_test_final", "04_explicabilite_diagnostics"], docs: ["rapport"],
+    id: "epreuve", num: "V", nom: "L'épreuve", kanji: "試",
+    notebooks: ["03b_test_final"], docs: ["rapport"],
     titre: `${CHIFFRES.moisTest} mois, une seule fois`,
     oeuvre: "Le cercle des mois de test",
     legende: "Une pierre par mois de test, de janvier 2024 à septembre 2026. Sa hauteur suit l'ampleur du mois ; claire s'il a monté, sombre s'il a baissé. La pastille au pied montre l'action du modèle : verte pour acheter, rouge brique pour vendre.",
     clair: `Sur 2024-2026, le modèle ne fait pas mieux que la prévision constante : ${dec(CHIFFRES.llModele)} de log-loss contre ${dec(CHIFFRES.llConstante)}. Sur ${CHIFFRES.moisTest} mois, l'écart ne permet de conclure ni dans un sens ni dans l'autre. Comme prévu avant le test, la recommandation retombe sur « toujours acheter, couvert ».`,
     technique: `Écart moyen de log-loss, mois par mois : ${dec(ECART_TEST.moyenne, 3)} pour une erreur type de ${dec(ECART_TEST.erreurType, 3)}. Les cibles mensuelles ne se chevauchent pas, l'erreur type simple suffit. La règle du modèle finit à ${pct(CHIFFRES.regle, 1, true)} ; acheter et garder couvert, à ${pct(CHIFFRES.couvert, 1, true)}. Ce second chiffre décrit le marché de 2024-2026 plus qu'un savoir-faire : sans signal, la règle n'a rien à ajouter au marché. Les indices sont des indices de prix, sans dividendes, et aucun frais n'est compté.`,
-    chiffres: [
-      [`${dec(CHIFFRES.llModele)} / ${dec(CHIFFRES.llConstante)}`, "log-loss : modèle / constante"],
-      [pct(CHIFFRES.regle, 1, true), "règle du modèle, en euros"],
-      [pct(CHIFFRES.couvert, 1, true), "acheter et garder, couvert"],
-    ],
+    chiffres: [[`${dec(CHIFFRES.llModele)} / ${dec(CHIFFRES.llConstante)}`, "log-loss : modèle / constante"], [pct(CHIFFRES.regle, 1, true), "règle du modèle, en euros"], [pct(CHIFFRES.couvert, 1, true), "acheter et garder, couvert"]],
     ton: { mur: "#262a35", sol: "#545660", ciel: "#d4d9e6", texte: "#eef0f6", accent: "#a9b3cb" },
   },
   {
-    id: "agitation", num: "VI", nom: "L'agitation",
-    notebooks: [], docs: ["rapport"],
-    titre: "Le sens ne se prévoit pas. L'agitation, un peu.",
-    oeuvre: "Le souffle",
-    legende: "Une spirale de 2016 (en bas) à 2026 (en haut), dont l'épaisseur suit la volatilité réalisée de chaque mois. Les parties teintées sont les mois agités, au-dessus de 20 % de volatilité annuelle.",
-    clair: "Après le test, un second volet a cherché à prévoir l'agitation du mois suivant plutôt que son sens. Elle se prévoit en partie : un mois agité se reconnaît bien mieux qu'un mois de hausse. Mais réduire la position quand le risque monte n'a pas fait mieux qu'acheter et garder, une fois sorti des années de réglage.",
-    technique: `Exploration faite après l'ouverture du test, hors résultat officiel. Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 et de ${dec(RISQUE.r2Test, 2)} sur 2024-2026 en mensuel ; en journalier, sur 2024-2026, il tombe à ${dec(RISQUE.r2JourTest, 2)}. Mois agité : AUC de ${dec(RISQUE.aucAgite, 2)} sur 2016-2023, contre 0,50 pour le sens du marché. Le signal d'achat fondé sur le risque, réglé sur 2000-2015, donne un rendement par unité de risque de ${dec(RISQUE.ratio("2016-2023").signal, 2)} contre ${dec(RISQUE.ratio("2016-2023").garder, 2)} pour acheter et garder sur 2016-2023, et ${dec(RISQUE.ratio("2024-2026").signal, 2)} contre ${dec(RISQUE.ratio("2024-2026").garder, 2)} sur 2024-2026.`,
-    chiffres: [
-      [dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"],
-      [dec(RISQUE.aucAgite, 2), "AUC pour un mois agité"],
-      [`${dec(RISQUE.ratio("2016-2023").signal, 2)} / ${dec(RISQUE.ratio("2016-2023").garder, 2)}`, "rendement par unité de risque : signal / acheter et garder"],
-    ],
-    ton: { mur: "#95a3ac", sol: "#7c858b", ciel: "#f2f6f8", texte: "#fbfdfe", accent: "#e1e8ec" },
+    id: "explication", num: "VI", nom: "L'explication", kanji: "解",
+    notebooks: ["04_explicabilite_diagnostics"], docs: [],
+    titre: "Ce qui pèse dans une prédiction",
+    oeuvre: "La balance",
+    legende: `Les douze variables de la dernière prédiction (${moisLong(moisSuivant(CHIFFRES.moisDernier))}) suspendues à un fléau : à droite celles qui poussent vers la baisse, à gauche celles qui poussent vers la hausse. La taille de chaque poids suit sa contribution.`,
+    clair: "Un modèle qu'on ne sait pas expliquer ne se défend pas. On mesure ce que chaque variable apporte : en la mélangeant pour voir ce que le modèle perd, en décomposant chaque prédiction, et en regardant où le modèle réussit et où il échoue.",
+    technique: `Importance par permutation sur le test, valeurs SHAP, dépendance partielle et tranches (régimes de volatilité, mois de réunion de la BoJ). Pour la dernière prédiction, la variable qui pèse le plus est « ${libelleVar(contribs[0]?.variable ?? "")} » (${dec(contribs[0]?.contribution ?? 0, 2)} sur le log-odds de la baisse). C'est aussi la plus fragile : son lien avec le rendement change de signe après 2021, et GDELT plafonne chaque requête trimestrielle à 250 articles, si bien que le compte d'un mois dépend du reste du trimestre.`,
+    chiffres: [[nombre(contribs.length), "variables dans la balance"], [Maj(libelleVar(contribs[0]?.variable ?? "—")), `pèse le plus en ${moisLong(moisSuivant(CHIFFRES.moisDernier))}`], [pct(CHIFFRES.pDernier, 1), "probabilité de hausse annoncée"]],
+    ton: { mur: "#9b8466", sol: "#857563", ciel: "#f7efe2", texte: "#fffaf2", accent: "#e9d8bd" },
   },
   {
-    id: "cabinet", num: "VII", nom: "Le cabinet",
-    notebooks: ["01_cadrage_eda_variables", "02_pipeline_modeles_optuna", "03_calibration_seuils", "03b_test_final", "04_explicabilite_diagnostics", "05_annexe_maths_logistique"], docs: ["rapport", "annexe"],
-    titre: "Toutes les pièces du projet",
-    oeuvre: "Les volumes",
-    legende: "Six cahiers pour les six notebooks, deux volumes pour le rapport et l'annexe de maths.",
-    clair: "Les six notebooks, le rapport, l'annexe de maths et les figures, à ouvrir tels quels. Tout ce que montrent la visite et la lecture en vient.",
-    technique: "Le code est en modules Python (src/), testé, et chaque résultat figé se revérifie : python -m src.decision --verifier et python -m src.evaluate --verifier recalculent la décision et l'évaluation du test et les comparent aux fichiers commités.",
-    chiffres: [
-      ["6", "notebooks"],
-      [nombre(D.figures.length), "figures"],
-      ["2", "documents PDF"],
-    ],
-    ton: { mur: "#55443a", sol: "#6f5d50", ciel: "#f6ebe0", texte: "#fbf4ec", accent: "#d9c2ab" },
+    id: "apres", num: "VII", nom: "Après le test", kanji: "後",
+    notebooks: [], docs: ["rapport"],
+    titre: "Ce qu'on a tenté ensuite",
+    oeuvre: "Le souffle",
+    legende: "Une spirale de 2016 (en bas) à 2026 (en haut), dont l'épaisseur suit la volatilité réalisée de chaque mois. Les parties teintées sont les mois agités, au-dessus de 20 % de volatilité annuelle.",
+    clair: "Une fois le test ouvert, deux pistes ont été suivies, sans valeur de preuve puisque le test était déjà connu : réentraîner le même modèle sur une histoire plus longue, de 1999 à 2026 avec Bloomberg en référence, et prévoir l'agitation du marché plutôt que son sens.",
+    technique: V2_INFO
+      ? `Avec ${V2_INFO.mois} mois d'entraînement au lieu de ${CHIFFRES.moisEntrainement}, la règle du notebook 03 retient ${V2_INFO.modele} sur la validation. Sur le test, sa log-loss vaut ${dec(V2_INFO.ll)} contre ${dec(V2_INFO.llConst)} pour la constante (écart ${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}), et sa règle rapporte ${pct(V2_INFO.regle, 1, true)} contre ${pct(V2_INFO.couvert, 1, true)} pour l'achat couvert. Mieux que la première version, toujours pas mieux que la constante. La logistique aurait battu la constante sur le test (${dec(V2_INFO.llLogit)}), mais la règle annoncée l'avait écartée sur la validation (${dec(V2_INFO.llLogitVal)}) : la choisir maintenant reviendrait à choisir sur le test. Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`
+      : `Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`,
+    chiffres: V2_INFO
+      ? [[`${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`, "log-loss 1999-2026 : modèle / constante"], [pct(V2_INFO.regle, 1, true), "règle de la seconde version, en euros"], [dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"]]
+      : [[dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"], [dec(RISQUE.aucAgite, 2), "AUC pour un mois agité"], ["—", ""]],
+    ton: { mur: "#95a3ac", sol: "#7c858b", ciel: "#f2f6f8", texte: "#fbfdfe", accent: "#e1e8ec" },
   },
 ];
-
 
 // ---------- parcours Maths : l'annexe, de la vraisemblance à la descente de gradient ----------
 const MOD = D.modele;
@@ -194,7 +202,7 @@ const f = (t) => `<span class="f">${t}</span>`;   // une formule, en italique se
 
 const SALLES_MATHS = [
   {
-    id: "m-modele", num: "I", nom: "Le modèle",
+    id: "m-modele", num: "I", nom: "Le modèle", kanji: "型",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
     titre: "Une probabilité par mois",
     oeuvre: "La sigmoïde",
@@ -205,7 +213,7 @@ const SALLES_MATHS = [
     ton: { mur: "#2e3a4e", sol: "#b7b2aa", ciel: "#dde4ee", texte: "#f1f3f7", accent: "#9fb0c9" },
   },
   {
-    id: "m-cout", num: "II", nom: "Le coût",
+    id: "m-cout", num: "II", nom: "Le coût", kanji: "損",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
     titre: "De la vraisemblance à la log-loss",
     oeuvre: "Les deux branches",
@@ -216,7 +224,7 @@ const SALLES_MATHS = [
     ton: { mur: "#c9bca6", sol: "#a99c86", ciel: "#fbf6ec", texte: "#fffaf1", accent: "#8a7a5f" },
   },
   {
-    id: "m-gradient", num: "III", nom: "Le gradient",
+    id: "m-gradient", num: "III", nom: "Le gradient", kanji: "勾",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
     titre: "L'erreur, fois l'entrée",
     oeuvre: "La carte des pentes",
@@ -227,7 +235,7 @@ const SALLES_MATHS = [
     ton: { mur: "#5f7066", sol: "#8c8f86", ciel: "#e6eee8", texte: "#f2f6f2", accent: "#b9c9bd" },
   },
   {
-    id: "m-prior", num: "IV", nom: "Le prior",
+    id: "m-prior", num: "IV", nom: "Le prior", kanji: "先",
     notebooks: ["05_annexe_maths_logistique", "02_pipeline_modeles_optuna"], docs: ["annexe"],
     titre: "La pénalité, une croyance a priori",
     oeuvre: "La cloche",
@@ -238,7 +246,7 @@ const SALLES_MATHS = [
     ton: { mur: "#a87b66", sol: "#8f7466", ciel: "#fbe9de", texte: "#fff4ec", accent: "#efc9b4" },
   },
   {
-    id: "m-convexite", num: "V", nom: "La convexité",
+    id: "m-convexite", num: "V", nom: "La convexité", kanji: "凸",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
     titre: "Un seul fond de vallée",
     oeuvre: "Le paysage du coût",
@@ -249,7 +257,7 @@ const SALLES_MATHS = [
     ton: { mur: "#35302e", sol: "#5e5853", ciel: "#e6dfd8", texte: "#f4efe9", accent: "#bdb0a3" },
   },
   {
-    id: "m-descente", num: "VI", nom: "La descente",
+    id: "m-descente", num: "VI", nom: "La descente", kanji: "降",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
     titre: "Choisir la taille du pas",
     oeuvre: "Les quatre pas",
@@ -260,7 +268,7 @@ const SALLES_MATHS = [
     ton: { mur: "#8ea2b1", sol: "#7a8791", ciel: "#eef3f7", texte: "#fafcfd", accent: "#dbe5ec" },
   },
   {
-    id: "m-preuve", num: "VII", nom: "La preuve",
+    id: "m-preuve", num: "VII", nom: "La preuve", kanji: "証",
     notebooks: ["03b_test_final", "05_annexe_maths_logistique"], docs: ["annexe", "rapport"],
     titre: `Ce que ${CHIFFRES.moisTest} mois peuvent prouver`,
     oeuvre: "Les deux colonnes",
@@ -319,7 +327,8 @@ const LIMITES_ML = [
   ["Les variables ont été choisies sur 2017-2026.", "L'analyse exploratoire qui a guidé le choix des variables recouvre la validation et le test."],
   ["Les écarts sont petits devant le bruit.", `Sur ${CHIFFRES.moisTest} mois, l'écart de log-loss entre le modèle et la constante (${dec(ECART_TEST.moyenne, 3)} ± ${dec(ECART_TEST.erreurType, 3)}) ne tranche dans aucun sens. Il faudrait des centaines de mois pour voir un gain réaliste.`],
   ["Les rendements sont simplifiés.", "Indice de prix sans dividendes (environ 2 % par an), pas de frais, couverture approchée par l'écart des taux à court terme."],
-  ["Le second volet est venu après le test.", "La volatilité et le signal fondé sur le risque ont été explorés après l'ouverture de 2024-2026 : ce sont des pistes, pas des résultats confirmés."],
+  ["Tout ce qui a suivi le test est exploratoire.", "La seconde version sur 1999-2026, la volatilité et le signal fondé sur le risque ont été faits après l'ouverture de 2024-2026 : ce sont des pistes, pas des résultats confirmés. Les confirmer demande des données que personne n'a encore vues, d'autres marchés ou les mois à venir."],
+  ["La variable de news la plus influente est fragile.", "GDELT plafonne chaque requête trimestrielle à 250 articles : le nombre d'articles d'un mois dépend alors du reste du trimestre. Il faudrait la reconstruire à partir des volumes totaux de GDELT, ou par fenêtres plus courtes."],
 ];
 
 const LIMITES_MATHS = [
@@ -359,7 +368,7 @@ const FIGURES = {
 };
 const nomNotebook = (nom) => `Notebook ${nom.split("_")[0]}`;
 
-return { D, nombre, pct, dec, moisLong, moisSuivant, ECART_TEST, CHIFFRES, RISQUE, MATHS, COURS, SALLES, TOUTES_SALLES, avecCours, COURS_INFO, ENTREE, LIMITES, FIGURES, nomNotebook };
+return { D, nombre, pct, Maj, dec, moisLong, moisSuivant, ECART_TEST, CHIFFRES, RISQUE, V2_INFO, MATHS, COURS, SALLES, TOUTES_SALLES, avecCours, COURS_INFO, ENTREE, LIMITES, FIGURES, nomNotebook };
 })();
 const __commun = (() => {
 "use strict";
@@ -502,7 +511,7 @@ const __lecture = (() => {
 "use strict";
 // La lecture : sept chapitres, les mêmes que les salles de la visite, avec graphiques, tableaux et figures.
 // Deux parcours : Applied ML (le projet) et Maths (l'annexe), selon le cours choisi en haut de page.
-const { D, SALLES, ENTREE, LIMITES, CHIFFRES, ECART_TEST, MATHS, COURS, COURS_INFO, FIGURES, avecCours, nomNotebook, nombre, pct, dec, moisLong, moisSuivant } = __contenu;
+const { D, SALLES, ENTREE, LIMITES, CHIFFRES, ECART_TEST, MATHS, COURS, COURS_INFO, FIGURES, V2_INFO, avecCours, nomNotebook, nombre, pct, dec, moisLong, moisSuivant } = __contenu;
 const { installerMenu, installerEntete, installerLiseuse, liensPieces, titreNotebook, FLECHE, FLECHE_G } = __commun;
 const $ = (s, r = document) => r.querySelector(s);
 const css = getComputedStyle(document.documentElement);
@@ -511,11 +520,11 @@ const Maj = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 // ---------- figures des notebooks : des planches avec titre, légende et notebook d'origine ----------
 const FIG_CHAPITRE = {
-  question: ["01_nikkei_split", "01_cibles_couverture"],
-  donnees: ["01_correlations"],
+  exploration: ["01_nikkei_split", "01_cibles_couverture", "01_correlations"],
   apprentissage: ["02_optuna_historique", "02_coefficients_logistiques", "02_coude_kmeans"],
   regle: ["03_fiabilite_brute", "03_fiabilite_platt", "03_regle_validation"],
-  epreuve: ["03b_test_probabilites", "03b_test_regle", "04_permutation", "04_shap_beeswarm_test", "04_shap_waterfall_2026-10"],
+  epreuve: ["03b_test_probabilites", "03b_test_regle"],
+  explication: ["04_permutation", "04_shap_beeswarm_test", "04_shap_waterfall_2026-10", "04_pdp_ice_news", "04_inversion_signal_news"],
   "m-modele": ["02_coefficients_logistiques"],
   "m-cout": ["03b_test_probabilites"],
   "m-prior": ["05_sensibilite_lambda"],
@@ -608,15 +617,16 @@ function ecarter(ys, ecart = 15) {
 }
 
 // ---------- I. le Nikkei ----------
+const SERIE = D.v2?.serie ?? D.serie;   // table 1999-2026 (seconde version) si elle est là
 function figNikkei(boite) {
-  const s = D.serie, mois = s.map((m) => m.mois), v = s.map((m) => m.cloture);
+  const s = SERIE, mois = s.map((m) => m.mois), v = s.map((m) => m.cloture);
   graphe(boite, (l) => {
     const h = Math.round(Math.min(380, l * 0.52)), g = 54, d = 16, hh = 26, b = 30;
     const x = echelle(0, s.length - 1, g, l - d), ticks = graduations(0, Math.max(...v), 4), y = echelle(0, Math.max(ticks[ticks.length - 1], Math.max(...v) * 1.03), h - b, hh);
     const iv = s.findIndex((m) => m.bloc === "validation"), it = s.findIndex((m) => m.bloc === "test"), ip = s.findIndex((m) => m.bloc === "à prédire");
     const bande = (i0, i1, op, nom, fin) => `<rect x="${x(i0)}" y="${hh - 14}" width="${x(i1) - x(i0)}" height="${h - b - hh + 14}" fill="${C.encre}" opacity="${op}"/><text class="etiquette" x="${fin ? x(i1) - 4 : x(i0) + 4}" y="${hh - 2}" text-anchor="${fin ? "end" : "start"}">${nom}</text>`;
     const chemin = v.map((c, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(c).toFixed(1)}`).join("");
-    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Clôture mensuelle du Nikkei 225 de 2010 à 2026, avec les périodes d'entraînement, de validation et de test">
+    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Clôture mensuelle du Nikkei 225 de ${s[0].mois.slice(0, 4)} à 2026, avec les périodes d'entraînement, de validation et de test">
       ${axeY(y, ticks, g, l - d, (t) => nombre(t))}
       ${bande(iv, it, 0.035, "Validation", true)}${bande(it, ip, 0.075, "Test")}
       <text class="etiquette" x="${g + 6}" y="${hh - 2}">Entraînement</text>
@@ -633,7 +643,7 @@ function figNikkei(boite) {
 
 // ---------- II. les rendements mensuels ----------
 function figRendements(boite) {
-  const s = D.serie, r = s.slice(1).map((m, i) => ({ mois: m.mois, r: m.cloture / s[i].cloture - 1 }));
+  const s = SERIE, r = s.slice(1).map((m, i) => ({ mois: m.mois, r: m.cloture / s[i].cloture - 1 }));
   boite.insertAdjacentHTML("beforeend", legende([["Mois en hausse", C.pin, "bloc"], ["Mois en baisse", C.argile, "bloc"]]));
   graphe(boite, (l) => {
     const h = Math.round(Math.min(300, l * 0.42)), g = 46, d = 10, hh = 12, b = 30;
@@ -641,7 +651,7 @@ function figRendements(boite) {
     const x = echelle(0, r.length, g, l - d), y = echelle(-m, m, h - b, hh), w = (l - g - d) / r.length;
     const ticks = graduations(-m, m, 4);
     const barres = r.map((e, i) => { const y0 = y(0), y1 = y(e.r); return `<rect x="${(x(i) + 0.5).toFixed(1)}" y="${Math.min(y0, y1).toFixed(1)}" width="${Math.max(w - 1, 1).toFixed(1)}" height="${Math.max(Math.abs(y1 - y0), 0.8).toFixed(1)}" rx="${w > 4 ? 1 : 0}" fill="${e.r >= 0 ? C.pin : C.argile}"/>`; }).join("");
-    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Rendement mensuel du Nikkei, mois par mois, de 2010 à 2026">
+    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Rendement mensuel du Nikkei, mois par mois, de ${s[0].mois.slice(0, 4)} à 2026">
       ${axeY(y, ticks, g, l - d, (t) => pct(t, 0))}
       ${barres}
       <line x1="${g}" x2="${l - d}" y1="${y(0)}" y2="${y(0)}" stroke="${C["encre-3"]}"/>
@@ -789,8 +799,7 @@ function figRegle(boite) {
 }
 
 // ---------- V. les euros sur le test ----------
-function figEuros(boite) {
-  const h = D.historique_test;
+function figEuros(boite, h = D.historique_test) {
   const series = [
     ["Acheter et garder, couvert", C.pin, "rendement_achat_couvert"],
     ["Acheter et garder, non couvert", C.ocre, "rendement_achat_non_couvert"],
@@ -1058,6 +1067,51 @@ function figPreuve(boite) {
   boite.insertAdjacentHTML("beforeend", `<figcaption>Au-dessus de zéro, le modèle fait pire que la constante. La bande contient zéro presque tout du long : sur ces données, l'écart n'est pas significatif. Pour qu'un gain de 0,02 sorte de la bande, il faudrait environ ${nombre(MATHS.moisPourPreuve)} mois.</figcaption>`);
 }
 
+
+// ---------- VI. ce qui pèse dans la dernière prédiction ----------
+function figContributions(boite) {
+  const lib = Object.fromEntries((D.modele?.variables ?? []).map((v, i) => [v, D.modele.libelles[i]]));
+  const items = [...(D.explication ?? [])].sort((a, b) => b.contribution - a.contribution).map((e) => ({ ...e, nom: Maj(lib[e.variable] ?? e.variable) }));
+  boite.insertAdjacentHTML("beforeend", legende([["Pousse vers la baisse", C.argile, "bloc"], ["Pousse vers la hausse", C.pin, "bloc"]]));
+  graphe(boite, (l) => {
+    const ligne = 26, g = Math.min(210, l * 0.4), d = 56, hh = 8, h = hh + ligne * items.length + 26;
+    const m = Math.max(...items.map((e) => Math.abs(e.contribution)));
+    const x = echelle(-m, m, g, l - d);
+    const barres = items.map((e, k) => {
+      const y = hh + k * ligne, x0 = x(0), x1 = x(e.contribution);
+      return `<text class="etiquette" x="${g - 10}" y="${y + ligne / 2 + 4}" text-anchor="end">${esc(e.nom)}</text>
+        <rect x="${Math.min(x0, x1).toFixed(1)}" y="${y + 5}" width="${Math.max(Math.abs(x1 - x0), 1).toFixed(1)}" height="${ligne - 10}" rx="2" fill="${e.contribution > 0 ? C.argile : C.pin}"/>
+        <text class="etiquette" x="${(e.contribution > 0 ? x1 + 6 : x1 - 6).toFixed(1)}" y="${y + ligne / 2 + 4}" text-anchor="${e.contribution > 0 ? "start" : "end"}">${e.contribution > 0 ? "+" : "−"}${dec(Math.abs(e.contribution), 2)}</text>`;
+    }).join("");
+    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Contribution de chaque variable à la dernière prédiction du modèle">
+      <line x1="${x(0)}" x2="${x(0)}" y1="${hh}" y2="${h - 22}" stroke="${C["encre-3"]}"/>
+      ${barres}
+      <g class="axe"><text x="${x(-m)}" y="${h - 6}">vers la hausse</text><text x="${x(m)}" y="${h - 6}" text-anchor="end">vers la baisse</text></g>
+    </svg>`;
+    return { svg, survol: null };
+  });
+  boite.insertAdjacentHTML("beforeend", `<figcaption>Contribution au log-odds de la baisse : poids de la logistique fois la valeur standardisée de la variable, pour la prédiction faite avec les données de fin ${moisLong(D.signal.mois_des_donnees)}.</figcaption>`);
+}
+
+// ---------- VII. la seconde version face à la première ----------
+function tableVersions() {
+  if (!V2_INFO) return "";
+  const e1 = D.evaluation, e2 = D.v2.evaluation_test, d2 = D.v2.decision_finale, C1 = "constante (fréquence de l'entraînement)";
+  const lignes = [
+    ["Mois d'entraînement", `${CHIFFRES.moisEntrainement} (2010-2021)`, `${V2_INFO.mois} (1999-2021)`],
+    ["Modèle retenu sur la validation", "logistique", e2.modele],
+    ["Log-loss de validation, modèle / constante", "0,699 / 0,681", `${dec(d2.validation.log_loss_calibree[d2.modele_nikkei])} / ${dec(d2.validation.log_loss_constante)}`],
+    ["Log-loss du test, modèle / constante", `${dec(e1.metriques.logistique["log-loss"])} / ${dec(e1.metriques[C1]["log-loss"])}`, `${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`],
+    ["Écart de log-loss ± erreur type", `${dec(ECART_TEST.moyenne, 3)} ± ${dec(ECART_TEST.erreurType, 3)}`, `${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}`],
+    ["Règle du modèle, en euros", pct(CHIFFRES.regle, 1, true), pct(V2_INFO.regle, 1, true)],
+    ["Acheter et garder, couvert", pct(CHIFFRES.couvert, 1, true), pct(V2_INFO.couvert, 1, true)],
+    ["Actions : acheter · neutre · vendre", `${e1.actions.acheter} · ${e1.actions.neutre} · ${e1.actions.vendre}`, `${V2_INFO.actions.acheter ?? 0} · ${V2_INFO.actions.neutre ?? 0} · ${V2_INFO.actions.vendre ?? 0}`],
+  ];
+  return `<div class="tableau-defile"><table><thead><tr><th>Sur le test 2024-2026</th><th>Première version (figée)</th><th>Seconde version (après coup)</th></tr></thead><tbody>
+    ${lignes.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
+    <p class="note">La première version est la seule évaluée à l'aveugle : sa décision a été commitée avant d'ouvrir le test. La seconde a été réglée et choisie par la même règle, mais après avoir vu ce test : son résultat sur 2024-2026 n'a pas valeur de preuve.</p>`;
+}
+
 // ---------- assemblage ----------
 const tuiles = (chiffres) => `<dl class="tuiles">${chiffres.map(([v, l]) => `<div><dt>${v}</dt><dd>${l}</dd></div>`).join("")}</dl>`;
 const figure = (titre, sous, id) => `<figure class="figure" id="${id}"><h3>${titre}</h3>${sous ? `<p class="sous">${sous}</p>` : ""}</figure>`;
@@ -1071,7 +1125,11 @@ const FIG_MATHS = {
   "m-descente": ["Quatre pas, quatre destins", "La même surface, le même départ, quatre tailles de pas.", "fig-surface", (b) => figSurface(b)],
   "m-preuve": ["Une marge d'erreur qui ne se referme pas", "L'écart moyen de log-loss entre le modèle et la constante, recalculé à chaque nouveau mois de test, avec sa marge de deux erreurs types.", "fig-preuve", figPreuve],
 };
-const FIG_ML = { "fig-nikkei": figNikkei, "fig-rendements": figRendements, "fig-essais": figEssais, "fig-regle": figRegle, "fig-euros": figEuros, "fig-volatilite": figVolatilite };
+const FIG_ML = {
+  "fig-nikkei": figNikkei, "fig-rendements": figRendements, "fig-essais": figEssais, "fig-regle": figRegle, "fig-euros": (b) => figEuros(b),
+  "fig-volatilite": figVolatilite, "fig-contributions": figContributions,
+  "fig-euros-v2": (b) => figEuros(b, D.v2.evaluation_test.historique_test),
+};
 
 const pieces = (s) => {
   const l = liensPieces(s);
@@ -1103,19 +1161,26 @@ function corps(s) {
   }
   part.push(`<p class="clair">${s.clair}</p>`, tuiles(s.chiffres));
   if (FIG_MATHS[s.id]) { const [t, sous, id] = FIG_MATHS[s.id]; part.push(figure(t, sous, id)); }
-  if (s.id === "question") part.push(figure("Seize ans de Nikkei, coupés dans l'ordre du temps", "Clôture mensuelle de l'indice, en points. Le modèle apprend sur l'entraînement, se règle sur la validation, et n'a vu le test qu'une fois.", "fig-nikkei"));
-  if (s.id === "donnees") {
+  if (s.id === "dataset") {
+    const ds = D.dataset ?? {}, cb = D.v2?.controle_bloomberg ?? {};
+    const sources = Object.entries(ds.sources ?? {}).sort((a, b) => b[1] - a[1]);
     part.push(`<figure class="figure"><h3>Une décision, deux dates</h3><p class="sous">Toutes les variables d'une ligne sont connues à la clôture de Tokyo, le dernier jour du mois. La cible ne l'est qu'un mois plus tard.</p>
-      <div class="chrono"><div><h4>Fin du mois t</h4><p>Prix et volatilité du Nikkei, taux japonais à 10 ans, dernier Tankan publié, portage et volatilité de l'euro-yen, news jusqu'à 6 h 30 UTC.</p></div>
+      <div class="chrono"><div><h4>Fin du mois t</h4><p>Prix et volatilité du Nikkei, courbe des taux japonais, dernier Tankan publié, portage et volatilité de l'euro-yen, incertitude, news jusqu'à 6 h 30 UTC.</p></div>
       <div class="pivot">la règle décide${FLECHE}</div>
-      <div><h4>Fin du mois t + 1</h4><p>On mesure le rendement du Nikkei, en yens pour la cible, en euros couverts ou non pour le gain de l'investisseur.</p></div></div>
-      <div class="familles">
-        <div><h4>News</h4><ul><li>Volume anormal d'articles <code>news_attention_6m</code></li><li>Tonalité FinBERT pondérée <code>news_sent_w</code></li><li>News disponibles <code>news_dispo</code></li></ul></div>
-        <div><h4>Prix</h4><ul><li>Momentum 12 mois <code>n225_mom_12m</code></li><li>Momentum 3 mois <code>n225_mom_3m</code></li><li>Volatilité lissée <code>n225_vol_ewma</code></li></ul></div>
-        <div><h4>Taux et conjoncture</h4><ul><li>Variation du taux à 10 ans <code>d_jgb10y_bp</code></li><li>Tankan des grandes industries <code>tankan_large_manuf</code></li></ul></div>
-        <div><h4>Change</h4><ul><li>Portage à un mois <code>carry_1m</code></li><li>Volatilité de l'euro-yen <code>eurjpy_rvol_1m</code></li></ul></div>
-      </div></figure>`);
-    part.push(figure("Deux cents rendements mensuels", `Chaque barre est un mois. Sur l'entraînement, ${pct(D.evaluation.metriques["constante (fréquence de l'entraînement)"]["proba moyenne"], 0)} des mois baissent : c'est la fréquence qu'annonce la prévision constante.`, "fig-rendements"));
+      <div><h4>Fin du mois t + 1</h4><p>On mesure le rendement du Nikkei, en yens pour la cible, en euros couverts ou non pour le gain de l'investisseur.</p></div></div></figure>`);
+    if (sources.length) part.push(`<figure class="figure"><h3>D'où viennent les ${nombre(ds.colonnes)} colonnes</h3><p class="sous">Colonnes de la table mensuelle, par source. Chaque colonne porte, dans le dictionnaire des variables, le délai après lequel elle était réellement connue.</p>
+      <ul class="barres-sources">${sources.map(([nom, n]) => `<li><span>${esc(nom)}</span><i style="--n:${n / sources[0][1]}"></i><b>${n}</b></li>`).join("")}</ul></figure>`);
+    if (cb.tankan) part.push(`<figure class="figure"><h3>Bloomberg en référence</h3><p class="sous">Les séries exportées de Bloomberg servent à contrôler la table, une fois chacune remise à sa date de publication.</p>
+      <div class="tableau-defile"><table><thead><tr><th>Série</th><th>Contrôle</th><th>Décision</th></tr></thead><tbody>
+      <tr><td>Tankan des grandes industries</td><td>${cb.tankan.valeurs_identiques} trimestres identiques sur ${cb.tankan.trimestres_compares}, une fois décalés au mois de publication ; à sa date Bloomberg, ${cb.tankan.erreur_si_date_bloomberg_prise_telle_quelle}</td><td>gardé, avec son décalage</td></tr>
+      <tr><td>Inflation (IPC, sur un an)</td><td>corrélation ${dec(cb.ipc.correlations.decalage_1, 2)} avec la mesure de la table, décalée d'un mois ; ce n'est pas la même mesure</td><td>en référence ; pas une variable du modèle</td></tr>
+      <tr><td>VIX</td><td>exporté « en euros » : ${dec(cb.vix.ratio_median_bloomberg_sur_vix, 2)} fois le VIX en médiane, de ${dec(cb.vix.ratio_min, 2)} à ${dec(cb.vix.ratio_max, 2)}</td><td>non utilisé : à réexporter sans conversion</td></tr>
+      <tr><td>Calendrier des publications</td><td>${nombre(cb.calendrier.lignes)} lignes, ${cb.calendrier.couvre}</td><td>tronqué à 5 000 lignes : à réexporter par périodes</td></tr>
+      </tbody></table></div></figure>`);
+  }
+  if (s.id === "exploration") {
+    part.push(figure(`${Math.round(SERIE.length / 12)} ans de Nikkei, coupés dans l'ordre du temps`, "Clôture mensuelle de l'indice, en points. Le modèle apprend sur l'entraînement, se règle sur la validation, et n'a vu le test qu'une fois.", "fig-nikkei"));
+    part.push(figure(`${nombre(SERIE.length - 1)} rendements mensuels`, "Chaque barre est un mois. La prévision constante annonce la fréquence des baisses de l'entraînement, la référence que tout modèle doit battre.", "fig-rendements"));
   }
   if (s.id === "apprentissage") part.push(figure(`${CHIFFRES.essais} essais, trois modèles`, "Log-loss en validation croisée de chaque essai Optuna (plus bas, c'est mieux). Le LightGBM retenu paraît le meilleur ici ; sur le test, il fera pire que la logistique : le meilleur de cinquante essais est toujours flatteur.", "fig-essais"));
   if (s.id === "regle") part.push(figure("Chaque mois, une probabilité et une action", "Probabilité de hausse annoncée pour chaque mois de validation et de test, et ce qui s'est passé ensuite. Les points d'une même couleur se mélangent : c'est le signe d'un modèle qui ne sépare pas les hausses des baisses.", "fig-regle"));
@@ -1126,8 +1191,13 @@ function corps(s) {
     const sig = D.signal;
     part.push(`<figure class="figure"><h3>Et pour ${moisLong(moisSuivant(sig.mois_des_donnees))} ?</h3><p class="sous">Avec les données de fin ${moisLong(sig.mois_des_donnees)}, le modèle annonce ${pct(sig.p_hausse, 1)} de chances de hausse : sa règle vendrait. Comme il n'a pas battu la constante, la recommandation du projet reste : ${sig.recommandation_finale.split("(")[0].trim()}.</p></figure>`);
   }
-  if (s.id === "agitation") {
+  if (s.id === "explication") part.push(figure("Ce qui pèse dans la dernière prédiction", "Chaque barre est la contribution d'une variable au log-odds de la baisse. Les plus longues font la prédiction ; leur signe dit dans quel sens elles poussent.", "fig-contributions"));
+  if (s.id === "apres") {
     part.push(`<p><span class="apres-coup">Exploration après coup</span></p>`);
+    if (V2_INFO) {
+      part.push(`<figure class="figure"><h3>La même méthode, sur 1999-2026</h3><p class="sous">Mêmes variables, même pipeline, même règle de choix du modèle et même découpage final ; seule l'histoire d'entraînement s'allonge, avec Bloomberg en référence.</p>${tableVersions()}</figure>`);
+      part.push(figure("La seconde version, en euros", `Gain cumulé de janvier 2024 à septembre 2026 avec la règle de la seconde version (${V2_INFO.modele}).`, "fig-euros-v2"));
+    }
     part.push(figure("L'agitation se lit un peu à l'avance", "Volatilité annualisée du Nikkei, réalisée chaque mois et prévue à la fin du mois précédent par une régression sur les volatilités passées, le VIX et le rendement.", "fig-volatilite"));
     part.push(`<figure class="figure"><h3>Acheter quand le risque est bas, depuis 2003</h3><p class="sous">Le signal réduit la position quand le risque prévu monte. Il protège en 2008, mais vend après les chutes brutales de 2020 et d'août 2024 et rate le rebond.</p>${tableSignalRisque()}</figure>`);
   }
@@ -1142,7 +1212,7 @@ function page() {
     <section class="chapitre large" id="${s.id}" style="--accent:${s.ton.mur}" aria-labelledby="titre-${s.id}">
       <div class="chapitre-grille">
         <header class="chapitre-tete">
-          <span class="num" aria-hidden="true">${s.num}</span>
+          <span class="num" aria-hidden="true">${s.num}<span class="sceau">${s.kanji}</span></span>
           <span class="sur-titre">${info.nom} · chapitre ${s.num} · ${s.nom}</span>
           <h2 id="titre-${s.id}">${s.titre}</h2>
           <a class="vers-salle" href="${avecCours(`index.html#${s.id}`)}"><i></i>Visiter la salle ${s.num} ${FLECHE}</a>

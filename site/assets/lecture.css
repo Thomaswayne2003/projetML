@@ -207,3 +207,13 @@ body.boite-ouverte, body.liseuse-ouverte { overflow: hidden; }
 .ouverture h1 { max-width: 15ch; }
 /* dans la grille à deux colonnes, un même cadre pour toutes les figures : les rangées restent alignées */
 .planches:not(.seule) .planche:not(.large) .planche-image img { aspect-ratio: 4 / 3; object-fit: contain; }
+
+/* les sources du dataset, en barres */
+.barres-sources { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.barres-sources li { display: grid; grid-template-columns: minmax(140px, 36%) 1fr 2.6em; gap: 12px; align-items: center; font: 400 13px/1.3 var(--sans); color: var(--encre-2); }
+.barres-sources i { display: block; height: 10px; border-radius: 0 2px 2px 0; background: var(--ardoise); width: calc(var(--n) * 100%); }
+.barres-sources b { font-weight: 500; color: var(--encre); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* le sceau du chapitre, à côté du grand numéro */
+.chapitre-tete .num { display: flex; align-items: flex-start; gap: 16px; }
+.chapitre-tete .num .sceau { font-size: 19px; margin: 6px 0 0; }

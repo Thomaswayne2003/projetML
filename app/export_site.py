@@ -34,6 +34,8 @@ ROUTES = {
 }
 
 NOTEBOOKS = [
+    ("00a_collecte_V1", "Collecte, première version : prix, taux, change, news"),
+    ("00b_collecte_V2", "Collecte, seconde version : 1999-2026, nouvelles sources"),
     ("01_cadrage_eda_variables", "Cadrage, audit des fuites, exploration, variables, découpage"),
     ("02_pipeline_modeles_optuna", "Pipeline, trois modèles, Optuna, journal des essais"),
     ("03_calibration_seuils", "Calibration, choix du modèle, règle de décision figée"),
@@ -130,6 +132,92 @@ def paquets() -> None:
         print(f"site/assets/{page}.bundle.js : {sortie.stat().st_size / 1e3:.0f} ko")
 
 
+# ---------- seconde version (Bloomberg, 1999-2026) et description du dataset ----------
+def version_2() -> dict:
+    """Résultats de src.v2_bloomberg et table 1999-2026, s'ils existent."""
+    import pandas as pd
+
+    dossier = ROOT / "runs" / "v2_bloomberg"
+    sortie = {}
+    for nom in ["evaluation_test", "decision_finale", "controle_bloomberg"]:
+        f = dossier / f"{nom}.json"
+        if f.exists():
+            sortie[nom] = json.loads(f.read_text())
+    table = ROOT / "data" / "3_modele" / "dataset_model2.csv"
+    if table.exists():
+        t = pd.read_csv(table, parse_dates=["date"])
+        sortie["serie"] = [{"mois": d.strftime("%Y-%m"), "cloture": round(float(c), 1), "bloc": b}
+                           for d, c, b in zip(t["date"], t["n225_close"], t["bloc"])]
+    journal = dossier / "trials_log.csv"
+    if journal.exists():
+        j = pd.read_csv(journal)
+        j = j[j["cible"] == "nikkei"]
+        sortie["essais"] = [{"modele": m, "essai": int(e), "logloss": float(l), "retenu": bool(r)}
+                            for m, e, l, r in zip(j["modele"], j["essai"], j["cv_logloss"], j["retenu"])]
+    return sortie
+
+
+def dataset() -> dict:
+    """Ce que contient la table 1999-2026 : taille, sources, décalages de publication."""
+    import pandas as pd
+
+    dico = ROOT / "data" / "2_construites" / "dictionnaire_variables2.csv"
+    mensuel = ROOT / "data" / "2_construites" / "dataset_monthly2.csv"
+    if not (dico.exists() and mensuel.exists()):
+        return {}
+    d = pd.read_csv(dico)
+    m = d[d["fichier"] == "dataset_monthly2.csv"]
+    def famille(source: str, colonne: str) -> str:
+        if colonne.startswith(("news_", "gdelt_")):
+            return "News (GDELT, FinBERT)"
+        if colonne.startswith("cpi_"):
+            return "Inflation (OCDE, e-Stat)"
+        if colonne.startswith("ff_"):
+            return "Facteurs Fama-French"
+        if colonne == "nikkei_vi":
+            return "Volatilité implicite (Nikkei VI)"
+        for cle, nom in [("Yahoo", "Yahoo Finance"), ("MoF", "Ministère des Finances"), ("BoJ", "Banque du Japon"), ("OCDE", "OCDE"),
+                         ("BCE", "BCE et Bundesbank"), ("Bundesbank", "BCE et Bundesbank"), ("policy", "Incertitude et géopolitique"),
+                         ("Caldara", "Incertitude et géopolitique")]:
+            if cle in source:
+                return nom
+        return "Calendrier et dérivées"
+    tab = pd.read_csv(mensuel, usecols=["date"], parse_dates=["date"])
+    return {"colonnes": int(len(m)), "mois": int(len(tab)), "premier_mois": tab["date"].min().strftime("%Y-%m"),
+            "dernier_mois": tab["date"].max().strftime("%Y-%m"),
+            "variables_journalieres": int((d["fichier"] == "dataset_daily2.csv").sum()),
+            "sources": pd.Series([famille(src, col) for src, col in zip(m["source"].fillna(""), m["colonne"])]).value_counts().to_dict(),
+            "decalages": m["decalage"].fillna("").value_counts().to_dict()}
+
+
+def images_integrees() -> None:
+    """Les estampes de la rotonde, en data URI : la 3D les lit même quand le site est ouvert depuis le disque."""
+    import base64
+
+    images = {f.stem: "data:image/jpeg;base64," + base64.b64encode(f.read_bytes()).decode()
+              for f in sorted((SITE / "images").glob("*.jpg"))}
+    (SITE / "data" / "images.js").write_text("// Fichier écrit par python -m app.export_site : ne pas modifier à la main.\n"
+                                             f"window.NIKKEI_IMAGES = {json.dumps(images)};\n", encoding="utf-8")
+    print(f"site/data/images.js : {len(images)} images")
+
+
+def notebook_html(nom: str) -> Path:
+    """La page HTML d'un notebook : celle de web/nb, ou une conversion faite ici si elle manque."""
+    source = ROOT / "web" / "nb" / f"{nom}.html"
+    if source.exists():
+        return source
+    import nbformat
+    from nbconvert import HTMLExporter
+
+    exporteur = HTMLExporter(template_name="lab")
+    exporteur.embed_images = True
+    html, _ = exporteur.from_notebook_node(nbformat.read(ROOT / "notebooks" / f"{nom}.ipynb", as_version=4))
+    cible = SITE / "nb" / f"{nom}.html"
+    cible.parent.mkdir(parents=True, exist_ok=True)
+    cible.write_text(html, encoding="utf-8")
+    return cible
+
+
 def copier(source: Path, destination: Path) -> int:
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
@@ -141,6 +229,8 @@ def main() -> None:
     donnees["notebooks"] = [{"nom": nom, "titre": titre} for nom, titre in NOTEBOOKS]
     donnees["figures"] = sorted(p.name for p in (ROOT / "figures").glob("*.png"))
     donnees["modele"] = modele_final()
+    donnees["v2"] = version_2()
+    donnees["dataset"] = dataset()
 
     (SITE / "data").mkdir(parents=True, exist_ok=True)
     texte = json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))
@@ -156,10 +246,9 @@ def main() -> None:
 
     total = 0
     for nom, _ in NOTEBOOKS:
-        source = ROOT / "web" / "nb" / f"{nom}.html"
-        if not source.exists():
-            raise SystemExit(f"{source} manque : lancer d'abord python -m app.build_site")
-        total += copier(source, SITE / "nb" / f"{nom}.html")
+        source = notebook_html(nom)
+        cible = SITE / "nb" / f"{nom}.html"
+        total += copier(source, cible) if source != cible else cible.stat().st_size
     print(f"site/nb : {len(NOTEBOOKS)} notebooks, {total / 1e6:.1f} Mo")
 
     for pdf in ("rapport.pdf", "annexe_maths.pdf"):
@@ -169,6 +258,7 @@ def main() -> None:
     vendeur = SITE / "vendor" / "three.module.min.js"
     if not vendeur.exists():
         copier(ROOT / "web" / "assets" / "three.module.min.js", vendeur)
+    images_integrees()
     paquets()
 
 
