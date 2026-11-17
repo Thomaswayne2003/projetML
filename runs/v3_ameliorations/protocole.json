@@ -1,0 +1,69 @@
+{
+  "fige_le": "2026-11-17 18:31:29",
+  "commit_du_code": "45cbf77",
+  "sha256": "127b06538b4fec21a3d49dc6076acb8d279126201ba955fc5039b452026f26d3",
+  "protocole": {
+    "question": "Quels leviers améliorent la prévision du mois suivant et la règle en euros, sans surapprendre ?",
+    "donnees": "data/3_modele/dataset_model2.csv (1999-2026, Bloomberg en référence) + jgb_slope_10y2y, us_slope_10y3m, d_cli_jpn de data/2_construites/dataset_monthly2.csv",
+    "reentrainement": "chaque mois, sur tous les mois connus depuis janvier 1999 (fenêtre croissante)",
+    "reglages": "fixés ici, avant tout calcul ; aucun réglage automatique",
+    "variables_economiques": [
+      "n225_mom_12m",
+      "jgb_slope_10y2y",
+      "us_slope_10y3m",
+      "d_cli_jpn",
+      "vix",
+      "n225_vol_ewma"
+    ],
+    "periodes": {
+      "2010-2023 (jugement)": [
+        "2010-01-01",
+        "2023-12-31"
+      ],
+      "2010-2016": [
+        "2010-01-01",
+        "2016-12-31"
+      ],
+      "2017-2023": [
+        "2017-01-01",
+        "2023-12-31"
+      ],
+      "2024-2026 (déjà vu, indicatif)": [
+        "2024-01-01",
+        "2026-09-30"
+      ]
+    },
+    "periode_de_jugement": "2010-2023 (jugement)",
+    "probabilites": {
+      "constante": "fréquence des baisses sur tout le passé connu (la référence)",
+      "logistique du projet": "13 variables du projet + régimes k-means, L2, C = 0.03 (valeur retenue par la V1)",
+      "logistique très pénalisée": "mêmes variables, C = 0.003 : dix fois plus tirée vers la constante",
+      "logistique du projet, mélangée à la constante": "moyenne 50% logistique du projet, 50% constante",
+      "logistique économique": "6 variables économiques, sans news ni régimes, L2, C = 0.03",
+      "logistique économique, mélangée à la constante": "moyenne 50% logistique économique, 50% constante",
+      "ridge sur le rendement": "régression ridge (alpha = 100) du rendement suivant sur les 6 variables économiques, puis P(baisse) = Φ(-rendement prévu / volatilité récente mensuelle)"
+    },
+    "critere_probabilites": "log-loss mensuelle comparée à la constante, mois par mois (test de Diebold-Mariano unilatéral) ; correction de Holm sur les variantes ; retenue si p corrigée < 0.05 et log-loss plus basse que la constante sur 2010-2016 et sur 2017-2023",
+    "regle_de_decision": "celle du projet : gain espéré au-dessus du cash comparé à la marge 0.005, coûts appris sur le passé connu",
+    "leviers_euros": {
+      "achat couvert, toujours": "la référence : acheter le Nikkei chaque mois, change couvert",
+      "achat non couvert": "acheter sans couvrir le yen",
+      "couverture à moitié": "acheter, couvrir la moitié du yen",
+      "couvert seulement si le carry est positif": "couvrir quand la couverture rapporte (carry > 0), sinon ne pas couvrir",
+      "achat couvert, dosé par la volatilité": "part investie = min(1, 15% / volatilité récente), le reste au cash",
+      "règle : constante": "acheter, neutre ou vendre selon la probabilité de cette variante",
+      "règle : logistique du projet": "acheter, neutre ou vendre selon la probabilité de cette variante",
+      "règle : logistique très pénalisée": "acheter, neutre ou vendre selon la probabilité de cette variante",
+      "règle : logistique du projet, mélangée à la constante": "acheter, neutre ou vendre selon la probabilité de cette variante",
+      "règle : logistique économique": "acheter, neutre ou vendre selon la probabilité de cette variante",
+      "règle : logistique économique, mélangée à la constante": "acheter, neutre ou vendre selon la probabilité de cette variante",
+      "règle : ridge sur le rendement": "acheter, neutre ou vendre selon la probabilité de cette variante"
+    },
+    "reference_euros": "achat couvert, toujours",
+    "critere_euros": "ratio de Sharpe annualisé (rendement au-dessus du cash / écart-type) ; bootstrap par blocs de 12 mois, 5000 tirages, graine 42 ; Holm sur les leviers ; retenu si p corrigée < 0.05 et Sharpe plus haut que la référence sur 2010-2016 et sur 2017-2023",
+    "frais": "0.05% par 100 % de position achetée ou vendue, pour toutes les stratégies",
+    "assemblage_final": "les leviers retenus sont combinés (une seule politique de couverture : celle au meilleur Sharpe 2010-2023) ; si aucun n'est retenu, on garde la référence : probabilité constante et achat couvert",
+    "deja_vu": "2024-2026 a été ouvert par la V1 et la V2 : affiché à titre indicatif, jamais utilisé pour choisir",
+    "ce_que_l_auteur_savait": "les explorations après coup sur 2016-2023 (runs/exploration_apres_coup.json) montraient déjà qu'aucun modèle ne battait nettement la constante, et C = 0,03 est la valeur réglée par la V1 sur son entraînement (qui recouvre 2010-2021) ; les autres choix sont des valeurs standards de la littérature"
+  }
+}
