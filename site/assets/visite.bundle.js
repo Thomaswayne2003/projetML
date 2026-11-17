@@ -108,6 +108,22 @@ const V2_INFO = E2 ? {
   couvert: E2.performance_euros["toujours acheter, couvert"].cumul, actions: E2.actions,
 } : null;
 
+// Troisième étape : les leviers d'amélioration, jugés sur 2010-2023 selon un protocole figé avant le calcul
+const V3 = D.v3 ?? {};
+const J3 = "2010-2023 (jugement)";
+const V3_INFO = V3.tests_probabilites ? (() => {
+  const tp = V3.tests_probabilites, te = V3.tests_euros;
+  const meilleure = Object.keys(tp).sort((a, b) => tp[a].ecart_vs_constante - tp[b].ecart_vs_constante)[0];
+  return {
+    J: J3, mois: V3.mois_par_periode[J3], fige: V3.protocole.fige_le, sha: V3.protocole.sha256,
+    tests: Object.keys(tp).length + Object.keys(te).length, retenus: V3.retenus.probabilites.length + V3.retenus.euros.length,
+    meilleure, ecart: tp[meilleure].ecart_vs_constante, se: tp[meilleure].erreur_type,
+    pMin: Math.min(...[...Object.values(tp), ...Object.values(te)].map((t) => t.p_holm)),
+    ref: V3.euros[J3]["achat couvert, toujours"], moitie: V3.euros[J3]["couverture à moitié"],
+    dose: V3.euros[J3]["achat couvert, dosé par la volatilité"], neutreConstante: V3.actions_2010_2023?.constante?.neutre ?? 0,
+  };
+})() : null;
+
 const SALLES_ML = [
   {
     id: "dataset", num: "I", nom: "Le dataset", kanji: "集",
@@ -174,7 +190,7 @@ const SALLES_ML = [
   },
   {
     id: "explication", num: "VI", nom: "L'explication", kanji: "解",
-    notebooks: ["04_explicabilite_diagnostics"], docs: [],
+    notebooks: ["04_explicabilite_diagnostics", "07_seconde_version_bloomberg"], docs: [],
     titre: "Ce qui pèse dans une prédiction",
     oeuvre: "La balance",
     legende: `Les douze variables de la dernière prédiction (${moisLong(moisSuivant(CHIFFRES.moisDernier))}) suspendues à un fléau : à droite celles qui poussent vers la baisse, à gauche celles qui poussent vers la hausse. La taille de chaque poids suit sa contribution.`,
@@ -185,16 +201,17 @@ const SALLES_ML = [
   },
   {
     id: "apres", num: "VII", nom: "Après le test", kanji: "後",
-    notebooks: [], docs: ["rapport"],
+    notebooks: ["06_annexe_news_prix", "07_seconde_version_bloomberg", "08_ameliorations_sans_surapprentissage"], docs: ["rapport"],
     titre: "Ce qu'on a tenté ensuite",
     oeuvre: "Le souffle",
     legende: "Une spirale de 2016 (en bas) à 2026 (en haut), dont l'épaisseur suit la volatilité réalisée de chaque mois. Les parties teintées sont les mois agités, au-dessus de 20 % de volatilité annuelle.",
-    clair: "Une fois le test ouvert, deux pistes ont été suivies, sans valeur de preuve puisque le test était déjà connu : réentraîner le même modèle sur une histoire plus longue, de 1999 à 2026 avec Bloomberg en référence, et prévoir l'agitation du marché plutôt que son sens.",
+    clair: "Une fois le test ouvert, trois pistes ont été suivies. D'abord, réentraîner le même modèle sur une histoire plus longue, de 1999 à 2026, avec Bloomberg en référence. Ensuite, appliquer tous les leviers d'amélioration réalisables, selon un protocole figé avant le moindre calcul et jugé sur 2010-2023 : aucun ne passe. Enfin, prévoir l'agitation du marché plutôt que son sens.",
     technique: V2_INFO
-      ? `Avec ${V2_INFO.mois} mois d'entraînement au lieu de ${CHIFFRES.moisEntrainement}, la règle du notebook 03 retient ${V2_INFO.modele} sur la validation. Sur le test, sa log-loss vaut ${dec(V2_INFO.ll)} contre ${dec(V2_INFO.llConst)} pour la constante (écart ${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}), et sa règle rapporte ${pct(V2_INFO.regle, 1, true)} contre ${pct(V2_INFO.couvert, 1, true)} pour l'achat couvert. Mieux que la première version, toujours pas mieux que la constante. La logistique aurait battu la constante sur le test (${dec(V2_INFO.llLogit)}), mais la règle annoncée l'avait écartée sur la validation (${dec(V2_INFO.llLogitVal)}) : la choisir maintenant reviendrait à choisir sur le test. Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`
+      ? `Avec ${V2_INFO.mois} mois d'entraînement au lieu de ${CHIFFRES.moisEntrainement}, la règle du notebook 03 retient ${V2_INFO.modele} sur la validation. Sur le test, sa log-loss vaut ${dec(V2_INFO.ll)} contre ${dec(V2_INFO.llConst)} pour la constante (écart ${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}), et sa règle rapporte ${pct(V2_INFO.regle, 1, true)} contre ${pct(V2_INFO.couvert, 1, true)} pour l'achat couvert. Mieux que la première version, toujours pas mieux que la constante. La logistique aurait battu la constante sur le test (${dec(V2_INFO.llLogit)}), mais la règle annoncée l'avait écartée sur la validation (${dec(V2_INFO.llLogitVal)}) : la choisir maintenant reviendrait à choisir sur le test.${V3_INFO ? ` Les leviers d'amélioration, réentraînés chaque mois sur ${V3_INFO.mois} mois de 2010-2023 : ${V3_INFO.retenus} sur ${V3_INFO.tests} passent le test de Diebold-Mariano ou le bootstrap du Sharpe après correction de Holm (plus petite p corrigée : ${dec(V3_INFO.pMin, 2)}). Le meilleur, « ${V3_INFO.meilleure} », gagne ${dec(-V3_INFO.ecart, 4)} de log-loss, soit ${dec(-V3_INFO.ecart / V3_INFO.se, 1)} erreur type.` : ""} Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`
       : `Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`,
     chiffres: V2_INFO
-      ? [[`${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`, "log-loss 1999-2026 : modèle / constante"], [pct(V2_INFO.regle, 1, true), "règle de la seconde version, en euros"], [dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"]]
+      ? [[`${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`, "log-loss 1999-2026 : modèle / constante"], [pct(V2_INFO.regle, 1, true), "règle de la seconde version, en euros"],
+         V3_INFO ? [`${V3_INFO.retenus} sur ${V3_INFO.tests}`, "leviers retenus par le protocole figé"] : [dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"]]
       : [[dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"], [dec(RISQUE.aucAgite, 2), "AUC pour un mois agité"], ["—", ""]],
     ton: { mur: "#95a3ac", sol: "#7c858b", ciel: "#f2f6f8", texte: "#fbfdfe", accent: "#e1e8ec" },
   },
@@ -279,12 +296,12 @@ const SALLES_MATHS = [
   },
   {
     id: "m-preuve", num: "VII", nom: "La preuve", kanji: "証",
-    notebooks: ["03b_test_final", "05_annexe_maths_logistique"], docs: ["annexe", "rapport"],
+    notebooks: ["03b_test_final", "05_annexe_maths_logistique", "08_ameliorations_sans_surapprentissage"], docs: ["annexe", "rapport"],
     titre: `Ce que ${CHIFFRES.moisTest} mois peuvent prouver`,
     oeuvre: "Les deux colonnes",
     legende: `À gauche, une pile de ${CHIFFRES.moisTest} disques : les mois de test. À droite, la hauteur qu'il faudrait atteindre, environ ${nombre(Math.round(MATHS.moisPourPreuve / 10) * 10)} mois, pour qu'un gain de 0,02 de log-loss dépasse deux erreurs types.`,
     clair: `Un écart entre deux modèles ne veut rien dire sans sa marge d'erreur. Sur ${CHIFFRES.moisTest} mois, l'écart de log-loss entre le modèle et la constante vaut à peine une erreur type : on ne peut conclure ni dans un sens ni dans l'autre. Pour prouver un gain réaliste, il faudrait des centaines de mois.`,
-    technique: `Écart moyen, mois par mois : ${f(`d̄ = ${dec(ECART_TEST.moyenne, 3)}`)}, écart-type ${dec(ECART_TEST.ecartType, 3)}, erreur type ${f(`s/√n = ${dec(ECART_TEST.erreurType, 3)}`)}. Les cibles mensuelles ne se chevauchent pas : l'erreur type simple suffit, et Newey-West donne presque la même. Pour qu'un gain de 0,02 dépasse deux erreurs types, il faut ${f("n ≥ (2s / 0,02)²")} ≈ ${nombre(MATHS.moisPourPreuve)} mois. Même verdict en régression : sur le rendement lui-même, les équations normales résolues à la main donnent R² = 0,12 sur l'entraînement, mais −1,77 sur la validation.`,
+    technique: `Écart moyen, mois par mois : ${f(`d̄ = ${dec(ECART_TEST.moyenne, 3)}`)}, écart-type ${dec(ECART_TEST.ecartType, 3)}, erreur type ${f(`s/√n = ${dec(ECART_TEST.erreurType, 3)}`)}. Les cibles mensuelles ne se chevauchent pas : l'erreur type simple suffit, et Newey-West donne presque la même. Pour qu'un gain de 0,02 dépasse deux erreurs types, il faut ${f("n ≥ (2s / 0,02)²")} ≈ ${nombre(MATHS.moisPourPreuve)} mois. Même verdict en régression : sur le rendement lui-même, les équations normales résolues à la main donnent R² = 0,12 sur l'entraînement, mais −1,77 sur la validation.${V3_INFO ? ` Tester plusieurs variantes demande plus encore : avec ${V3_INFO.tests} comparaisons sur ${V3_INFO.mois} mois, la correction de Holm multiplie la plus petite p-valeur par ${V3_INFO.tests}, puis la deuxième par ${V3_INFO.tests - 1}, et ainsi de suite (notebook 08) ; aucune ne reste sous 5 %.` : ""}`,
     chiffres: [[dec(ECART_TEST.moyenne, 3), "écart moyen de log-loss, modèle − constante"], [`± ${dec(ECART_TEST.erreurType, 3)}`, "une erreur type"], [`≈ ${nombre(MATHS.moisPourPreuve)}`, "mois pour prouver un gain de 0,02"]],
     ton: { mur: "#56485e", sol: "#6c6270", ciel: "#efe6f1", texte: "#f7f2f8", accent: "#cdbdd3" },
   },
@@ -375,10 +392,27 @@ const FIGURES = {
   "05_sensibilite_pas": ["L'effet du pas de descente", "J(wₜ) − J* selon le pas : trop petit, c'est lent ; trop grand, ça ne converge pas.", "05_annexe_maths_logistique"],
   "05_sensibilite_depart": ["Trois départs, un seul minimum", "Trois points de départ très différents mènent au même minimum : la convexité, observée.", "05_annexe_maths_logistique"],
   "05_sensibilite_iterations": ["Le nombre d'itérations", "Log-loss d'entraînement et de validation selon le nombre d'itérations, avec α = 1/L.", "05_annexe_maths_logistique"],
+  "07_nikkei_1999_2026": ["Le Nikkei de 1999 à 2026", "La clôture mensuelle sur toute la table de la seconde version, en échelle logarithmique.", "07_seconde_version_bloomberg"],
+  "07_bloomberg_controles": ["Bloomberg en référence", "À gauche, le Tankan de la table et celui de Bloomberg, décalé d'un mois ; à droite, l'export du VIX « en euros » rapporté au VIX.", "07_seconde_version_bloomberg"],
+  "07_optuna_v1_v2": ["Les essais Optuna des deux versions", "Log-loss en validation croisée de chaque essai, 2010-2021 contre 1999-2021.", "07_seconde_version_bloomberg"],
+  "07_test_euros": ["Les deux règles sur le test", "1 € investi selon la règle de chaque version, face à l'achat couvert.", "07_seconde_version_bloomberg"],
+  "07_permutation_v2": ["Permutation, seconde version", "Ce que perd le LightGBM retenu quand on mélange chaque variable, sur la validation et sur le test.", "07_seconde_version_bloomberg"],
+  "07_shap_v2_test": ["SHAP, seconde version", "L'effet de chaque variable sur chaque prédiction du LightGBM, sur le test.", "07_seconde_version_bloomberg"],
+  "07_shap_v2_derniere": ["La dernière prédiction, seconde version", "La prédiction pour novembre 2026 décomposée variable par variable.", "07_seconde_version_bloomberg"],
+  "07_coefficients_v1_v2": ["La logistique, réentraînée", "Les coefficients de la logistique sur 2010-2021 et sur 1999-2021 : la pénalité L1 n'en garde que cinq.", "07_seconde_version_bloomberg"],
+  "07_stabilite_signaux": ["Des signaux qui changent de signe", "Corrélation de rang de chaque variable avec le rendement du mois suivant, période par période.", "07_seconde_version_bloomberg"],
+  "08_ecarts_log_loss": ["Six variantes face à la constante", "Écart de log-loss avec la constante, chaque variante réapprise chaque mois, par sous-période ; les barres couvrent 95 %.", "08_ameliorations_sans_surapprentissage"],
+  "08_log_loss_cumulee": ["L'écart, cumulé mois après mois", "Au-dessus de zéro, la variante a perdu contre la constante depuis janvier 2010.", "08_ameliorations_sans_surapprentissage"],
+  "08_fiabilite": ["Fiabilité sur 2010-2023", "Probabilité de baisse annoncée, par quintile, face à la fréquence observée des baisses.", "08_ameliorations_sans_surapprentissage"],
+  "08_regle_au_cash": ["Pourquoi la règle reste au cash", "La zone neutre de la règle (en gris) et les probabilités annoncées : la constante n'en sort jamais.", "08_ameliorations_sans_surapprentissage"],
+  "08_leviers_sharpe": ["Les leviers en euros", "Écart de Sharpe avec l'achat couvert sur 2010-2023, avec un intervalle bootstrap à 90 %.", "08_ameliorations_sans_surapprentissage"],
+  "08_richesse": ["100 € investis, levier par levier", "À gauche, 2010-2023 pour juger ; à droite, 2024-2026, déjà vu, à titre indicatif.", "08_ameliorations_sans_surapprentissage"],
+  "08_coefficients_dans_le_temps": ["Des coefficients réappris chaque mois", "Les six coefficients standardisés de la logistique économique, de 2010 à 2026.", "08_ameliorations_sans_surapprentissage"],
+  "08_contributions_mois_prochain": ["La prévision de novembre 2026, décomposée", "Coefficient × écart standardisé de chaque variable, pour la logistique économique.", "08_ameliorations_sans_surapprentissage"],
 };
 const nomNotebook = (nom) => `Notebook ${nom.split("_")[0]}`;
 
-return { D, nombre, pct, Maj, dec, moisLong, moisSuivant, ECART_TEST, CHIFFRES, RISQUE, V2_INFO, MATHS, COURS, SALLES, TOUTES_SALLES, avecCours, COURS_INFO, ENTREE, LIMITES, FIGURES, nomNotebook };
+return { D, nombre, pct, Maj, dec, moisLong, moisSuivant, ECART_TEST, CHIFFRES, RISQUE, V2_INFO, V3_INFO, MATHS, COURS, SALLES, TOUTES_SALLES, avecCours, COURS_INFO, ENTREE, LIMITES, FIGURES, nomNotebook };
 })();
 const __commun = (() => {
 "use strict";
@@ -392,6 +426,22 @@ function lire(cle) { try { return localStorage.getItem(cle); } catch (e) { retur
 
 const DOCS = { rapport: ["Le rapport Applied ML", "docs/rapport.pdf"], annexe: ["L'annexe de mathématiques", "docs/annexe_maths.pdf"] };
 const titreNotebook = (nom) => D.notebooks.find((n) => n.nom === nom)?.titre ?? nom;
+const BAS = '<svg class="bas" viewBox="0 0 10 12" aria-hidden="true"><path d="M5 0v10M1 6l4 4 4-4M0 11.5h10" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
+// Ce qui se télécharge : chaque notebook en .ipynb (ou son dossier en .zip), et deux archives (site/data/donnees.js)
+const TL = D.telechargements ?? { notebooks: {}, archives: [] };
+const telechargement = (nom) => TL.notebooks[nom] ?? { href: `nb/${nom}.ipynb`, fichier: `${nom}.ipynb`, dossier: false };
+const etiquetteNb = (nom) => (telechargement(nom).dossier ? "dossier .zip" : ".ipynb");
+const lienIpynb = (nom, classe = "telecharger") => {
+  const t = telechargement(nom);
+  const aide = t.dossier ? `Télécharger ${nomNotebook(nom)} avec tout son dossier (${t.fichiers} fichiers : notebook, scripts, figures)` : `Télécharger ${nomNotebook(nom)} (.ipynb, à ouvrir dans Jupyter)`;
+  return `<a class="${classe}" href="${t.href}" download="${t.fichier}" title="${aide}">${etiquetteNb(nom)} ${BAS}</a>`;
+};
+const mo = (o) => `${(o / 1e6).toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo`;
+const archives = () => TL.archives;
+const lienArchive = (cle, classe = "telecharger") => {
+  const a = TL.archives.find((x) => x.cle === cle);
+  return a ? `<a class="${classe}" href="${a.href}" download="${a.fichier}" title="${a.fichiers} fichiers, ${mo(a.octets)}">${a.titre} (.zip, ${mo(a.octets)}) ${BAS}</a>` : "";
+};
 
 // Le choix du cours (Applied ML ou Maths) et le mode (visite ou lecture) restent d'une page à l'autre.
 function installerEntete(page) {
@@ -475,10 +525,29 @@ function installerMenu({ page, allerSalle = null, salleActive = () => null }) {
 
 // Les notebooks et documents d'une salle, en boutons ; data-nb ouvre la liseuse sans quitter la page
 function liensPieces(salle) {
-  const nbs = salle.notebooks.map((n) => `<li><button type="button" class="piece-lien" data-nb="${n}"><span class="sur-titre">${nomNotebook(n)}</span><span class="t">${titreNotebook(n)}</span>${FLECHE}</button></li>`);
+  const nbs = salle.notebooks.map((n) => `<li class="piece-nb"><button type="button" class="piece-lien" data-nb="${n}"><span class="sur-titre">${nomNotebook(n)}</span><span class="t">${titreNotebook(n)}</span>${FLECHE}</button>${lienIpynb(n, "piece-telecharger")}</li>`);
   const docs = salle.docs.map((d) => `<li><a class="piece-lien" href="${DOCS[d][1]}" target="_blank" rel="noopener"><span class="sur-titre">PDF</span><span class="t">${DOCS[d][0]}</span>${FLECHE}</a></li>`);
   if (!nbs.length && !docs.length) return "";
   return `<ul class="pieces-salle">${nbs.join("")}${docs.join("")}</ul>`;
+}
+
+// Ouvre un notebook dans un cadre et cache le voile « Ouverture… » dès que la page est lisible, sans attendre ses scripts
+// externes (MathJax) : hors ligne, l'événement load peut tarder longtemps.
+function ouvrirDansCadre(cadre, url, cacher) {
+  const jeton = (cadre.dataset.jeton = String(Date.now() + Math.random()));
+  if (cadre.getAttribute("src") === url) { cacher(); return; }
+  cadre.src = url;
+  const debut = Date.now();
+  const verifier = () => {
+    if (cadre.dataset.jeton !== jeton) return;
+    let pret = false;
+    try {
+      const d = cadre.contentDocument;
+      pret = !!d && d.URL.endsWith(url) && d.readyState !== "loading" && !!d.body && d.body.childElementCount > 0;
+    } catch (e) { /* ouvert depuis le disque : on attend l'événement load */ }
+    if (pret || Date.now() - debut > 10000) cacher(); else setTimeout(verifier, 120);
+  };
+  setTimeout(verifier, 60);
 }
 
 // Une liseuse plein écran pour lire un notebook sans perdre sa place (salle de la visite, chapitre de la lecture)
@@ -489,7 +558,7 @@ function installerLiseuse() {
   l.setAttribute("role", "dialog");
   l.setAttribute("aria-modal", "true");
   l.setAttribute("aria-label", "Notebook");
-  l.innerHTML = `<div class="liseuse-barre"><p class="liseuse-titre"></p><a class="liseuse-cabinet" href="#">Ouvrir dans le cabinet ${FLECHE}</a><button type="button" class="liseuse-fermer">Fermer</button></div>
+  l.innerHTML = `<div class="liseuse-barre"><p class="liseuse-titre"></p><a class="liseuse-telecharger" href="#" download>.ipynb ${BAS}</a><a class="liseuse-cabinet" href="#">Ouvrir dans le cabinet ${FLECHE}</a><button type="button" class="liseuse-fermer">Fermer</button></div>
     <div class="liseuse-cadre"><p class="liseuse-charge">Ouverture du notebook…</p><iframe title="Notebook"></iframe></div>`;
   document.body.appendChild(l);
   const cadre = l.querySelector("iframe"), charge = l.querySelector(".liseuse-charge");
@@ -506,8 +575,11 @@ function installerLiseuse() {
     const nom = b.dataset.nb;
     l.querySelector(".liseuse-titre").innerHTML = `<span class="sur-titre">${nomNotebook(nom)}</span> ${titreNotebook(nom)}`;
     l.querySelector(".liseuse-cabinet").href = avecCours(`cabinet.html?nb=${nom}`);
+    const dl = l.querySelector(".liseuse-telecharger"), t = telechargement(nom);
+    dl.href = t.href; dl.download = t.fichier; dl.title = `Télécharger ${nomNotebook(nom)}`;
+    dl.innerHTML = `${etiquetteNb(nom)} ${BAS}`;
     charge.style.opacity = 1;
-    if (!cadre.src.endsWith(`nb/${nom}.html`)) cadre.src = `nb/${nom}.html`; else charge.style.opacity = 0;
+    ouvrirDansCadre(cadre, `nb/${nom}.html`, () => (charge.style.opacity = 0));
     l.hidden = false;
     document.body.classList.add("liseuse-ouverte");
     l.querySelector(".liseuse-fermer").focus();
@@ -515,7 +587,7 @@ function installerLiseuse() {
   return { estOuverte: () => !l.hidden };
 }
 
-return { FLECHE, FLECHE_G, stocker, lire, titreNotebook, installerEntete, installerMenu, liensPieces, installerLiseuse };
+return { FLECHE, FLECHE_G, stocker, lire, titreNotebook, BAS, telechargement, etiquetteNb, lienIpynb, archives, lienArchive, installerEntete, installerMenu, liensPieces, ouvrirDansCadre, installerLiseuse };
 })();
 const __oeuvres = (() => {
 "use strict";

@@ -51,6 +51,8 @@ src/                 code principal
   evaluate.py        évaluation sur le test avec la décision figée
   predict.py         signal du mois (utilisé par la plateforme)
   logreg_scratch.py  régression logistique codée à la main (annexe de Maths)
+  v2_bloomberg.py    seconde version : 1999-2026, contrôles Bloomberg, réentraînement (runs/v2_bloomberg/)
+  ameliorations.py   troisième étape : leviers d'amélioration, protocole figé, jugés sur 2010-2023 (runs/v3_ameliorations/)
 app/
   api.py             API FastAPI : /signal, /prediction, /explication, /historique, /decision, /serie, /essais, /surface, ...
   build_site.py      convertit les notebooks en pages HTML pour le site
@@ -98,7 +100,8 @@ La table mensuelle `data/2_construites/dataset_monthly2.csv` (334 mois, 1999-202
 Les exports Bloomberg (`data/1_brutes/bloomberg/`, non suivis par Git) servent de référence :
 - **Tankan** : identique à la table sur 112 trimestres sur 112, une fois décalé au mois de sa publication ; à sa date
   Bloomberg (fin de trimestre), il aurait été utilisé avant d'être publié ;
-- **IPC** : même tendance que la mesure de la table, mais pas la même série ; il n'entre pas dans le modèle ;
+- **IPC** : la même série que celle de la table une fois décalée d'un mois, sa publication (corrélation 0,998,
+  écart moyen 0,05 point) ; il n'entre pas dans le modèle ;
 - **VIX** : l'export est « EUR, as exported » (converti au taux de change), donc inutilisable ; le VIX en points de la
   table est gardé. À réexporter sans conversion ;
 - **calendrier des publications** : les trois exports sont tronqués à 5 000 lignes (1999-2006 au mieux). À réexporter
@@ -109,6 +112,11 @@ NIKKEI_CONFIG=config_bloomberg.yaml python -m src.data            # data/3_model
 NIKKEI_CONFIG=config_bloomberg.yaml python -m src.v2_bloomberg    # contrôles, Optuna, décision, évaluation
 ```
 
+Le notebook `notebooks/07_seconde_version_bloomberg.ipynb` présente cette seconde version : données et contrôles
+Bloomberg, réglage comparé à la première version, choix du modèle, test, et explicabilité (importance par permutation,
+SHAP du LightGBM retenu, coefficients de la logistique, stabilité des signaux dans le temps). Il relit
+`runs/v2_bloomberg/` sans rien réentraîner ; `notebooks/fabriquer_07.py` l'écrit, `jupyter nbconvert --execute` l'exécute.
+
 Le protocole est celui de la première version (mêmes variables, réglage sur 1999-2021, choix du modèle et Platt sur
 la validation 2022-2023 par la règle du notebook 03, une évaluation sur 2024-2026) ; tout s'écrit dans
 `runs/v2_bloomberg/`, sans toucher à la décision ni à l'évaluation figées de `runs/`. La règle retient LightGBM ; sur le
@@ -116,6 +124,55 @@ test, sa log-loss vaut 0,681 contre 0,665 pour la constante (écart +0,016 ± 0,
 +82,3 % pour l'achat couvert. Mieux que la première version, toujours pas mieux que la constante. La logistique aurait
 battu la constante sur le test (0,634), mais la règle l'avait écartée sur la validation (0,731) : la choisir maintenant
 reviendrait à choisir sur le test. Ce test ayant déjà été ouvert, ces chiffres sont une exploration après coup.
+
+## Troisième étape : améliorer sans surapprendre (protocole figé)
+
+`src/ameliorations.py` applique tous les leviers réalisables avec les données disponibles, selon un protocole écrit
+dans `runs/v3_ameliorations/protocole.json` **avant** tout calcul, avec son empreinte SHA-256. L'évaluation recalcule
+cette empreinte et refuse de tourner si une variante, un réglage ou un critère a changé depuis.
+
+```bash
+python -m src.ameliorations --figer    # écrit le protocole (refusé s'il existe déjà)
+python -m src.ameliorations            # calcule tout, après avoir vérifié le protocole figé
+```
+
+**Les garde-fous.**
+- Chaque variante est réentraînée chaque mois sur tous les mois connus depuis 1999.
+- Les réglages sont fixés d'avance : pas d'Optuna.
+- Le jugement porte sur 2010-2023 (168 mois).
+- Une variante n'est retenue que si elle bat la référence après correction de Holm **et** sur 2010-2016 **et** sur
+  2017-2023.
+- 2024-2026, déjà vu, n'est montré qu'à titre indicatif.
+
+**Les variantes.**
+- Sept façons de prévoir la baisse :
+  - la constante (la référence) ;
+  - la logistique du projet ;
+  - la même, très pénalisée ;
+  - la même, mélangée à la constante ;
+  - une logistique sur six variables économiques (momentum, pentes des taux japonais et américains, indicateur avancé
+    OCDE, VIX, volatilité) ;
+  - cette logistique économique, mélangée à la constante ;
+  - une ridge sur le rendement.
+- Quatre leviers en euros : ne pas couvrir le yen, le couvrir à moitié, le couvrir selon le portage, doser la position
+  selon la volatilité.
+
+**Résultat : aucun levier ne passe.**
+
+| Levier | Résultat sur 2010-2023 |
+|---|---|
+| Meilleure probabilité (mélange à la constante) | −0,007 de log-loss, 0,8 erreur type ; perd sur 2010-2016 |
+| Toutes les variantes | AUC entre 0,49 et 0,52 |
+| Couvrir le yen à moitié | perte maximale −19 % contre −25,5 %, Sharpe 0,59 contre 0,56 ; l'avantage s'inverse sur 2017-2023 |
+| Doser selon la volatilité | moins de pertes, mais un Sharpe plus bas |
+
+La règle du projet reste au cash les 168 mois avec la probabilité constante : sa marge de 0,5 % par mois dépasse le
+gain espéré appris sur le passé. L'assemblage final reste donc la référence : probabilité constante, achat couvert.
+
+Le notebook `notebooks/08_ameliorations_sans_surapprentissage.ipynb`, écrit par `notebooks/fabriquer_08.py`, présente
+le protocole, les résultats, les leviers en euros et l'explicabilité :
+- les coefficients réappris mois après mois ;
+- la décomposition de la prévision de novembre 2026.
 
 ## Le site : visite et lecture
 
@@ -138,13 +195,41 @@ chargent. Les fichiers à modifier restent les modules ; les paquets se refont a
 Le site a deux parcours, un par cours, choisis en haut de chaque page (`?cours=ml` ou `?cours=maths`, le choix est
 retenu d'une page à l'autre) :
 - **Applied ML** : les étapes du projet dans l'ordre des notebooks : le dataset (00a, 00b), l'exploration (01),
-  l'apprentissage (02), la règle (03), le test (03b), l'explication (04), puis ce qui a été tenté après le test ;
+  l'apprentissage (02), la règle (03), le test (03b), l'explication (04), puis ce qui a été tenté après le test (06, 07, 08) ;
 - **Maths** : l'annexe, salle par salle : le modèle (sigmoïde), le coût (log-loss), le gradient, le prior gaussien,
   la convexité, la descente de gradient et ce que 33 mois de test peuvent prouver (erreur type, nombre de mois
   nécessaire).
 
-Chaque salle et chaque chapitre ouvre ses notebooks et ses PDF sur place, dans une liseuse, sans quitter la page. Les
-figures des notebooks sont présentées en planches (titre, ce qu'il faut y voir, notebook d'origine) et s'ouvrent dans
+Chaque salle et chaque chapitre ouvre ses notebooks et ses PDF sur place, dans une liseuse, sans quitter la page.
+Chaque notebook se télécharge aussi, à ouvrir dans Jupyter, depuis trois endroits :
+- un bouton à côté de chaque notebook ;
+- un bouton dans la liseuse ;
+- un lien dans le cabinet.
+
+Le format dépend du notebook :
+- en `.ipynb` pour les notebooks d'un seul fichier ;
+- en `.zip` avec tout son dossier pour le 06 (notebook, scripts `nikkei_*.py`, figures, README, `requirements.txt`).
+
+Deux archives sont aussi proposées, refaites à chaque `python -m app.export_site` et identiques octet pour octet si rien
+n'a changé :
+
+| Archive | Contenu |
+|---|---|
+| `site/nb/notebooks_nikkei_225.zip` | le dossier `notebooks/` au complet |
+| `site/nb/projet_nikkei_225.zip` | la version finale du projet : notebooks, `src/`, `app/`, `tests/`, configurations, données construites, `runs/`, figures et rapport |
+
+L'archive du projet ne contient ni le site, ni l'ancien site PHP, ni les données brutes. Celles-ci se retéléchargent
+avec les notebooks 00a et 00b, et les exports Bloomberg ne peuvent pas être redistribués.
+
+Le téléchargement est sûr quand le site est servi par `php lancer.php` ou le serveur Python. Ouvert directement depuis
+le disque, le navigateur peut afficher le fichier au lieu de l'enregistrer.
+
+**L'affichage des notebooks sur le site.** Les pages HTML des notebooks ne changent rien aux `.ipynb` :
+- le tableau de bord ipywidgets du 06, qui ne peut pas tourner dans une page statique, y est remplacé par une note ;
+- les avertissements techniques des bibliothèques (tqdm, torch) en sont retirés ;
+- MathJax se charge après le texte, et `require.js`, inutile, n'est pas chargé : la page s'affiche sans attendre le CDN.
+
+Les figures des notebooks sont présentées en planches (titre, ce qu'il faut y voir, notebook d'origine) et s'ouvrent dans
 une visionneuse qui passe de l'une à l'autre.
 
 Chaque parcours se lit de deux façons, avec le même contenu :
@@ -157,7 +242,8 @@ Chaque parcours se lit de deux façons, avec le même contenu :
   une salle s'ouvre directement avec son adresse, par exemple `index.html?cours=maths#m-prior` ;
 - **la lecture** (`lecture.html`) : les sept chapitres en texte, chacun en clair puis en termes techniques, avec des
   graphiques interactifs tirés des mêmes données, les tableaux de résultats, les figures des notebooks et les limites ;
-- **le cabinet** (`cabinet.html`) : les six notebooks exécutés, le rapport et l'annexe en PDF.
+- **le cabinet** (`cabinet.html`) : les onze notebooks exécutés, à lire ou à télécharger (ou tous en
+  `.zip`), le rapport et l'annexe en PDF.
 
 Les textes communs aux deux modes sont dans `site/assets/contenu.js` ; les chiffres y sont lus dans les données, jamais
 recopiés à la main. Three.js est en copie locale (`site/vendor/`) ; seules les polices viennent de Google Fonts.
