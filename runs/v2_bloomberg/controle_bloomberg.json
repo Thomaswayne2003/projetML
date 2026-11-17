@@ -6,13 +6,15 @@
     "erreur_si_date_bloomberg_prise_telle_quelle": "99 trimestres auraient utilisé l'enquête avant sa publication"
   },
   "ipc": {
-    "mois_compares": 201,
+    "mois_compares": 202,
     "correlations": {
       "decalage_0": 0.9682643637221644,
       "decalage_1": 0.9979765731579079,
       "decalage_2": 0.9690355787280627
     },
-    "lecture": "même tendance, mais ce n'est pas la même mesure que l'IPC officiel ; l'IPC n'est pas une variable du modèle"
+    "ecart_moyen_points": 0.054369069306930695,
+    "ecart_max_points": 0.41578899999999996,
+    "lecture": "même série que Bloomberg une fois décalée d'un mois (sa publication), recalculée à partir de l'indice ; l'IPC n'est pas une variable du modèle"
   },
   "vix": {
     "mois_compares": 334,

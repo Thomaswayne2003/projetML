@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-17 17:46",
-  "commit_du_code": "0f9ada2",
+  "date": "2026-11-17 18:03",
+  "commit_du_code": "45cbf77",
   "configuration": "config_bloomberg.yaml",
   "avertissement": "Seconde version, après l'ouverture du test 2024-2026 par la première : exploration après coup, pas un test à l'aveugle.",
   "mois_entrainement": 276,
