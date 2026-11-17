@@ -43,6 +43,7 @@ function socleCarre(l, h, p) {
   return m;
 }
 
+const SERIE = D.v2?.serie ?? D.serie;   // table 1999-2026 (seconde version) si elle est là
 const lisser = (v, k) => v.map((_, i) => { let s = 0, n = 0; for (let j = i - k; j <= i + k; j++) if (v[j] != null) { s += v[j]; n++; } return s / n; });
 
 // ---------- I. Le vase des 201 mois ----------
@@ -50,7 +51,7 @@ function vase() {
   const g = new THREE.Group();
   const H0 = 0.78;
   g.add(socleRond(0.82, H0));
-  const c = lisser(D.serie.map((m) => m.cloture), 3);
+  const c = lisser(SERIE.map((m) => m.cloture), 3);
   const min = Math.min(...c), max = Math.max(...c);
   const hauteur = 2.25, n = c.length;
   const rayon = (v) => 0.26 + 0.5 * Math.sqrt((v - min) / (max - min));
@@ -63,7 +64,7 @@ function vase() {
   g.add(corps);
   // deux sillons : début de la validation et début du test
   for (const bloc of ["validation", "test"]) {
-    const k = D.serie.findIndex((m) => m.bloc === bloc);
+    const k = SERIE.findIndex((m) => m.bloc === bloc);
     const y = 0.04 + (k / (n - 1)) * hauteur;
     const sillon = new THREE.Mesh(new THREE.TorusGeometry(rayon(c[k]) - 0.002, 0.007, 8, 180), MATIERES.sillon);
     sillon.rotation.x = Math.PI / 2;
@@ -78,13 +79,13 @@ function pile() {
   const g = new THREE.Group();
   const H0 = 0.7;
   g.add(socleCarre(1.75, H0, 1.75));
-  const c = D.serie.map((m) => m.cloture);
-  const n = c.length, ep = 0.0102, pas = 0.0116;
+  const c = SERIE.map((m) => m.cloture);
+  const n = c.length, pas = 2.1 / n, ep = pas * 0.86;
   const disques = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.6, 0.6, ep, 72), MATIERES.blanche, n);
   const m4 = new THREE.Matrix4(), clair = new THREE.Color(0xf1ece4), sombre = new THREE.Color(0x8e8378);
   for (let k = 0; k < n; k++) {
     const r = k === 0 ? 0 : c[k] / c[k - 1] - 1;
-    const a = k * 0.085, ecart = Math.min(Math.abs(r) * 3.4, 0.42);
+    const a = k * 0.06, ecart = Math.min(Math.abs(r) * 2.2, 0.26);   // décalage selon l'ampleur du mois, plafonné
     m4.makeTranslation(Math.cos(a) * ecart, H0 + ep / 2 + k * pas, Math.sin(a) * ecart);
     disques.setMatrixAt(k, m4);
     disques.setColorAt(k, r < 0 ? sombre : clair);
@@ -587,16 +588,53 @@ function volumes() {
   return ombres(g);
 }
 
+
+// ---------- La balance des contributions (Applied ML VI) ----------
+function balance(etat) {
+  const g = new THREE.Group();
+  const H0 = 0.45, HAUT = 2.35, DEMI = 1.55;
+  g.add(socleRond(0.62, H0));
+  const mat = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.05, HAUT - H0, 24), MATIERES.basalte);
+  mat.position.y = (H0 + HAUT) / 2;
+  g.add(mat);
+  const items = [...(D.explication ?? [])];
+  const somme = items.reduce((a, b) => a + b.contribution, 0);
+  const fleau = new THREE.Group();
+  fleau.position.y = HAUT;
+  fleau.rotation.z = -THREE.MathUtils.clamp(somme * 0.12, -0.14, 0.14);   // penche du côté de la baisse si la somme est positive
+  g.add(fleau);
+  fleau.add(new THREE.Mesh(boiteArrondie(2 * DEMI, 0.05, 0.07, 0.012, 2), MATIERES.encre));
+  const pivot = new THREE.Mesh(new THREE.SphereGeometry(0.07, 24, 16), MATIERES.encre);
+  fleau.add(pivot);
+  for (const cote of [1, -1]) {
+    const liste = items.filter((it) => (cote > 0 ? it.contribution > 0 : it.contribution <= 0))
+      .sort((a, b) => Math.abs(b.contribution) - Math.abs(a.contribution));
+    liste.forEach((it, k) => {
+      const x = cote * (0.22 + (k * (DEMI - 0.3)) / Math.max(liste.length - 1, 1));
+      const r = 0.045 + Math.sqrt(Math.abs(it.contribution)) * 0.2;
+      const fil = 0.55 + (k % 3) * 0.2;
+      const brin = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, fil, 6), MATIERES.encre);
+      brin.position.set(x, -fil / 2, 0);
+      const poids = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 20), cote > 0 ? MATIERES.basalte : MATIERES.ceramique);
+      poids.position.set(x, -fil - r, 0);
+      fleau.add(brin, poids);
+    });
+  }
+  etat.animer = (t) => { fleau.rotation.y = Math.sin(t * 0.35) * 0.18; };
+  return ombres(g);
+}
+
 export const OEUVRES = {
-  question: vase, donnees: pile, apprentissage: essais, regle: cadran, epreuve: cercle, agitation: souffle, cabinet: volumes,
+  dataset: pile, exploration: vase, apprentissage: essais, regle: cadran, epreuve: cercle, explication: balance, apres: souffle,
   "m-modele": sigmoide, "m-cout": branches, "m-gradient": pentes, "m-prior": cloche, "m-convexite": paysage, "m-descente": quatrePas, "m-preuve": colonnes,
 };
 
 // ---------- les tableaux du mur du fond : un dégradé et une seule courbe tirée des données ----------
 export function seriePourTableau(id) {
   const norm = (v) => { const a = Math.min(...v), b = Math.max(...v); return v.map((x) => (x - a) / (b - a || 1)); };
-  if (id === "question") return { ligne: norm(D.serie.map((m) => m.cloture)) };
-  if (id === "donnees") { const c = D.serie.map((m) => m.cloture); return { barres: c.slice(1).map((v, i) => v / c[i] - 1) }; }
+  if (id === "exploration") return { ligne: norm(SERIE.map((m) => m.cloture)) };
+  if (id === "dataset") { const c = SERIE.map((m) => m.cloture); return { barres: c.slice(1).map((v, i) => v / c[i] - 1) }; }
+  if (id === "explication") return { barres: [...(D.explication ?? [])].sort((a, b) => b.contribution - a.contribution).map((e) => e.contribution) };
   if (id === "apprentissage") return { points: D.essais.filter((e) => e.cible === "nikkei").map((e) => Math.min(e.logloss, 0.9)) };
   if (id === "regle") return { ligne: D.historique_validation.concat(D.historique_test).map((m) => m.p_hausse), seuils: [D.decision.seuils.theta_v, D.decision.seuils.theta_a] };
   if (id === "epreuve") {
@@ -605,7 +643,7 @@ export function seriePourTableau(id) {
     const tout = norm(ca.concat(cb));
     return { ligne: tout.slice(0, ca.length), ligne2: tout.slice(ca.length) };
   }
-  if (id === "agitation") return { ligne: norm(D.volatilite.serie.map((m) => m.reelle ?? m.prevue)) };
+  if (id === "apres") return { ligne: norm(D.volatilite.serie.map((m) => m.reelle ?? m.prevue)) };
   const grille = (n, f) => [...Array(n).keys()].map((i) => f(i / (n - 1)));
   if (id === "m-modele") return { ligne: grille(120, (t) => 1 / (1 + Math.exp(-(t * 10 - 5)))) };
   if (id === "m-cout") return { ligne: norm(grille(120, (t) => -Math.log(0.03 + 0.94 * t))), ligne2: norm(grille(120, (t) => -Math.log(1 - 0.03 - 0.94 * t))) };

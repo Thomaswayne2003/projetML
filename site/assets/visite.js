@@ -196,6 +196,42 @@ scene.add(rotonde);
   rotonde.add(jour);
 }
 
+// ---------- deux estampes sur le mur de la rotonde, entre les portes ----------
+function estampe(cle, largeur, hauteur, angle, rouleau) {
+  const src = window.NIKKEI_IMAGES?.[cle];
+  if (!src) return;
+  const g = new THREE.Group();
+  g.rotation.y = -angle;
+  scene.add(g);
+  const z = -(R - 0.24), y = 3.05;   // assez en avant du mur courbe pour que les bords ne passent pas derrière
+  const tex = new THREE.TextureLoader().load(src);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  if (rouleau) {
+    // kakemono : la peinture montée sur soie, deux baguettes de bois
+    const soie = new THREE.Mesh(new THREE.PlaneGeometry(largeur + 0.34, hauteur + 0.9), new THREE.MeshStandardMaterial({ color: 0xcfc2a6, roughness: 0.9 }));
+    soie.position.set(0, y - 0.05, z - 0.01);
+    const bande = new THREE.Mesh(new THREE.PlaneGeometry(largeur + 0.34, 0.22), new THREE.MeshStandardMaterial({ color: 0x5b4a3a, roughness: 0.85 }));
+    bande.position.set(0, y + hauteur / 2 + 0.24, z - 0.005);
+    g.add(soie, bande);
+    for (const dy of [hauteur / 2 + 0.42, -hauteur / 2 - 0.52]) {
+      const baguette = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, largeur + 0.5, 16), new THREE.MeshStandardMaterial({ color: 0x2a211b, roughness: 0.5 }));
+      baguette.rotation.z = Math.PI / 2;
+      baguette.position.set(0, y + dy, z + 0.02);
+      g.add(baguette);
+    }
+  } else {
+    const cadre = new THREE.Mesh(boiteArrondie(largeur + 0.22, hauteur + 0.22, 0.06, 0.01, 1), new THREE.MeshStandardMaterial({ color: 0x2a211b, roughness: 0.55 }));
+    cadre.position.set(0, y, z - 0.04);
+    const marie = new THREE.Mesh(new THREE.PlaneGeometry(largeur + 0.12, hauteur + 0.12), new THREE.MeshStandardMaterial({ color: 0xf1ebe0, roughness: 0.9 }));
+    marie.position.set(0, y, z - 0.005);
+    g.add(cadre, marie);
+  }
+  const image = new THREE.Mesh(new THREE.PlaneGeometry(largeur, hauteur), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85 }));
+  image.position.set(0, y, z);
+  g.add(image);
+}
+
 // ---------- les portes et les salles ----------
 const portes = [];   // disques invisibles pour le clic
 const salles = [];   // { groupe, titre, lumiere, etat }
@@ -207,6 +243,19 @@ projecteur.shadow.normalBias = 0.025;
 projecteur.shadow.camera.near = 1;
 projecteur.shadow.camera.far = 14;
 scene.add(projecteur, projecteur.target);
+
+const POLICE_JP = '"Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif';
+function toileNoren(signe, ideogramme) {
+  return texture(512, 960, (ctx, l, h) => {
+    ctx.fillStyle = "#22324c"; ctx.fillRect(0, 0, l, h);                       // aizome : indigo de cuve
+    for (let y = 0; y < h; y += 3) { ctx.fillStyle = `rgba(255,255,255,${0.012 + Math.random() * 0.02})`; ctx.fillRect(0, y, l, 1); }
+    bruit(ctx, l, h, 9000, 0.06);
+    ctx.fillStyle = "rgba(255,255,255,.07)"; ctx.fillRect(0, h - 70, l, 3);     // un filet près de l'ourlet
+    ctx.fillStyle = "#f3efe6"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    if (ideogramme) { ctx.font = `700 300px ${POLICE_JP}`; ctx.fillText(signe, l / 2, h * 0.42); }
+    else { ctx.font = `400 210px "Instrument Serif", Georgia, serif`; ctx.fillText(signe, l / 2, h * 0.42); }
+  });
+}
 
 function texteTitre(texte, couleur, l0 = 2048, h0 = 400) {
   return texture(l0, h0, (ctx, l, h) => {
@@ -280,6 +329,20 @@ function construireSalle(salle, i) {
   groupe.add(disque);
   portes.push(disque);
 
+  // le noren : deux pans de toile indigo suspendus dans la porte, l'idéogramme de la salle sur l'un, son numéro sur l'autre
+  const noren = new THREE.Group();
+  noren.position.set(0, YP + RP * 0.97, -(R + 0.12));
+  const pans = [];
+  for (const cote of [-1, 1]) {
+    const pan = new THREE.Mesh(new THREE.PlaneGeometry(RP * 0.92, 1.72, 1, 8).translate(0, -0.86, 0),
+      new THREE.MeshStandardMaterial({ map: toileNoren(cote < 0 ? salle.kanji : salle.num, cote < 0), roughness: 0.95, side: THREE.DoubleSide }));
+    pan.position.x = cote * (RP * 0.46 + 0.025);
+    pan.castShadow = false;
+    noren.add(pan);
+    pans.push(pan);
+  }
+  groupe.add(noren);
+
   // numéro gravé au-dessus de la porte
   const num = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.6), new THREE.MeshBasicMaterial({ map: texteTitre(salle.num, "#4f4740", 512, 256), transparent: true, opacity: 0.7, depthWrite: false }));
   num.position.set(0, YP + RP + 0.6, -(R - 0.02));
@@ -338,7 +401,7 @@ function construireSalle(salle, i) {
   titre.position.set(0, etat.vue?.titre ?? 3.55, ZO - 2.3);
   groupe.add(titre);
 
-  salles.push({ groupe, titre, lumiere, etat, oeuvre });
+  salles.push({ groupe, titre, lumiere, etat, oeuvre, pans });
 }
 
 // ---------- état de la caméra ----------
@@ -425,7 +488,7 @@ function majRotonde() {
   $("#precedente").setAttribute("aria-label", `Salle précédente : ${SALLES[p].nom}`);
   $("#suivante").innerHTML = `<span class="nom">${SALLES[n].nom}</span>${FLECHE}`;
   $("#suivante").setAttribute("aria-label", `Salle suivante : ${SALLES[n].nom}`);
-  $("#courante-num").textContent = `SALLE ${SALLES[i].num} — ${i + 1} / ${N}`;
+  $("#courante-num").innerHTML = `<span class="sceau" aria-hidden="true">${SALLES[i].kanji}</span>SALLE ${SALLES[i].num} — ${i + 1} / ${N}`;
   $("#courante-nom").textContent = SALLES[i].nom;
   $("#courante-nom").setAttribute("aria-label", `Entrer dans la salle ${SALLES[i].num} : ${SALLES[i].nom}`);
   nav.classList.remove("change"); void nav.offsetWidth; nav.classList.add("change");
@@ -434,7 +497,7 @@ function majCartel() {
   const s = SALLES[cam.index];
   cartel.innerHTML = `
     <button class="cartel-replier" type="button">Replier</button>
-    <p class="sur-titre">Salle ${s.num} · ${s.nom}</p>
+    <p class="sur-titre"><span class="sceau" aria-hidden="true">${s.kanji}</span>Salle ${s.num} · ${s.nom}</p>
     <h2>${s.titre}</h2>
     <p class="oeuvre">${s.oeuvre}</p>
     <p class="clair">${s.clair}</p>
@@ -615,6 +678,7 @@ function boucle() {
     const s = salles[i];
     const proche = i === cam.index;
     if (s.etat.animer && proche) s.etat.animer(t);
+    if (!MOUVEMENT_REDUIT) s.pans.forEach((pan, k) => (pan.rotation.x = Math.sin(t * 0.9 + i + k * 1.7) * 0.025));   // le noren respire
     if (!MOUVEMENT_REDUIT && proche && cam.dansSalle && !geste) s.oeuvre.rotation.y += dt * 0.05;
   }
   placerCamera();
@@ -624,9 +688,15 @@ function boucle() {
 // ---------- démarrage ----------
 async function demarrer() {
   avancer(12);
-  try { await Promise.race([document.fonts.load('400 120px "Instrument Serif"'), new Promise((ok) => setTimeout(ok, 2500))]); } catch (e) { /* police de secours */ }
+  const ideogrammes = SALLES.map((s) => s.kanji).join("");
+  try {
+    await Promise.race([Promise.all([document.fonts.load('400 120px "Instrument Serif"'), document.fonts.load('700 120px "Noto Serif JP"', ideogrammes)]),
+      new Promise((ok) => setTimeout(ok, 2500))]);
+  } catch (e) { /* polices de secours */ }
   avancer(30);
   for (let i = 0; i < N; i++) construireSalle(SALLES[i], i);
+  estampe("vague", 2.7, 2.7 * 453 / 676, angleDe(N - 1) + Math.PI / N, false);    // entre la dernière porte et la première
+  estampe("samourai", 1.3, 1.3 * 547 / 365, angleDe(3) + Math.PI / N, true);       // entre les portes IV et V
   avancer(80);
   const depart = Math.max(0, SALLES.findIndex((s) => `#${s.id}` === location.hash));
   cam.index = depart; cam.theta = angleDe(depart);
