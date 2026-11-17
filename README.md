@@ -92,6 +92,31 @@ python -m src.predict               # signal du dernier mois disponible
 python -m pytest -q                 # tests
 ```
 
+## Seconde version, après le test : 1999-2026, Bloomberg en référence
+
+La table mensuelle `data/2_construites/dataset_monthly2.csv` (334 mois, 1999-2026, 158 colonnes) allonge l'histoire.
+Les exports Bloomberg (`data/1_brutes/bloomberg/`, non suivis par Git) servent de référence :
+- **Tankan** : identique à la table sur 112 trimestres sur 112, une fois décalé au mois de sa publication ; à sa date
+  Bloomberg (fin de trimestre), il aurait été utilisé avant d'être publié ;
+- **IPC** : même tendance que la mesure de la table, mais pas la même série ; il n'entre pas dans le modèle ;
+- **VIX** : l'export est « EUR, as exported » (converti au taux de change), donc inutilisable ; le VIX en points de la
+  table est gardé. À réexporter sans conversion ;
+- **calendrier des publications** : les trois exports sont tronqués à 5 000 lignes (1999-2006 au mieux). À réexporter
+  par périodes pour vérifier les dates de publication jusqu'en 2026.
+
+```bash
+NIKKEI_CONFIG=config_bloomberg.yaml python -m src.data            # data/3_modele/dataset_model2.csv, audit des fuites
+NIKKEI_CONFIG=config_bloomberg.yaml python -m src.v2_bloomberg    # contrôles, Optuna, décision, évaluation
+```
+
+Le protocole est celui de la première version (mêmes variables, réglage sur 1999-2021, choix du modèle et Platt sur
+la validation 2022-2023 par la règle du notebook 03, une évaluation sur 2024-2026) ; tout s'écrit dans
+`runs/v2_bloomberg/`, sans toucher à la décision ni à l'évaluation figées de `runs/`. La règle retient LightGBM ; sur le
+test, sa log-loss vaut 0,681 contre 0,665 pour la constante (écart +0,016 ± 0,051) et sa règle rapporte +21,4 %, contre
++82,3 % pour l'achat couvert. Mieux que la première version, toujours pas mieux que la constante. La logistique aurait
+battu la constante sur le test (0,634), mais la règle l'avait écartée sur la validation (0,731) : la choisir maintenant
+reviendrait à choisir sur le test. Ce test ayant déjà été ouvert, ces chiffres sont une exploration après coup.
+
 ## Le site : visite et lecture
 
 Le site de présentation est dans `site/`. Il est statique : ni API à lancer, ni serveur obligatoire. Trois façons de
@@ -112,7 +137,8 @@ chargent. Les fichiers à modifier restent les modules ; les paquets se refont a
 
 Le site a deux parcours, un par cours, choisis en haut de chaque page (`?cours=ml` ou `?cours=maths`, le choix est
 retenu d'une page à l'autre) :
-- **Applied ML** : la question, les données, l'apprentissage (Optuna), la règle, le test, l'agitation et le cabinet ;
+- **Applied ML** : les étapes du projet dans l'ordre des notebooks : le dataset (00a, 00b), l'exploration (01),
+  l'apprentissage (02), la règle (03), le test (03b), l'explication (04), puis ce qui a été tenté après le test ;
 - **Maths** : l'annexe, salle par salle : le modèle (sigmoïde), le coût (log-loss), le gradient, le prior gaussien,
   la convexité, la descente de gradient et ce que 33 mois de test peuvent prouver (erreur type, nombre de mois
   nécessaire).

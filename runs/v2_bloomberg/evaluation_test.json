@@ -1,0 +1,713 @@
+{
+  "date": "2026-11-17 17:46",
+  "commit_du_code": "0f9ada2",
+  "configuration": "config_bloomberg.yaml",
+  "avertissement": "Seconde version, après l'ouverture du test 2024-2026 par la première : exploration après coup, pas un test à l'aveugle.",
+  "mois_entrainement": 276,
+  "mois_test": 33,
+  "baisses_test": 12,
+  "modele": "LightGBM",
+  "metriques": {
+    "logistique": {
+      "log-loss": 0.6342945302540383,
+      "Brier": 0.221826818367999,
+      "ECE": 0.11663722990971126,
+      "PR-AUC": 0.5340939153439154,
+      "proba moyenne": 0.4293312873956792,
+      "fréquence observée": 0.36363636363636365
+    },
+    "Random Forest": {
+      "log-loss": 0.7180210213739657,
+      "Brier": 0.2593592729341628,
+      "ECE": 0.17445697038418823,
+      "PR-AUC": 0.40446699593558677,
+      "proba moyenne": 0.49933335059401696,
+      "fréquence observée": 0.36363636363636365
+    },
+    "LightGBM": {
+      "log-loss": 0.681293159910586,
+      "Brier": 0.24388545424692024,
+      "ECE": 0.1570177040258531,
+      "PR-AUC": 0.45623951184950334,
+      "proba moyenne": 0.4665888083792339,
+      "fréquence observée": 0.36363636363636365
+    },
+    "constante (fréquence de l'entraînement)": {
+      "log-loss": 0.6649268102731251,
+      "Brier": 0.23596432185751656,
+      "ECE": 0.1531620553359684,
+      "PR-AUC": 0.36363636363636365,
+      "proba moyenne": 0.4311594202898551,
+      "fréquence observée": 0.36363636363636365
+    }
+  },
+  "actions": {
+    "neutre": 12,
+    "acheter": 11,
+    "vendre": 10
+  },
+  "performance_euros": {
+    "règle du modèle": {
+      "cumul": 0.214043298554637,
+      "annualisé": 0.07307631564160055,
+      "perte maximale": -0.1872900103308096
+    },
+    "toujours acheter, couvert": {
+      "cumul": 0.823457220253422,
+      "annualisé": 0.2441453467656609,
+      "perte maximale": -0.131903
+    },
+    "toujours acheter, non couvert": {
+      "cumul": 0.5792012861957321,
+      "annualisé": 0.18075307949590091,
+      "perte maximale": -0.12840700000000005
+    },
+    "toujours neutre (cash)": {
+      "cumul": 0.07569015537250423,
+      "annualisé": 0.02688690569675911,
+      "perte maximale": 0.0
+    },
+    "même exposition moyenne (3%), sans timing": {
+      "cumul": 0.09524455433991186,
+      "annualisé": 0.033636111608757124,
+      "perte maximale": -0.0024350404040404117
+    }
+  },
+  "plancher_battu": false,
+  "ecart_log_loss": {
+    "moyenne": 0.01636634963746097,
+    "ecart_type": 0.2901538503237742,
+    "erreur_type": 0.05050930213088301
+  },
+  "historique_test": [
+    {
+      "date": "2024-01",
+      "p_hausse": 0.506039,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.003256,
+      "rendement_achat_couvert": 0.080934,
+      "rendement_achat_non_couvert": 0.056444,
+      "rendement_vente": -0.077669,
+      "rendement_cash": 0.003256
+    },
+    {
+      "date": "2024-02",
+      "p_hausse": 0.442371,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.030691,
+      "rendement_achat_couvert": 0.03395,
+      "rendement_achat_non_couvert": 0.029687,
+      "rendement_vente": -0.030691,
+      "rendement_cash": 0.003254
+    },
+    {
+      "date": "2024-03",
+      "p_hausse": 0.371997,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.047487,
+      "rendement_achat_couvert": -0.044296,
+      "rendement_achat_non_couvert": -0.071299,
+      "rendement_vente": 0.047487,
+      "rendement_cash": 0.003255
+    },
+    {
+      "date": "2024-04",
+      "p_hausse": 0.414099,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.002109,
+      "rendement_achat_couvert": 0.005302,
+      "rendement_achat_non_couvert": -0.013186,
+      "rendement_vente": -0.002109,
+      "rendement_cash": 0.003257
+    },
+    {
+      "date": "2024-05",
+      "p_hausse": 0.316666,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.028113,
+      "rendement_achat_couvert": 0.031306,
+      "rendement_achat_non_couvert": 0.016088,
+      "rendement_vente": -0.028113,
+      "rendement_cash": 0.003257
+    },
+    {
+      "date": "2024-06",
+      "p_hausse": 0.392727,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.01267,
+      "rendement_achat_couvert": -0.009684,
+      "rendement_achat_non_couvert": 0.029441,
+      "rendement_vente": 0.01267,
+      "rendement_cash": 0.003051
+    },
+    {
+      "date": "2024-07",
+      "p_hausse": 0.314176,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.011943,
+      "rendement_achat_couvert": -0.008955,
+      "rendement_achat_non_couvert": 0.016555,
+      "rendement_vente": 0.011943,
+      "rendement_cash": 0.003052
+    },
+    {
+      "date": "2024-08",
+      "p_hausse": 0.546042,
+      "action": "neutre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.003055,
+      "rendement_achat_couvert": -0.016102,
+      "rendement_achat_non_couvert": -0.012339,
+      "rendement_vente": 0.018967,
+      "rendement_cash": 0.003055
+    },
+    {
+      "date": "2024-09",
+      "p_hausse": 0.686626,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.032024,
+      "rendement_achat_couvert": 0.032024,
+      "rendement_achat_non_couvert": -0.012064,
+      "rendement_vente": -0.029367,
+      "rendement_cash": 0.002846
+    },
+    {
+      "date": "2024-10",
+      "p_hausse": 0.524843,
+      "action": "neutre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.002637,
+      "rendement_achat_couvert": -0.020837,
+      "rendement_achat_non_couvert": 0.018801,
+      "rendement_vente": 0.023284,
+      "rendement_cash": 0.002637
+    },
+    {
+      "date": "2024-11",
+      "p_hausse": 0.486125,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.002637,
+      "rendement_achat_couvert": 0.045242,
+      "rendement_achat_non_couvert": 0.01231,
+      "rendement_vente": -0.042795,
+      "rendement_cash": 0.002637
+    },
+    {
+      "date": "2024-12",
+      "p_hausse": 0.629586,
+      "action": "acheter",
+      "hausse_realisee": 0,
+      "rendement_regle": -0.006063,
+      "rendement_achat_couvert": -0.006063,
+      "rendement_achat_non_couvert": 0.019585,
+      "rendement_vente": 0.008298,
+      "rendement_cash": 0.002424
+    },
+    {
+      "date": "2025-01",
+      "p_hausse": 0.484489,
+      "action": "neutre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.002436,
+      "rendement_achat_couvert": -0.060716,
+      "rendement_achat_non_couvert": -0.035311,
+      "rendement_vente": 0.062754,
+      "rendement_cash": 0.002436
+    },
+    {
+      "date": "2025-02",
+      "p_hausse": 0.682797,
+      "action": "acheter",
+      "hausse_realisee": 0,
+      "rendement_regle": -0.038033,
+      "rendement_achat_couvert": -0.038033,
+      "rendement_achat_non_couvert": -0.076969,
+      "rendement_vente": 0.039856,
+      "rendement_cash": 0.002221
+    },
+    {
+      "date": "2025-03",
+      "p_hausse": 0.670554,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.013619,
+      "rendement_achat_couvert": 0.013619,
+      "rendement_achat_non_couvert": 0.011268,
+      "rendement_vente": -0.012003,
+      "rendement_cash": 0.002014
+    },
+    {
+      "date": "2025-04",
+      "p_hausse": 0.550235,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.001806,
+      "rendement_achat_couvert": 0.054172,
+      "rendement_achat_non_couvert": 0.043465,
+      "rendement_vente": -0.052763,
+      "rendement_cash": 0.001806
+    },
+    {
+      "date": "2025-05",
+      "p_hausse": 0.604241,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.065542,
+      "rendement_achat_couvert": 0.065542,
+      "rendement_achat_non_couvert": 0.029457,
+      "rendement_vente": -0.064133,
+      "rendement_cash": 0.001806
+    },
+    {
+      "date": "2025-06",
+      "p_hausse": 0.676901,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.015503,
+      "rendement_achat_couvert": 0.015503,
+      "rendement_achat_non_couvert": 0.007926,
+      "rendement_vente": -0.014294,
+      "rendement_cash": 0.001608
+    },
+    {
+      "date": "2025-07",
+      "p_hausse": 0.658168,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.041126,
+      "rendement_achat_couvert": 0.041126,
+      "rendement_achat_non_couvert": 0.034489,
+      "rendement_vente": -0.039924,
+      "rendement_cash": 0.001602
+    },
+    {
+      "date": "2025-08",
+      "p_hausse": 0.68209,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.052191,
+      "rendement_achat_couvert": 0.052191,
+      "rendement_achat_non_couvert": 0.034659,
+      "rendement_vente": -0.050985,
+      "rendement_cash": 0.001604
+    },
+    {
+      "date": "2025-09",
+      "p_hausse": 0.734467,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.164116,
+      "rendement_achat_couvert": 0.164116,
+      "rendement_achat_non_couvert": 0.141679,
+      "rendement_vente": -0.162909,
+      "rendement_cash": 0.001605
+    },
+    {
+      "date": "2025-10",
+      "p_hausse": 0.70514,
+      "action": "acheter",
+      "hausse_realisee": 0,
+      "rendement_regle": -0.039229,
+      "rendement_achat_couvert": -0.039229,
+      "rendement_achat_non_couvert": -0.057999,
+      "rendement_vente": 0.040441,
+      "rendement_cash": 0.001609
+    },
+    {
+      "date": "2025-11",
+      "p_hausse": 0.738949,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.002889,
+      "rendement_achat_couvert": 0.002889,
+      "rendement_achat_non_couvert": -0.011429,
+      "rendement_vente": -0.00168,
+      "rendement_cash": 0.001607
+    },
+    {
+      "date": "2025-12",
+      "p_hausse": 0.392993,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.059402,
+      "rendement_achat_couvert": 0.0604,
+      "rendement_achat_non_couvert": 0.061716,
+      "rendement_vente": -0.059402,
+      "rendement_cash": 0.001605
+    },
+    {
+      "date": "2026-01",
+      "p_hausse": 0.328831,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.103276,
+      "rendement_achat_couvert": 0.10428,
+      "rendement_achat_non_couvert": 0.099573,
+      "rendement_vente": -0.103276,
+      "rendement_cash": 0.001611
+    },
+    {
+      "date": "2026-02",
+      "p_hausse": 0.567365,
+      "action": "neutre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.001611,
+      "rendement_achat_couvert": -0.131903,
+      "rendement_achat_non_couvert": -0.128407,
+      "rendement_vente": 0.132907,
+      "rendement_cash": 0.001611
+    },
+    {
+      "date": "2026-03",
+      "p_hausse": 0.569428,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.001608,
+      "rendement_achat_couvert": 0.15851,
+      "rendement_achat_non_couvert": 0.135823,
+      "rendement_vente": -0.157508,
+      "rendement_cash": 0.001608
+    },
+    {
+      "date": "2026-04",
+      "p_hausse": 0.57355,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.00161,
+      "rendement_achat_couvert": 0.120851,
+      "rendement_achat_non_couvert": 0.128448,
+      "rendement_vente": -0.119848,
+      "rendement_cash": 0.00161
+    },
+    {
+      "date": "2026-05",
+      "p_hausse": 0.57355,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.00161,
+      "rendement_achat_couvert": 0.057489,
+      "rendement_achat_non_couvert": 0.06019,
+      "rendement_vente": -0.056485,
+      "rendement_cash": 0.00161
+    },
+    {
+      "date": "2026-06",
+      "p_hausse": 0.560614,
+      "action": "neutre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.001817,
+      "rendement_achat_couvert": -0.0805,
+      "rendement_achat_non_couvert": -0.079763,
+      "rendement_vente": 0.081502,
+      "rendement_cash": 0.001817
+    },
+    {
+      "date": "2026-07",
+      "p_hausse": 0.575161,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.001821,
+      "rendement_achat_couvert": 0.031141,
+      "rendement_achat_non_couvert": 0.024871,
+      "rendement_vente": -0.030137,
+      "rendement_cash": 0.001821
+    },
+    {
+      "date": "2026-08",
+      "p_hausse": 0.28051,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.006925,
+      "rendement_achat_couvert": 0.007934,
+      "rendement_achat_non_couvert": 0.046402,
+      "rendement_vente": -0.006925,
+      "rendement_cash": 0.001823
+    },
+    {
+      "date": "2026-09",
+      "p_hausse": 0.361242,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.052486,
+      "rendement_achat_couvert": -0.051476,
+      "rendement_achat_non_couvert": -0.040937,
+      "rendement_vente": 0.052486,
+      "rendement_cash": 0.002033
+    }
+  ],
+  "historique_validation": [
+    {
+      "date": "2022-01",
+      "p_hausse": 0.656859,
+      "action": "acheter",
+      "hausse_realisee": 0,
+      "rendement_regle": -0.017964,
+      "rendement_achat_couvert": -0.017964,
+      "rendement_achat_non_couvert": -0.022782,
+      "rendement_vente": 0.017504,
+      "rendement_cash": -0.000478
+    },
+    {
+      "date": "2022-02",
+      "p_hausse": 0.587084,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.00048,
+      "rendement_achat_couvert": 0.045838,
+      "rendement_achat_non_couvert": -0.004858,
+      "rendement_vente": -0.046307,
+      "rendement_cash": -0.00048
+    },
+    {
+      "date": "2022-03",
+      "p_hausse": 0.351501,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.035162,
+      "rendement_achat_couvert": -0.035641,
+      "rendement_achat_non_couvert": -0.0303,
+      "rendement_vente": 0.035162,
+      "rendement_cash": -0.000483
+    },
+    {
+      "date": "2022-04",
+      "p_hausse": 0.488327,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.000485,
+      "rendement_achat_couvert": 0.015368,
+      "rendement_achat_non_couvert": 0.00035,
+      "rendement_vente": -0.015838,
+      "rendement_cash": -0.000485
+    },
+    {
+      "date": "2022-05",
+      "p_hausse": 0.621114,
+      "action": "acheter",
+      "hausse_realisee": 0,
+      "rendement_regle": -0.031832,
+      "rendement_achat_couvert": -0.031832,
+      "rendement_achat_non_couvert": -0.066527,
+      "rendement_vente": 0.031363,
+      "rendement_cash": -0.000487
+    },
+    {
+      "date": "2022-06",
+      "p_hausse": 0.493774,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.000484,
+      "rendement_achat_couvert": 0.055136,
+      "rendement_achat_non_couvert": 0.097236,
+      "rendement_vente": -0.055593,
+      "rendement_cash": -0.000484
+    },
+    {
+      "date": "2022-07",
+      "p_hausse": 0.682848,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.010207,
+      "rendement_achat_couvert": 0.010207,
+      "rendement_achat_non_couvert": -0.004809,
+      "rendement_vente": -0.01027,
+      "rendement_cash": -7.1e-05
+    },
+    {
+      "date": "2022-08",
+      "p_hausse": 0.682797,
+      "action": "acheter",
+      "hausse_realisee": 0,
+      "rendement_regle": -0.075162,
+      "rendement_achat_couvert": -0.075162,
+      "rendement_achat_non_couvert": -0.095499,
+      "rendement_vente": 0.075127,
+      "rendement_cash": -6.8e-05
+    },
+    {
+      "date": "2022-09",
+      "p_hausse": 0.48994,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.000552,
+      "rendement_achat_couvert": 0.061993,
+      "rendement_achat_non_couvert": 0.026209,
+      "rendement_vente": -0.061387,
+      "rendement_cash": 0.000552
+    },
+    {
+      "date": "2022-10",
+      "p_hausse": 0.481449,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.000548,
+      "rendement_achat_couvert": 0.014797,
+      "rendement_achat_non_couvert": 0.041448,
+      "rendement_vente": -0.014207,
+      "rendement_cash": 0.000548
+    },
+    {
+      "date": "2022-11",
+      "p_hausse": 0.647598,
+      "action": "acheter",
+      "hausse_realisee": 0,
+      "rendement_regle": -0.066515,
+      "rendement_achat_couvert": -0.066515,
+      "rendement_achat_non_couvert": -0.056867,
+      "rendement_vente": 0.06775,
+      "rendement_cash": 0.001169
+    },
+    {
+      "date": "2022-12",
+      "p_hausse": 0.489935,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.001588,
+      "rendement_achat_couvert": 0.048894,
+      "rendement_achat_non_couvert": 0.048161,
+      "rendement_vente": -0.047278,
+      "rendement_cash": 0.001588
+    },
+    {
+      "date": "2023-01",
+      "p_hausse": 0.489935,
+      "action": "neutre",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.001588,
+      "rendement_achat_couvert": 0.005843,
+      "rendement_achat_non_couvert": -0.016779,
+      "rendement_vente": -0.004243,
+      "rendement_cash": 0.001588
+    },
+    {
+      "date": "2023-02",
+      "p_hausse": 0.70369,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.023625,
+      "rendement_achat_couvert": 0.023625,
+      "rendement_achat_non_couvert": 0.017267,
+      "rendement_vente": -0.021618,
+      "rendement_cash": 0.001998
+    },
+    {
+      "date": "2023-03",
+      "p_hausse": 0.654227,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.031039,
+      "rendement_achat_couvert": 0.031039,
+      "rendement_achat_non_couvert": 0.01322,
+      "rendement_vente": -0.028615,
+      "rendement_cash": 0.002412
+    },
+    {
+      "date": "2023-04",
+      "p_hausse": 0.698076,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.071683,
+      "rendement_achat_couvert": 0.071683,
+      "rendement_achat_non_couvert": 0.05256,
+      "rendement_vente": -0.069225,
+      "rendement_cash": 0.002417
+    },
+    {
+      "date": "2023-05",
+      "p_hausse": 0.722456,
+      "action": "acheter",
+      "hausse_realisee": 1,
+      "rendement_regle": 0.073703,
+      "rendement_achat_couvert": 0.073703,
+      "rendement_achat_non_couvert": 0.024404,
+      "rendement_vente": -0.071027,
+      "rendement_cash": 0.002622
+    },
+    {
+      "date": "2023-06",
+      "p_hausse": 0.41893,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.000514,
+      "rendement_achat_couvert": 0.002382,
+      "rendement_achat_non_couvert": 0.013535,
+      "rendement_vente": 0.000514,
+      "rendement_cash": 0.002833
+    },
+    {
+      "date": "2023-07",
+      "p_hausse": 0.425931,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.016197,
+      "rendement_achat_couvert": -0.013312,
+      "rendement_achat_non_couvert": -0.044381,
+      "rendement_vente": 0.016197,
+      "rendement_cash": 0.002836
+    },
+    {
+      "date": "2023-08",
+      "p_hausse": 0.414603,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.023639,
+      "rendement_achat_couvert": -0.020552,
+      "rendement_achat_non_couvert": -0.011358,
+      "rendement_vente": 0.023639,
+      "rendement_cash": 0.003043
+    },
+    {
+      "date": "2023-09",
+      "p_hausse": 0.398517,
+      "action": "vendre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.031246,
+      "rendement_achat_couvert": -0.027939,
+      "rendement_achat_non_couvert": -0.034601,
+      "rendement_vente": 0.031246,
+      "rendement_cash": 0.003254
+    },
+    {
+      "date": "2023-10",
+      "p_hausse": 0.310366,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.083537,
+      "rendement_achat_couvert": 0.086803,
+      "rendement_achat_non_couvert": 0.064441,
+      "rendement_vente": -0.083537,
+      "rendement_cash": 0.003253
+    },
+    {
+      "date": "2023-11",
+      "p_hausse": 0.472603,
+      "action": "neutre",
+      "hausse_realisee": 0,
+      "rendement_regle": 0.003253,
+      "rendement_achat_couvert": 0.002572,
+      "rendement_achat_non_couvert": 0.030069,
+      "rendement_vente": 0.000699,
+      "rendement_cash": 0.003253
+    },
+    {
+      "date": "2023-12",
+      "p_hausse": 0.352298,
+      "action": "vendre",
+      "hausse_realisee": 1,
+      "rendement_regle": -0.082627,
+      "rendement_achat_couvert": 0.085891,
+      "rendement_achat_non_couvert": 0.062262,
+      "rendement_vente": -0.082627,
+      "rendement_cash": 0.00325
+    }
+  ]
+}

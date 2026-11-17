@@ -14,4 +14,6 @@ data/archives/
 data/2_construites/*
 !data/2_construites/dataset_monthly.csv
 !data/2_construites/dictionnaire_variables.csv
+!data/2_construites/dataset_monthly2.csv
+!data/2_construites/dictionnaire_variables2.csv
 notebooks/06_annexe_news_prix/__pycache__/

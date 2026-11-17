@@ -1,13 +1,16 @@
 """Chemins et configuration communs à tous les modules."""
+import os
 from pathlib import Path
 import subprocess
 
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-CFG = yaml.safe_load(open(ROOT / "config.yaml"))
+# NIKKEI_CONFIG choisit une autre configuration (config_bloomberg.yaml : seconde version, après le test)
+CONFIG = ROOT / os.environ.get("NIKKEI_CONFIG", "config.yaml")
+CFG = yaml.safe_load(open(CONFIG))
 SEED = CFG["seed"]
-RUNS = ROOT / "runs"
+RUNS = ROOT / CFG.get("runs", "runs")
 MODELS = RUNS / "models"
 FIG = ROOT / "figures"
 
