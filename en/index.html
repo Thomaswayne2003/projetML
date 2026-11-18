@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nikkei · The tour</title>
+  <meta name="description" content="Nikkei 225 project: seven rooms in 3D, each with a work made of data.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23a8322a'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23f6f1e8' font-family='Hiragino Mincho ProN,Yu Mincho,Noto Serif JP,serif'%3E%E6%97%A5%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#eee9e2">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nikkei · The tour">
+  <meta property="og:description" content="Nikkei 225 project: seven rooms in 3D, each with a work made of data.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Noto+Serif+JP:wght@500;700&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/base.css?v=c39ac84da6">
+  <link rel="stylesheet" href="../assets/visite.css?v=578aa8c7db">
+</head>
+<body class="visite">
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <!-- loading screen -->
+  <div class="attente" id="attente">
+    <p class="attente-devise"></p>
+    <div class="attente-pied">
+      <span class="attente-pct" id="pct">0%</span>
+      <span class="attente-ligne"><i id="ligne"></i></span>
+    </div>
+  </div>
+
+  <header class="entete">
+    <a class="marque" href="index.html"><span class="sceau" aria-hidden="true">日経</span>Nikkei <small>225 · the project</small></a>
+    <div class="entete-droite">
+      <nav class="modes cours" aria-label="Course"><a data-cours="ml" href="?cours=ml">Applied ML</a><a data-cours="maths" href="?cours=maths">Maths</a></nav>
+      <nav class="modes" aria-label="Mode">
+        <a href="index.html" data-lien="index.html" aria-current="page">Tour</a>
+        <a href="lecture.html" data-lien="lecture.html" id="vers-lecture">Reading</a>
+        <a href="../index.html" data-langue="fr" lang="fr" hreflang="fr" title="Version française">FR</a>
+      </nav>
+      <button class="bouton-menu" type="button" aria-expanded="false">Menu <span class="points" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+    </div>
+  </header>
+
+  <!-- the rotunda: navigation between rooms -->
+  <nav class="rotonde-nav" id="rotonde-nav" aria-label="Rooms">
+    <button class="voisine precedente" type="button" id="precedente"></button>
+    <div class="courante">
+      <span class="courante-num" id="courante-num"></span>
+      <button class="courante-nom" type="button" id="courante-nom"></button>
+      <span class="courante-aide">Click to enter</span>
+    </div>
+    <button class="voisine suivante" type="button" id="suivante"></button>
+  </nav>
+
+  <!-- inside a room -->
+  <section class="salle-ui" id="salle-ui" aria-live="polite">
+    <button class="retour" type="button" id="retour">Back</button>
+    <aside class="cartel" id="cartel"></aside>
+    <a class="bouton-sombre lire" id="lire" href="lecture.html"></a>
+  </section>
+
+  <!-- help on first visit -->
+  <div class="aide" id="aide" hidden>
+    <div class="aide-gestes">
+      <p><b>Click</b><span>Enter a room</span></p>
+      <p><b>Drag</b><span>Look around</span></p>
+      <p><b>Scroll or ← →</b><span>Move from room to room</span></p>
+    </div>
+    <p class="aide-fermer">Click anywhere to close</p>
+  </div>
+
+  <p class="pied-visite"><span id="pied-ecole"></span></p>
+
+  <noscript><p class="sans-3d">The tour needs JavaScript. <a href="lecture.html">Open the reading</a>.</p></noscript>
+
+  <script src="../data/donnees.js?v=797090974c"></script>
+  <script src="../data/images.js?v=8f318bb5bd"></script>
+  <script defer src="assets/visite.bundle.js?v=02cdbad89c"></script>
+</body>
+</html>

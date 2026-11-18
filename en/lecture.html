@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nikkei · The reading</title>
+  <meta name="description" content="Nikkei 225 project: the question, the data, the model, the rule, the test and its limitations, with the charts and the notebooks.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23a8322a'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%23f6f1e8' font-family='Hiragino Mincho ProN,Yu Mincho,Noto Serif JP,serif'%3E%E6%97%A5%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#eee9e2">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nikkei · The reading">
+  <meta property="og:description" content="Nikkei 225 project: the question, the data, the model, the rule, the test and its limitations, with the charts and the notebooks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Noto+Serif+JP:wght@500;700&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/base.css?v=c39ac84da6">
+  <link rel="stylesheet" href="../assets/lecture.css?v=c70b89d14a">
+</head>
+<body class="lecture">
+  <header class="entete" id="entete">
+    <a class="marque" href="lecture.html#haut"><span class="sceau" aria-hidden="true">日経</span>Nikkei <small>225 · the project</small></a>
+    <div class="entete-droite">
+      <nav class="modes cours" aria-label="Course"><a data-cours="ml" href="?cours=ml">Applied ML</a><a data-cours="maths" href="?cours=maths">Maths</a></nav>
+      <nav class="modes" aria-label="Mode">
+        <a href="index.html" data-lien="index.html" id="vers-visite">Tour</a>
+        <a href="lecture.html" data-lien="lecture.html" aria-current="page">Reading</a>
+        <a href="../lecture.html" data-langue="fr" lang="fr" hreflang="fr" title="Version française">FR</a>
+      </nav>
+      <button class="bouton-menu" type="button" aria-expanded="false">Menu <span class="points" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+    </div>
+  </header>
+
+  <main id="haut">
+    <noscript><p style="padding:120px 0">This page needs JavaScript to display the text and the charts.</p></noscript>
+  </main>
+
+  <div class="boite" id="boite" hidden role="dialog" aria-modal="true" aria-label="Enlarged figure">
+    <button type="button" id="boite-fermer">Close</button>
+    <figure><img alt="" id="boite-img"><figcaption id="boite-legende"></figcaption></figure>
+  </div>
+
+  <script src="../data/donnees.js?v=797090974c"></script>
+  <script defer src="assets/lecture.bundle.js?v=675283e9bd"></script>
+</body>
+</html>
