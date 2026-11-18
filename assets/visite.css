@@ -1,0 +1,133 @@
+/* La visite : une rotonde, sept salles. Le texte flotte sur la scène, sans cadre. */
+body.visite { overflow: hidden; height: 100vh; height: 100dvh; background: #cfc6ba; color: var(--ui, #fff); --ui: #fbf8f3; }
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; touch-action: none; }
+.visite .entete { color: var(--ui); transition: color 1s var(--lent); }
+.visite .marque { text-shadow: 0 1px 14px rgb(0 0 0 / .12); }
+.glisse { cursor: grabbing !important; }
+.survol-porte #scene { cursor: pointer; }
+
+/* ---------- écran d'attente ---------- */
+.attente {
+  position: fixed; inset: 0; z-index: 80; background: var(--papier); color: var(--encre);
+  display: grid; place-items: center; transition: opacity 1.1s var(--lent), visibility 0s 1.1s;
+}
+.attente.fini { opacity: 0; visibility: hidden; }
+.attente-devise {
+  margin: 0; padding: 0 var(--gouttiere); max-width: 22em; text-align: center;
+  font: 400 clamp(26px, 3.4vw, 40px)/1.15 var(--serif);
+  opacity: 0; transform: translateY(8px); animation: monte 1.4s var(--doux) .2s forwards;
+}
+.attente-pied { position: absolute; left: var(--gouttiere); right: var(--gouttiere); bottom: 34px; display: grid; justify-items: center; gap: 10px; }
+.attente-pct { font: 400 11px/1 var(--sans); font-variant-numeric: tabular-nums; color: var(--encre-2); }
+.attente-ligne { display: block; width: 100%; height: 1px; background: var(--filet); position: relative; overflow: hidden; }
+.attente-ligne i { position: absolute; inset: 0 auto 0 50%; width: 0; background: var(--encre); transform: translateX(-50%); transition: width .5s var(--doux); }
+@keyframes monte { to { opacity: 1; transform: none; } }
+
+/* ---------- la rotonde ---------- */
+.rotonde-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 12px;
+  padding: 0 var(--gouttiere) 46px; color: var(--ui);
+  transition: opacity .7s var(--doux), transform .9s var(--doux);
+  text-shadow: 0 1px 18px rgb(40 30 20 / .18);
+}
+.rotonde-nav.cache { opacity: 0; transform: translateY(16px); pointer-events: none; }
+.voisine {
+  display: inline-flex; align-items: center; gap: 14px; justify-self: start;
+  font: 400 clamp(20px, 2.6vw, 34px)/1 var(--serif); opacity: .9; transition: opacity .3s;
+}
+.voisine.suivante { justify-self: end; }
+.voisine:hover { opacity: 1; }
+.voisine .fleche { width: clamp(22px, 2.6vw, 32px); }
+.voisine.precedente:hover .fleche { transform: translateX(-5px); }
+.voisine.suivante:hover .fleche { transform: translateX(5px); }
+.courante { display: grid; justify-items: center; gap: 8px; text-align: center; }
+.courante-num { font: 500 10.5px/1 var(--sans); letter-spacing: .18em; opacity: .85; }
+.courante-nom { font: 400 clamp(30px, 4.2vw, 56px)/1 var(--serif); }
+.courante-aide { font: 400 11px/1 var(--sans); opacity: .7; letter-spacing: .02em; }
+.change .courante-nom, .change .courante-num { animation: fondu .7s var(--doux); }
+@keyframes fondu { from { opacity: 0; transform: translateY(6px); } }
+
+/* ---------- dans une salle ---------- */
+.salle-ui { position: fixed; inset: 0; z-index: 15; pointer-events: none; color: var(--ui); opacity: 0; transition: opacity .8s var(--doux); }
+.salle-ui.visible { opacity: 1; }
+.salle-ui.visible > * { pointer-events: auto; }
+.retour {
+  position: absolute; left: var(--gouttiere); bottom: 34px; font: 400 12.5px/1 var(--sans);
+  display: inline-flex; gap: 10px; align-items: center; padding: 11px 15px; border-radius: 999px;
+  color: #f6f2ec; background: rgb(28 27 25 / .5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: background .3s;
+}
+.retour .fleche { width: 22px; }
+.retour:hover { background: rgb(28 27 25 / .72); }
+.dans-salle .pied-visite { opacity: 0; }
+.lire { position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%); }
+.lire:hover { transform: translateX(-50%); }
+
+.cartel {
+  position: absolute; right: var(--gouttiere); top: 50%; transform: translateY(-46%);
+  width: min(340px, 30vw); padding: 22px 22px 18px;
+  background: rgb(250 247 242 / .9); color: var(--encre);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-radius: 3px; box-shadow: 0 10px 40px rgb(0 0 0 / .08);
+  transition: transform .9s var(--doux), opacity .7s var(--doux);
+}
+.salle-ui:not(.visible) .cartel { transform: translateY(-40%); opacity: 0; }
+.cartel .sur-titre { color: var(--encre-3); margin: 0 0 10px; }
+.cartel h2 { margin: 0 0 4px; font: 400 26px/1.1 var(--serif); }
+.cartel .oeuvre { margin: 0 0 14px; font: italic 400 15px/1.3 var(--texte); color: var(--encre-2); }
+.cartel p.clair { margin: 0 0 16px; font: 400 14.5px/1.5 var(--texte); color: var(--encre); }
+.cartel dl { margin: 0; display: grid; gap: 10px; border-top: 1px solid var(--filet); padding-top: 14px; }
+.cartel dl div { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: baseline; }
+.cartel dt { font: 400 22px/1 var(--serif); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cartel dd { margin: 0; font: 400 11.5px/1.35 var(--sans); color: var(--encre-2); }
+.cartel .legende { margin: 14px 0 0; font: 400 11.5px/1.45 var(--sans); color: var(--encre-3); }
+.cartel-replier { display: none; }
+
+@media (max-width: 860px) {
+  .cartel {
+    top: auto; bottom: 92px; right: var(--gouttiere); left: var(--gouttiere); width: auto; transform: none;
+    max-height: 38vh; overflow: auto; padding: 16px 16px 14px;
+  }
+  .salle-ui:not(.visible) .cartel { transform: translateY(20px); }
+  .cartel.replie { max-height: 64px; overflow: hidden; }
+  .cartel-replier { display: block; position: absolute; top: 12px; right: 14px; font: 500 11px/1 var(--sans); color: var(--encre-2); }
+  .cartel h2 { font-size: 22px; padding-right: 64px; }
+  .cartel .legende { display: none; }
+  .lire { min-width: 0; gap: 18px; bottom: 26px; left: auto; right: var(--gouttiere); transform: none; }
+  .lire:hover { transform: none; }
+  .retour { bottom: 40px; }
+  .rotonde-nav { grid-template-columns: auto 1fr auto; padding-bottom: 34px; }
+  .voisine .nom { display: none; }
+}
+
+/* ---------- aide ---------- */
+.aide {
+  position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; align-content: center; gap: 40px;
+  background: rgb(20 18 16 / .35); color: #fff; cursor: pointer;
+  animation: apparait .8s var(--doux);
+}
+.aide[hidden] { display: none; }
+.aide-gestes { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(28px, 6vw, 80px); padding: 0 var(--gouttiere); }
+.aide-gestes p { margin: 0; display: grid; justify-items: center; gap: 8px; text-align: center; }
+.aide-gestes b { font: 400 26px/1 var(--serif); }
+.aide-gestes span { font: 400 12px/1 var(--sans); opacity: .85; }
+.aide-fermer { margin: 0; font: 400 11px/1 var(--sans); opacity: .7; }
+@keyframes apparait { from { opacity: 0; } }
+
+.pied-visite {
+  position: fixed; right: var(--gouttiere); bottom: 14px; margin: 0; z-index: 12;
+  font: 400 10px/1 var(--sans); color: var(--ui); opacity: .62; letter-spacing: .01em;
+}
+@media (max-width: 860px) { .pied-visite { display: none; } }
+
+.sans-3d {
+  position: fixed; inset: 0; z-index: 90; margin: 0; display: grid; place-content: center; gap: 12px; text-align: center;
+  background: var(--papier); color: var(--encre); padding: var(--gouttiere); font: 400 24px/1.3 var(--serif);
+}
+.sans-3d a { font: 500 14px/1 var(--sans); }
+
+/* les notebooks de la salle, au pied du cartel */
+.cartel-pieces { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--filet); display: grid; gap: 8px; }
+.cartel-pieces .sur-titre { margin: 0; }
+@media (min-width: 861px) { .cartel { max-height: calc(100vh - 190px); overflow: auto; } }

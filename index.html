@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nikkei · La visite</title>
+  <meta name="description" content="Projet Nikkei 225 : sept salles en 3D, une œuvre faite de données dans chacune.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Noto+Serif+JP:wght@500;700&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/base.css">
+  <link rel="stylesheet" href="assets/visite.css">
+</head>
+<body class="visite">
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <!-- écran d'attente -->
+  <div class="attente" id="attente">
+    <p class="attente-devise"></p>
+    <div class="attente-pied">
+      <span class="attente-pct" id="pct">0 %</span>
+      <span class="attente-ligne"><i id="ligne"></i></span>
+    </div>
+  </div>
+
+  <header class="entete">
+    <a class="marque" href="index.html"><span class="sceau" aria-hidden="true">日経</span>Nikkei <small>225 · le projet</small></a>
+    <div class="entete-droite">
+      <nav class="modes cours" aria-label="Cours"><a data-cours="ml" href="?cours=ml">Applied ML</a><a data-cours="maths" href="?cours=maths">Maths</a></nav>
+      <nav class="modes" aria-label="Mode">
+        <a href="index.html" data-lien="index.html" aria-current="page">Visite</a>
+        <a href="lecture.html" data-lien="lecture.html" id="vers-lecture">Lecture</a>
+      </nav>
+      <button class="bouton-menu" type="button" aria-expanded="false">Menu <span class="points" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+    </div>
+  </header>
+
+  <!-- la rotonde : navigation entre les salles -->
+  <nav class="rotonde-nav" id="rotonde-nav" aria-label="Salles">
+    <button class="voisine precedente" type="button" id="precedente"></button>
+    <div class="courante">
+      <span class="courante-num" id="courante-num"></span>
+      <button class="courante-nom" type="button" id="courante-nom"></button>
+      <span class="courante-aide">Cliquer pour entrer</span>
+    </div>
+    <button class="voisine suivante" type="button" id="suivante"></button>
+  </nav>
+
+  <!-- dans une salle -->
+  <section class="salle-ui" id="salle-ui" aria-live="polite">
+    <button class="retour" type="button" id="retour">Retour</button>
+    <aside class="cartel" id="cartel"></aside>
+    <a class="bouton-sombre lire" id="lire" href="lecture.html"></a>
+  </section>
+
+  <!-- aide au premier passage -->
+  <div class="aide" id="aide" hidden>
+    <div class="aide-gestes">
+      <p><b>Clic</b><span>Entrer dans une salle</span></p>
+      <p><b>Glisser</b><span>Regarder autour</span></p>
+      <p><b>Défiler ou ← →</b><span>Passer d'une salle à l'autre</span></p>
+    </div>
+    <p class="aide-fermer">Cliquer n'importe où pour fermer</p>
+  </div>
+
+  <p class="pied-visite"><span id="pied-ecole"></span></p>
+
+  <noscript><p class="sans-3d">La visite a besoin de JavaScript. <a href="lecture.html">Ouvrir la lecture</a>.</p></noscript>
+
+  <script src="data/donnees.js"></script>
+  <script src="data/images.js"></script>
+  <script defer src="assets/visite.bundle.js"></script>
+</body>
+</html>

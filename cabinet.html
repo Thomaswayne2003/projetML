@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nikkei · Le cabinet</title>
+  <meta name="description" content="Les notebooks du projet Nikkei 225, tels qu'ils ont été exécutés, à lire ou à télécharger en .ipynb.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/base.css">
+  <style>
+    body.cabinet { height: 100vh; height: 100dvh; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+    .cabinet .entete { position: static; background: var(--papier); border-bottom: 1px solid var(--filet); }
+    .cabinet-corps { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: 0; }
+    .rayonnage { border-right: 1px solid var(--filet); padding: 24px var(--gouttiere) 24px; overflow: auto; display: flex; flex-direction: column; gap: 22px; }
+    .rayonnage h1 { margin: 0; font: 400 34px/1 var(--serif); }
+    .rayonnage p { margin: 0; font: 400 13px/1.5 var(--sans); color: var(--encre-2); }
+    .rayonnage ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--filet); }
+    .rayonnage a:not(.telecharger) { display: grid; grid-template-columns: 2.6em 1fr; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--filet); text-decoration: none; }
+    .rayonnage a .n { font: 400 15px/1.2 var(--serif); color: var(--encre-3); }
+    .rayonnage a .t { font: 400 14px/1.35 var(--sans); color: var(--encre-2); }
+    .rayonnage a[aria-current="page"] .t { color: var(--encre); font-weight: 500; }
+    .rayonnage a[aria-current="page"] .n { color: var(--encre); }
+    .rayonnage .docs a { grid-template-columns: 1fr auto; align-items: center; }
+    .rayonnage .docs .fleche { width: 22px; }
+    .rayonnage li { border-bottom: 1px solid var(--filet); }
+    .rayonnage li > a[data-nb] { border-bottom: 0; padding-bottom: 4px; }
+    .rayonnage .telecharger.mini { display: flex; width: max-content; min-height: 0; margin: 0 0 11px calc(2.6em + 8px); padding: 2px 0; border: 0; background: none;
+      font-size: 10.5px; color: var(--encre-3); }
+    .rayonnage .telecharger.mini:hover { color: var(--encre); text-decoration: underline; text-underline-offset: 3px; }
+    #archive { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: -10px; }
+    .liseuse { position: relative; background: #fff; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+    .barre-courant { display: flex; justify-content: flex-end; padding: 8px 16px; background: var(--papier); border-bottom: 1px solid var(--filet); }
+    .liseuse iframe { border: 0; width: 100%; height: 100%; display: block; }
+    .liseuse .charge { position: absolute; inset: 0; z-index: 1; margin: 0; background: #fff; display: grid; place-items: center; font: 400 22px/1 var(--serif); color: var(--encre-3); pointer-events: none; transition: opacity .4s; }
+    .choix { display: none; }
+    @media (max-width: 820px) {
+      .cabinet-corps { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+      .rayonnage { border-right: 0; border-bottom: 1px solid var(--filet); padding-top: 14px; padding-bottom: 14px; gap: 10px; }
+      .rayonnage ol, .rayonnage .docs, .rayonnage p, .rayonnage #archive { display: none; }
+      .barre-courant { padding: 6px 10px; }
+      .rayonnage h1 { font-size: 26px; }
+      .choix { display: block; width: 100%; font: 400 14px/1.2 var(--sans); padding: 10px; border: 1px solid var(--filet); border-radius: 3px; background: var(--carte); color: var(--encre); }
+    }
+  </style>
+</head>
+<body class="cabinet">
+  <header class="entete">
+    <a class="marque" href="index.html"><span class="sceau" aria-hidden="true">日経</span>Nikkei <small>225 · le projet</small></a>
+    <div class="entete-droite">
+      <nav class="modes cours" aria-label="Cours"><a data-cours="ml" href="?cours=ml">Applied ML</a><a data-cours="maths" href="?cours=maths">Maths</a></nav>
+      <nav class="modes" aria-label="Mode">
+        <a href="index.html" data-lien="index.html">Visite</a>
+        <a href="lecture.html" data-lien="lecture.html">Lecture</a>
+      </nav>
+      <button class="bouton-menu" type="button" aria-expanded="false">Menu <span class="points" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+    </div>
+  </header>
+  <div class="cabinet-corps">
+    <nav class="rayonnage" aria-label="Notebooks">
+      <h1>Le cabinet</h1>
+      <p>Les notebooks tels qu'ils ont été exécutés, sorties comprises. Chacun se télécharge en .ipynb, à ouvrir dans Jupyter (le 06 avec son dossier). Ou tout ensemble :</p>
+      <div id="archive"></div>
+      <label class="sr" for="choix">Choisir un notebook</label>
+      <select class="choix" id="choix"></select>
+      <ol id="liste"></ol>
+      <div class="docs" id="docs"></div>
+    </nav>
+    <section class="liseuse">
+      <div class="barre-courant"><a class="telecharger courant" id="courant" href="#" download>Télécharger le .ipynb</a></div>
+      <p class="charge" id="charge">Ouverture du notebook…</p>
+      <iframe id="cadre" title="Notebook"></iframe>
+    </section>
+  </div>
+  <script src="data/donnees.js"></script>
+  <script defer src="assets/cabinet.bundle.js"></script>
+</body>
+</html>
