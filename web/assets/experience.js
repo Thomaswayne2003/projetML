@@ -162,7 +162,7 @@ function image(maintenant) {
 const [serie, cout] = await Promise.all([api("serie"), api("surface")]);
 const P = window.PROJET;
 formes = [enso, serie ? relief(serie) : sphere, blocs, cout ? surface(cout) : sphere, jauge(P.p, P.seuils), verdict(P.regle, P.achat), helice, sphere].map(calculer);
-if (!serie) document.getElementById("etat").textContent = "API Python arrêtée : formes de secours";
+if (!serie) document.getElementById("etat").textContent = document.documentElement.lang === "en" ? "Python API stopped: fallback shapes" : "API Python arrêtée : formes de secours";
 requestAnimationFrame(image);
 
 /* ---------- Ouverture : compteur, puis l'écran d'encre s'ouvre depuis le soleil et les gouttes se rassemblent ---------- */

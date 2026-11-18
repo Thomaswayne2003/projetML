@@ -54,6 +54,8 @@ $chapitres = [
   .marque .kanji { font: 500 34px/1 "Hiragino Mincho ProN", "Yu Mincho", "Songti SC", serif; letter-spacing: .04em; }
   .marque small { font: 10.5px var(--mono); letter-spacing: .16em; text-transform: uppercase; line-height: 1.5; }
   .coin { position: absolute; right: 44px; top: 34px; text-align: right; text-transform: uppercase; }
+  .langue { position: absolute; right: 44px; top: 128px; color: var(--encre); text-decoration: none; border: 1px solid var(--encre); padding: 6px 9px; }
+  .langue:hover { background: var(--encre); color: var(--papier); }
   .coin b { display: block; font: 200 60px/1 var(--sans); letter-spacing: -.05em; }
   .vertical { position: absolute; right: 48px; top: 50%; translate: 0 -50%; writing-mode: vertical-rl; text-transform: uppercase; letter-spacing: .3em; opacity: .55; }
   .etat { position: absolute; left: 62px; top: 112px; text-transform: uppercase; opacity: .5; writing-mode: vertical-rl; letter-spacing: .2em; font-size: 10px; }
@@ -83,6 +85,7 @@ $chapitres = [
     .vertical, .jauge-defilement, .etat { display: none; } .marque { left: 24px; } .coin { right: 24px; } .coin b { font-size: 40px; }
     .fil { gap: 0; } .fil button:not(.actif) { display: none; } }
   /* ----- Ouverture : écran d'encre, puis ouverture circulaire depuis le soleil ----- */
+  @media (max-width: 800px) { .langue { right: 24px; top: 104px; } }
   .intro { position: fixed; inset: 0; z-index: 60; background: var(--encre); color: var(--papier); display: grid; place-items: center;
     clip-path: circle(150% at 66% 50%); transition: clip-path 1.25s cubic-bezier(.7, 0, .15, 1); }
   .intro.ouvre { clip-path: circle(0% at 66% 50%); pointer-events: none; }
@@ -117,6 +120,7 @@ $chapitres = [
     <canvas id="toile" aria-hidden="true"></canvas>
     <div class="hud">
       <a class="marque" href="/"><span class="kanji">日経</span><small>Nikkei 225<br>Albert School · 2026</small></a>
+      <a class="langue" href="/en" lang="en" hreflang="en" title="English version">EN</a>
       <div class="coin"><b id="compteur">01</b><span>/ <?= sprintf('%02d', count($chapitres)) ?> · <span id="nom-chapitre">Ouverture</span></span></div>
 <?php foreach ($chapitres as $i => [$nom, $titre, $texte, $valeur]): ?>
       <section class="chapitre<?= $i === 0 ? ' actif' : '' ?>" data-chapitre="<?= $i ?>">

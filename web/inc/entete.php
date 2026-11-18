@@ -21,6 +21,8 @@
 <?php endforeach; ?>
       <a class="cta" href="/notebooks">Notebooks</a>
       <a class="cta blanc" href="/rapport.pdf" target="_blank">Rapport</a>
+<?php $en = ['notebooks' => '/en/notebooks' . (isset($courant) ? '?nb=' . rawurlencode($courant[0]) : '')][$page] ?? (($theme ?? '') === 'encre' ? '/en/recit' : '/en'); ?>
+      <a class="cta" href="<?= e($en) ?>" lang="en" hreflang="en" title="English version">EN</a>
     </div>
   </div>
 </nav>

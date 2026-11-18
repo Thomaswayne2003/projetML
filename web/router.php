@@ -9,7 +9,9 @@ declare(strict_types=1);
 $chemin = urldecode((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $projet = dirname(__DIR__);
 
-$pages = ['/' => 'experience.php', '/dossier' => 'index.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php'];
+$pages = ['/' => 'experience.php', '/dossier' => 'index.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php',
+          // version anglaise, dans web/en/
+          '/en' => 'en/experience.php', '/en/' => 'en/experience.php', '/en/recit' => 'en/recit.php', '/en/notebooks' => 'en/notebooks.php'];
 if (isset($pages[$chemin])) {
     require __DIR__ . '/' . $pages[$chemin];
     return true;

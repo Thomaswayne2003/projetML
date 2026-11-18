@@ -6,7 +6,8 @@ import * as THREE from "./three.module.min.js";
 const IMMOBILE = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const api = (route) => fetch("/api.php?" + new URLSearchParams({ route }))
   .then((r) => { if (!r.ok) throw new Error(route); return r.json(); });
-const fr = (x, d = 2) => x.toFixed(d).replace(".", ",");
+const EN = document.documentElement.lang === "en";                      // version anglaise (/en)
+const fr = (x, d = 2) => (EN ? x.toFixed(d) : x.toFixed(d).replace(".", ","));
 
 function creerRendu(canvas) {
   const rendu = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -210,7 +211,8 @@ async function sceneSurface() {
   scene.add(lampe);
 
   // Étiquettes des axes, placées en projetant les bouts d'axes sur l'écran
-  const etiquettes = { w1: "w₁ · volume d'articles", w2: "w₂ · momentum 12 mois", J: "coût J" };
+  const etiquettes = EN ? { w1: "w₁ · article volume", w2: "w₂ · 12-month momentum", J: "cost J" }
+    : { w1: "w₁ · volume d'articles", w2: "w₂ · momentum 12 mois", J: "coût J" };
   const elements = Object.fromEntries(Object.entries(etiquettes).map(([cle, texte]) => {
     const el = Object.assign(document.createElement("span"), { className: "axe", textContent: texte });
     boite.appendChild(el);
@@ -237,13 +239,15 @@ async function sceneSurface() {
     const arrivee = courant.points.findIndex((p) => Math.abs(p[2] - Jmin) < 1e-3);
     const dernier = courant.points[courant.points.length - 1];
     etat.textContent = `α = ${fr(courant.alpha, 2)} · ` + (courant.converge
-      ? `atteint le minimum en ${arrivee} itérations`
+      ? (EN ? `reaches the minimum in ${arrivee} iterations` : `atteint le minimum en ${arrivee} itérations`)
       : courant.alpha < 1
-        ? `trop lent : après ${courant.points.length} itérations, J = ${fr(dernier[2], 3)} (minimum ${fr(Jmin, 3)})`
-        : "ne converge pas : la descente rebondit d'un versant à l'autre");
+        ? (EN ? `too slow: after ${courant.points.length} iterations, J = ${fr(dernier[2], 3)} (minimum ${fr(Jmin, 3)})`
+              : `trop lent : après ${courant.points.length} itérations, J = ${fr(dernier[2], 3)} (minimum ${fr(Jmin, 3)})`)
+        : (EN ? "does not converge: the descent bounces from one side to the other" : "ne converge pas : la descente rebondit d'un versant à l'autre"));
   }
   Object.keys(d.trajectoires).forEach((nom, i) => {
-    const bouton = Object.assign(document.createElement("button"), { className: "onglet", textContent: nom });
+    const PAS_EN = { "trop petit": "too small", "classique (1/L)": "standard (1/L)", "près de la limite": "near the limit", "au-delà de la limite": "beyond the limit" };
+    const bouton = Object.assign(document.createElement("button"), { className: "onglet", textContent: EN ? PAS_EN[nom] ?? nom : nom });
     bouton.addEventListener("click", () => choisir(nom, bouton));
     choix.appendChild(bouton);
     if (i === 1) choisir(nom, bouton);          // pas classique affiché d'abord
@@ -287,6 +291,6 @@ async function sceneSurface() {
 sceneAccueil().catch((erreur) => console.warn("Scène d'accueil indisponible :", erreur));
 sceneSurface().catch((erreur) => {
   const etat = document.getElementById("etat-pas");
-  if (etat) etat.textContent = "Scène 3D indisponible : l'API Python ne répond pas.";
+  if (etat) etat.textContent = EN ? "3D scene unavailable: the Python API is not responding." : "Scène 3D indisponible : l'API Python ne répond pas.";
   console.warn(erreur);
 });

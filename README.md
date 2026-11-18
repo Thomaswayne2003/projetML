@@ -112,6 +112,13 @@ Le site a trois niveaux de lecture :
   - la **surface de coût en 3D** et la descente de gradient pour quatre pas ;
 - **le lecteur de notebooks** (`/notebooks`), le rapport et l'annexe en PDF.
 
+**Version anglaise.** L'accueil, le récit et le lecteur de notebooks existent en anglais sous `/en`, `/en/recit` et
+`/en/notebooks` (lien « EN » dans l'en-tête, « FR » pour revenir). Les pages sont des copies traduites rangées dans
+`web/en/` (`en/index.php` sert de contenu à `en/recit.php` et n'a pas d'adresse propre) ; les graphiques utilisent
+`web/en/assets/app.js` et `web/en/assets/recit.js`. `scene3d.js` et `experience.js` restent partagés et lisent
+`<html lang>`. L'API, les notebooks et les PDF restent en français. **Toute modification du texte d'une page doit
+être reportée dans sa copie anglaise.**
+
 Après avoir modifié un notebook, régénérer ses pages avec `python -m app.build_site`. Une variante en tableau de
 bord Streamlit existe aussi : `streamlit run app/dashboard.py`.
 
