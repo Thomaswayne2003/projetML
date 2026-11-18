@@ -19,6 +19,7 @@
                'explorateur' => 'Prédire', 'simulateur' => 'Simuler', 'projection' => 'Projection', 'regime' => 'Régime', 'maths' => 'Maths 3D'] as $ancre => $libelle): ?>
       <a href="<?= $racine ?>#<?= $ancre ?>"><?= e($libelle) ?></a>
 <?php endforeach; ?>
+      <a href="/bloomberg">Bloomberg</a>
       <a class="cta" href="/notebooks">Notebooks</a>
       <a class="cta blanc" href="/rapport.pdf" target="_blank">Rapport</a>
     </div>
