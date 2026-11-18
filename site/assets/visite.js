@@ -2,7 +2,7 @@
 import * as THREE from "../vendor/three.module.min.js";
 import { SALLES, ENTREE, COURS, COURS_INFO, avecCours } from "./contenu.js";
 import { OEUVRES, seriePourTableau, boiteArrondie } from "./oeuvres.js";
-import { installerMenu, installerEntete, installerLiseuse, liensPieces, FLECHE, FLECHE_G, stocker, lire } from "./commun.js";
+import { installerMenu, installerEntete, installerLiseuse, liensPieces, arrivee, FLECHE, FLECHE_G, stocker, lire } from "./commun.js";
 
 const TEINTE = COURS_INFO[COURS].rotonde;   // la rotonde change de teinte avec le cours
 
@@ -488,7 +488,8 @@ function majRotonde() {
   $("#precedente").setAttribute("aria-label", `Salle précédente : ${SALLES[p].nom}`);
   $("#suivante").innerHTML = `<span class="nom">${SALLES[n].nom}</span>${FLECHE}`;
   $("#suivante").setAttribute("aria-label", `Salle suivante : ${SALLES[n].nom}`);
-  $("#courante-num").innerHTML = `<span class="sceau" aria-hidden="true">${SALLES[i].kanji}</span>SALLE ${SALLES[i].num} — ${i + 1} / ${N}`;
+  const seances = (SALLES[i].seances ?? []).map(([code]) => code).filter((c) => /^[SL]\d/.test(c)).join(" · ");
+  $("#courante-num").innerHTML = `<span class="sceau" aria-hidden="true">${SALLES[i].kanji}</span>SALLE ${SALLES[i].num} — ${i + 1} / ${N}${seances ? ` · ${seances}` : ""}`;
   $("#courante-nom").textContent = SALLES[i].nom;
   $("#courante-nom").setAttribute("aria-label", `Entrer dans la salle ${SALLES[i].num} : ${SALLES[i].nom}`);
   nav.classList.remove("change"); void nav.offsetWidth; nav.classList.add("change");
@@ -499,6 +500,7 @@ function majCartel() {
     <button class="cartel-replier" type="button">Replier</button>
     <p class="sur-titre"><span class="sceau" aria-hidden="true">${s.kanji}</span>Salle ${s.num} · ${s.nom}</p>
     <h2>${s.titre}</h2>
+    ${arrivee(s)}
     <p class="oeuvre">${s.oeuvre}</p>
     <p class="clair">${s.clair}</p>
     <dl>${s.chiffres.map(([v, l]) => `<div><dt>${v}</dt><dd>${l}</dd></div>`).join("")}</dl>

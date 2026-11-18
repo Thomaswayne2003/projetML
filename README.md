@@ -201,9 +201,15 @@ Le site a deux parcours, un par cours, choisis en haut de chaque page (`?cours=m
 retenu d'une page à l'autre) :
 - **Applied ML** : les étapes du projet dans l'ordre des notebooks : le dataset (00a, 00b), l'exploration (01),
   l'apprentissage (02), la règle (03), le test (03b), l'explication (04), puis ce qui a été tenté après le test (06, 07, 08) ;
-- **Maths** : l'annexe, salle par salle : le modèle (sigmoïde), le coût (log-loss), le gradient, le prior gaussien,
-  la convexité, la descente de gradient et ce que 33 mois de test peuvent prouver (erreur type, nombre de mois
-  nécessaire).
+- **Maths** : l'annexe du cours *Mathematics & Statistics for ML*, salle par salle, sur les mois d'entraînement : le
+  modèle (L1, L2), le coût par maximum de vraisemblance (L5), le gradient (L1, L2), le prior gaussien de la pénalité
+  ridge (L7), la convexité (L7, L8), la descente de gradient (L1, L8) et les moindres carrés (L2 : équations normales,
+  R² de 0,12 sur l'entraînement et de −1,77 sur la validation).
+
+Les deux parcours ne partagent pas leurs notions. En arrivant dans une salle, le cartel de la visite et le chapitre de
+la lecture commencent par :
+- les séances du cours qu'elle mobilise (S1 à S9 et les consignes du projet pour Applied ML, L1 à L8 pour Maths) ;
+- les trois points à présenter, avec les chiffres du projet.
 
 Chaque salle et chaque chapitre ouvre ses notebooks et ses PDF sur place, dans une liseuse, sans quitter la page.
 Chaque notebook se télécharge aussi, à ouvrir dans Jupyter, depuis trois endroits :
@@ -243,7 +249,7 @@ Chaque parcours se lit de deux façons, avec le même contenu :
   des mois (un disque par mois, décalé selon son rendement), le champ des 150 essais Optuna, le cadran de la règle, le
   cercle des 33 mois de test, la spirale de la volatilité et les volumes du cabinet. Maths : la sigmoïde, les deux
   branches de la log-loss, la carte des pentes (−∇J), la cloche du prior et les douze poids appris, le paysage du coût,
-  les quatre pas de descente, et les deux colonnes (33 mois de test face aux mois qu'il faudrait). Clic pour entrer, glisser pour regarder, molette ou flèches pour changer de salle ;
+  les quatre pas de descente, et les deux nuages des moindres carrés (prévu face au réel, entraînement et validation). Clic pour entrer, glisser pour regarder, molette ou flèches pour changer de salle ;
   une salle s'ouvre directement avec son adresse, par exemple `index.html?cours=maths#m-prior` ;
 - **la lecture** (`lecture.html`) : les sept chapitres en texte, chacun en clair puis en termes techniques, avec des
   graphiques interactifs tirés des mêmes données, les tableaux de résultats, les figures des notebooks et les limites ;

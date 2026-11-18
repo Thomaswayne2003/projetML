@@ -128,6 +128,12 @@ const SALLES_ML = [
   {
     id: "dataset", num: "I", nom: "Le dataset", kanji: "集",
     notebooks: ["00a_collecte_V1", "00b_collecte_V2"], docs: [],
+    seances: [["S1", "Données, test de l'instant de prédiction, fuites"], ["Consigne 1", "EDA et cadrage du problème"]],
+    presenter: [
+      `<b>La question (S1).</b> À la fin de chaque mois, prédire si le Nikkei baisse le mois suivant. Une ligne par fin de mois : ${nombre(DS.mois ?? serieV2.length)} mois, de ${(DS.premier_mois ?? "").slice(0, 4)} à ${(DS.dernier_mois ?? "").slice(0, 4)}.`,
+      "<b>Le test de l'instant de prédiction (S1).</b> Chaque colonne est décalée jusqu'à sa publication : elle n'entre dans la table qu'à la date où on la connaissait vraiment.",
+      `<b>Les fuites (S1).</b> Pris à sa date Bloomberg, le Tankan aurait fui : ${CB.tankan?.erreur_si_date_bloomberg_prise_telle_quelle ?? "il aurait été utilisé avant sa publication"}. Un audit automatique arrête la construction si une variable regarde le futur.`,
+    ],
     titre: "Construire la table, mois par mois",
     oeuvre: "La pile des mois",
     legende: `Un disque par mois, de ${moisLong(serieV2[0].mois)} (en bas) à ${moisLong(serieV2[serieV2.length - 1].mois)} (en haut). Chaque disque est décalé selon le rendement du mois : la pile se tord dans les mois agités. Les disques foncés sont les mois de baisse.`,
@@ -143,6 +149,12 @@ const SALLES_ML = [
   {
     id: "exploration", num: "II", nom: "L'exploration", kanji: "探",
     notebooks: ["01_cadrage_eda_variables"], docs: [],
+    seances: [["S1", "EDA et découpage entraînement, validation, test"], ["S7", "Équilibre des classes"], ["Consignes 1 à 3", "Cadrage, variables, déséquilibre"]],
+    presenter: [
+      `<b>La cible et son équilibre (S1, S7).</b> 1 si le Nikkei baisse le mois suivant : ${baissesEntrainement == null ? "—" : pct(baissesEntrainement, 0)} des mois d'entraînement. Les classes sont presque équilibrées ; on juge quand même sur la log-loss et la PR-AUC, pas sur l'exactitude.`,
+      "<b>Un découpage dans l'ordre du temps (S1).</b> Entraînement jusqu'en 2021, validation 2022-2023, test 2024-2026 ouvert une seule fois. Un découpage au hasard ferait voir le futur au modèle.",
+      "<b>Des variables justifiées (consigne 2).</b> Momentum à 3 et 12 mois, volatilité lissée, variation du taux à 10 ans, Tankan, portage et volatilité de l'euro-yen, volume et tonalité des news, plus un régime de marché par k-means. Deux références sans compétence : la constante et « toujours acheter ».",
+    ],
     titre: "Regarder avant de modéliser",
     oeuvre: `Le vase des ${serieV2.length} mois`,
     legende: `Son profil suit la clôture mensuelle du Nikkei, de ${moisLong(serieV2[0].mois)} (au pied) à ${moisLong(serieV2[serieV2.length - 1].mois)} (au col). Deux sillons marquent le début de la validation et celui du test.`,
@@ -158,7 +170,13 @@ const SALLES_ML = [
   {
     id: "apprentissage", num: "III", nom: "L'apprentissage", kanji: "学",
     notebooks: ["02_pipeline_modeles_optuna"], docs: [],
-    titre: "Trois modèles, deux cents essais",
+    seances: [["S2", "Régression logistique et log-loss"], ["S3", "Régularisation"], ["S4", "Arbres de décision"], ["S5", "Forêts aléatoires et boosting"], ["Consignes 4 à 7", "Progression, pipeline, Optuna, journal"]],
+    presenter: [
+      "<b>Une progression de trois modèles (S2 à S5, consigne 4).</b> Une logistique pénalisée (S2, S3), une forêt aléatoire (S4, S5) et un LightGBM (S5), comparés sur la même log-loss.",
+      "<b>Une seule pipeline (consigne 5).</b> Imputation, standardisation, régime k-means et modèle s'ajustent ensemble, pli par pli : aucune statistique du futur ne fuit dans le passé.",
+      `<b>Optuna sans score optimiste (S3, consignes 6 et 7).</b> ${nombre(CHIFFRES.essais)} essais sur des plis qui respectent le temps (TimeSeriesSplit), tous journalisés ; pénalité et pondération des classes sont choisies en validation croisée. La logistique retenue : ${dec(CHIFFRES.llCV)} de log-loss.`,
+    ],
+    titre: `Trois modèles, ${nombre(CHIFFRES.essais)} essais`,
     oeuvre: "Le champ des essais",
     legende: "Une tige par essai Optuna, en trois rangées : logistique, forêt aléatoire, LightGBM. Plus la tige est haute, plus la log-loss de validation croisée est basse. La tige teintée est l'essai retenu.",
     clair: "Une régression logistique, une forêt aléatoire et un LightGBM, réglés par Optuna sur des plis qui respectent l'ordre du temps. Tout ce qui apprend un paramètre, imputation et régimes compris, reste dans la pipeline.",
@@ -169,6 +187,12 @@ const SALLES_ML = [
   {
     id: "regle", num: "IV", nom: "La règle", kanji: "律",
     notebooks: ["03_calibration_seuils"], docs: [],
+    seances: [["S7", "Seuil de décision"], ["S8", "Calibration des probabilités"], ["Consigne 9", "Diagnostic de calibration"]],
+    presenter: [
+      `<b>Calibrer avant de décider (S8).</b> La calibration de Platt est apprise sur les prédictions hors pli (a = ${dec(D.decision.platt.a)}, c = ${dec(D.decision.platt.c)}) : une probabilité annoncée doit correspondre à une fréquence observée.`,
+      `<b>Un seuil qui n'est pas 50 % (S7).</b> Il vient des gains en euros : acheter au-dessus de ${pct(CHIFFRES.thetaA, 0)} de hausse, vendre sous ${pct(CHIFFRES.thetaV, 0)}, rester neutre entre les deux, avec une marge de ${pct(CHIFFRES.marge, 1)} par mois.`,
+      "<b>Figée avant le test.</b> Modèle, calibration et seuils ont été commités avant d'ouvrir 2024-2026 (commit 75712cf) : rien ne se règle sur le test.",
+    ],
     titre: "D'une probabilité à une action",
     oeuvre: "Le cadran",
     legende: "Le cadran va de 0 à 100 % de probabilité de hausse. À gauche la zone « vendre », au centre « neutre », à droite « acheter ». Le style pointe la prévision pour " + moisLong(moisSuivant(CHIFFRES.moisDernier)) + ".",
@@ -180,6 +204,12 @@ const SALLES_ML = [
   {
     id: "epreuve", num: "V", nom: "L'épreuve", kanji: "試",
     notebooks: ["03b_test_final"], docs: ["rapport"],
+    seances: [["S1", "Le test, ouvert une seule fois"], ["S7", "PR-AUC face à la référence"], ["S8", "Brier, ECE, fiabilité"], ["Consigne 9", "Peut-on se fier aux probabilités ?"]],
+    presenter: [
+      `<b>Une seule ouverture (S1).</b> ${CHIFFRES.moisTest} mois, de 2024 à 2026, évalués avec la décision figée, sans aucun réglage.`,
+      `<b>Les métriques du cours face à la constante (S7, S8).</b> Log-loss ${dec(met.logistique["log-loss"])} contre ${dec(met[CONST]["log-loss"])}, PR-AUC ${dec(met.logistique["PR-AUC"], 2)} contre ${dec(met[CONST]["PR-AUC"], 2)}, Brier ${dec(met.logistique.Brier)} contre ${dec(met[CONST].Brier)}. Le modèle annonce ${pct(met.logistique["proba moyenne"], 0)} de baisse en moyenne pour ${pct(met.logistique["fréquence observée"], 0)} observés : il surestime les baisses (ECE ${dec(met.logistique.ECE, 2)}), ses probabilités ne sont pas utilisables telles quelles.`,
+      `<b>Le verdict.</b> L'écart de log-loss (${dec(ECART_TEST.moyenne, 3)} ± ${dec(ECART_TEST.erreurType, 3)}) ne tranche pas ; la règle fait ${pct(CHIFFRES.regle, 1, true)} contre ${pct(CHIFFRES.couvert, 1, true)} pour l'achat couvert. Comme annoncé avant le test : acheter, couvert.`,
+    ],
     titre: `${CHIFFRES.moisTest} mois, une seule fois`,
     oeuvre: "Le cercle des mois de test",
     legende: "Une pierre par mois de test, de janvier 2024 à septembre 2026. Sa hauteur suit l'ampleur du mois ; claire s'il a monté, sombre s'il a baissé. La pastille au pied montre l'action du modèle : verte pour acheter, rouge brique pour vendre.",
@@ -191,6 +221,12 @@ const SALLES_ML = [
   {
     id: "explication", num: "VI", nom: "L'explication", kanji: "解",
     notebooks: ["04_explicabilite_diagnostics", "07_seconde_version_bloomberg"], docs: [],
+    seances: [["S9", "Diagnostics par tranches, permutation, SHAP"], ["Consigne 8", "Importance globale et explications locales"]],
+    presenter: [
+      "<b>Les tranches (S9).</b> Un bon score global peut cacher un échec : on découpe le test par régime de volatilité et par mois de réunion de la Banque du Japon.",
+      "<b>La permutation (S9).</b> On mélange une variable et on mesure la log-loss perdue. Piège vu en cours : deux variables corrélées se remplacent, et chacune paraît inutile.",
+      `<b>SHAP (S9, consigne 8).</b> La prédiction de ${moisLong(moisSuivant(CHIFFRES.moisDernier))} se décompose variable par variable ; « ${libelleVar(contribs[0]?.variable ?? "")} » pèse le plus. A-t-elle un sens économique ? Son lien avec le rendement change de signe après 2021 : non, pas de façon stable.`,
+    ],
     titre: "Ce qui pèse dans une prédiction",
     oeuvre: "La balance",
     legende: `Les douze variables de la dernière prédiction (${moisLong(moisSuivant(CHIFFRES.moisDernier))}) suspendues à un fléau : à droite celles qui poussent vers la baisse, à gauche celles qui poussent vers la hausse. La taille de chaque poids suit sa contribution.`,
@@ -202,6 +238,12 @@ const SALLES_ML = [
   {
     id: "apres", num: "VII", nom: "Après le test", kanji: "後",
     notebooks: ["06_annexe_news_prix", "07_seconde_version_bloomberg", "08_ameliorations_sans_surapprentissage"], docs: ["rapport"],
+    seances: [["S1", "Généralisation, fuites"], ["S3", "Choisir sans regarder le test"], ["Après coup", "Exploration, sans valeur de preuve"]],
+    presenter: [
+      V2_INFO ? `<b>Réentraîner sur 1999-2026.</b> Même pipeline et même règle de choix : ${V2_INFO.modele}, ${dec(V2_INFO.ll)} de log-loss sur le test contre ${dec(V2_INFO.llConst)} pour la constante. Mieux que la première version, toujours pas mieux que la constante.` : "<b>Réentraîner sur une histoire plus longue.</b>",
+      V3_INFO ? `<b>Améliorer sans surapprendre.</b> Protocole figé avant tout calcul, réentraînement mois par mois sur ${V3_INFO.mois} mois (2010-2023), correction de Holm : ${V3_INFO.retenus} levier retenu sur ${V3_INFO.tests}.` : "<b>Améliorer sans surapprendre.</b>",
+      "<b>Ce qu'on en retient.</b> Le test ayant été vu, tout cela reste exploratoire. Avec ces données, le mois suivant du Nikkei ne se prévoit pas ; la meilleure décision reste d'acheter, couvert.",
+    ],
     titre: "Ce qu'on a tenté ensuite",
     oeuvre: "Le souffle",
     legende: "Une spirale de 2016 (en bas) à 2026 (en haut), dont l'épaisseur suit la volatilité réalisée de chaque mois. Les parties teintées sont les mois agités, au-dessus de 20 % de volatilité annuelle.",
@@ -217,64 +259,95 @@ const SALLES_ML = [
   },
 ];
 
-// ---------- parcours Maths : l'annexe, de la vraisemblance à la descente de gradient ----------
+// ---------- parcours Maths : l'annexe du cours Mathematics & Statistics for ML ----------
+// Elle doit dériver le coût, le gradient et le prior du modèle du projet, puis étudier la sensibilité de son
+// optimisation ; le plan suit la recette de L1 (données, modèle, coût, optimiseur), et finit par l'option L2.
 const MOD = D.modele;
 const M = CHIFFRES.moisEntrainement;
 const LAMBDA = 1 / (2 * M * MOD.C), TAU = Math.sqrt(MOD.C);
-const MATHS = {
-  lambda: LAMBDA, tau: TAU,
-  moisPourPreuve: Math.ceil(Math.pow((2 * ECART_TEST.ecartType) / 0.02, 2)),
-};
+const MC = D.maths ?? {};
+const OLS = MC.ols ?? {};
+const MATHS = { lambda: LAMBDA, tau: TAU, ols: OLS, llEntrainement: MC.logloss_entrainement, coutPenalise: MC.cout_penalise_entrainement };
 const f = (t) => `<span class="f">${t}</span>`;   // une formule, en italique serif
 
 const SALLES_MATHS = [
   {
     id: "m-modele", num: "I", nom: "Le modèle", kanji: "型",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
+    seances: [["L1", "La recette : données, modèle, coût, optimiseur"], ["L2", "La matrice de conception"]],
+    presenter: [
+      `<b>La recette de L1.</b> Données : m = ${M} mois d'entraînement et d = ${MOD.coefficients.length} variables standardisées. Le modèle, le coût et l'optimiseur viennent ensuite, une salle chacun.`,
+      `<b>Le modèle.</b> Un score linéaire ${f("u = wᵀx + b")}, écrit pour tous les mois à la fois avec la matrice de conception de L2, puis la sigmoïde ${f("σ(u) = 1 / (1 + e<sup>−u</sup>)")} en fait une probabilité de baisse.`,
+      `<b>La propriété à retenir.</b> ${f("σ′(u) = σ(u)(1 − σ(u))")} : c'est elle qui rendra le gradient si simple, salle III.`,
+    ],
     titre: "Une probabilité par mois",
     oeuvre: "La sigmoïde",
-    legende: "Un bloc de céramique dont l'arête suit σ(u) = 1 / (1 + e⁻ᵘ). Les perles sont les mois de validation et de test, posées à leur score : claires si le Nikkei a monté, sombres s'il a baissé.",
-    clair: "Chaque fin de mois, le modèle combine douze variables en un score, puis la sigmoïde transforme ce score en une probabilité de baisse, entre 0 et 1. Tout le parcours explique comment on choisit les poids de cette combinaison.",
-    technique: `On dispose de m = ${M} mois d'entraînement et de d = ${MOD.coefficients.length} variables standardisées (news, prix, taux, change, et deux distances aux régimes k-means). Le modèle est ${f("p = σ(wᵀx + b)")}, avec ${f("σ(u) = 1 / (1 + e<sup>−u</sup>)")}. En dérivant, ${f("σ′(u) = σ(u)(1 − σ(u))")} : c'est cette propriété qui rendra le gradient très simple.`,
+    legende: `Un bloc de céramique dont l'arête suit σ(u) = 1 / (1 + e⁻ᵘ). Les perles sont les ${M} mois d'entraînement, posées au score que le modèle leur donne : claires si le Nikkei a monté, sombres s'il a baissé.`,
+    clair: "Chaque fin de mois, le modèle combine douze variables en un score, puis la sigmoïde transforme ce score en une probabilité de baisse, entre 0 et 1. Tout le parcours explique comment on choisit les poids de cette combinaison, et comment on vérifie qu'ils sont les bons.",
+    technique: `On dispose de m = ${M} mois d'entraînement et de d = ${MOD.coefficients.length} variables standardisées (news, prix, taux, change, et deux distances aux régimes k-means). La matrice de conception X̃ = [X, 1] a une ligne par mois et une colonne de 1 pour l'intercept. Le modèle est ${f("p = σ(wᵀx + b)")}, avec ${f("σ(u) = 1 / (1 + e<sup>−u</sup>)")}. En dérivant (1 + e<sup>−u</sup>)<sup>−1</sup>, ${f("σ′(u) = e<sup>−u</sup> / (1 + e<sup>−u</sup>)² = σ(u)(1 − σ(u))")}.`,
     chiffres: [[nombre(M), "mois d'entraînement, m"], [nombre(MOD.coefficients.length), "variables standardisées, d"], [dec(MOD.intercept, 3), "intercept b appris"]],
     ton: { mur: "#2e3a4e", sol: "#b7b2aa", ciel: "#dde4ee", texte: "#f1f3f7", accent: "#9fb0c9" },
   },
   {
     id: "m-cout", num: "II", nom: "Le coût", kanji: "損",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
+    seances: [["L5", "Maximum de vraisemblance"], ["Aide-mémoire", "Loi de Bernoulli"]],
+    presenter: [
+      `<b>Chaque mois est un tirage de Bernoulli.</b> ${f("P(y | x) = p<sup>y</sup>(1 − p)<sup>1−y</sup>")}, où p est la probabilité de baisse et y vaut 1 si le mois a baissé.`,
+      `<b>De la vraisemblance à la log-loss (L5).</b> Mois supposés indépendants : la vraisemblance est un produit ; son logarithme, changé de signe et divisé par m, donne ${f("J(w, b) = −(1/m) Σ [y log p + (1 − y) log(1 − p)]")}.`,
+      `<b>Sur nos données.</b> J vaut ln 2 ≈ 0,693 au départ (w = 0, p = 50 %) et ${MC.logloss_entrainement != null ? dec(MC.logloss_entrainement) : "—"} au minimum, sur l'entraînement. L'indépendance des mois est une approximation, à discuter.`,
+    ],
     titre: "De la vraisemblance à la log-loss",
     oeuvre: "Les deux branches",
-    legende: "Deux courbes de céramique : la perte −log p quand le mois baisse, et −log(1 − p) quand il monte. Les perles sont les 33 mois de test, posées à la perte que le modèle a payée.",
+    legende: `Deux courbes de céramique : la perte −log p quand le mois baisse, et −log(1 − p) quand il monte. Les perles sont les ${M} mois d'entraînement, posées à la perte que le modèle y paie.`,
     clair: "Chaque mois est un tirage à pile ou face, de probabilité p. Rendre les mois observés aussi probables que possible revient à minimiser la log-loss : elle est faible quand le modèle annonce avec assurance ce qui arrive, et très grande quand il se trompe avec assurance.",
-    technique: `${f("P(y | x) = p<sup>y</sup>(1 − p)<sup>1−y</sup>")}. Si les mois sont indépendants, la vraisemblance est un produit ; maximiser son logarithme revient à minimiser ${f("J(w, b) = −(1/m) Σ [y log p + (1 − y) log(1 − p)]")}. Hypothèse à discuter : les rendements mensuels sont peu corrélés, pas exactement indépendants, et la vraisemblance n'est qu'une approximation. Sur le test, la log-loss moyenne vaut ${dec(CHIFFRES.llModele)} pour le modèle et ${dec(CHIFFRES.llConstante)} pour la constante ; un pile ou face à 50 % donnerait ln 2 ≈ 0,693.`,
-    chiffres: [[dec(CHIFFRES.llModele), "log-loss du modèle sur le test"], [dec(CHIFFRES.llConstante), "log-loss de la constante"], [dec(Math.log(2)), "pile ou face à 50 %, ln 2"]],
+    technique: `${f("P(y | x) = p<sup>y</sup>(1 − p)<sup>1−y</sup>")}. Si les mois sont indépendants, la vraisemblance ${f("L = Π p<sup>y</sup>(1 − p)<sup>1−y</sup>")} est un produit ; maximiser son logarithme revient à minimiser ${f("J(w, b) = −(1/m) log L")}. Le logarithme change le produit en somme et ne déplace pas le maximum. Hypothèse à discuter : les rendements mensuels sont peu corrélés, pas exactement indépendants. Au minimum, sur les ${M} mois d'entraînement, J vaut ${MC.logloss_entrainement != null ? dec(MC.logloss_entrainement) : "—"}, et le coût pénalisé de la salle IV ${MC.cout_penalise_entrainement != null ? dec(MC.cout_penalise_entrainement) : "—"} ; un pile ou face à 50 % donnerait ln 2 ≈ 0,693.`,
+    chiffres: [[dec(Math.log(2)), "ln 2 : le coût au départ, w = 0"], [MC.logloss_entrainement != null ? dec(MC.logloss_entrainement) : "—", "log-loss au minimum, entraînement"], [MC.cout_penalise_entrainement != null ? dec(MC.cout_penalise_entrainement) : "—", "coût pénalisé J<sub>λ</sub> au minimum"]],
     ton: { mur: "#c9bca6", sol: "#a99c86", ciel: "#fbf6ec", texte: "#fffaf1", accent: "#8a7a5f" },
   },
   {
     id: "m-gradient", num: "III", nom: "Le gradient", kanji: "勾",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
+    seances: [["L1", "Le gradient d'un coût"], ["L2", "Le gradient, un poids à la fois"]],
+    presenter: [
+      `<b>La règle de la chaîne.</b> ${f("∂J/∂w<sub>j</sub> = (−y/p + (1 − y)/(1 − p)) · p(1 − p) · x<sub>j</sub> = (p − y) x<sub>j</sub>")} : la dérivée de la sigmoïde simplifie tout.`,
+      `<b>La forme des moindres carrés (L2).</b> En matrice, ${f("∇<sub>w</sub>J = (1/m) Xᵀ(p − y)")} : l'erreur de prédiction fois l'entrée, exactement comme pour la régression linéaire.`,
+      "<b>Vérifié.</b> En un point tiré au hasard, le gradient analytique et les différences finies centrées s'accordent à 1,3 × 10⁻⁹ près.",
+    ],
     titre: "L'erreur, fois l'entrée",
     oeuvre: "La carte des pentes",
     legende: "Une plaque gravée des courbes de niveau du coût, sur deux coefficients. Chaque flèche montre la direction de plus forte descente, −∇J ; sa longueur dit la raideur de la pente.",
     clair: "Pour savoir dans quel sens bouger les poids, on dérive le coût. Le résultat est d'une grande simplicité : pour chaque mois, l'erreur de prédiction, p − y, multipliée par les variables du mois.",
-    technique: `Règle de la chaîne, pour un mois : ${f("∂J/∂w<sub>j</sub> = (−y/p + (1 − y)/(1 − p)) · p(1 − p) · x<sub>j</sub> = (p − y) x<sub>j</sub>")}. En matrice : ${f("∇<sub>w</sub>J = (1/m) Xᵀ(p − y)")} et ${f("∂J/∂b = (1/m) Σ (p − y)")}. C'est la forme de la régression linéaire. Vérification numérique : en un point tiré au hasard, le gradient analytique et les différences finies centrées s'accordent à 1,3 × 10⁻⁹ près.`,
+    technique: `Règle de la chaîne, pour un mois : ${f("∂J/∂w<sub>j</sub> = (−y/p + (1 − y)/(1 − p)) · p(1 − p) · x<sub>j</sub> = (p − y) x<sub>j</sub>")}. En matrice : ${f("∇<sub>w</sub>J = (1/m) Xᵀ(p − y)")} et ${f("∂J/∂b = (1/m) Σ (p − y)")}. Pour la régression linéaire de L2, ${f("∇J = (1/m) Xᵀ(Xw − y)")} : même forme, avec p à la place de Xw. Vérification numérique : en un point tiré au hasard, le gradient analytique et les différences finies centrées s'accordent à 1,3 × 10⁻⁹ près.`,
     chiffres: [["(p − y)·x", "le gradient d'un mois"], ["1,3 × 10⁻⁹", "écart avec les différences finies"], [nombre(MOD.coefficients.length + 1), "dérivées partielles, w et b"]],
     ton: { mur: "#5f7066", sol: "#8c8f86", ciel: "#e6eee8", texte: "#f2f6f2", accent: "#b9c9bd" },
   },
   {
     id: "m-prior", num: "IV", nom: "Le prior", kanji: "先",
     notebooks: ["05_annexe_maths_logistique", "02_pipeline_modeles_optuna"], docs: ["annexe"],
+    seances: [["L7", "Ridge : la pénalité L2"], ["L2", "Quand XᵀX n'est pas inversible"]],
+    presenter: [
+      `<b>Le prior.</b> Avant de voir les données, on suppose chaque poids petit : ${f("w ∼ N(0, τ²I)")}.`,
+      `<b>Le maximum a posteriori.</b> Il ajoute ${f("λ‖w‖²")} au coût, avec ${f("λ = 1/(2mτ²)")} : la pénalité ridge de L7 est un prior gaussien.`,
+      `<b>Sur nos données.</b> Le C = ${dec(MOD.C, 4)} choisi par Optuna donne λ = ${dec(LAMBDA, 3)} et τ = ${dec(TAU, 2)} ; l'intercept n'est pas pénalisé. Réserve : λ vient d'une validation croisée, pas d'une croyance posée avant les données.`,
+    ],
     titre: "La pénalité, une croyance a priori",
     oeuvre: "La cloche",
     legende: `La densité du prior gaussien N(0, τ²), avec τ = ${dec(TAU, 2)}. Les douze tiges sont les poids appris par le modèle final : tous restent au cœur de la cloche.`,
     clair: "Avant de voir les données, on suppose que chaque poids est probablement petit. Écrire cette croyance comme une loi normale centrée, puis chercher les poids les plus probables a posteriori, revient exactement à ajouter une pénalité L2 au coût.",
-    technique: `Prior ${f("w ∼ N(0, τ²I)")}. Le maximum a posteriori ajoute ${f("−(1/m) log p(w) = ‖w‖² / (2mτ²)")} : ${f("J<sub>λ</sub> = J + λ‖w‖²")}, avec ${f("λ = 1/(2mτ²)")}, et ${f("∇J<sub>λ</sub> = (1/m) Xᵀ(p − y) + 2λw")}. scikit-learn minimise ½‖w‖² + C Σ ℓ ; en divisant par Cm, on retrouve J<sub>λ</sub> avec λ = 1/(2mC). Le C = ${dec(MOD.C, 4)} choisi par Optuna donne λ = ${dec(LAMBDA, 3)} et τ = ${dec(TAU, 2)}. L'intercept n'a pas de prior : liblinear le pénalisait et tirait les probabilités vers 50 %, d'où le solveur ${MOD.solveur}. Réserve : λ vient d'une validation croisée, ce n'est donc pas un prior fixé avant de voir les données.`,
+    technique: `Prior ${f("w ∼ N(0, τ²I)")}. Le maximum a posteriori ajoute ${f("−(1/m) log p(w) = ‖w‖² / (2mτ²)")} : ${f("J<sub>λ</sub> = J + λ‖w‖²")}, avec ${f("λ = 1/(2mτ²)")}, et ${f("∇J<sub>λ</sub> = (1/m) Xᵀ(p − y) + 2λw")}. scikit-learn minimise ½‖w‖² + C Σ ℓ ; en divisant par Cm, on retrouve J<sub>λ</sub> avec λ = 1/(2mC). Le C = ${dec(MOD.C, 4)} choisi par Optuna donne λ = ${dec(LAMBDA, 3)} et τ = ${dec(TAU, 2)}. Comme en L2, où ridge rend XᵀX + λI inversible quand des variables se répètent, la pénalité stabilise les poids. L'intercept n'a pas de prior : liblinear le pénalisait et tirait les probabilités vers 50 %, d'où le solveur ${MOD.solveur}.`,
     chiffres: [[dec(MOD.C, 4), "C, choisi par Optuna"], [dec(LAMBDA, 3), "λ = 1/(2mC)"], [dec(TAU, 2), "τ, écart-type a priori d'un poids"]],
     ton: { mur: "#a87b66", sol: "#8f7466", ciel: "#fbe9de", texte: "#fff4ec", accent: "#efc9b4" },
   },
   {
     id: "m-convexite", num: "V", nom: "La convexité", kanji: "凸",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
+    seances: [["L7", "Le coût pénalisé, strictement convexe"], ["L8", "Sensibilité au point de départ"]],
+    presenter: [
+      `<b>La hessienne.</b> ${f("H = (1/m) X̃ᵀ S X̃ + 2λ diag(1, …, 1, 0)")}, avec ${f("S = diag(p(1 − p))")} : elle est définie positive.`,
+      "<b>Donc un seul minimum.</b> Le coût pénalisé est strictement convexe : il a au plus un minimum, et la pénalité, qui le fait croître sans limite, garantit qu'il existe.",
+      "<b>Vérifié (L8).</b> Trois départs très différents, de J = 0,69 à 12,4, arrivent au même minimum à 10⁻¹⁷ près.",
+    ],
     titre: "Un seul fond de vallée",
     oeuvre: "Le paysage du coût",
     legende: "La surface de log-loss pénalisée sur deux coefficients, gravée de ses courbes de niveau. La bille suit la descente de gradient jusqu'au minimum.",
@@ -286,6 +359,12 @@ const SALLES_MATHS = [
   {
     id: "m-descente", num: "VI", nom: "La descente", kanji: "降",
     notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
+    seances: [["L1", "La descente de gradient, un pas à la main"], ["L8", "Sensibilité au pas et aux itérations"]],
+    presenter: [
+      `<b>L'optimiseur de L1.</b> ${f("w ← w − α ∇J<sub>λ</sub>")}, répété jusqu'à ce que le gradient s'annule.`,
+      "<b>Le bon pas (L8).</b> Comme p(1 − p) ≤ ¼, L ≤ 0,962 : la descente converge pour α < 2/L = 2,08. Trop petit, elle traîne ; au-delà, elle oscille et s'éloigne.",
+      "<b>Vérifié.</b> Avec α = 1/L, la descente codée à la main retrouve lbfgs, le solveur de scikit-learn, à 4,6 × 10⁻⁶ près.",
+    ],
     titre: "Choisir la taille du pas",
     oeuvre: "Les quatre pas",
     legende: "Quatre tables, une par taille de pas, et le même point de départ. Trop petit, la bille n'arrive pas ; au-delà de 2/L, elle oscille et s'éloigne.",
@@ -295,14 +374,20 @@ const SALLES_MATHS = [
     ton: { mur: "#8ea2b1", sol: "#7a8791", ciel: "#eef3f7", texte: "#fafcfd", accent: "#dbe5ec" },
   },
   {
-    id: "m-preuve", num: "VII", nom: "La preuve", kanji: "証",
-    notebooks: ["03b_test_final", "05_annexe_maths_logistique", "08_ameliorations_sans_surapprentissage"], docs: ["annexe", "rapport"],
-    titre: `Ce que ${CHIFFRES.moisTest} mois peuvent prouver`,
-    oeuvre: "Les deux colonnes",
-    legende: `À gauche, une pile de ${CHIFFRES.moisTest} disques : les mois de test. À droite, la hauteur qu'il faudrait atteindre, environ ${nombre(Math.round(MATHS.moisPourPreuve / 10) * 10)} mois, pour qu'un gain de 0,02 de log-loss dépasse deux erreurs types.`,
-    clair: `Un écart entre deux modèles ne veut rien dire sans sa marge d'erreur. Sur ${CHIFFRES.moisTest} mois, l'écart de log-loss entre le modèle et la constante vaut à peine une erreur type : on ne peut conclure ni dans un sens ni dans l'autre. Pour prouver un gain réaliste, il faudrait des centaines de mois.`,
-    technique: `Écart moyen, mois par mois : ${f(`d̄ = ${dec(ECART_TEST.moyenne, 3)}`)}, écart-type ${dec(ECART_TEST.ecartType, 3)}, erreur type ${f(`s/√n = ${dec(ECART_TEST.erreurType, 3)}`)}. Les cibles mensuelles ne se chevauchent pas : l'erreur type simple suffit, et Newey-West donne presque la même. Pour qu'un gain de 0,02 dépasse deux erreurs types, il faut ${f("n ≥ (2s / 0,02)²")} ≈ ${nombre(MATHS.moisPourPreuve)} mois. Même verdict en régression : sur le rendement lui-même, les équations normales résolues à la main donnent R² = 0,12 sur l'entraînement, mais −1,77 sur la validation.${V3_INFO ? ` Tester plusieurs variantes demande plus encore : avec ${V3_INFO.tests} comparaisons sur ${V3_INFO.mois} mois, la correction de Holm multiplie la plus petite p-valeur par ${V3_INFO.tests}, puis la deuxième par ${V3_INFO.tests - 1}, et ainsi de suite (notebook 08) ; aucune ne reste sous 5 %.` : ""}`,
-    chiffres: [[dec(ECART_TEST.moyenne, 3), "écart moyen de log-loss, modèle − constante"], [`± ${dec(ECART_TEST.erreurType, 3)}`, "une erreur type"], [`≈ ${nombre(MATHS.moisPourPreuve)}`, "mois pour prouver un gain de 0,02"]],
+    id: "m-moindres", num: "VII", nom: "Les moindres carrés", kanji: "線",
+    notebooks: ["05_annexe_maths_logistique"], docs: ["annexe"],
+    seances: [["L2", "Moindres carrés, équations normales, R²"], ["L1", "Sur-apprentissage"]],
+    presenter: [
+      `<b>L'idée (L2).</b> Pourquoi ne pas prédire directement le rendement du mois suivant, par une régression linéaire sur les ${OLS.variables ?? 12} mêmes variables ?`,
+      `<b>Les équations normales, à la main.</b> ${f("X̃ᵀX̃β = X̃ᵀr")}, résolues sans inverser la matrice : elles retrouvent scikit-learn à ${OLS.ecart_scikit_learn != null ? "7 × 10⁻¹⁷" : "—"} près.`,
+      `<b>Le R² tranche.</b> ${OLS.r2_entrainement != null ? dec(OLS.r2_entrainement, 2) : "—"} sur l'entraînement, ${OLS.r2_validation != null ? dec(OLS.r2_validation, 2) : "—"} sur la validation : hors échantillon, la droite fait pire que la moyenne. D'où le choix d'une probabilité et d'un coût pénalisé.`,
+    ],
+    titre: "Et si l'on prédisait le rendement ?",
+    oeuvre: "Les deux nuages",
+    legende: `Une plaque et sa diagonale, où le rendement prévu égale le rendement réel. Chaque perle est un mois, posée à ces deux rendements : claires pour les ${M} mois d'entraînement, terre cuite pour les ${OLS.mois_validation ?? 24} mois de validation, qui s'écartent de la diagonale.`,
+    clair: "Avant de prédire une probabilité, on peut tenter la régression linéaire de L2 sur le rendement lui-même. Les équations normales donnent la meilleure droite sur l'entraînement ; sur la validation, elle fait pire que la simple moyenne. C'est ce qui justifie de prédire une probabilité, avec un coût pénalisé.",
+    technique: `Mêmes ${OLS.variables ?? 12} variables, plus une colonne de 1 : au fond du bol, le gradient de ${f("Σ (r − X̃β)²")} s'annule, ce qui donne les équations normales ${f("X̃ᵀX̃β = X̃ᵀr")}. Résolues avec np.linalg.solve, sans calculer d'inverse, elles retrouvent scikit-learn à 7 × 10⁻¹⁷ près. ${f("R² = 1 − Σ(r − r̂)² / Σ(r − r̄)²")} vaut ${OLS.r2_entrainement != null ? dec(OLS.r2_entrainement, 3) : "—"} sur l'entraînement et ${OLS.r2_validation != null ? dec(OLS.r2_validation, 3) : "—"} sur la validation. Un R² négatif veut dire que la droite prédit moins bien que la moyenne : le R² d'entraînement est optimiste, c'est le sur-apprentissage de L1.`,
+    chiffres: [[OLS.r2_entrainement != null ? dec(OLS.r2_entrainement, 2) : "—", "R² sur l'entraînement"], [OLS.r2_validation != null ? dec(OLS.r2_validation, 2) : "—", "R² sur la validation"], ["7 × 10⁻¹⁷", "écart des équations normales avec scikit-learn"]],
     ton: { mur: "#56485e", sol: "#6c6270", ciel: "#efe6f1", texte: "#f7f2f8", accent: "#cdbdd3" },
   },
 ];
@@ -335,8 +420,8 @@ const COURS_INFO = {
   maths: {
     nom: "Maths", cours: "Mathematics & Statistics for Machine Learning",
     h1: "La régression logistique, <em>refaite à la main</em>",
-    devise: "D'une vraisemblance de Bernoulli à une descente de gradient qui retrouve scikit-learn : le modèle du projet, dérivé et vérifié pas à pas.",
-    verdict: `La log-loss est l'opposé d'une log-vraisemblance ; son gradient vaut (1/m)·Xᵀ(p − y) ; la pénalité L2 est un prior gaussien qui rend le problème strictement convexe ; la descente converge pour α < 2/L. Et sur ${CHIFFRES.moisTest} mois de test, aucun écart entre modèles n'est assez grand pour être prouvé.`,
+    devise: "Ce que demande l'annexe du cours : dériver le coût, le gradient et le prior du modèle du projet, puis étudier la sensibilité de son optimisation, jusqu'à une descente codée à la main qui retrouve scikit-learn.",
+    verdict: `La log-loss est l'opposé d'une log-vraisemblance ; son gradient vaut (1/m)·Xᵀ(p − y) ; la pénalité L2 est un prior gaussien qui rend le problème strictement convexe ; la descente converge pour α < 2/L. Et une régression linéaire sur le rendement, résolue par les équations normales, fait pire que la moyenne hors échantillon (R² = ${OLS.r2_validation != null ? dec(OLS.r2_validation, 2) : "—"}).`,
     rotonde: { mur: 0xcdd0cd, sol: 0xb8b2ab, fond: 0xc9ccc9 },
   },
 };
@@ -344,7 +429,7 @@ const COURS_INFO = {
 const ENTREE = {
   titre: "Le Nikkei, mois après mois",
   devise: COURS === "maths"
-    ? "Comment un modèle apprend-il ses poids, et que peut-on en prouver ?"
+    ? "Comment le modèle du projet apprend-il ses poids, et comment le vérifier ?"
     : "Peut-on savoir, à la fin d'un mois, s'il faut acheter le Nikkei le mois suivant ?",
   ecole: "Applied ML · Mathematics & Statistics for ML — Albert School, MSc 1, automne 2026",
 };
@@ -363,7 +448,7 @@ const LIMITES_MATHS = [
   ["Le prior n'est pas fixé à l'avance.", "λ, donc τ, vient d'une validation croisée : c'est un réglage appris sur les données, pas une croyance posée avant de les voir."],
   ["La surface en deux dimensions est une simplification.", "Pour dessiner le coût, l'intercept est fixé à son optimum et seules deux variables sont gardées ; les constantes L et la limite locale de cette surface diffèrent de celles du modèle complet (0,962 et 2,23)."],
   ["La borne 2/L est prudente.", "Elle vaut partout, mais près du minimum p(1 − p) reste nettement sous ¼ : la descente converge encore un peu au-delà, jusqu'à la limite locale."],
-  ["L'erreur type suppose des écarts indépendants.", "C'est raisonnable pour des cibles mensuelles qui ne se chevauchent pas ; sur des cibles qui se chevauchent, il faudrait Newey-West ou un bootstrap par blocs."],
+  ["Le R² d'entraînement est optimiste.", "Il est mesuré sur les mois qui ont servi à calculer β. Seul le R² de validation dit ce que la droite vaut sur des mois nouveaux : ici, moins que la moyenne."],
 ];
 const LIMITES = COURS === "maths" ? LIMITES_MATHS : LIMITES_ML;
 
@@ -523,6 +608,17 @@ function installerMenu({ page, allerSalle = null, salleActive = () => null }) {
   return { ouvrir, clore, estOuvert: () => menu.classList.contains("ouvert") };
 }
 
+// En arrivant dans une salle : les séances du cours qu'elle mobilise, puis les trois points à présenter
+function arrivee(salle) {
+  if (!salle.presenter?.length) return "";
+  const seances = (salle.seances ?? []).map(([code, nom]) => `<li><b>${code}</b>${nom}</li>`).join("");
+  return `<div class="arrivee">
+    ${seances ? `<p class="sur-titre">Vu en cours · ${COURS_INFO[COURS].nom}</p><ul class="seances">${seances}</ul>` : ""}
+    <p class="sur-titre">À présenter en arrivant</p>
+    <ol class="a-presenter">${salle.presenter.map((p) => `<li>${p}</li>`).join("")}</ol>
+  </div>`;
+}
+
 // Les notebooks et documents d'une salle, en boutons ; data-nb ouvre la liseuse sans quitter la page
 function liensPieces(salle) {
   const nbs = salle.notebooks.map((n) => `<li class="piece-nb"><button type="button" class="piece-lien" data-nb="${n}"><span class="sur-titre">${nomNotebook(n)}</span><span class="t">${titreNotebook(n)}</span>${FLECHE}</button>${lienIpynb(n, "piece-telecharger")}</li>`);
@@ -587,7 +683,7 @@ function installerLiseuse() {
   return { estOuverte: () => !l.hidden };
 }
 
-return { FLECHE, FLECHE_G, stocker, lire, titreNotebook, BAS, telechargement, etiquetteNb, lienIpynb, archives, lienArchive, installerEntete, installerMenu, liensPieces, ouvrirDansCadre, installerLiseuse };
+return { FLECHE, FLECHE_G, stocker, lire, titreNotebook, BAS, telechargement, etiquetteNb, lienIpynb, archives, lienArchive, installerEntete, installerMenu, arrivee, liensPieces, ouvrirDansCadre, installerLiseuse };
 })();
 const __oeuvres = (() => {
 "use strict";
@@ -636,6 +732,7 @@ function socleCarre(l, h, p) {
 }
 
 const SERIE = D.v2?.serie ?? D.serie;   // table 1999-2026 (seconde version) si elle est là
+const SCORES = D.maths?.scores_entrainement ?? [];   // [mois, score wᵀx + b, baisse] des mois d'entraînement (parcours Maths)
 const lisser = (v, k) => v.map((_, i) => { let s = 0, n = 0; for (let j = i - k; j <= i + k; j++) if (v[j] != null) { s += v[j]; n++; } return s / n; });
 
 // ---------- I. Le vase des 201 mois ----------
@@ -875,15 +972,15 @@ function sigmoide() {
   const bloc = new THREE.Mesh(geo, MATIERES.ceramique);
   bloc.position.y = H0;
   g.add(bloc);
-  // une perle par mois de validation et de test, à son score u = logit(p de baisse)
+  // une perle par mois d'entraînement, à son score u = wᵀx + b
   const places = new Map();
-  for (const m of D.historique_validation.concat(D.historique_test)) {
-    const p = 1 - m.p_hausse, u = Math.log(p / (1 - p)), x = (u / U) * LX;
+  for (const [, u0, baisse] of SCORES) {
+    const u = Math.max(-U, Math.min(U, u0)), x = (u / U) * LX;
     const cle = Math.round(x / 0.07);
     const rang = places.get(cle) ?? 0; places.set(cle, rang + 1);
-    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.034, 20, 14), m.hausse_realisee ? MATIERES.ceramique : MATIERES.basalte);
+    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.03, 20, 14), baisse ? MATIERES.basalte : MATIERES.ceramique);
     // les perles d'un même score se rangent dans l'épaisseur du bloc, puis s'empilent
-    perle.position.set(x, H0 + 0.12 + sigma(u) * HAUT + 0.05 + Math.floor(rang / 4) * 0.066, -0.12 + (rang % 4) * 0.08);
+    perle.position.set(x, H0 + 0.12 + sigma(u) * HAUT + 0.045 + Math.floor(rang / 4) * 0.058, -0.12 + (rang % 4) * 0.08);
     g.add(perle);
   }
   return ombres(g);
@@ -908,11 +1005,11 @@ function branches() {
     const bout = new THREE.Mesh(new THREE.SphereGeometry(0.035, 16, 12), z < 0 ? MATIERES.basalte : MATIERES.ceramique);
     bout.position.copy(c.getPointAt(t)); bout.position.z = z; g.add(bout);
   }
-  // les 33 mois de test, à la perte payée : sur la branche « baisse » si le mois a baissé
-  for (const m of D.historique_test) {
-    const p = 1 - m.p_hausse, y = m.hausse_realisee ? 0 : 1, perte = y ? -Math.log(p) : -Math.log(1 - p);
-    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.042, 20, 14), MATIERES.argile);
-    perle.position.set(x(p), H0 + 0.08 + perte * K + 0.06, y ? -0.12 : 0.12);
+  // les mois d'entraînement, à la perte payée : sur la branche « baisse » si le mois a baissé
+  for (const [, u, y] of SCORES) {
+    const p = sigma(u), perte = y ? -Math.log(p) : -Math.log(1 - p);
+    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.03, 18, 12), MATIERES.argile);
+    perle.position.set(x(Math.min(0.97, Math.max(0.03, p))), H0 + 0.08 + perte * K + 0.05, y ? -0.12 : 0.12);
     g.add(perle);
   }
   return ombres(g);
@@ -988,40 +1085,40 @@ function cloche() {
   return ombres(g);
 }
 
-// ---------- Les deux colonnes : les mois qu'on a, les mois qu'il faudrait (Maths VII) ----------
-function colonnes(etat) {
+// ---------- Les deux nuages : les moindres carrés, sur l'entraînement et sur la validation (Maths VII) ----------
+function nuages(etat) {
   const g = new THREE.Group();
-  const H0 = 0.35, HMAX = 3.1;
-  etat.vue = { oeil: 2.0, cible: 1.9, titre: 4.3 };
-  g.add(socleCarre(2.2, H0, 1.2));
-  const n = D.historique_test.length;
-  const pi = (2 * (() => { const h = D.historique_test, pc = 1 - D.evaluation.metriques["constante (fréquence de l'entraînement)"]["proba moyenne"];
-    const ll = (p, y) => -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
-    const d = h.map((m) => ll(m.p_hausse, m.hausse_realisee) - ll(pc, m.hausse_realisee)), moy = d.reduce((a, b) => a + b, 0) / d.length;
-    return Math.sqrt(d.reduce((a, b) => a + (b - moy) ** 2, 0) / (d.length - 1)); })()) / 0.02;
-  const besoin = Math.ceil(pi * pi), pas = HMAX / besoin;
-  // à gauche : les 33 mois de test, empilés
-  const pile = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.3, pas * 0.8, 48), MATIERES.ceramique, n);
-  const m4 = new THREE.Matrix4();
-  for (let k = 0; k < n; k++) { m4.makeTranslation(-0.5, H0 + pas * (k + 0.5), 0); pile.setMatrixAt(k, m4); }
-  g.add(pile);
-  // à droite : la colonne qu'il faudrait, en verre dépoli, graduée tous les 100 mois
-  const verre = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, HMAX, 64), new THREE.MeshPhysicalMaterial({ color: 0xf4efe8, roughness: 0.25, transparent: true, opacity: 0.32, depthWrite: false, clearcoat: 1 }));
-  verre.position.set(0.5, H0 + HMAX / 2, 0);
-  g.add(verre);
-  for (let mois = 100; mois < besoin; mois += 100) {
-    const anneau = new THREE.Mesh(new THREE.TorusGeometry(0.302, 0.004, 6, 64), MATIERES.sillon);
-    anneau.rotation.x = Math.PI / 2;
-    anneau.position.set(0.5, H0 + mois * pas, 0);
-    g.add(anneau);
+  const H0 = 0.7, L = 2.3;
+  etat.vue = { oeil: 3.1, cible: 1.0, titre: 2.9 };
+  g.add(socleCarre(L * 0.66, H0 - 0.05, L * 0.66));
+  const plaque = new THREE.Mesh(boiteArrondie(L, L, 0.07, 0.02, 2), MATIERES.socle);
+  plaque.geometry.rotateX(-Math.PI / 2);
+  plaque.position.y = H0;
+  g.add(plaque);
+  const ols = D.maths?.ols ?? { entrainement: [], validation: [] };
+  const tous = ols.entrainement.concat(ols.validation).flatMap(([, a, b]) => [a, b]);
+  const lim = Math.max(0.08, ...tous.map(Math.abs)) * 1.05;
+  const pos = (v) => (v / lim) * (L / 2 - 0.08);
+  // la diagonale : rendement prévu = rendement réel
+  const diag = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, Math.SQRT2 * (L - 0.16), 12), MATIERES.encre);
+  diag.rotation.z = Math.PI / 2; diag.rotation.y = Math.PI / 4;
+  diag.position.y = H0 + 0.05;
+  g.add(diag);
+  for (const axe of [0, Math.PI / 2]) {
+    const trait = new THREE.Mesh(new THREE.BoxGeometry(L - 0.16, 0.004, 0.006), MATIERES.sillon);
+    trait.rotation.y = axe; trait.position.y = H0 + 0.037;
+    g.add(trait);
   }
-  const niveau = new THREE.Mesh(new THREE.TorusGeometry(0.305, 0.008, 8, 64), MATIERES.argile);
-  niveau.rotation.x = Math.PI / 2;
-  niveau.position.set(0.5, H0 + n * pas, 0);
-  g.add(niveau);
-  const couvercle = new THREE.Mesh(new THREE.CylinderGeometry(0.31, 0.31, 0.02, 64), MATIERES.basalte);
-  couvercle.position.set(0.5, H0 + HMAX + 0.01, 0);
-  g.add(couvercle);
+  // x : rendement prévu ; profondeur : rendement réel (vers le visiteur quand il est négatif)
+  const poser = (liste, matiere, r) => {
+    for (const [, prevu, reel] of liste) {
+      const perle = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), matiere);
+      perle.position.set(pos(prevu), H0 + 0.035 + r, -pos(reel));
+      g.add(perle);
+    }
+  };
+  poser(ols.entrainement, MATIERES.ceramique, 0.026);
+  poser(ols.validation, MATIERES.argile, 0.034);
   return ombres(g);
 }
 
@@ -1218,7 +1315,7 @@ function balance(etat) {
 
 const OEUVRES = {
   dataset: pile, exploration: vase, apprentissage: essais, regle: cadran, epreuve: cercle, explication: balance, apres: souffle,
-  "m-modele": sigmoide, "m-cout": branches, "m-gradient": pentes, "m-prior": cloche, "m-convexite": paysage, "m-descente": quatrePas, "m-preuve": colonnes,
+  "m-modele": sigmoide, "m-cout": branches, "m-gradient": pentes, "m-prior": cloche, "m-convexite": paysage, "m-descente": quatrePas, "m-moindres": nuages,
 };
 
 // ---------- les tableaux du mur du fond : un dégradé et une seule courbe tirée des données ----------
@@ -1242,11 +1339,10 @@ function seriePourTableau(id) {
   if (id === "m-prior") return { ligne: grille(120, (t) => Math.exp(-Math.pow((t - 0.5) * 6, 2) / 2)) };
   if (id === "m-convexite" || id === "m-gradient") return { ligne: norm(D.surface.trajectoires["classique (1/L)"].points.slice(0, 20).map((q) => q[2])) };
   if (id === "m-descente") return { ligne: norm(D.surface.trajectoires["près de la limite"].points.slice(0, 30).map((q) => q[2])), ligne2: norm(D.surface.trajectoires["trop petit"].points.slice(0, 30).map((q) => q[2])) };
-  if (id === "m-preuve") {
-    const pc = 1 - D.evaluation.metriques["constante (fréquence de l'entraînement)"]["proba moyenne"];
-    const ll = (p, y) => -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
-    let somme = 0;
-    return { ligne: norm(D.historique_test.map((m, i) => (somme += ll(m.p_hausse, m.hausse_realisee) - ll(pc, m.hausse_realisee)) / (i + 1))) };
+  if (id === "m-moindres") {
+    const v = D.maths?.ols?.validation ?? [];
+    const tout = norm(v.map(([, a]) => a).concat(v.map(([, , b]) => b)));
+    return { ligne: tout.slice(v.length), ligne2: tout.slice(0, v.length) };
   }
   return {};
 }
@@ -1259,7 +1355,7 @@ const __visite = (() => {
 const THREE = __three;
 const { SALLES, ENTREE, COURS, COURS_INFO, avecCours } = __contenu;
 const { OEUVRES, seriePourTableau, boiteArrondie } = __oeuvres;
-const { installerMenu, installerEntete, installerLiseuse, liensPieces, FLECHE, FLECHE_G, stocker, lire } = __commun;
+const { installerMenu, installerEntete, installerLiseuse, liensPieces, arrivee, FLECHE, FLECHE_G, stocker, lire } = __commun;
 const TEINTE = COURS_INFO[COURS].rotonde;   // la rotonde change de teinte avec le cours
 
 const $ = (s) => document.querySelector(s);
@@ -1744,7 +1840,8 @@ function majRotonde() {
   $("#precedente").setAttribute("aria-label", `Salle précédente : ${SALLES[p].nom}`);
   $("#suivante").innerHTML = `<span class="nom">${SALLES[n].nom}</span>${FLECHE}`;
   $("#suivante").setAttribute("aria-label", `Salle suivante : ${SALLES[n].nom}`);
-  $("#courante-num").innerHTML = `<span class="sceau" aria-hidden="true">${SALLES[i].kanji}</span>SALLE ${SALLES[i].num} — ${i + 1} / ${N}`;
+  const seances = (SALLES[i].seances ?? []).map(([code]) => code).filter((c) => /^[SL]\d/.test(c)).join(" · ");
+  $("#courante-num").innerHTML = `<span class="sceau" aria-hidden="true">${SALLES[i].kanji}</span>SALLE ${SALLES[i].num} — ${i + 1} / ${N}${seances ? ` · ${seances}` : ""}`;
   $("#courante-nom").textContent = SALLES[i].nom;
   $("#courante-nom").setAttribute("aria-label", `Entrer dans la salle ${SALLES[i].num} : ${SALLES[i].nom}`);
   nav.classList.remove("change"); void nav.offsetWidth; nav.classList.add("change");
@@ -1755,6 +1852,7 @@ function majCartel() {
     <button class="cartel-replier" type="button">Replier</button>
     <p class="sur-titre"><span class="sceau" aria-hidden="true">${s.kanji}</span>Salle ${s.num} · ${s.nom}</p>
     <h2>${s.titre}</h2>
+    ${arrivee(s)}
     <p class="oeuvre">${s.oeuvre}</p>
     <p class="clair">${s.clair}</p>
     <dl>${s.chiffres.map(([v, l]) => `<div><dt>${v}</dt><dd>${l}</dd></div>`).join("")}</dl>

@@ -117,6 +117,44 @@ def modele_final() -> dict:
             "C": round(float(reg.C), 6), "solveur": reg.solver}
 
 
+def maths_cours() -> dict:
+    """Parcours Maths : la log-loss d'entraînement du modèle figé, et l'option L2 de l'annexe (notebook 05, section 7) :
+    les équations normales résolues à la main pour prédire le rendement du mois suivant, et le R² qu'elles donnent."""
+    import joblib
+    import numpy as np
+    import pandas as pd
+    import yaml
+    from sklearn.linear_model import LinearRegression
+
+    cfg = yaml.safe_load(open(ROOT / "config.yaml"))
+    table = pd.read_csv(ROOT / cfg["data"]["model_table"], parse_dates=["date"]).set_index("date")
+    features = [c for g in ["news", "price", "macro", "fx"] for c in cfg["features"][g]]
+    colonnes = features + [c for c in cfg["features"]["regime"] if c not in features]
+    train, valid = table[table["bloc"] == "entraînement"], table[table["bloc"] == "validation"]
+    pipe = joblib.load(ROOT / "runs" / "models" / "nikkei_logit.joblib")
+    prep = pipe[:-1]
+    X, Xv = prep.transform(train[colonnes]), prep.transform(valid[colonnes])
+    y = train["y_baisse"].astype(int).to_numpy()
+    p = np.clip(pipe.predict_proba(train[colonnes])[:, 1], 1e-12, 1 - 1e-12)
+    w = pipe.named_steps["model"].coef_[0]
+    lam = 1 / (2 * len(y) * pipe.named_steps["model"].C)
+    ll = float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
+    Xt, Xvt = np.c_[X, np.ones(len(X))], np.c_[Xv, np.ones(len(Xv))]
+    r, rv = train["target_rn_next"].to_numpy(), valid["target_rn_next"].to_numpy()
+    beta = np.linalg.solve(Xt.T @ Xt, Xt.T @ r)
+    ols = LinearRegression().fit(X, r)
+    r2 = lambda vrai, prevu: float(1 - ((vrai - prevu) ** 2).sum() / ((vrai - vrai.mean()) ** 2).sum())
+    pv = Xvt @ beta
+    u = X @ w + pipe.named_steps["model"].intercept_[0]          # score wᵀx + b de chaque mois d'entraînement
+    return {"logloss_entrainement": ll, "cout_penalise_entrainement": ll + lam * float(w @ w), "lambda": lam, "mois_entrainement": int(len(y)),
+            "scores_entrainement": [[d.strftime("%Y-%m"), round(float(a), 4), int(b)] for d, a, b in zip(train.index, u, y)],
+            "ols": {"r2_entrainement": r2(r, Xt @ beta), "r2_validation": r2(rv, pv),
+                    "ecart_scikit_learn": float(np.abs(beta - np.r_[ols.coef_, ols.intercept_]).max()),
+                    "variables": int(X.shape[1]), "mois_validation": int(len(rv)),
+                    "entrainement": [[d.strftime("%Y-%m"), round(float(a), 5), round(float(b), 5)] for d, a, b in zip(train.index, Xt @ beta, r)],
+                    "validation": [[d.strftime("%Y-%m"), round(float(a), 5), round(float(b), 5)] for d, a, b in zip(valid.index, pv, rv)]}}
+
+
 # ---------- paquets : un script classique par page, pour ouvrir le site d'un double-clic ----------
 # Les navigateurs refusent les modules JavaScript ouverts depuis le disque (file://). On assemble donc, pour
 # chaque page, Three.js et nos modules en un seul script classique : chaque module devient une fonction qui
@@ -380,6 +418,7 @@ def main() -> None:
     donnees["modele"] = modele_final()
     donnees["v2"] = version_2()
     donnees["v3"] = version_3()
+    donnees["maths"] = maths_cours()
     donnees["telechargements"] = telechargements()
     donnees["dataset"] = dataset()
 

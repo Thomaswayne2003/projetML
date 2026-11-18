@@ -106,6 +106,17 @@ export function installerMenu({ page, allerSalle = null, salleActive = () => nul
   return { ouvrir, clore, estOuvert: () => menu.classList.contains("ouvert") };
 }
 
+// En arrivant dans une salle : les séances du cours qu'elle mobilise, puis les trois points à présenter
+export function arrivee(salle) {
+  if (!salle.presenter?.length) return "";
+  const seances = (salle.seances ?? []).map(([code, nom]) => `<li><b>${code}</b>${nom}</li>`).join("");
+  return `<div class="arrivee">
+    ${seances ? `<p class="sur-titre">Vu en cours · ${COURS_INFO[COURS].nom}</p><ul class="seances">${seances}</ul>` : ""}
+    <p class="sur-titre">À présenter en arrivant</p>
+    <ol class="a-presenter">${salle.presenter.map((p) => `<li>${p}</li>`).join("")}</ol>
+  </div>`;
+}
+
 // Les notebooks et documents d'une salle, en boutons ; data-nb ouvre la liseuse sans quitter la page
 export function liensPieces(salle) {
   const nbs = salle.notebooks.map((n) => `<li class="piece-nb"><button type="button" class="piece-lien" data-nb="${n}"><span class="sur-titre">${nomNotebook(n)}</span><span class="t">${titreNotebook(n)}</span>${FLECHE}</button>${lienIpynb(n, "piece-telecharger")}</li>`);
