@@ -35,6 +35,8 @@ export function installerEntete(page) {
     a.setAttribute("aria-current", a.dataset.cours === COURS ? "page" : "false");
   });
   document.querySelectorAll("a[data-lien]").forEach((a) => (a.href = avecCours(a.dataset.lien)));
+  // le lien EN ouvre la même page de la version anglaise (site/en/), avec le même cours (et le même notebook dans le cabinet)
+  document.querySelectorAll("a[data-langue]").forEach((a) => (a.href = `en/${page === "cabinet" ? "cabinet.html" : page === "lecture" ? "lecture.html" : "index.html"}${location.search || `?cours=${COURS}`}${location.hash}`));
 }
 
 // page : "visite" | "lecture" | "cabinet" ; allerSalle(id) : appelé par la visite pour se déplacer sans recharger
