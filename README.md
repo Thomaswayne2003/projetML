@@ -176,8 +176,13 @@ le protocole, les résultats, les leviers en euros et l'explicabilité :
 
 ## Le site : visite et lecture
 
-Le site de présentation est dans `site/`. Il est statique : ni API à lancer, ni serveur obligatoire. Trois façons de
-l'ouvrir :
+**En ligne : https://thomaswayne2003.github.io/projetML/** (GitHub Pages, branche `gh-pages`).
+
+Le site de présentation est dans `site/`. Il est statique : ni API à lancer, ni serveur obligatoire. Pour mettre à jour
+la version en ligne, commiter les changements puis lancer `sh publier_site.sh`, qui met le contenu de `site/` sur la
+branche `gh-pages`.
+
+En local, trois façons de l'ouvrir :
 - **double-cliquer sur `Ouvrir le site.html`** : le site s'ouvre directement depuis le disque ;
 - **`php lancer.php`** (PHP 8 ou plus récent) : lance le serveur intégré de PHP et ouvre le navigateur ;
 - **double-cliquer sur `Lancer le projet.command`**, choix 1 (serveur Python).
