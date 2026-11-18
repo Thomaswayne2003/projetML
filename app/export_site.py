@@ -117,6 +117,24 @@ def modele_final() -> dict:
             "C": round(float(reg.C), 6), "solveur": reg.solver}
 
 
+def versionner() -> None:
+    """Chaque page appelle ses scripts et ses styles avec une empreinte de leur contenu (?v=…) : en ligne, un navigateur
+    qui garde une ancienne copie en cache recharge le fichier dès qu'il change, sans jamais mélanger deux versions."""
+    import hashlib
+
+    def empreinte(m: re.Match) -> str:
+        chemin = m.group(2)
+        cible = SITE / chemin
+        if not cible.exists():
+            return m.group(0)
+        return f'{m.group(1)}="{chemin}?v={hashlib.sha256(cible.read_bytes()).hexdigest()[:10]}"'
+    for page in ("index.html", "lecture.html", "cabinet.html"):
+        p = SITE / page
+        html = p.read_text(encoding="utf-8")
+        html = re.sub(r'(src|href)="((?:assets|data)/[^"?]+\.(?:js|css))(?:\?v=[0-9a-f]+)?"', empreinte, html)
+        p.write_text(html, encoding="utf-8")
+
+
 def maths_cours() -> dict:
     """Parcours Maths : la log-loss d'entraînement du modèle figé, et l'option L2 de l'annexe (notebook 05, section 7) :
     les équations normales résolues à la main pour prédire le rendement du mois suivant, et le R² qu'elles donnent."""
@@ -454,6 +472,7 @@ def main() -> None:
         copier(ROOT / "web" / "assets" / "three.module.min.js", vendeur)
     images_integrees()
     paquets()
+    versionner()
 
 
 if __name__ == "__main__":
