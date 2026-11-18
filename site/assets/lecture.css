@@ -254,3 +254,5 @@ body.boite-ouverte, body.liseuse-ouverte { overflow: hidden; }
 td .ok { color: var(--pin); font-weight: 500; }
 td .non { color: var(--argile); }
 .leviers th:first-child, .leviers td:first-child { min-width: 15em; }
+.chapitre-corps .arrivee { margin: 0; padding: 18px 20px 20px; }
+.chapitre-corps .arrivee .a-presenter { font-size: 15px; gap: 11px; max-width: 46em; }

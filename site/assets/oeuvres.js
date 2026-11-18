@@ -44,6 +44,7 @@ function socleCarre(l, h, p) {
 }
 
 const SERIE = D.v2?.serie ?? D.serie;   // table 1999-2026 (seconde version) si elle est là
+const SCORES = D.maths?.scores_entrainement ?? [];   // [mois, score wᵀx + b, baisse] des mois d'entraînement (parcours Maths)
 const lisser = (v, k) => v.map((_, i) => { let s = 0, n = 0; for (let j = i - k; j <= i + k; j++) if (v[j] != null) { s += v[j]; n++; } return s / n; });
 
 // ---------- I. Le vase des 201 mois ----------
@@ -283,15 +284,15 @@ function sigmoide() {
   const bloc = new THREE.Mesh(geo, MATIERES.ceramique);
   bloc.position.y = H0;
   g.add(bloc);
-  // une perle par mois de validation et de test, à son score u = logit(p de baisse)
+  // une perle par mois d'entraînement, à son score u = wᵀx + b
   const places = new Map();
-  for (const m of D.historique_validation.concat(D.historique_test)) {
-    const p = 1 - m.p_hausse, u = Math.log(p / (1 - p)), x = (u / U) * LX;
+  for (const [, u0, baisse] of SCORES) {
+    const u = Math.max(-U, Math.min(U, u0)), x = (u / U) * LX;
     const cle = Math.round(x / 0.07);
     const rang = places.get(cle) ?? 0; places.set(cle, rang + 1);
-    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.034, 20, 14), m.hausse_realisee ? MATIERES.ceramique : MATIERES.basalte);
+    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.03, 20, 14), baisse ? MATIERES.basalte : MATIERES.ceramique);
     // les perles d'un même score se rangent dans l'épaisseur du bloc, puis s'empilent
-    perle.position.set(x, H0 + 0.12 + sigma(u) * HAUT + 0.05 + Math.floor(rang / 4) * 0.066, -0.12 + (rang % 4) * 0.08);
+    perle.position.set(x, H0 + 0.12 + sigma(u) * HAUT + 0.045 + Math.floor(rang / 4) * 0.058, -0.12 + (rang % 4) * 0.08);
     g.add(perle);
   }
   return ombres(g);
@@ -316,11 +317,11 @@ function branches() {
     const bout = new THREE.Mesh(new THREE.SphereGeometry(0.035, 16, 12), z < 0 ? MATIERES.basalte : MATIERES.ceramique);
     bout.position.copy(c.getPointAt(t)); bout.position.z = z; g.add(bout);
   }
-  // les 33 mois de test, à la perte payée : sur la branche « baisse » si le mois a baissé
-  for (const m of D.historique_test) {
-    const p = 1 - m.p_hausse, y = m.hausse_realisee ? 0 : 1, perte = y ? -Math.log(p) : -Math.log(1 - p);
-    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.042, 20, 14), MATIERES.argile);
-    perle.position.set(x(p), H0 + 0.08 + perte * K + 0.06, y ? -0.12 : 0.12);
+  // les mois d'entraînement, à la perte payée : sur la branche « baisse » si le mois a baissé
+  for (const [, u, y] of SCORES) {
+    const p = sigma(u), perte = y ? -Math.log(p) : -Math.log(1 - p);
+    const perle = new THREE.Mesh(new THREE.SphereGeometry(0.03, 18, 12), MATIERES.argile);
+    perle.position.set(x(Math.min(0.97, Math.max(0.03, p))), H0 + 0.08 + perte * K + 0.05, y ? -0.12 : 0.12);
     g.add(perle);
   }
   return ombres(g);
@@ -396,40 +397,40 @@ function cloche() {
   return ombres(g);
 }
 
-// ---------- Les deux colonnes : les mois qu'on a, les mois qu'il faudrait (Maths VII) ----------
-function colonnes(etat) {
+// ---------- Les deux nuages : les moindres carrés, sur l'entraînement et sur la validation (Maths VII) ----------
+function nuages(etat) {
   const g = new THREE.Group();
-  const H0 = 0.35, HMAX = 3.1;
-  etat.vue = { oeil: 2.0, cible: 1.9, titre: 4.3 };
-  g.add(socleCarre(2.2, H0, 1.2));
-  const n = D.historique_test.length;
-  const pi = (2 * (() => { const h = D.historique_test, pc = 1 - D.evaluation.metriques["constante (fréquence de l'entraînement)"]["proba moyenne"];
-    const ll = (p, y) => -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
-    const d = h.map((m) => ll(m.p_hausse, m.hausse_realisee) - ll(pc, m.hausse_realisee)), moy = d.reduce((a, b) => a + b, 0) / d.length;
-    return Math.sqrt(d.reduce((a, b) => a + (b - moy) ** 2, 0) / (d.length - 1)); })()) / 0.02;
-  const besoin = Math.ceil(pi * pi), pas = HMAX / besoin;
-  // à gauche : les 33 mois de test, empilés
-  const pile = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.3, pas * 0.8, 48), MATIERES.ceramique, n);
-  const m4 = new THREE.Matrix4();
-  for (let k = 0; k < n; k++) { m4.makeTranslation(-0.5, H0 + pas * (k + 0.5), 0); pile.setMatrixAt(k, m4); }
-  g.add(pile);
-  // à droite : la colonne qu'il faudrait, en verre dépoli, graduée tous les 100 mois
-  const verre = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, HMAX, 64), new THREE.MeshPhysicalMaterial({ color: 0xf4efe8, roughness: 0.25, transparent: true, opacity: 0.32, depthWrite: false, clearcoat: 1 }));
-  verre.position.set(0.5, H0 + HMAX / 2, 0);
-  g.add(verre);
-  for (let mois = 100; mois < besoin; mois += 100) {
-    const anneau = new THREE.Mesh(new THREE.TorusGeometry(0.302, 0.004, 6, 64), MATIERES.sillon);
-    anneau.rotation.x = Math.PI / 2;
-    anneau.position.set(0.5, H0 + mois * pas, 0);
-    g.add(anneau);
+  const H0 = 0.7, L = 2.3;
+  etat.vue = { oeil: 3.1, cible: 1.0, titre: 2.9 };
+  g.add(socleCarre(L * 0.66, H0 - 0.05, L * 0.66));
+  const plaque = new THREE.Mesh(boiteArrondie(L, L, 0.07, 0.02, 2), MATIERES.socle);
+  plaque.geometry.rotateX(-Math.PI / 2);
+  plaque.position.y = H0;
+  g.add(plaque);
+  const ols = D.maths?.ols ?? { entrainement: [], validation: [] };
+  const tous = ols.entrainement.concat(ols.validation).flatMap(([, a, b]) => [a, b]);
+  const lim = Math.max(0.08, ...tous.map(Math.abs)) * 1.05;
+  const pos = (v) => (v / lim) * (L / 2 - 0.08);
+  // la diagonale : rendement prévu = rendement réel
+  const diag = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, Math.SQRT2 * (L - 0.16), 12), MATIERES.encre);
+  diag.rotation.z = Math.PI / 2; diag.rotation.y = Math.PI / 4;
+  diag.position.y = H0 + 0.05;
+  g.add(diag);
+  for (const axe of [0, Math.PI / 2]) {
+    const trait = new THREE.Mesh(new THREE.BoxGeometry(L - 0.16, 0.004, 0.006), MATIERES.sillon);
+    trait.rotation.y = axe; trait.position.y = H0 + 0.037;
+    g.add(trait);
   }
-  const niveau = new THREE.Mesh(new THREE.TorusGeometry(0.305, 0.008, 8, 64), MATIERES.argile);
-  niveau.rotation.x = Math.PI / 2;
-  niveau.position.set(0.5, H0 + n * pas, 0);
-  g.add(niveau);
-  const couvercle = new THREE.Mesh(new THREE.CylinderGeometry(0.31, 0.31, 0.02, 64), MATIERES.basalte);
-  couvercle.position.set(0.5, H0 + HMAX + 0.01, 0);
-  g.add(couvercle);
+  // x : rendement prévu ; profondeur : rendement réel (vers le visiteur quand il est négatif)
+  const poser = (liste, matiere, r) => {
+    for (const [, prevu, reel] of liste) {
+      const perle = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), matiere);
+      perle.position.set(pos(prevu), H0 + 0.035 + r, -pos(reel));
+      g.add(perle);
+    }
+  };
+  poser(ols.entrainement, MATIERES.ceramique, 0.026);
+  poser(ols.validation, MATIERES.argile, 0.034);
   return ombres(g);
 }
 
@@ -626,7 +627,7 @@ function balance(etat) {
 
 export const OEUVRES = {
   dataset: pile, exploration: vase, apprentissage: essais, regle: cadran, epreuve: cercle, explication: balance, apres: souffle,
-  "m-modele": sigmoide, "m-cout": branches, "m-gradient": pentes, "m-prior": cloche, "m-convexite": paysage, "m-descente": quatrePas, "m-preuve": colonnes,
+  "m-modele": sigmoide, "m-cout": branches, "m-gradient": pentes, "m-prior": cloche, "m-convexite": paysage, "m-descente": quatrePas, "m-moindres": nuages,
 };
 
 // ---------- les tableaux du mur du fond : un dégradé et une seule courbe tirée des données ----------
@@ -650,11 +651,10 @@ export function seriePourTableau(id) {
   if (id === "m-prior") return { ligne: grille(120, (t) => Math.exp(-Math.pow((t - 0.5) * 6, 2) / 2)) };
   if (id === "m-convexite" || id === "m-gradient") return { ligne: norm(D.surface.trajectoires["classique (1/L)"].points.slice(0, 20).map((q) => q[2])) };
   if (id === "m-descente") return { ligne: norm(D.surface.trajectoires["près de la limite"].points.slice(0, 30).map((q) => q[2])), ligne2: norm(D.surface.trajectoires["trop petit"].points.slice(0, 30).map((q) => q[2])) };
-  if (id === "m-preuve") {
-    const pc = 1 - D.evaluation.metriques["constante (fréquence de l'entraînement)"]["proba moyenne"];
-    const ll = (p, y) => -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
-    let somme = 0;
-    return { ligne: norm(D.historique_test.map((m, i) => (somme += ll(m.p_hausse, m.hausse_realisee) - ll(pc, m.hausse_realisee)) / (i + 1))) };
+  if (id === "m-moindres") {
+    const v = D.maths?.ols?.validation ?? [];
+    const tout = norm(v.map(([, a]) => a).concat(v.map(([, , b]) => b)));
+    return { ligne: tout.slice(v.length), ligne2: tout.slice(0, v.length) };
   }
   return {};
 }
