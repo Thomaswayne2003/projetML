@@ -1,7 +1,7 @@
 // La lecture : sept chapitres, les mêmes que les salles de la visite, avec graphiques, tableaux et figures.
 // Deux parcours : Applied ML (le projet) et Maths (l'annexe), selon le cours choisi en haut de page.
 import { D, SALLES, ENTREE, LIMITES, CHIFFRES, ECART_TEST, MATHS, COURS, COURS_INFO, FIGURES, V2_INFO, V3_INFO, avecCours, nomNotebook, nombre, pct, dec, moisLong, moisSuivant } from "./contenu.js";
-import { installerMenu, installerEntete, installerLiseuse, liensPieces, titreNotebook, FLECHE, FLECHE_G } from "./commun.js";
+import { installerMenu, installerEntete, installerLiseuse, liensPieces, titreNotebook, arrivee, FLECHE, FLECHE_G } from "./commun.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const css = getComputedStyle(document.documentElement);
@@ -19,11 +19,10 @@ const FIG_CHAPITRE = {
   epreuve: ["03b_test_probabilites", "03b_test_regle"],
   explication: ["04_permutation", "04_shap_beeswarm_test", "04_shap_waterfall_2026-10", "04_pdp_ice_news", "07_stabilite_signaux", "07_shap_v2_derniere"],
   "m-modele": ["02_coefficients_logistiques"],
-  "m-cout": ["03b_test_probabilites"],
   "m-prior": ["05_sensibilite_lambda"],
   "m-convexite": ["05_sensibilite_depart"],
   "m-descente": ["05_sensibilite_pas", "05_sensibilite_iterations"],
-  "m-preuve": ["03b_test_regle", "08_ecarts_log_loss"],
+  "m-moindres": [],
 };
 const existe = (n) => D.figures.includes(`${n}.png`);
 function planches(noms, groupe) {
@@ -375,7 +374,8 @@ function tableSignalRisque() {
 // ---------- Maths I. la sigmoïde et les mois qu'elle doit séparer ----------
 const logit = (p) => Math.log(p / (1 - p));
 const sigma = (u) => 1 / (1 + Math.exp(-u));
-const moisMaths = () => D.historique_validation.concat(D.historique_test).map((m) => ({ ...m, pb: 1 - m.p_hausse, baisse: m.hausse_realisee ? 0 : 1 }));
+// parcours Maths : les mois d'entraînement, au score que le modèle figé leur donne (pas de mois de test ici)
+const moisMaths = () => (D.maths?.scores_entrainement ?? []).map(([date, u, baisse]) => ({ date, u, pb: Math.min(1 - 1e-6, Math.max(1e-6, sigma(u))), baisse }));
 function figSigmoide(boite) {
   const mois = moisMaths();
   boite.insertAdjacentHTML("beforeend", legende([["σ(u), la probabilité de baisse", C.encre], ["Mois qui a baissé (cerclé)", C.argile, "rond anneau"], ["Mois qui a monté (plein)", C.pin, "rond"]]));
@@ -390,7 +390,7 @@ function figSigmoide(boite) {
       pts.push({ px: x(u), py, m });
       return m.baisse ? `<circle cx="${x(u).toFixed(1)}" cy="${py.toFixed(1)}" r="3.6" fill="${C.carte}" stroke="${C.argile}" stroke-width="1.8"/>` : `<circle cx="${x(u).toFixed(1)}" cy="${py.toFixed(1)}" r="4.2" fill="${C.pin}" stroke="${C.carte}" stroke-width="1.2"/>`;
     }).join("");
-    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="La fonction sigmoïde, et les mois de validation et de test placés à leur score">
+    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="La fonction sigmoïde, et les mois d'entraînement placés à leur score">
       ${axeY(y, [0, 0.25, 0.5, 0.75, 1], g, l - d, (t) => pct(t, 0))}
       <rect x="${x(umin)}" y="${hh}" width="${x(umax) - x(umin)}" height="${h - b - hh}" fill="${C.encre}" opacity=".05"/>
       <text class="etiquette" x="${x(umax) + 6}" y="${y(0.5) + 18}">les scores du modèle</text>
@@ -406,29 +406,29 @@ function figSigmoide(boite) {
       for (const t of pts) { const dd = Math.hypot(t.px - px, t.py - py); if (dd < dmin) { dmin = dd; best = t; } }
       if (!best) return null;
       const m = best.m;
-      return { x: best.px, y: best.py - 6, html: `<b>${Maj(moisLong(moisSuivant(m.date)))}</b>score ${dec(logit(m.pb), 2)}, soit ${pct(m.pb, 1)} de baisse<br>le mois a ${m.baisse ? "baissé" : "monté"}` };
+      return { x: best.px, y: best.py - 6, html: `<b>${Maj(moisLong(moisSuivant(m.date)))}</b>score ${dec(m.u, 2)}, soit ${pct(m.pb, 1)} de baisse<br>le mois a ${m.baisse ? "baissé" : "monté"}` };
     } };
   });
 }
 
 // ---------- Maths II. les deux branches de la log-loss ----------
 function figPertes(boite) {
-  const t = D.historique_test.map((m) => { const p = 1 - m.p_hausse, y = m.hausse_realisee ? 0 : 1; return { ...m, p, y, perte: y ? -Math.log(p) : -Math.log(1 - p) }; });
-  const pc = D.evaluation.metriques["constante (fréquence de l'entraînement)"]["proba moyenne"];
-  boite.insertAdjacentHTML("beforeend", legende([["Perte si le mois baisse, −log p", C.argile], ["Perte si le mois monte, −log(1 − p)", C.pin], ["Un mois de test", C.encre, "rond"]]));
+  const t = moisMaths().map((m) => ({ ...m, p: m.pb, y: m.baisse, perte: m.baisse ? -Math.log(m.pb) : -Math.log(1 - m.pb) }));
+  const pc = t.reduce((a, m) => a + m.y, 0) / (t.length || 1), moyenne = MATHS.llEntrainement ?? t.reduce((a, m) => a + m.perte, 0) / (t.length || 1);
+  boite.insertAdjacentHTML("beforeend", legende([["Perte si le mois baisse, −log p", C.argile], ["Perte si le mois monte, −log(1 − p)", C.pin], ["Un mois d'entraînement", C.encre, "rond"]]));
   graphe(boite, (l) => {
     const h = Math.round(Math.min(360, l * 0.56)), g = 40, d = 16, hh = 14, b = 40;
     const x = echelle(0, 1, g, l - d), y = echelle(0, 3, h - b, hh);
     const trace = (f, c) => `<path d="${[...Array(97).keys()].map((i) => { const p = 0.02 + i * 0.01; return `${i ? "L" : "M"}${x(p).toFixed(1)},${y(Math.min(f(p), 3)).toFixed(1)}`; }).join("")}" fill="none" stroke="${c}" stroke-width="2"/>`;
     const pts = t.map((m) => ({ px: x(m.p), py: y(m.perte), m }));
-    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Les deux branches de la log-loss, et la perte payée chaque mois de test">
+    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Les deux branches de la log-loss, et la perte payée chaque mois d'entraînement">
       ${axeY(y, [0, 1, 2, 3], g, l - d, (v) => dec(v, 0))}
       ${trace((p) => -Math.log(p), C.argile)}${trace((p) => -Math.log(1 - p), C.pin)}
-      <line x1="${g}" x2="${l - d}" y1="${y(CHIFFRES.llModele)}" y2="${y(CHIFFRES.llModele)}" stroke="${C.encre}" stroke-dasharray="4 4"/>
-      <text class="etiquette" x="${l - d}" y="${y(CHIFFRES.llModele) - 6}" text-anchor="end">moyenne du modèle : ${dec(CHIFFRES.llModele)}</text>
+      <line x1="${g}" x2="${l - d}" y1="${y(moyenne)}" y2="${y(moyenne)}" stroke="${C.encre}" stroke-dasharray="4 4"/>
+      <text class="etiquette" x="${l - d}" y="${y(moyenne) - 6}" text-anchor="end">J au minimum : ${dec(moyenne)}</text>
       <line x1="${x(pc)}" x2="${x(pc)}" y1="${hh}" y2="${h - b}" stroke="${C["encre-3"]}" stroke-dasharray="2 4"/>
-      <text class="etiquette" x="${x(pc) + 6}" y="${hh + 12}">constante : ${pct(pc, 1)}</text>
-      ${pts.map((q) => `<circle cx="${q.px.toFixed(1)}" cy="${q.py.toFixed(1)}" r="4.2" fill="${q.m.y ? C.argile : C.pin}" stroke="${C.carte}" stroke-width="1.4"/>`).join("")}
+      <text class="etiquette" x="${x(pc) + 6}" y="${hh + 12}">fréquence des baisses : ${pct(pc, 1)}</text>
+      ${pts.map((q) => `<circle cx="${q.px.toFixed(1)}" cy="${Math.max(hh, q.py).toFixed(1)}" r="3.4" fill="${q.m.y ? C.argile : C.pin}" stroke="${C.carte}" stroke-width="1.2"/>`).join("")}
       <g class="axe">${[0, 0.25, 0.5, 0.75, 1].map((v) => `<text x="${x(v)}" y="${h - b + 18}" text-anchor="middle">${pct(v, 0)}</text>`).join("")}
         <text x="${(g + l - d) / 2}" y="${h - 4}" text-anchor="middle">probabilité de baisse annoncée, p</text></g>
     </svg>`;
@@ -521,43 +521,34 @@ function figPrior(boite) {
 }
 
 // ---------- Maths VII. ce que 33 mois peuvent prouver ----------
-function figPreuve(boite) {
-  const pc = 1 - D.evaluation.metriques["constante (fréquence de l'entraînement)"]["proba moyenne"];
-  const ll = (p, y) => -(y * Math.log(p) + (1 - y) * Math.log(1 - p));
-  const dd = D.historique_test.map((m) => ll(m.p_hausse, m.hausse_realisee) - ll(pc, m.hausse_realisee));
-  const suite = dd.map((_, k) => {
-    const a = dd.slice(0, k + 1), n = a.length, moy = a.reduce((x, z) => x + z, 0) / n;
-    const se = n > 2 ? Math.sqrt(a.reduce((x, z) => x + (z - moy) ** 2, 0) / (n - 1) / n) : null;
-    return { n, moy, se, mois: moisSuivant(D.historique_test[k].date) };
-  });
-  boite.insertAdjacentHTML("beforeend", legende([["Écart moyen, modèle − constante", C.encre], ["± 2 erreurs types", C.encre, "bloc"]]));
+function figMoindres(boite) {
+  const O = MATHS.ols ?? {}, tr = O.entrainement ?? [], va = O.validation ?? [];
+  boite.insertAdjacentHTML("beforeend", legende([[`Mois d'entraînement (R² = ${dec(O.r2_entrainement ?? 0, 2)})`, C.pin, "rond"], [`Mois de validation (R² = ${dec(O.r2_validation ?? 0, 2)})`, C.argile, "rond"], ["Prévision parfaite, r̂ = r", C.encre]]));
   graphe(boite, (l) => {
-    const h = Math.round(Math.min(330, l * 0.5)), g = 50, d = 16, hh = 14, b = 30;
-    const bornes = suite.filter((q) => q.se).flatMap((q) => [q.moy - 2 * q.se, q.moy + 2 * q.se]);
-    const lo = Math.min(-0.15, ...bornes), hi = Math.max(0.2, ...bornes), ticks = graduations(lo, hi, 5);
-    const x = echelle(1, suite.length, g, l - d), y = echelle(Math.min(lo, ticks[0]), Math.max(hi, ticks[ticks.length - 1]), h - b, hh);
-    const avec = suite.filter((q) => q.se);
-    const bande = `${avec.map((q, i) => `${i ? "L" : "M"}${x(q.n).toFixed(1)},${y(q.moy + 2 * q.se).toFixed(1)}`).join("")}${[...avec].reverse().map((q) => `L${x(q.n).toFixed(1)},${y(q.moy - 2 * q.se).toFixed(1)}`).join("")}Z`;
-    const ligne = suite.map((q, i) => `${i ? "L" : "M"}${x(q.n).toFixed(1)},${y(q.moy).toFixed(1)}`).join("");
-    const fin = suite[suite.length - 1];
-    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Écart moyen de log-loss entre le modèle et la constante au fil des mois de test, avec sa marge de deux erreurs types">
-      ${axeY(y, ticks, g, l - d, (v) => dec(v, 2))}
-      <path d="${bande}" fill="${C.encre}" opacity=".09"/>
-      <line x1="${g}" x2="${l - d}" y1="${y(0)}" y2="${y(0)}" stroke="${C["encre-2"]}"/>
-      <text class="etiquette" x="${l - d - 4}" y="${y(0) + 15}" text-anchor="end">aucune différence</text>
-      <path d="${ligne}" fill="none" stroke="${C.encre}" stroke-width="2"/>
-      <circle cx="${x(fin.n)}" cy="${y(fin.moy)}" r="4" fill="${C.encre}"/>
-      <text class="etiquette-forte" x="${x(fin.n) - 8}" y="${y(fin.moy + 2 * fin.se) - 8}" text-anchor="end">${dec(fin.moy, 3)} ± ${dec(2 * fin.se, 3)}</text>
-      <g class="axe">${[1, 6, 12, 18, 24, 30, 33].map((n) => `<text x="${x(n)}" y="${h - b + 18}" text-anchor="middle">${n}</text>`).join("")}</g>
-      <line class="marque-survol" y1="${hh}" y2="${h - b}" stroke="${C["encre-3"]}" opacity="0"/>
+    const h = Math.round(Math.min(380, l * 0.62)), g = 52, d = 16, hh = 14, b = 40;
+    const tous = tr.concat(va).flatMap(([, a, c]) => [a, c]), lim = Math.max(0.1, ...tous.map(Math.abs)) * 1.05;
+    const ticks = graduations(-lim, lim, 5);
+    const x = echelle(-lim, lim, g, l - d), y = echelle(-lim, lim, h - b, hh);
+    const pts = [...tr.map((q) => ({ q, v: false })), ...va.map((q) => ({ q, v: true }))].map((p) => ({ ...p, px: x(p.q[1]), py: y(p.q[2]) }));
+    const svg = `<svg viewBox="0 0 ${l} ${h}" role="img" aria-label="Rendement prévu par les moindres carrés face au rendement réel, mois d'entraînement et de validation">
+      ${axeY(y, ticks, g, l - d, (v) => pct(v, 0))}
+      <line x1="${x(-lim)}" y1="${y(-lim)}" x2="${x(lim)}" y2="${y(lim)}" stroke="${C.encre}" stroke-width="1.6"/>
+      <line x1="${x(0)}" x2="${x(0)}" y1="${hh}" y2="${h - b}" stroke="${C.filet}"/>
+      ${pts.filter((p) => !p.v).map((p) => `<circle cx="${p.px.toFixed(1)}" cy="${p.py.toFixed(1)}" r="3.4" fill="${C.pin}" fill-opacity=".75" stroke="${C.carte}" stroke-width="1"/>`).join("")}
+      ${pts.filter((p) => p.v).map((p) => `<circle cx="${p.px.toFixed(1)}" cy="${p.py.toFixed(1)}" r="4.6" fill="${C.argile}" stroke="${C.carte}" stroke-width="1.3"/>`).join("")}
+      <g class="axe">${ticks.map((t) => `<text x="${x(t)}" y="${h - b + 18}" text-anchor="middle">${pct(t, 0)}</text>`).join("")}
+        <text x="${(g + l - d) / 2}" y="${h - 4}" text-anchor="middle">rendement prévu par les équations normales, r̂</text></g>
+      <text class="etiquette" x="${g + 6}" y="${hh + 12}">rendement réel du mois suivant, r</text>
     </svg>`;
     return { svg, survol: (px, py) => {
-      const k = Math.round(x.inv(px)) - 1; if (k < 0 || k >= suite.length) return null;
-      const q = suite[k];
-      return { x: x(q.n), y: py, marque: { x1: x(q.n), x2: x(q.n) }, html: `<b>Après ${q.n} mois (fin ${moisLong(q.mois)})</b>écart moyen ${dec(q.moy, 3)}${q.se ? `<br>± 2 erreurs types : ${dec(2 * q.se, 3)}` : ""}` };
+      let best = null, dmin = 10;
+      for (const p of pts) { const dd = Math.hypot(p.px - px, p.py - py); if (dd < dmin) { dmin = dd; best = p; } }
+      if (!best) return null;
+      const [date, prevu, reel] = best.q;
+      return { x: best.px, y: best.py - 6, html: `<b>${Maj(moisLong(moisSuivant(date)))}</b>${best.v ? "validation" : "entraînement"}<br>prévu ${pct(prevu, 1, true)}, réel ${pct(reel, 1, true)}` };
     } };
   });
-  boite.insertAdjacentHTML("beforeend", `<figcaption>Au-dessus de zéro, le modèle fait pire que la constante. La bande contient zéro presque tout du long : sur ces données, l'écart n'est pas significatif. Pour qu'un gain de 0,02 sorte de la bande, il faudrait environ ${nombre(MATHS.moisPourPreuve)} mois.</figcaption>`);
+  boite.insertAdjacentHTML("beforeend", `<figcaption>Sur l'entraînement, les points suivent un peu la diagonale (R² = ${dec(O.r2_entrainement ?? 0, 2)}). Sur la validation, ils s'en écartent : R² = ${dec(O.r2_validation ?? 0, 2)}, pire que de prédire chaque mois la moyenne.</figcaption>`);
 }
 
 
@@ -692,13 +683,13 @@ const tuiles = (chiffres) => `<dl class="tuiles">${chiffres.map(([v, l]) => `<di
 const figure = (titre, sous, id) => `<figure class="figure" id="${id}"><h3>${titre}</h3>${sous ? `<p class="sous">${sous}</p>` : ""}</figure>`;
 
 const FIG_MATHS = {
-  "m-modele": ["La sigmoïde, et les mois qu'elle doit séparer", "Chaque point est un mois de validation ou de test, placé à son score. En haut, les mois qui ont baissé ; en bas, ceux qui ont monté. Les deux groupes se superposent au centre : le score ne les sépare presque pas.", "fig-sigmoide", figSigmoide],
-  "m-cout": ["Ce que coûte une erreur assurée", "La perte d'un mois selon la probabilité annoncée. Elle reste modérée quand le modèle hésite, et explose quand il se trompe avec assurance. Les points sont les 33 mois de test.", "fig-pertes", figPertes],
+  "m-modele": ["La sigmoïde, et les mois qu'elle doit séparer", "Chaque point est un mois d'entraînement, placé au score que le modèle lui donne. En haut, les mois qui ont baissé ; en bas, ceux qui ont monté. Même sur les mois qu'il a appris, les deux groupes se superposent : le score les sépare à peine.", "fig-sigmoide", figSigmoide],
+  "m-cout": ["Ce que coûte une erreur assurée", "La perte d'un mois selon la probabilité annoncée. Elle reste modérée quand le modèle hésite, et explose quand il se trompe avec assurance. Les points sont les mois d'entraînement, à la perte que le modèle y paie.", "fig-pertes", figPertes],
   "m-gradient": ["Le champ des gradients", "En chaque point de la surface, la flèche montre −∇J : la direction dans laquelle le coût baisse le plus vite. Toutes convergent vers le minimum.", "fig-pentes", figPentes],
   "m-prior": ["Le prior, et les poids qu'il a laissés passer", "La densité a priori d'un poids standardisé, et les douze poids appris par le modèle final. Aucun ne sort de la zone qui contient 95 % de la masse du prior.", "fig-prior", figPrior],
   "m-convexite": ["Une seule vallée", "La log-loss pénalisée sur deux coefficients, l'intercept fixé à son optimum. Depuis le départ, la descente rejoint le seul minimum.", "fig-convexite", (b) => figSurface(b, ["classique (1/L)"])],
   "m-descente": ["Quatre pas, quatre destins", "La même surface, le même départ, quatre tailles de pas.", "fig-surface", (b) => figSurface(b)],
-  "m-preuve": ["Une marge d'erreur qui ne se referme pas", "L'écart moyen de log-loss entre le modèle et la constante, recalculé à chaque nouveau mois de test, avec sa marge de deux erreurs types.", "fig-preuve", figPreuve],
+  "m-moindres": ["La meilleure droite, et ce qu'elle vaut hors échantillon", "Chaque point est un mois, placé à son rendement prévu par les équations normales et à son rendement réel. Sur la diagonale, la prévision est exacte.", "fig-moindres", figMoindres],
 };
 const FIG_ML = {
   "fig-nikkei": figNikkei, "fig-rendements": figRendements, "fig-essais": figEssais, "fig-regle": figRegle, "fig-euros": (b) => figEuros(b),
@@ -734,7 +725,7 @@ function corps(s) {
     part.push(`<div class="figures-chapitre"><h3 class="sur-titre">Toutes les figures, notebook par notebook</h3>${galerie()}</div>`);
     return part.join("");
   }
-  part.push(`<p class="clair">${s.clair}</p>`, tuiles(s.chiffres));
+  part.push(arrivee(s), `<p class="clair">${s.clair}</p>`, tuiles(s.chiffres));
   if (FIG_MATHS[s.id]) { const [t, sous, id] = FIG_MATHS[s.id]; part.push(figure(t, sous, id)); }
   if (s.id === "dataset") {
     const ds = D.dataset ?? {}, cb = D.v2?.controle_bloomberg ?? {};
