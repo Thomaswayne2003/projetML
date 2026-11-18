@@ -122,16 +122,18 @@ def versionner() -> None:
     qui garde une ancienne copie en cache recharge le fichier dès qu'il change, sans jamais mélanger deux versions."""
     import hashlib
 
-    def empreinte(m: re.Match) -> str:
-        chemin = m.group(2)
-        cible = SITE / chemin
-        if not cible.exists():
-            return m.group(0)
-        return f'{m.group(1)}="{chemin}?v={hashlib.sha256(cible.read_bytes()).hexdigest()[:10]}"'
-    for page in ("index.html", "lecture.html", "cabinet.html"):
-        p = SITE / page
+    for p in [SITE / page for page in ("index.html", "lecture.html", "cabinet.html")] + [SITE / "en" / page for page in ("index.html", "lecture.html", "cabinet.html")]:
+        if not p.exists():
+            continue
+
+        def empreinte(m: re.Match, dossier: Path = p.parent) -> str:
+            chemin = m.group(2)
+            cible = dossier / chemin
+            if not cible.exists():
+                return m.group(0)
+            return f'{m.group(1)}="{chemin}?v={hashlib.sha256(cible.read_bytes()).hexdigest()[:10]}"'
         html = p.read_text(encoding="utf-8")
-        html = re.sub(r'(src|href)="((?:assets|data)/[^"?]+\.(?:js|css))(?:\?v=[0-9a-f]+)?"', empreinte, html)
+        html = re.sub(r'(src|href)="((?:\.\./)?(?:assets|data)/[^"?]+\.(?:js|css))(?:\?v=[0-9a-f]+)?"', empreinte, html)
         p.write_text(html, encoding="utf-8")
 
 
@@ -192,8 +194,11 @@ def _three() -> str:
     return f"const __three = (() => {{\n\"use strict\";\n{code[:export.start()]}\nreturn {{{retour}}};\n}})();\n"
 
 
-def _module(nom: str) -> str:
-    code = (SITE / "assets" / f"{nom}.js").read_text(encoding="utf-8")
+def _module(nom: str, dossier: Path = SITE / "assets") -> str:
+    source = dossier / f"{nom}.js"
+    if not source.exists():                      # version anglaise : un module sans texte (oeuvres.js) reste commun
+        source = SITE / "assets" / f"{nom}.js"
+    code = source.read_text(encoding="utf-8")
     exports = []
 
     def importer(m: re.Match) -> str:
@@ -215,14 +220,18 @@ def _module(nom: str) -> str:
 
 
 def paquets() -> None:
-    for page, modules in PAQUETS.items():
-        morceaux = ["// Fichier écrit par python -m app.export_site à partir de assets/*.js : ne pas modifier à la main.\n"]
-        if any(m in ("oeuvres", "visite") for m in modules):
-            morceaux.append(_three())
-        morceaux += [_module(m) for m in modules]
-        sortie = SITE / "assets" / f"{page}.bundle.js"
-        sortie.write_text("".join(morceaux), encoding="utf-8")
-        print(f"site/assets/{page}.bundle.js : {sortie.stat().st_size / 1e3:.0f} ko")
+    # le site français (site/assets) et sa copie anglaise (site/en/assets, mêmes données, textes traduits)
+    for dossier in (SITE / "assets", SITE / "en" / "assets"):
+        if not dossier.exists():
+            continue
+        for page, modules in PAQUETS.items():
+            morceaux = [f"// Fichier écrit par python -m app.export_site à partir de {dossier.relative_to(SITE)}/*.js : ne pas modifier à la main.\n"]
+            if any(m in ("oeuvres", "visite") for m in modules):
+                morceaux.append(_three())
+            morceaux += [_module(m, dossier) for m in modules]
+            sortie = dossier / f"{page}.bundle.js"
+            sortie.write_text("".join(morceaux), encoding="utf-8")
+            print(f"site/{sortie.relative_to(SITE)} : {sortie.stat().st_size / 1e3:.0f} ko")
 
 
 # ---------- seconde version (Bloomberg, 1999-2026) et description du dataset ----------
