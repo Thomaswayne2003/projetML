@@ -124,6 +124,16 @@ const V3_INFO = V3.tests_probabilites ? (() => {
   };
 })() : null;
 
+// Salle III : le meilleur essai de chaque modèle en validation croisée, face à sa log-loss sur le test
+const ESSAIS_PAR_MODELE = Math.round(CHIFFRES.essais / 3);
+const CV_TEST = Object.fromEntries([["logit", "logistique"], ["rf", "Random Forest"], ["lgbm", "LightGBM"]].map(([m, nomTest]) => [m, {
+  cv: D.essais.find((e) => e.retenu && e.modele === m && e.cible === "nikkei")?.logloss,
+  test: met[nomTest]?.["log-loss"],
+}]));
+const parcours = (m) => `${dec(CV_TEST[m].cv)} → ${dec(CV_TEST[m].test)}`;
+// Salle VII : « aucun sur 17 » plutôt que « 0 sur 17 »
+const surTotal = (n, total) => (n === 0 ? `aucun sur ${total}` : `${n} sur ${total}`);
+
 const SALLES_ML = [
   {
     id: "dataset", num: "I", nom: "Le dataset", kanji: "集",
@@ -174,14 +184,14 @@ const SALLES_ML = [
     presenter: [
       "<b>Une progression de trois modèles (S2 à S5, consigne 4).</b> Une logistique pénalisée (S2, S3), une forêt aléatoire (S4, S5) et un LightGBM (S5), comparés sur la même log-loss.",
       "<b>Une seule pipeline (consigne 5).</b> Imputation, standardisation, régime k-means et modèle s'ajustent ensemble, pli par pli : aucune statistique du futur ne fuit dans le passé.",
-      `<b>Optuna sans score optimiste (S3, consignes 6 et 7).</b> ${nombre(CHIFFRES.essais)} essais sur des plis qui respectent le temps (TimeSeriesSplit), tous journalisés ; pénalité et pondération des classes sont choisies en validation croisée. La logistique retenue : ${dec(CHIFFRES.llCV)} de log-loss.`,
+      `<b>Optuna sans score optimiste (S3, consignes 6 et 7).</b> ${nombre(CHIFFRES.essais)} essais sur des plis qui respectent le temps (TimeSeriesSplit), tous journalisés. Le meilleur de ${ESSAIS_PAR_MODELE} essais flatte toujours : le LightGBM passe de ${dec(CV_TEST.lgbm.cv)} en validation croisée à ${dec(CV_TEST.lgbm.test)} sur le test, la logistique de ${dec(CV_TEST.logit.cv)} à ${dec(CV_TEST.logit.test)}. D'où la règle annoncée avant le test : la logistique, sauf si un modèle plus complexe la bat sur la validation à la fois en PR-AUC et en log-loss calibrée.`,
     ],
     titre: `Trois modèles, ${nombre(CHIFFRES.essais)} essais`,
     oeuvre: "Le champ des essais",
     legende: "Une tige par essai Optuna, en trois rangées : logistique, forêt aléatoire, LightGBM. Plus la tige est haute, plus la log-loss de validation croisée est basse. La tige teintée est l'essai retenu.",
     clair: "Une régression logistique, une forêt aléatoire et un LightGBM, réglés par Optuna sur des plis qui respectent l'ordre du temps. Tout ce qui apprend un paramètre, imputation et régimes compris, reste dans la pipeline.",
-    technique: `Pipeline scikit-learn : imputation, standardisation, régime k-means, modèle. ${CHIFFRES.essais} essais Optuna sur la cible principale (50 par modèle), avec un découpage TimeSeriesSplit ; la logistique retenue obtient ${dec(CHIFFRES.llCV)} de log-loss en validation croisée. Calibration de Platt sur les prédictions hors pli. Le meilleur de cinquante essais est toujours flatteur : le LightGBM paraît excellent en validation croisée et fait pire que la logistique sur le test.`,
-    chiffres: [["3", "modèles comparés"], [nombre(CHIFFRES.essais), "essais Optuna"], [dec(CHIFFRES.llCV), "log-loss de la logistique en validation croisée"]],
+    technique: `Pipeline scikit-learn : imputation, standardisation, régime k-means, modèle. ${CHIFFRES.essais} essais Optuna sur la cible principale (${ESSAIS_PAR_MODELE} par modèle), avec un découpage TimeSeriesSplit ; pénalité et pondération des classes sont choisies en validation croisée. Meilleur essai en validation croisée : LightGBM ${dec(CV_TEST.lgbm.cv)}, forêt aléatoire ${dec(CV_TEST.rf.cv)}, logistique ${dec(CV_TEST.logit.cv)}. Sur le test, l'ordre s'inverse : logistique ${dec(CV_TEST.logit.test)}, LightGBM ${dec(CV_TEST.lgbm.test)}, forêt ${dec(CV_TEST.rf.test)}, et la constante (${dec(CHIFFRES.llConstante)}) fait mieux que les trois. Garder le meilleur de ${ESSAIS_PAR_MODELE} essais, c'est garder celui que le hasard des plis a le plus favorisé : plus le modèle est souple, plus l'écart est grand. Aucun modèle plus complexe n'a rempli la règle de choix sur la validation, la logistique est donc retenue. Calibration de Platt sur les prédictions hors pli.`,
+    chiffres: [["3", "modèles comparés"], [nombre(CHIFFRES.essais), "essais Optuna"], [parcours("lgbm"), "LightGBM : validation croisée → test"]],
     ton: { mur: "#a26a52", sol: "#8c6b5c", ciel: "#fae9de", texte: "#fff5ee", accent: "#f0c7b0" },
   },
   {
@@ -191,13 +201,13 @@ const SALLES_ML = [
     presenter: [
       `<b>Calibrer avant de décider (S8).</b> La calibration de Platt est apprise sur les prédictions hors pli (a = ${dec(D.decision.platt.a)}, c = ${dec(D.decision.platt.c)}) : une probabilité annoncée doit correspondre à une fréquence observée.`,
       `<b>Un seuil qui n'est pas 50 % (S7).</b> Il vient des gains en euros : acheter au-dessus de ${pct(CHIFFRES.thetaA, 0)} de hausse, vendre sous ${pct(CHIFFRES.thetaV, 0)}, rester neutre entre les deux, avec une marge de ${pct(CHIFFRES.marge, 1)} par mois.`,
-      "<b>Figée avant le test.</b> Modèle, calibration et seuils ont été commités avant d'ouvrir 2024-2026 (commit 75712cf) : rien ne se règle sur le test.",
+      "<b>Figée avant le test.</b> Modèle, calibration et seuils ont été commités avant d'ouvrir 2024-2026 (commit 0d8df2f) : rien ne se règle sur le test.",
     ],
     titre: "D'une probabilité à une action",
     oeuvre: "Le cadran",
     legende: "Le cadran va de 0 à 100 % de probabilité de hausse. À gauche la zone « vendre », au centre « neutre », à droite « acheter ». Le style pointe la prévision pour " + moisLong(moisSuivant(CHIFFRES.moisDernier)) + ".",
     clair: `Le modèle donne une probabilité de hausse. La règle compare le gain espéré d'un achat et d'une vente à une marge de ${pct(CHIFFRES.marge, 1)} : au-dessus de ${pct(CHIFFRES.thetaA, 0)}, acheter ; sous ${pct(CHIFFRES.thetaV, 0)}, vendre ; entre les deux, rester neutre. Les seuils ont été figés et commités avant d'ouvrir le test.`,
-    technique: `Les gains moyens viennent de l'entraînement : un achat rapporte ${pct(D.decision.couts.B_u, 1, true)} un mois de hausse et ${pct(D.decision.couts.B_d, 1, true)} un mois de baisse ; une vente fait l'inverse. Acheter si p·B_u + (1 − p)·B_d dépasse la marge, vendre si p·S_u + (1 − p)·S_d la dépasse. D'où les seuils θ_achat = ${dec(CHIFFRES.thetaA)} et θ_vente = ${dec(CHIFFRES.thetaV)}. Calibration de Platt : a = ${dec(D.decision.platt.a)}, c = ${dec(D.decision.platt.c)}. Couverture : toujours couvert. Décision figée au commit 75712cf. Sans signal, la même règle appliquée à la prévision constante achète tous les mois.`,
+    technique: `Les gains moyens viennent de l'entraînement : un achat rapporte ${pct(D.decision.couts.B_u, 1, true)} un mois de hausse et ${pct(D.decision.couts.B_d, 1, true)} un mois de baisse ; une vente fait l'inverse. Acheter si p·B_u + (1 − p)·B_d dépasse la marge, vendre si p·S_u + (1 − p)·S_d la dépasse. D'où les seuils θ_achat = ${dec(CHIFFRES.thetaA)} et θ_vente = ${dec(CHIFFRES.thetaV)}. Calibration de Platt : a = ${dec(D.decision.platt.a)}, c = ${dec(D.decision.platt.c)}. Couverture : toujours couvert. Décision figée au commit 0d8df2f. Sans signal, la même règle appliquée à la prévision constante achète tous les mois.`,
     chiffres: [[pct(CHIFFRES.thetaA, 1), "seuil d'achat"], [pct(CHIFFRES.thetaV, 1), "seuil de vente"], [pct(CHIFFRES.marge, 1), "marge exigée"]],
     ton: { mur: "#8d9883", sol: "#7a7f70", ciel: "#f1f3e9", texte: "#fbfcf6", accent: "#e3e8d5" },
   },
@@ -240,20 +250,21 @@ const SALLES_ML = [
     notebooks: ["06_annexe_news_prix", "07_seconde_version_bloomberg", "08_ameliorations_sans_surapprentissage"], docs: ["rapport"],
     seances: [["S1", "Généralisation, fuites"], ["S3", "Choisir sans regarder le test"], ["Après coup", "Exploration, sans valeur de preuve"]],
     presenter: [
-      V2_INFO ? `<b>Réentraîner sur 1999-2026.</b> Même pipeline et même règle de choix : ${V2_INFO.modele}, ${dec(V2_INFO.ll)} de log-loss sur le test contre ${dec(V2_INFO.llConst)} pour la constante. Mieux que la première version, toujours pas mieux que la constante.` : "<b>Réentraîner sur une histoire plus longue.</b>",
-      V3_INFO ? `<b>Améliorer sans surapprendre.</b> Protocole figé avant tout calcul, réentraînement mois par mois sur ${V3_INFO.mois} mois (2010-2023), correction de Holm : ${V3_INFO.retenus} levier retenu sur ${V3_INFO.tests}.` : "<b>Améliorer sans surapprendre.</b>",
-      "<b>Ce qu'on en retient.</b> Le test ayant été vu, tout cela reste exploratoire. Avec ces données, le mois suivant du Nikkei ne se prévoit pas ; la meilleure décision reste d'acheter, couvert.",
+      V2_INFO ? `<b>Réentraîner sur 1999-2026 (S1).</b> Même pipeline, même règle de choix, même test 2024-2026 : ${V2_INFO.modele}, ${dec(V2_INFO.ll)} de log-loss contre ${dec(V2_INFO.llConst)} pour la constante. L'écart à la constante passe de ${dec(ECART_TEST.moyenne)} à ${dec(V2_INFO.ecart.moyenne)} : mieux, pas assez.${CB.ipc ? ` Bloomberg sert de contrôle : l'IPC de la table est la même série, décalée d'un mois pour sa publication (corrélation ${dec(CB.ipc.correlations.decalage_1)}).` : ""}` : "<b>Réentraîner sur une histoire plus longue.</b>",
+      V3_INFO ? `<b>Améliorer sans surapprendre (S3).</b> Protocole figé avant tout calcul, ${V3_INFO.tests} leviers réentraînés mois par mois sur ${V3_INFO.mois} mois (2010-2023), correction de Holm : ${V3_INFO.retenus === 0 ? "aucun n'est retenu" : `${V3_INFO.retenus} retenu(s)`}. Le meilleur gagne ${dec(-V3_INFO.ecart, 4)} de log-loss, soit ${dec(-V3_INFO.ecart / V3_INFO.se, 1)} erreur type : du bruit.` : "<b>Améliorer sans surapprendre.</b>",
+      `<b>Le risque se prévoit, le sens non.</b> La volatilité du mois suivant se prévoit (R² hors échantillon ${dec(RISQUE.r2Avant, 2)} sur 2016-2023, ${dec(RISQUE.r2Test, 2)} sur le test), et un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.${V3_INFO ? ` Doser l'achat par la volatilité ne bat pourtant pas l'achat couvert (Sharpe ${dec(V3_INFO.dose.sharpe, 2)} contre ${dec(V3_INFO.ref.sharpe, 2)}).` : ""} Le test ayant été vu, tout cela reste exploratoire : la décision reste d'acheter, couvert.`,
     ],
     titre: "Ce qu'on a tenté ensuite",
     oeuvre: "Le souffle",
     legende: "Une spirale de 2016 (en bas) à 2026 (en haut), dont l'épaisseur suit la volatilité réalisée de chaque mois. Les parties teintées sont les mois agités, au-dessus de 20 % de volatilité annuelle.",
-    clair: "Une fois le test ouvert, trois pistes ont été suivies. D'abord, réentraîner le même modèle sur une histoire plus longue, de 1999 à 2026, avec Bloomberg en référence. Ensuite, appliquer tous les leviers d'amélioration réalisables, selon un protocole figé avant le moindre calcul et jugé sur 2010-2023 : aucun ne passe. Enfin, prévoir l'agitation du marché plutôt que son sens.",
+    clair: "Une fois le test ouvert, trois pistes ont été suivies. D'abord, réentraîner le même modèle sur une histoire plus longue, de 1999 à 2026, avec Bloomberg en référence. Ensuite, appliquer tous les leviers d'amélioration réalisables, selon un protocole figé avant le moindre calcul et jugé sur 2010-2023 : aucun ne passe. Enfin, prévoir l'agitation du marché plutôt que son sens : elle se prévoit, le sens non. Une piste reste ouverte : la table n'a aucune variable de valorisation ni de bénéfices (PER, révisions des bénéfices attendus), que Bloomberg fournit.",
     technique: V2_INFO
-      ? `Avec ${V2_INFO.mois} mois d'entraînement au lieu de ${CHIFFRES.moisEntrainement}, la règle du notebook 03 retient ${V2_INFO.modele} sur la validation. Sur le test, sa log-loss vaut ${dec(V2_INFO.ll)} contre ${dec(V2_INFO.llConst)} pour la constante (écart ${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}), et sa règle rapporte ${pct(V2_INFO.regle, 1, true)} contre ${pct(V2_INFO.couvert, 1, true)} pour l'achat couvert. Mieux que la première version, toujours pas mieux que la constante. La logistique aurait battu la constante sur le test (${dec(V2_INFO.llLogit)}), mais la règle annoncée l'avait écartée sur la validation (${dec(V2_INFO.llLogitVal)}) : la choisir maintenant reviendrait à choisir sur le test.${V3_INFO ? ` Les leviers d'amélioration, réentraînés chaque mois sur ${V3_INFO.mois} mois de 2010-2023 : ${V3_INFO.retenus} sur ${V3_INFO.tests} passent le test de Diebold-Mariano ou le bootstrap du Sharpe après correction de Holm (plus petite p corrigée : ${dec(V3_INFO.pMin, 2)}). Le meilleur, « ${V3_INFO.meilleure} », gagne ${dec(-V3_INFO.ecart, 4)} de log-loss, soit ${dec(-V3_INFO.ecart / V3_INFO.se, 1)} erreur type.` : ""} Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`
+      ? `Avec ${V2_INFO.mois} mois d'entraînement au lieu de ${CHIFFRES.moisEntrainement}, la règle du notebook 03 retient ${V2_INFO.modele} sur la validation. Sur le même test 2024-2026, déjà vu, sa log-loss vaut ${dec(V2_INFO.ll)} contre ${dec(V2_INFO.llConst)} pour la constante (écart ${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}), et sa règle rapporte ${pct(V2_INFO.regle, 1, true)} contre ${pct(V2_INFO.couvert, 1, true)} pour l'achat couvert. Mieux que la première version, toujours pas mieux que la constante. La logistique aurait battu la constante sur le test (${dec(V2_INFO.llLogit)}), mais la règle annoncée l'avait écartée sur la validation (${dec(V2_INFO.llLogitVal)}) : la choisir maintenant reviendrait à choisir sur le test.${V3_INFO ? ` Les leviers d'amélioration, réentraînés chaque mois sur ${V3_INFO.mois} mois de 2010-2023 : ${V3_INFO.retenus === 0 ? `aucun des ${V3_INFO.tests} ne passe` : `${V3_INFO.retenus} sur ${V3_INFO.tests} passent`} le test de Diebold-Mariano ou le bootstrap du Sharpe après correction de Holm (${V3_INFO.pMin >= 0.995 ? "toutes les p corrigées valent 1" : `plus petite p corrigée : ${dec(V3_INFO.pMin, 2)}`}). Le meilleur, « ${V3_INFO.meilleure} », gagne ${dec(-V3_INFO.ecart, 4)} de log-loss, soit ${dec(-V3_INFO.ecart / V3_INFO.se, 1)} erreur type.` : ""} Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 et ${dec(RISQUE.r2Test, 2)} sur 2024-2026 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`
       : `Volatilité du mois suivant : R² hors échantillon de ${dec(RISQUE.r2Avant, 2)} sur 2016-2023 ; un mois agité se reconnaît avec une AUC de ${dec(RISQUE.aucAgite, 2)}.`,
     chiffres: V2_INFO
-      ? [[`${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`, "log-loss 1999-2026 : modèle / constante"], [pct(V2_INFO.regle, 1, true), "règle de la seconde version, en euros"],
-         V3_INFO ? [`${V3_INFO.retenus} sur ${V3_INFO.tests}`, "leviers retenus par le protocole figé"] : [dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"]]
+      ? [[`${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`, "log-loss 1999-2026 : modèle / constante"],
+         V3_INFO ? [Maj(surTotal(V3_INFO.retenus, V3_INFO.tests)), "leviers retenus par le protocole figé"] : [pct(V2_INFO.regle, 1, true), "règle de la seconde version, en euros"],
+         [dec(RISQUE.aucAgite, 2), "AUC : reconnaître un mois agité"]]
       : [[dec(RISQUE.r2Avant, 2), "R² de la volatilité, 2016-2023"], [dec(RISQUE.aucAgite, 2), "AUC pour un mois agité"], ["—", ""]],
     ton: { mur: "#95a3ac", sol: "#7c858b", ciel: "#f2f6f8", texte: "#fbfdfe", accent: "#e1e8ec" },
   },
