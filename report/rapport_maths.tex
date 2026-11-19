@@ -5,22 +5,32 @@
 \usepackage{lmodern,microtype}
 \usepackage[margin=2.3cm]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage{graphicx,booktabs,float,caption,enumitem}
+\usepackage{graphicx,booktabs,float,caption,enumitem,xcolor}
 \usepackage[hidelinks]{hyperref}
 \graphicspath{{../figures/}}
 \setlist{itemsep=1pt,topsep=3pt}
 \captionsetup{font=small,labelfont=bf}
 \newtheorem*{prop}{Propriété}
 
-\title{\textbf{Annexe mathématique : la régression logistique L2,\\ de la vraisemblance à la descente de gradient}}
-\author{Mathematics \& Statistics for Machine Learning (MSA-DATI07-04) --- Projet Nikkei}
+\title{\textbf{Prévoir la baisse du Nikkei 225 : la régression logistique L2,}\\[2pt]
+\large de la vraisemblance à la descente de gradient}
+\author{Mathematics \& Statistics for Machine Learning (MSA-DATI07-04) --- Albert School, MSc~1}
 \date{Novembre 2026}
 
 \begin{document}
 \maketitle
 
-\noindent Le modèle du projet prédit, chaque fin de mois, la probabilité que le Nikkei 225 baisse le mois suivant. Cette
-annexe dérive sa fonction de coût, son gradient et son prior de régularisation, puis analyse la sensibilité de son
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+\textbf{Projet.} Chaque fin de mois, prédire la probabilité que le Nikkei 225 baisse le mois suivant, à partir de
+variables de marché, de taux, de change et de news (février 2010 → septembre 2026). Ce rapport traite la partie
+mathématique du modèle retenu ; la démarche complète d'apprentissage automatique (données, modèles, calibration, test,
+explicabilité) est dans le rapport d'Applied ML.\\
+\textbf{Dépôt Git :} \url{https://github.com/Thomaswayne2003/projetML} \quad \textbf{Calculs :}
+\texttt{notebooks/05\_annexe\_maths\_logistique.ipynb}, \texttt{src/logreg\_scratch.py}.}}
+
+
+\noindent Le modèle du projet prédit, chaque fin de mois, la probabilité que le Nikkei 225 baisse le mois suivant. Ce
+rapport dérive sa fonction de coût, son gradient et son prior de régularisation, puis analyse la sensibilité de son
 optimisation. Le plan suit la recette de L1 : données, modèle, coût, optimiseur, évaluation. Les calculs sont dans
 \texttt{notebooks/05\_annexe\_maths\_logistique.ipynb} et \texttt{src/logreg\_scratch.py}.
 
@@ -162,5 +172,7 @@ L2 est un prior gaussien de variance $\tau^2=1/(2m\lambda)$ qui rend le problèm
 gradient converge pour $\alpha<2/L$ et retrouve scikit-learn. Sur ce problème, toutes les sensibilités pointent dans le
 même sens : plus de régularisation, ou un arrêt plus précoce, rapproche le modèle de la constante, signe d'un signal
 faible et instable dans le temps.
+
+\input{roles_et_ia}
 
 \end{document}

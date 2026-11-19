@@ -74,7 +74,7 @@ tests/               tests (fuites, pipeline, gradient, règle de décision, API
 notebooks/           analyses et figures, dans l'ordre des étapes (matériel complémentaire)
 runs/                journal des essais, prédictions, modèles, décision figée, évaluation du test
 figures/             figures exportées
-report/              rapport.tex/.pdf (Applied ML), annexe_maths.tex/.pdf (Maths), plan_oral.md
+report/              rapport.tex (Applied ML), rapport_maths.tex (Maths), roles_et_ia.tex (partie commune), plan_oral.md
                      comprendre_le_projet.pdf : le projet expliqué simplement, avec un avis sur chaque choix
 ```
 
@@ -351,8 +351,7 @@ au-dessus de 20 %), contre 0,50 pour le sens du marché. Doser la position d'apr
 (−9,7 % au lieu de −13,2 %) sans améliorer le rendement par unité de risque (1,00 contre 0,98). Le volet annonce donc
 le risque, et la recommandation du projet reste « toujours acheter, couvert ». L'API le sert sur `/volatilite`, les
 trois vérifications sur `/verifications`. Le site les présente dans deux chapitres du récit et dans la scène
-« Risque » de l'accueil. Une section prête à insérer dans le rapport se trouve dans `report/section_apres_coup.tex`
-(le rapport n'a pas été recompilé).
+« Risque » de l'accueil. Ces résultats sont repris dans le rapport d'Applied ML (`report/section_apres_coup.tex`, incluse dans `report/rapport.tex`).
 
 ## Limites connues (revue finale)
 

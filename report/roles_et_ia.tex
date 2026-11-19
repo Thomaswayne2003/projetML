@@ -1,0 +1,38 @@
+% Rôles des membres et usage de l'IA : partie commune aux deux rapports (\input{roles_et_ia}).
+
+\section*{Contributions des membres}
+
+\begin{table}[H]\centering\small
+\begin{tabular}{p{3.2cm}p{12cm}}\toprule
+Membre & Ce qu'il a fait \\\midrule
+\textbf{Yann Linganzi} &
+\textbf{Conception et conduite du projet.} Choix de la question (acheter, rester neutre ou vendre le Nikkei, couvert
+ou non contre le yen) et de sa traduction en deux classifications ; collecte des données (versions 1 et 2), choix des
+sources et des décalages de publication ; audit des fuites ; exploration et construction des variables ; découpage
+chronologique ; pipeline, trois modèles et réglage Optuna ; choix de la log-loss comme critère ; calibration de Platt
+et règle de décision par espérance de gain, figées avant le test ; évaluation unique du test ; explicabilité
+(tranches, permutation, SHAP, dépendances partielles) ; annexe mathématique (logistique codée à la main, sensibilité,
+moindres carrés) ; seconde version 1999-2026 avec le contrôle des séries Bloomberg ; explorations après coup et
+protocole figé de la troisième version ; API, tableau de bord et site ; rédaction des rapports. \\[3pt]
+\textbf{arnshl} &
+Captures du terminal Bloomberg (huit écrans : inflation japonaise, fondamentaux et décomposition du rendement du
+Nikkei, révisions des bénéfices, rendement des bénéfices contre le taux américain à 10 ans, trajectoires du bénéfice
+par action), avec les vérifications visuelles et les pistes de variables qu'elles suggèrent ; chiffres qui justifient
+les conclusions des salles III et VII du site ; relecture et fusion des contributions sur GitHub. \\[3pt]
+\textbf{jovi-mce} &
+Version anglaise du site (\texttt{site/en/}) et sa mise en ligne. \\\bottomrule
+\end{tabular}\end{table}
+
+\section*{Usage de l'IA}
+
+La réflexion et la méthode sont les nôtres. Yann Linganzi a posé le problème et décidé de chaque choix de méthode :
+les variables et leurs dates de publication, le découpage dans le temps, les modèles comparés, le critère, la
+calibration, la règle de décision et l'engagement pris avant d'ouvrir le test, puis, après coup, les vérifications à
+mener et le protocole de la troisième version. Il a testé chacun de ces choix et validé chaque résultat : audit des
+fuites, vérifications qui retrouvent à l'identique la décision et l'évaluation figées, tests automatiques, lecture et
+interprétation des chiffres.
+
+Un assistant IA (Claude, d'Anthropic) a servi d'aide à la programmation : écriture du code Python des modules et des
+notebooks à partir de ces choix, mise en forme du site et des figures, et aide à la relecture et à la mise en forme de
+la rédaction. Tout ce qu'il a produit a été relu, exécuté et vérifié avant d'être gardé ; quand un résultat ne
+tenait pas, c'est la méthode qui a été corrigée, pas le chiffre. La soutenance est assurée par le groupe.

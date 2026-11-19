@@ -286,6 +286,8 @@ groupe) : rien ne permet de conclure à un traitement inégal. Nous n'avons pas 
 baisses par groupe, des seuils propres à chaque groupe seraient réglés sur le bruit. C'est la principale limite du
 projet au regard de l'énoncé.
 
+\input{section_apres_coup}
+
 \section{Limites}
 
 \begin{itemize}
@@ -305,26 +307,11 @@ postérieures à septembre 2026.
 Le code principal est en Python (\texttt{src/}) : construction de la table et audit, pipeline, réglage, décision,
 évaluation, prédiction, régression logistique codée à la main. Toutes les graines sont fixées ; deux exécutions du
 réglage donnent les mêmes 200 essais ; \texttt{python -m src.decision --verifier} et \texttt{python -m src.evaluate
---verifier} retrouvent les fichiers figés à l'identique sans les réécrire ; 15 tests passent. Une API FastAPI sert le
+--verifier} retrouvent les fichiers figés à l'identique sans les réécrire ; 28 tests passent. Une API FastAPI sert le
 signal (\texttt{/signal}, \texttt{/explication}, \texttt{/historique}, \texttt{/evaluation}) et un tableau de bord
-Streamlit le présente. Les notebooks sont du matériel complémentaire.
+Streamlit le présente. Les notebooks sont du matériel complémentaire ; le notebook 09 rassemble tout le code avec les concepts expliqués. La partie mathématique fait l'objet d'un rapport séparé (\texttt{report/rapport\_maths.tex}).
 
-\section*{Contributions des membres (obligatoire)}
-
-\begin{table}[H]\centering\small
-\begin{tabular}{p{3.5cm}p{11.5cm}}\toprule
-Membre & Rôle et parties du projet \\\midrule
-\textcolor{red}{À COMPLÉTER} & \textcolor{red}{par exigence ou par étape : collecte, EDA, modèles, calibration, explicabilité, rapport, plateforme} \\
-\textcolor{red}{À COMPLÉTER} & \textcolor{red}{À COMPLÉTER} \\
-\textcolor{red}{À COMPLÉTER} & \textcolor{red}{À COMPLÉTER} \\\bottomrule
-\end{tabular}\end{table}
-
-\section*{Usage d'assistants IA}
-
-Le projet a été développé avec l'aide de Claude (Anthropic) : relecture des supports de cours pour aligner la méthode,
-écriture et exécution du code des notebooks et des modules Python, revue indépendante du dépôt (fuites, cohérence
-des chiffres, conformité à l'énoncé), et première rédaction de ce rapport. Les commits concernés portent la mention
-\emph{Co-Authored-By: Claude}. Les choix de méthode, la validation des résultats et la soutenance relèvent du groupe.
+\input{roles_et_ia}
 
 \appendix
 \section{Journal des essais (exigence 7)}
