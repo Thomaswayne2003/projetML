@@ -149,6 +149,14 @@ const V3_INFO = V3.tests_probabilites ? (() => {
   };
 })() : null;
 
+// Room III: each model's best cross-validation trial, against its log-loss on the test
+const ESSAIS_PAR_MODELE = Math.round(CHIFFRES.essais / 3);
+const CV_TEST = Object.fromEntries([["logit", "logistique"], ["rf", "Random Forest"], ["lgbm", "LightGBM"]].map(([m, nomTest]) => [m, {
+  cv: D.essais.find((e) => e.retenu && e.modele === m && e.cible === "nikkei")?.logloss,
+  test: D.evaluation.metriques[nomTest]?.["log-loss"],
+}]));
+const parcours = (m) => `${dec(CV_TEST[m].cv)} → ${dec(CV_TEST[m].test)}`;
+
 const SALLES_ML = [
   {
     id: "dataset", num: "I", nom: "The dataset", kanji: "集",
@@ -199,14 +207,14 @@ const SALLES_ML = [
     presenter: [
       "<b>A progression of three models (S2 to S5, brief 4).</b> A penalised logistic (S2, S3), a random forest (S4, S5) and a LightGBM (S5), compared on the same log-loss.",
       "<b>A single pipeline (brief 5).</b> Imputation, standardisation, k-means regime and model are fitted together, fold by fold: no statistic from the future leaks into the past.",
-      `<b>Optuna without an optimistic score (S3, briefs 6 and 7).</b> ${nombre(CHIFFRES.essais)} trials on folds that respect time (TimeSeriesSplit), all logged; the penalty and class weighting are chosen in cross-validation. The selected logistic: ${dec(CHIFFRES.llCV)} log-loss.`,
+      `<b>Optuna without an optimistic score (S3, briefs 6 and 7).</b> ${nombre(CHIFFRES.essais)} trials on folds that respect time (TimeSeriesSplit), all logged. The best of ${ESSAIS_PAR_MODELE} trials is always flattering: LightGBM goes from ${dec(CV_TEST.lgbm.cv)} in cross-validation to ${dec(CV_TEST.lgbm.test)} on the test, the logistic from ${dec(CV_TEST.logit.cv)} to ${dec(CV_TEST.logit.test)}. Hence the rule announced before the test: the logistic, unless a more complex model beats it on validation in both PR-AUC and calibrated log-loss.`,
     ],
     titre: `Three models, ${nombre(CHIFFRES.essais)} trials`,
     oeuvre: "The field of trials",
     legende: "One stem per Optuna trial, in three rows: logistic, random forest, LightGBM. The taller the stem, the lower the cross-validation log-loss. The tinted stem is the selected trial.",
     clair: "A logistic regression, a random forest and a LightGBM, tuned by Optuna on folds that respect time order. Everything that learns a parameter, imputation and regimes included, stays inside the pipeline.",
-    technique: `scikit-learn pipeline: imputation, standardisation, k-means regime, model. ${CHIFFRES.essais} Optuna trials on the main target (50 per model), with a TimeSeriesSplit; the selected logistic reaches ${dec(CHIFFRES.llCV)} log-loss in cross-validation. Platt calibration on the out-of-fold predictions. The best of fifty trials is always flattering: LightGBM looks excellent in cross-validation and does worse than the logistic on the test.`,
-    chiffres: [["3", "models compared"], [nombre(CHIFFRES.essais), "Optuna trials"], [dec(CHIFFRES.llCV), "logistic log-loss in cross-validation"]],
+    technique: `scikit-learn pipeline: imputation, standardisation, k-means regime, model. ${CHIFFRES.essais} Optuna trials on the main target (${ESSAIS_PAR_MODELE} per model), with a TimeSeriesSplit; the penalty and class weighting are chosen in cross-validation. Best cross-validation trial: LightGBM ${dec(CV_TEST.lgbm.cv)}, random forest ${dec(CV_TEST.rf.cv)}, logistic ${dec(CV_TEST.logit.cv)}. On the test, the order flips: logistic ${dec(CV_TEST.logit.test)}, LightGBM ${dec(CV_TEST.lgbm.test)}, forest ${dec(CV_TEST.rf.test)}, and the constant (${dec(CHIFFRES.llConstante)}) beats all three. Keeping the best of ${ESSAIS_PAR_MODELE} trials means keeping the one the folds favoured most by chance: the more flexible the model, the wider the gap. No more complex model met the selection rule on validation, so the logistic is kept. Platt calibration on the out-of-fold predictions.`,
+    chiffres: [["3", "models compared"], [nombre(CHIFFRES.essais), "Optuna trials"], [parcours("lgbm"), "LightGBM: cross-validation → test"]],
     ton: { mur: "#a26a52", sol: "#8c6b5c", ciel: "#fae9de", texte: "#fff5ee", accent: "#f0c7b0" },
   },
   {
@@ -265,20 +273,21 @@ const SALLES_ML = [
     notebooks: ["06_annexe_news_prix", "07_seconde_version_bloomberg", "08_ameliorations_sans_surapprentissage"], docs: ["rapport"],
     seances: [["S1", "Generalisation, leakage"], ["S3", "Choosing without looking at the test"], ["Afterwards", "Exploration, with no value as proof"]],
     presenter: [
-      V2_INFO ? `<b>Retraining on 1999-2026.</b> Same pipeline and same selection rule: ${V2_INFO.modele}, ${dec(V2_INFO.ll)} log-loss on the test vs ${dec(V2_INFO.llConst)} for the constant. Better than the first version, still no better than the constant.` : "<b>Retraining on a longer history.</b>",
-      V3_INFO ? `<b>Improving without overfitting.</b> Protocol frozen before any computation, month-by-month retraining over ${V3_INFO.mois} months (2010-2023), Holm correction: ${V3_INFO.retenus} lever kept out of ${V3_INFO.tests}.` : "<b>Improving without overfitting.</b>",
-      "<b>What we take from it.</b> Since the test had been seen, all of this remains exploratory. With these data, the Nikkei's next month cannot be forecast; the best decision is still to buy, hedged.",
+      V2_INFO ? `<b>Retraining on 1999-2026 (S1).</b> Same pipeline, same selection rule, same 2024-2026 test: ${V2_INFO.modele}, ${dec(V2_INFO.ll)} log-loss vs ${dec(V2_INFO.llConst)} for the constant. The gap to the constant shrinks from ${dec(ECART_TEST.moyenne)} to ${dec(V2_INFO.ecart.moyenne)}: better, not enough.${CB.ipc ? ` Bloomberg serves as a check: the table's CPI is the same series, shifted one month for its release (correlation ${dec(CB.ipc.correlations.decalage_1)}).` : ""}` : "<b>Retraining on a longer history.</b>",
+      V3_INFO ? `<b>Improving without overfitting (S3).</b> Protocol frozen before any computation, ${V3_INFO.tests} levers retrained month by month over ${V3_INFO.mois} months (2010-2023), Holm correction: ${V3_INFO.retenus === 0 ? "none is kept" : `${V3_INFO.retenus} kept`}. The best gains ${dec(-V3_INFO.ecart, 4)} of log-loss, i.e. ${dec(-V3_INFO.ecart / V3_INFO.se, 1)} standard errors: noise.` : "<b>Improving without overfitting.</b>",
+      `<b>Risk can be forecast, direction cannot.</b> Next month's volatility can be forecast (out-of-sample R² ${dec(RISQUE.r2Avant, 2)} on 2016-2023, ${dec(RISQUE.r2Test, 2)} on the test), and a turbulent month is recognised with an AUC of ${dec(RISQUE.aucAgite, 2)}.${V3_INFO ? ` Yet sizing the purchase by volatility does not beat buying hedged (Sharpe ${dec(V3_INFO.dose.sharpe, 2)} vs ${dec(V3_INFO.ref.sharpe, 2)}).` : ""} Since the test had been seen, all of this remains exploratory: the decision is still to buy, hedged.`,
     ],
     titre: "What we tried next",
     oeuvre: "The breath",
     legende: "A spiral from 2016 (bottom) to 2026 (top), whose thickness follows each month's realised volatility. The tinted parts are turbulent months, above 20% annual volatility.",
-    clair: "Once the test was opened, three leads were followed. First, retrain the same model on a longer history, from 1999 to 2026, with Bloomberg as the reference. Next, apply every feasible improvement lever, under a protocol frozen before any computation and judged on 2010-2023: none passes. Finally, forecast how turbulent the market will be rather than its direction.",
+    clair: "Once the test was opened, three leads were followed. First, retrain the same model on a longer history, from 1999 to 2026, with Bloomberg as the reference. Next, apply every feasible improvement lever, under a protocol frozen before any computation and judged on 2010-2023: none passes. Finally, forecast how turbulent the market will be rather than its direction: turbulence can be forecast, direction cannot. One lead remains open: the table has no valuation or earnings variable (P/E, revisions of expected earnings), which Bloomberg provides.",
     technique: V2_INFO
-      ? `With ${V2_INFO.mois} training months instead of ${CHIFFRES.moisEntrainement}, the rule from notebook 03 selects ${V2_INFO.modele} on validation. On the test, its log-loss is ${dec(V2_INFO.ll)} vs ${dec(V2_INFO.llConst)} for the constant (gap ${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}), and its rule returns ${pct(V2_INFO.regle, 1, true)} vs ${pct(V2_INFO.couvert, 1, true)} for buying hedged. Better than the first version, still no better than the constant. The logistic would have beaten the constant on the test (${dec(V2_INFO.llLogit)}), but the announced rule had ruled it out on validation (${dec(V2_INFO.llLogitVal)}): choosing it now would mean choosing on the test.${V3_INFO ? ` The improvement levers, retrained each month over ${V3_INFO.mois} months of 2010-2023: ${V3_INFO.retenus} of ${V3_INFO.tests} pass the Diebold-Mariano test or the Sharpe bootstrap after Holm correction (smallest corrected p: ${dec(V3_INFO.pMin, 2)}). The best, “${levier(V3_INFO.meilleure)}”, gains ${dec(-V3_INFO.ecart, 4)} of log-loss, i.e. ${dec(-V3_INFO.ecart / V3_INFO.se, 1)} standard errors.` : ""} Next month's volatility: out-of-sample R² of ${dec(RISQUE.r2Avant, 2)} on 2016-2023; a turbulent month is recognised with an AUC of ${dec(RISQUE.aucAgite, 2)}.`
+      ? `With ${V2_INFO.mois} training months instead of ${CHIFFRES.moisEntrainement}, the rule from notebook 03 selects ${V2_INFO.modele} on validation. On the same 2024-2026 test, already seen, its log-loss is ${dec(V2_INFO.ll)} vs ${dec(V2_INFO.llConst)} for the constant (gap ${dec(V2_INFO.ecart.moyenne, 3)} ± ${dec(V2_INFO.ecart.erreur_type, 3)}), and its rule returns ${pct(V2_INFO.regle, 1, true)} vs ${pct(V2_INFO.couvert, 1, true)} for buying hedged. Better than the first version, still no better than the constant. The logistic would have beaten the constant on the test (${dec(V2_INFO.llLogit)}), but the announced rule had ruled it out on validation (${dec(V2_INFO.llLogitVal)}): choosing it now would mean choosing on the test.${V3_INFO ? ` The improvement levers, retrained each month over ${V3_INFO.mois} months of 2010-2023: ${V3_INFO.retenus === 0 ? `none of the ${V3_INFO.tests} passes` : `${V3_INFO.retenus} of ${V3_INFO.tests} pass`} the Diebold-Mariano test or the Sharpe bootstrap after Holm correction (${V3_INFO.pMin >= 0.995 ? "every corrected p equals 1" : `smallest corrected p: ${dec(V3_INFO.pMin, 2)}`}). The best, “${levier(V3_INFO.meilleure)}”, gains ${dec(-V3_INFO.ecart, 4)} of log-loss, i.e. ${dec(-V3_INFO.ecart / V3_INFO.se, 1)} standard errors.` : ""} Next month's volatility: out-of-sample R² of ${dec(RISQUE.r2Avant, 2)} on 2016-2023 and ${dec(RISQUE.r2Test, 2)} on 2024-2026; a turbulent month is recognised with an AUC of ${dec(RISQUE.aucAgite, 2)}.`
       : `Next month's volatility: out-of-sample R² of ${dec(RISQUE.r2Avant, 2)} on 2016-2023; a turbulent month is recognised with an AUC of ${dec(RISQUE.aucAgite, 2)}.`,
     chiffres: V2_INFO
-      ? [[`${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`, "log-loss 1999-2026: model / constant"], [pct(V2_INFO.regle, 1, true), "second version's rule, in euros"],
-         V3_INFO ? [`${V3_INFO.retenus} of ${V3_INFO.tests}`, "levers kept by the frozen protocol"] : [dec(RISQUE.r2Avant, 2), "volatility R², 2016-2023"]]
+      ? [[`${dec(V2_INFO.ll)} / ${dec(V2_INFO.llConst)}`, "log-loss 1999-2026: model / constant"],
+         V3_INFO ? [V3_INFO.retenus === 0 ? `None of ${V3_INFO.tests}` : `${V3_INFO.retenus} of ${V3_INFO.tests}`, "levers kept by the frozen protocol"] : [pct(V2_INFO.regle, 1, true), "second version's rule, in euros"],
+         [dec(RISQUE.aucAgite, 2), "AUC: spotting a turbulent month"]]
       : [[dec(RISQUE.r2Avant, 2), "volatility R², 2016-2023"], [dec(RISQUE.aucAgite, 2), "AUC for a turbulent month"], ["—", ""]],
     ton: { mur: "#95a3ac", sol: "#7c858b", ciel: "#f2f6f8", texte: "#fbfdfe", accent: "#e1e8ec" },
   },
