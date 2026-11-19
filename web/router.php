@@ -9,14 +9,14 @@ declare(strict_types=1);
 $chemin = urldecode((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $projet = dirname(__DIR__);
 
-$pages = ['/' => 'experience.php', '/dossier' => 'index.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php'];
+$pages = ['/' => 'experience.php', '/dossier' => 'index.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php', '/bloomberg' => 'bloomberg.php'];
 if (isset($pages[$chemin])) {
     require __DIR__ . '/' . $pages[$chemin];
     return true;
 }
 
 $fichiers = ['/rapport.pdf' => $projet . '/report/rapport.pdf', '/annexe_maths.pdf' => $projet . '/report/annexe_maths.pdf'];
-$dossiers = ['/figures/' => $projet . '/figures', '/ipynb/' => $projet . '/notebooks'];
+$dossiers = ['/figures/' => $projet . '/figures', '/ipynb/' => $projet . '/notebooks', '/bloomberg/' => $projet . '/data/bloomberg'];
 $types = ['png' => 'image/png', 'pdf' => 'application/pdf', 'ipynb' => 'application/x-ipynb+json'];
 
 $cible = $fichiers[$chemin] ?? null;

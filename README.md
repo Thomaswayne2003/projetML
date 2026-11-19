@@ -18,6 +18,8 @@ l'engagement pris avant le test, la recommandation est **« toujours acheter le 
 - `data/dataset_monthly.csv` : une ligne par mois, de 2010 à 2026, construite par les notebooks de collecte
   (V1 et V2, hors de ce dépôt). Les news n'existent qu'à partir de 2017.
 - `data/dictionnaire_variables.csv` : définition, fréquence et décalage de publication de chaque colonne.
+- `data/bloomberg/` : huit captures Bloomberg (18 novembre 2026), avec des vérifications visuelles et des pistes de
+  variables de valorisation et de bénéfices. Le modèle ne les utilise pas.
 
 ## Structure
 
@@ -110,6 +112,8 @@ Le site a trois niveaux de lecture :
     projet est restée fixée avant le test ;
   - le **changement de régime** : des cartes qui se retournent pour comparer avant et après 2022 ;
   - la **surface de coût en 3D** et la descente de gradient pour quatre pas ;
+- **les captures Bloomberg** (`/bloomberg`) : huit écrans commentés (valorisation, révisions de bénéfices, CPI),
+  qui confirment ou nuancent les conclusions du projet ;
 - **le lecteur de notebooks** (`/notebooks`), le rapport et l'annexe en PDF.
 
 Après avoir modifié un notebook, régénérer ses pages avec `python -m app.build_site`. Une variante en tableau de
