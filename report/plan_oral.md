@@ -14,7 +14,7 @@
 
 **Questions probables et réponses courtes**
 - *Pourquoi pas LightGBM, meilleur en CV ?* Règle de baseline de S1 : un modèle complexe doit battre clairement le simple ; en validation, ses probabilités étaient pires.
-- *Le test était-il vraiment caché ?* Les choix de modèle et de seuils, oui : commit `75712cf` avant `6efd12c`. Mais le notebook 01 affichait des statistiques du test, donc la couverture et la règle de repli n'ont pas été choisies à l'aveugle. Nous le déclarons.
+- *Le test était-il vraiment caché ?* Les choix de modèle et de seuils, oui : commit `0d8df2f` avant `775a352`. Mais le notebook 01 affichait des statistiques du test, donc la couverture et la règle de repli n'ont pas été choisies à l'aveugle. Nous le déclarons.
 - *Pourquoi pas de `class_weight` ?* Optuna l'a testé et rejeté : il tire les probabilités vers 50 %, alors que la décision a besoin de probabilités calibrées. Le remède retenu est le seuil (S7).
 - *Et l'équité ?* Pas de personnes, donc pas d'attribut sensible. Analyse transposée à des groupes de mois : aucun écart au-delà du bruit, pas de mitigation.
 - *Pourquoi l'importance par permutation ne voit pas l'extrapolation ?* Elle mélange des valeurs toutes élevées ; SHAP compare à la moyenne de l'entraînement.

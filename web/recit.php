@@ -125,7 +125,7 @@ $bilan = [
      "Log-loss de $ll contre $ll0 · $gain_achat contre $gain_regle sur le test"],
     ['Une méthode qui ne triche pas',
      "Le modèle n'a jamais vu le futur, nos choix ont été écrits avant l'examen final, et cet examen n'a eu lieu qu'une seule fois.",
-     'Audit des fuites · décision figée au commit 75712cf · une seule évaluation du test'],
+     'Audit des fuites · décision figée au commit 0d8df2f · une seule évaluation du test'],
     ['Un échec que nous savons expliquer',
      "La banque centrale du Japon a changé de politique en 2022, et ce que le modèle avait appris a cessé d'être vrai.",
      'Corrélation news-rendement de −0,38 à +0,29 · portage à 6 écarts-types · modèle meilleur seulement en 2024'],

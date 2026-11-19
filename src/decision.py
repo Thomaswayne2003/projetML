@@ -1,6 +1,6 @@
 """Calibration de Platt, règle de décision par espérance de gain, et décision figée (notebook 03).
 
-La décision du projet est figée dans runs/decision_finale.json (commit 75712cf, avant le test).
+La décision du projet est figée dans runs/decision_finale.json (commit 0d8df2f, avant le test).
 Usage :
   python -m src.decision --verifier   recalcule tout et compare à la décision figée, sans rien écrire
   python -m src.decision --ecrire     réécrit le fichier (refusé s'il existe déjà, sauf --forcer)

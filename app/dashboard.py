@@ -112,5 +112,5 @@ with onglets[4]:
   calibrée par Platt sur les prédictions hors fold.
 - **Décision** : espérance de gain en euros avec des coûts mesurés sur l'entraînement et une marge fixée à l'avance
   ({100 * DEC['marge_m']:.1f} %/mois) ; couverture : {DEC['couverture']}.
-- **Traçabilité** : décision commitée (`75712cf`) avant l'évaluation du test (`6efd12c`).
+- **Traçabilité** : décision commitée (`0d8df2f`) avant l'évaluation du test (`775a352`).
 """)

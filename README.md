@@ -305,7 +305,7 @@ Après avoir modifié un notebook, régénérer ses pages avec `python -m app.bu
 bord Streamlit existe aussi : `streamlit run app/dashboard.py`.
 
 `src.decision` et `src.evaluate` ne réécrivent jamais les fichiers figés : la décision a été commitée avant le test
-(commit `75712cf`), et le test n'a été évalué qu'une fois (commit `6efd12c`).
+(commit `0d8df2f`), et le test n'a été évalué qu'une fois (commit `775a352`).
 
 ## Reproductibilité
 
@@ -367,7 +367,7 @@ trois vérifications sur `/verifications`. Le site les présente dans deux chapi
 - **Le notebook 04 réutilise le test** pour des diagnostics (borner le portage) : c'est une analyse exploratoire, pas un score.
 - **Deux commits figurent dans les fichiers figés.** Dans `runs/evaluation_test.json`, le champ
   `decision_figee_au_commit` vaut `2aa4b40` : c'est le commit du code qui a calculé la décision. Le fichier de
-  décision lui-même a été figé par le commit `75712cf`.
+  décision lui-même a été figé par le commit `0d8df2f`.
 - **Le dictionnaire des variables** indique « aucun » décalage pour les colonnes `target_*`, alors que ces cibles ne
   sont connues qu'en t+1. Elles ne sont jamais utilisées comme variables (contrôlé par l'audit de `src/data.py`).
 - **Petit échantillon** : 143 mois d'entraînement et 12 baisses dans le test. Les écarts entre modèles et entre

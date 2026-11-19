@@ -1,6 +1,6 @@
 """Évaluation sur le test 2024-2026 avec la décision figée (notebook 03b).
 
-Le test a été évalué une seule fois, au commit 6efd12c (runs/evaluation_test.json).
+Le test a été évalué une seule fois, au commit 775a352 (runs/evaluation_test.json).
 Usage : python -m src.evaluate --verifier   recalcule et compare au fichier, sans rien écrire
 """
 import argparse

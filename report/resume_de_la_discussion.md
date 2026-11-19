@@ -1,6 +1,6 @@
 # Résumé de la discussion — projet Nikkei
 
-Rédigé le 16 novembre 2026. Tout ce qui suit est **en local** : rien n'a été commité ni poussé depuis le commit `5565228`.
+Rédigé le 16 novembre 2026. Tout ce qui suit est **en local** : rien n'a été commité ni poussé depuis le commit `9f0c197`.
 
 ## 1. Où en est le projet
 
@@ -89,7 +89,7 @@ Ce fichier ne suffit pas seul : il faut lui donner aussi l'accès au dossier `pr
 **Règles fermes**
 
 - Ne jamais réécrire `runs/decision_finale.json` ni `runs/evaluation_test.json`. Ne pas réévaluer le test pour régler un modèle. Contrôle : `python -m src.evaluate --verifier` et `python -m src.decision --verifier`.
-- Ne rien commiter ni pousser sans demande explicite. Pas de ligne `Co-Authored-By` dans les commits. Ne pas réécrire l'historique Git (les commits `75712cf` et `6efd12c` prouvent que la décision a été figée avant le test).
+- Ne rien commiter ni pousser sans demande explicite. Pas de ligne `Co-Authored-By` dans les commits. Ne pas réécrire l'historique Git (les commits `0d8df2f` et `775a352` prouvent que la décision a été figée avant le test).
 - Le dépôt GitHub (`Thomaswayne2003/projetML`) reste privé. L'assistant ne saisit aucun mot de passe.
 - Tout résultat obtenu après l'ouverture du test se présente comme une exploration après coup, jamais comme le résultat du projet.
 - Le volet volatilité ne se vend pas comme une meilleure stratégie.

@@ -299,7 +299,7 @@ $etapes_dataset = [
     <div class="carte">
       <h3>Figée avant de voir le test</h3>
       <p>Le modèle, la calibration, les coûts, la marge et la couverture sont écrits dans un fichier, commité
-        (<code>75712cf</code>) avant toute évaluation sur le test (<code>6efd12c</code>).</p>
+        (<code>0d8df2f</code>) avant toute évaluation sur le test (<code>775a352</code>).</p>
       <div class="alerte"><b>Engagement pris à l'avance.</b> Si le modèle perd aussi contre le modèle constant sur le
         test, la recommandation sera « toujours acheter, couvert ».</div>
       <p class="note" style="margin-top:14px">La calibration de Platt est apprise sur les prédictions hors fold. Un premier
