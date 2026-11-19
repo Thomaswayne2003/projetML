@@ -520,7 +520,7 @@ const FLECHE_G = '<svg class="fleche" viewBox="0 0 34 10" aria-hidden="true"><pa
 function stocker(cle, valeur) { try { localStorage.setItem(cle, valeur); } catch (e) { /* stockage indisponible */ } }
 function lire(cle) { try { return localStorage.getItem(cle); } catch (e) { return null; } }
 
-const DOCS = { rapport: ["Le rapport Applied ML", "docs/rapport.pdf"], annexe: ["L'annexe de mathématiques", "docs/annexe_maths.pdf"] };
+const DOCS = { rapport: ["Le rapport Applied ML", "docs/rapport.pdf"], annexe: ["Le rapport de mathématiques", "docs/rapport_maths.pdf"] };
 const titreNotebook = (nom) => D.notebooks.find((n) => n.nom === nom)?.titre ?? nom;
 const BAS = '<svg class="bas" viewBox="0 0 10 12" aria-hidden="true"><path d="M5 0v10M1 6l4 4 4-4M0 11.5h10" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
 // Ce qui se télécharge : chaque notebook en .ipynb (ou son dossier en .zip), et deux archives (site/data/donnees.js)
@@ -578,7 +578,7 @@ function installerMenu({ page, allerSalle = null, salleActive = () => null }) {
           ${page !== "lecture" ? `<a href="${avecCours("lecture.html")}"><span class="t">La lecture</span>${FLECHE}</a>` : ""}
           ${page !== "cabinet" ? `<a href="${avecCours("cabinet.html")}"><span class="t">Les notebooks</span>${FLECHE}</a>` : ""}
           <a href="docs/rapport.pdf"><span class="t">Le rapport, en PDF</span>${FLECHE}</a>
-          <a href="docs/annexe_maths.pdf"><span class="t">L'annexe de maths, en PDF</span>${FLECHE}</a>
+          <a href="docs/rapport_maths.pdf"><span class="t">Le rapport de maths, en PDF</span>${FLECHE}</a>
         </div>
         <p class="menu-pied"><span>${ENTREE.ecole}</span></p>
       </nav>
