@@ -557,7 +557,7 @@ $bascules = [
           <tr><td>Écart-type a priori τ pour λ = 0,117</td><td class="num">0,17</td></tr>
         </tbody>
       </table>
-      <p style="margin-top:16px"><a class="btn contour" href="/annexe_maths.pdf" target="_blank">Annexe PDF (4 pages)</a></p>
+      <p style="margin-top:16px"><a class="btn contour" href="/rapport_maths.pdf" target="_blank">Rapport de maths PDF (5 pages)</a></p>
     </div>
   </div>
   <div class="carte" style="margin-top:20px">
@@ -862,8 +862,8 @@ $sr_noms = ['acheter et garder' => 'Acheter et garder', $sr_cle => 'Signal chaqu
     <a class="carte ressource relief" href="/notebooks?nb=03b_test_final"><span class="fleche">→</span><span class="num">Notebook 03b</span><h3>Test final</h3><p>L'évaluation unique sur 2024-2026.</p></a>
     <a class="carte ressource relief" href="/notebooks?nb=04_explicabilite_diagnostics"><span class="fleche">→</span><span class="num">Notebook 04</span><h3>Explicabilité</h3><p>Slices, permutation, SHAP, PDP.</p></a>
     <a class="carte ressource relief" href="/notebooks?nb=05_annexe_maths_logistique"><span class="fleche">→</span><span class="num">Notebook 05</span><h3>Annexe de Maths</h3><p>La logistique codée à la main.</p></a>
-    <a class="carte ressource relief" href="/rapport.pdf" target="_blank"><span class="fleche">→</span><span class="num">PDF · 9 pages</span><h3>Rapport Applied ML</h3><p>Les dix exigences, dans l'ordre.</p></a>
-    <a class="carte ressource relief" href="/annexe_maths.pdf" target="_blank"><span class="fleche">→</span><span class="num">PDF · 4 pages</span><h3>Annexe mathématique</h3><p>Loss, gradient, prior, sensibilité.</p></a>
+    <a class="carte ressource relief" href="/rapport.pdf" target="_blank"><span class="fleche">→</span><span class="num">PDF · 10 pages</span><h3>Rapport Applied ML</h3><p>Les dix exigences, dans l'ordre.</p></a>
+    <a class="carte ressource relief" href="/rapport_maths.pdf" target="_blank"><span class="fleche">→</span><span class="num">PDF · 5 pages</span><h3>Rapport de mathématiques</h3><p>Loss, gradient, prior, sensibilité.</p></a>
     <a class="carte ressource relief" href="<?= e(API) ?>/docs" target="_blank"><span class="fleche">→</span><span class="num">API</span><h3>Documentation de l'API</h3><p>/signal, /explication, /historique, /evaluation.</p></a>
   </div>
 </section>

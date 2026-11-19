@@ -1,19 +1,23 @@
 \documentclass[11pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+\usepackage{iftex}
+\ifXeTeX\usepackage{fontspec}\else\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}\fi
 \usepackage[french]{babel}
-\usepackage{lmodern,microtype}
+\ifXeTeX\usepackage{microtype}\else\usepackage{lmodern,microtype}\fi
 \usepackage[margin=2.2cm]{geometry}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx,booktabs,float,caption,enumitem,xcolor}
 \usepackage[hidelinks]{hyperref}
+\usepackage{textcomp,newunicodechar}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{€}{\texteuro}
+\newunicodechar{×}{\ensuremath{\times}}
 \graphicspath{{../figures/}}
 \setlist{itemsep=1pt,topsep=3pt}
 \captionsetup{font=small,labelfont=bf}
 
 \title{\textbf{Acheter, rester neutre ou vendre le Nikkei 225 ?}\\[2pt]
 \large Un signal mensuel tiré des news et des marchés, pour un investisseur en euros}
-\author{Applied ML: Foundations, Engineering \& Evaluation (MSA-DATI07-05) --- Albert School, MSc~1}
+\author{Applied ML: Foundations, Engineering \& Evaluation (MSA-DATI07-05)\\ Albert School, MSc~1 --- Yann Linganzi, Arnault, Abhi, Fathi}
 \date{Novembre 2026}
 
 \begin{document}
@@ -97,7 +101,7 @@ l'indicateur \texttt{news\_dispo} signale l'imputation. Aucune variable n'est ca
 \section{Split, déséquilibre et pipeline (exigences 3 et 5)}
 
 \begin{table}[H]\centering\small
-\begin{tabular}{lcccc}\toprule
+\begin{tabular}{lcccp{4.4cm}}\toprule
 Bloc & Période & Mois & Part de baisses & Rôle \\\midrule
 Entraînement & 2010-02 → 2021-12 & 143 (57 avec news) & 39,2~\% & Optuna, \texttt{TimeSeriesSplit} 4 × 12 mois \\
 Validation & 2022-01 → 2023-12 & 24 & 41,7~\% & choix du modèle \\

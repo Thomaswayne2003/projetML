@@ -544,7 +544,7 @@ const FLECHE_G = '<svg class="fleche" viewBox="0 0 34 10" aria-hidden="true"><pa
 function stocker(cle, valeur) { try { localStorage.setItem(cle, valeur); } catch (e) { /* stockage indisponible */ } }
 function lire(cle) { try { return localStorage.getItem(cle); } catch (e) { return null; } }
 
-const DOCS = { rapport: ["The Applied ML report (in French)", `${RACINE}docs/rapport.pdf`], annexe: ["The maths appendix (in French)", `${RACINE}docs/annexe_maths.pdf`] };
+const DOCS = { rapport: ["The Applied ML report (in French)", `${RACINE}docs/rapport.pdf`], annexe: ["The maths report (in French)", `${RACINE}docs/rapport_maths.pdf`] };
 const titreNotebook = (nom) => titreNb(nom);
 const BAS = '<svg class="bas" viewBox="0 0 10 12" aria-hidden="true"><path d="M5 0v10M1 6l4 4 4-4M0 11.5h10" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
 // What can be downloaded: each notebook as .ipynb (or its folder as .zip), and two archives (site/data/donnees.js)
@@ -602,7 +602,7 @@ function installerMenu({ page, allerSalle = null, salleActive = () => null }) {
           ${page !== "lecture" ? `<a href="${avecCours("lecture.html")}"><span class="t">The reading</span>${FLECHE}</a>` : ""}
           ${page !== "cabinet" ? `<a href="${avecCours("cabinet.html")}"><span class="t">The notebooks</span>${FLECHE}</a>` : ""}
           <a href="${RACINE}docs/rapport.pdf"><span class="t">The report, PDF (French)</span>${FLECHE}</a>
-          <a href="${RACINE}docs/annexe_maths.pdf"><span class="t">The maths appendix, PDF (French)</span>${FLECHE}</a>
+          <a href="${RACINE}docs/rapport_maths.pdf"><span class="t">The maths report, PDF (French)</span>${FLECHE}</a>
           <a href="${RACINE}${location.pathname.endsWith("cabinet.html") ? "cabinet.html" : location.pathname.endsWith("lecture.html") ? "lecture.html" : "index.html"}${location.search}" lang="fr" hreflang="fr"><span class="t">Version française</span>${FLECHE}</a>
         </div>
         <p class="menu-pied"><span>${ENTREE.ecole}</span></p>
@@ -1478,7 +1478,7 @@ function corps(s) {
     part.push(`<p class="clair">${s.clair}</p>`);
     part.push(`<div class="pieces">${D.notebooks.map((n) => `<button type="button" class="piece" data-nb="${n.nom}"><span class="sur-titre">${nomNotebook(n.nom)}</span><strong>${titreNb(n.nom)}</strong><span>Open ${FLECHE}</span></button>`).join("")}
       <a class="piece" href="${RACINE}docs/rapport.pdf" target="_blank" rel="noopener"><span class="sur-titre">PDF · French</span><strong>The Applied ML report</strong><span>Open ${FLECHE}</span></a>
-      <a class="piece" href="${RACINE}docs/annexe_maths.pdf" target="_blank" rel="noopener"><span class="sur-titre">PDF · French</span><strong>The maths appendix</strong><span>Open ${FLECHE}</span></a></div>`);
+      <a class="piece" href="${RACINE}docs/rapport_maths.pdf" target="_blank" rel="noopener"><span class="sur-titre">PDF · French</span><strong>The maths report</strong><span>Open ${FLECHE}</span></a></div>`);
     part.push(`<div class="technique"><span class="sur-titre">In technical terms</span><p>${s.technique}</p></div>`);
     part.push(`<div class="figures-chapitre"><h3 class="sur-titre">All the figures, notebook by notebook</h3>${galerie()}</div>`);
     return part.join("");
@@ -1567,7 +1567,7 @@ function page() {
         <div class="chapitre-corps"><ol>${LIMITES.map(([t, d]) => `<li><div><b>${t}</b><span>${d}</span></div></li>`).join("")}</ol></div>
       </div>
     </section>
-    <footer class="pied large"><span>${ENTREE.ecole}</span><span>Data: FRED, Bank of Japan, Japanese Ministry of Finance, ECB, Yahoo Finance, GDELT. <a href="${avecCours("cabinet.html")}">Notebooks</a> · ${(D.telechargements?.archives ?? []).map((a) => `<a href="${RACINE}${a.href}" download="${a.fichier}">${({ notebooks: "All the notebooks", projet: "The complete project" })[a.cle] ?? a.titre} (.zip)</a>`).join(" · ")} · <a href="${RACINE}docs/rapport.pdf">Report (FR)</a> · <a href="${RACINE}docs/annexe_maths.pdf">Appendix (FR)</a> · <a href="${RACINE}lecture.html${location.search}" lang="fr" hreflang="fr">Version française</a></span></footer>`;
+    <footer class="pied large"><span>${ENTREE.ecole}</span><span>Data: FRED, Bank of Japan, Japanese Ministry of Finance, ECB, Yahoo Finance, GDELT. <a href="${avecCours("cabinet.html")}">Notebooks</a> · ${(D.telechargements?.archives ?? []).map((a) => `<a href="${RACINE}${a.href}" download="${a.fichier}">${({ notebooks: "All the notebooks", projet: "The complete project" })[a.cle] ?? a.titre} (.zip)</a>`).join(" · ")} · <a href="${RACINE}docs/rapport.pdf">Report (FR)</a> · <a href="${RACINE}docs/rapport_maths.pdf">Appendix (FR)</a> · <a href="${RACINE}lecture.html${location.search}" lang="fr" hreflang="fr">Version française</a></span></footer>`;
 
   for (const [id, f] of Object.entries(FIG_ML)) { const e = document.getElementById(id); if (e) f(e); }
   for (const [, , id, f] of Object.values(FIG_MATHS)) { const e = document.getElementById(id); if (e) f(e); }

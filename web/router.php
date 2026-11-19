@@ -21,7 +21,7 @@ if (isset($pages[$chemin])) {
     return true;
 }
 
-$fichiers = ['/rapport.pdf' => $projet . '/report/rapport.pdf', '/annexe_maths.pdf' => $projet . '/report/annexe_maths.pdf'];
+$fichiers = ['/rapport.pdf' => $projet . '/report/rapport.pdf', '/rapport_maths.pdf' => $projet . '/report/rapport_maths.pdf'];
 $dossiers = ['/figures/' => $projet . '/figures', '/ipynb/' => $projet . '/notebooks', '/bloomberg/' => $projet . '/data/bloomberg'];
 $types = ['png' => 'image/png', 'pdf' => 'application/pdf', 'ipynb' => 'application/x-ipynb+json'];
 

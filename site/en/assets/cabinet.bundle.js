@@ -544,7 +544,7 @@ const FLECHE_G = '<svg class="fleche" viewBox="0 0 34 10" aria-hidden="true"><pa
 function stocker(cle, valeur) { try { localStorage.setItem(cle, valeur); } catch (e) { /* stockage indisponible */ } }
 function lire(cle) { try { return localStorage.getItem(cle); } catch (e) { return null; } }
 
-const DOCS = { rapport: ["The Applied ML report (in French)", `${RACINE}docs/rapport.pdf`], annexe: ["The maths appendix (in French)", `${RACINE}docs/annexe_maths.pdf`] };
+const DOCS = { rapport: ["The Applied ML report (in French)", `${RACINE}docs/rapport.pdf`], annexe: ["The maths report (in French)", `${RACINE}docs/rapport_maths.pdf`] };
 const titreNotebook = (nom) => titreNb(nom);
 const BAS = '<svg class="bas" viewBox="0 0 10 12" aria-hidden="true"><path d="M5 0v10M1 6l4 4 4-4M0 11.5h10" fill="none" stroke="currentColor" stroke-width="1"/></svg>';
 // What can be downloaded: each notebook as .ipynb (or its folder as .zip), and two archives (site/data/donnees.js)
@@ -602,7 +602,7 @@ function installerMenu({ page, allerSalle = null, salleActive = () => null }) {
           ${page !== "lecture" ? `<a href="${avecCours("lecture.html")}"><span class="t">The reading</span>${FLECHE}</a>` : ""}
           ${page !== "cabinet" ? `<a href="${avecCours("cabinet.html")}"><span class="t">The notebooks</span>${FLECHE}</a>` : ""}
           <a href="${RACINE}docs/rapport.pdf"><span class="t">The report, PDF (French)</span>${FLECHE}</a>
-          <a href="${RACINE}docs/annexe_maths.pdf"><span class="t">The maths appendix, PDF (French)</span>${FLECHE}</a>
+          <a href="${RACINE}docs/rapport_maths.pdf"><span class="t">The maths report, PDF (French)</span>${FLECHE}</a>
           <a href="${RACINE}${location.pathname.endsWith("cabinet.html") ? "cabinet.html" : location.pathname.endsWith("lecture.html") ? "lecture.html" : "index.html"}${location.search}" lang="fr" hreflang="fr"><span class="t">Version française</span>${FLECHE}</a>
         </div>
         <p class="menu-pied"><span>${ENTREE.ecole}</span></p>
@@ -737,7 +737,7 @@ liste.innerHTML = nbs.map((n) => `<li><a href="?nb=${n.nom}&cours=${COURS}" data
 choix.innerHTML = nbs.map((n) => `<option value="${n.nom}">${n.nom.split("_")[0]} · ${titreNb(n.nom)}</option>`).join("");
 document.getElementById("archive").innerHTML = lienArchive("notebooks") + lienArchive("projet");
 const courant = document.getElementById("courant");
-document.getElementById("docs").innerHTML = `<a href="${RACINE}docs/rapport.pdf"><span class="t">The report, PDF (French)</span>${FLECHE}</a><a href="${RACINE}docs/annexe_maths.pdf"><span class="t">The maths appendix, PDF (French)</span>${FLECHE}</a>`;
+document.getElementById("docs").innerHTML = `<a href="${RACINE}docs/rapport.pdf"><span class="t">The report, PDF (French)</span>${FLECHE}</a><a href="${RACINE}docs/rapport_maths.pdf"><span class="t">The maths report, PDF (French)</span>${FLECHE}</a>`;
 
 function ouvrir(nom, pousser) {
   if (!nbs.some((n) => n.nom === nom)) nom = nbs[0].nom;

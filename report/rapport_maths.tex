@@ -1,12 +1,16 @@
 \documentclass[11pt,a4paper]{article}
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+\usepackage{iftex}
+\ifXeTeX\usepackage{fontspec}\else\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}\fi
 \usepackage[french]{babel}
-\usepackage{lmodern,microtype}
+\ifXeTeX\usepackage{microtype}\else\usepackage{lmodern,microtype}\fi
 \usepackage[margin=2.3cm]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{graphicx,booktabs,float,caption,enumitem,xcolor}
 \usepackage[hidelinks]{hyperref}
+\usepackage{textcomp,newunicodechar}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
+\newunicodechar{€}{\texteuro}
+\newunicodechar{×}{\ensuremath{\times}}
 \graphicspath{{../figures/}}
 \setlist{itemsep=1pt,topsep=3pt}
 \captionsetup{font=small,labelfont=bf}
@@ -14,7 +18,7 @@
 
 \title{\textbf{Prévoir la baisse du Nikkei 225 : la régression logistique L2,}\\[2pt]
 \large de la vraisemblance à la descente de gradient}
-\author{Mathematics \& Statistics for Machine Learning (MSA-DATI07-04) --- Albert School, MSc~1}
+\author{Mathematics \& Statistics for Machine Learning (MSA-DATI07-04)\\ Albert School, MSc~1 --- Yann Linganzi, Arnault, Abhi, Fathi}
 \date{Novembre 2026}
 
 \begin{document}
@@ -25,8 +29,9 @@
 variables de marché, de taux, de change et de news (février 2010 → septembre 2026). Ce rapport traite la partie
 mathématique du modèle retenu ; la démarche complète d'apprentissage automatique (données, modèles, calibration, test,
 explicabilité) est dans le rapport d'Applied ML.\\
-\textbf{Dépôt Git :} \url{https://github.com/Thomaswayne2003/projetML} \quad \textbf{Calculs :}
-\texttt{notebooks/05\_annexe\_maths\_logistique.ipynb}, \texttt{src/logreg\_scratch.py}.}}
+\textbf{Dépôt Git :} \url{https://github.com/Thomaswayne2003/projetML}}}
+
+\medskip
 
 
 \noindent Le modèle du projet prédit, chaque fin de mois, la probabilité que le Nikkei 225 baisse le mois suivant. Ce

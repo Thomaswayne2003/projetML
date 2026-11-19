@@ -11,7 +11,7 @@ liste.innerHTML = nbs.map((n) => `<li><a href="?nb=${n.nom}&cours=${COURS}" data
 choix.innerHTML = nbs.map((n) => `<option value="${n.nom}">${n.nom.split("_")[0]} · ${titreNb(n.nom)}</option>`).join("");
 document.getElementById("archive").innerHTML = lienArchive("notebooks") + lienArchive("projet");
 const courant = document.getElementById("courant");
-document.getElementById("docs").innerHTML = `<a href="${RACINE}docs/rapport.pdf"><span class="t">The report, PDF (French)</span>${FLECHE}</a><a href="${RACINE}docs/annexe_maths.pdf"><span class="t">The maths appendix, PDF (French)</span>${FLECHE}</a>`;
+document.getElementById("docs").innerHTML = `<a href="${RACINE}docs/rapport.pdf"><span class="t">The report, PDF (French)</span>${FLECHE}</a><a href="${RACINE}docs/rapport_maths.pdf"><span class="t">The maths report, PDF (French)</span>${FLECHE}</a>`;
 
 function ouvrir(nom, pousser) {
   if (!nbs.some((n) => n.nom === nom)) nom = nbs[0].nom;

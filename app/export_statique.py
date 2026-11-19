@@ -69,7 +69,7 @@ def relier(html: str) -> str:
     html = re.sub(r'href="/recit([?#][^"]*)?"', lambda m: f'href="recit.html{m.group(1) or ""}"', html)
     html = html.replace('href="/"', 'href="accueil.html"')
     html = re.sub(r'(href|src)="/(assets|figures|nb)/', r'\1="\2/', html)
-    html = re.sub(r'href="/(rapport|annexe_maths)\.pdf"', r'href="\1.pdf"', html)
+    html = re.sub(r'href="/(rapport|rapport_maths)\.pdf"', r'href="\1.pdf"', html)
     html = re.sub(r'<a href="/ipynb/[^"]*"[^>]*>[^<]*</a>', "", html)                # pas de .ipynb dans la copie
     html = re.sub(r'href="http://127\.0\.0\.1:\d+/docs"', 'href="recit.html#ressources"', html)
     return html
@@ -121,7 +121,7 @@ def main(site: str, sortie: Path) -> None:
     shutil.copytree(WEB / "assets", sortie / "assets")
     shutil.copytree(WEB / "nb", sortie / "nb")
     shutil.copytree(ROOT / "figures", sortie / "figures")
-    for pdf in ["rapport.pdf", "annexe_maths.pdf"]:
+    for pdf in ["rapport.pdf", "rapport_maths.pdf"]:
         shutil.copy(ROOT / "report" / pdf, sortie / pdf)
 
     n = sum(1 for _ in sortie.rglob("*") if _.is_file())

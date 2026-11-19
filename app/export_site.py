@@ -473,9 +473,9 @@ def main() -> None:
     print(f"site/nb : {len(NOTEBOOKS)} notebooks en HTML ({total / 1e6:.1f} Mo), à télécharger en .ipynb ou en dossier ; "
           + " ; ".join(f"{a['fichier']} {a['fichiers']} fichiers, {a['octets'] / 1e6:.1f} Mo" for a in donnees["telechargements"]["archives"]))
 
-    for pdf in ("rapport.pdf", "annexe_maths.pdf"):
+    for pdf in ("rapport.pdf", "rapport_maths.pdf"):
         copier(ROOT / "report" / pdf, SITE / "docs" / pdf)
-    print("site/docs : rapport.pdf, annexe_maths.pdf")
+    print("site/docs : rapport.pdf, rapport_maths.pdf")
 
     vendeur = SITE / "vendor" / "three.module.min.js"
     if not vendeur.exists():
