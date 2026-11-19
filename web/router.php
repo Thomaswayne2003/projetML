@@ -9,7 +9,7 @@ declare(strict_types=1);
 $chemin = urldecode((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $projet = dirname(__DIR__);
 
-$pages = ['/' => 'experience.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php'];
+$pages = ['/' => 'experience.php', '/recit' => 'recit.php', '/notebooks' => 'notebooks.php', '/bloomberg' => 'bloomberg.php'];
 // Le récit n'a qu'une version : l'ancienne adresse du dossier y mène
 if (in_array($chemin, ['/dossier', '/index.php'], true)) {
     $suite = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
@@ -22,7 +22,7 @@ if (isset($pages[$chemin])) {
 }
 
 $fichiers = ['/rapport.pdf' => $projet . '/report/rapport.pdf', '/annexe_maths.pdf' => $projet . '/report/annexe_maths.pdf'];
-$dossiers = ['/figures/' => $projet . '/figures', '/ipynb/' => $projet . '/notebooks'];
+$dossiers = ['/figures/' => $projet . '/figures', '/ipynb/' => $projet . '/notebooks', '/bloomberg/' => $projet . '/data/bloomberg'];
 $types = ['png' => 'image/png', 'pdf' => 'application/pdf', 'ipynb' => 'application/x-ipynb+json'];
 
 $cible = $fichiers[$chemin] ?? null;
