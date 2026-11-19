@@ -373,6 +373,17 @@ trois vérifications sur `/verifications`. Le site les présente dans deux chapi
 - **Petit échantillon** : 143 mois d'entraînement et 12 baisses dans le test. Les écarts entre modèles et entre
   slices restent fragiles.
 
+**Identifiants de commit.** Les messages de commit ont été nettoyés le 19 novembre 2026, ce qui a changé leurs
+identifiants ; les dates et le contenu sont inchangés. Les fichiers de `runs/`, écrits à l'époque et jamais modifiés,
+gardent les anciens identifiants :
+
+| Étape | Ancien | Nouveau |
+|---|---|---|
+| Étape 1 : cadrage (`commit_du_code` du journal Optuna) | `2cbac44` | `0ab4a0d` |
+| Étape 2 : code qui a calculé la décision (`decision_figee_au_commit`) | `2aa4b40` | `e5c7d12` |
+| Étape 3 : décision figée | `75712cf` | `0d8df2f` |
+| Étape 3b : évaluation unique du test | `6efd12c` | `775a352` |
+
 ## Avancement
 
 | Étape | Contenu | État |
