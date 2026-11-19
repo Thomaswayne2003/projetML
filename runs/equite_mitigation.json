@@ -1,0 +1,75 @@
+{
+  "commit_du_code": "aea4885",
+  "attribut": "régime k-means de la pipeline (calme ou agité), ajusté sur l'entraînement",
+  "mitigation": "repondération de Kamiran et Calders, w(g, y) = P(g) P(y) / P(g, y), mêmes hyperparamètres",
+  "seuil": 0.5,
+  "poids": {
+    "calme, hausse": 1.017,
+    "calme, baisse": 0.975,
+    "agité, hausse": 0.943,
+    "agité, baisse": 1.104
+  },
+  "entrainement_par_groupe": {
+    "agité": {
+      "hausse": 20,
+      "baisse": 11
+    },
+    "calme": {
+      "hausse": 67,
+      "baisse": 45
+    }
+  },
+  "platt_repondere": {
+    "a": 0.8292786409876727,
+    "c": -0.02915898223667121
+  },
+  "log_loss_constante_test": 0.6571388490305725,
+  "avant": {
+    "groupes": {
+      "calme": {
+        "mois": 24,
+        "baisses": 9,
+        "recall": 0.7777777777777778,
+        "taux_faux_positifs": 0.6,
+        "taux_predit_baisse": 0.6666666666666666
+      },
+      "agité": {
+        "mois": 9,
+        "baisses": 3,
+        "recall": 0.6666666666666666,
+        "taux_faux_positifs": 0.3333333333333333,
+        "taux_predit_baisse": 0.4444444444444444
+      }
+    },
+    "ecart_recall": 0.11111111111111116,
+    "ecart_faux_positifs": 0.26666666666666666,
+    "ecart_parite": 0.2222222222222222,
+    "log_loss": 0.7076792292160762,
+    "brier": 0.25687279590259754,
+    "exactitude": 0.5757575757575758
+  },
+  "apres": {
+    "groupes": {
+      "calme": {
+        "mois": 24,
+        "baisses": 9,
+        "recall": 0.5555555555555556,
+        "taux_faux_positifs": 0.5333333333333333,
+        "taux_predit_baisse": 0.5416666666666666
+      },
+      "agité": {
+        "mois": 9,
+        "baisses": 3,
+        "recall": 0.6666666666666666,
+        "taux_faux_positifs": 0.5,
+        "taux_predit_baisse": 0.5555555555555556
+      }
+    },
+    "ecart_recall": 0.11111111111111105,
+    "ecart_faux_positifs": 0.033333333333333326,
+    "ecart_parite": 0.01388888888888895,
+    "log_loss": 0.7004983152871113,
+    "brier": 0.25351708829573416,
+    "exactitude": 0.5151515151515151
+  }
+}

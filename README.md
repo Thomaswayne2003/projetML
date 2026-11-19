@@ -353,6 +353,13 @@ le risque, et la recommandation du projet reste « toujours acheter, couvert ».
 trois vérifications sur `/verifications`. Le site les présente dans deux chapitres du récit et dans la scène
 « Risque » de l'accueil. Ces résultats sont repris dans le rapport d'Applied ML (`report/section_apres_coup.tex`, incluse dans `report/rapport.tex`).
 
+## Équité (exigence 10)
+
+`python -m src.equite` mesure les écarts de recall, de faux positifs et de parité entre régimes de marché (calme,
+agité) sur le test, puis applique une mitigation par repondération (Kamiran et Calders) et compare avant et après
+(`runs/equite_mitigation.json`). Avec `NIKKEI_CONFIG=config_bloomberg.yaml`, le même audit tourne sur la version
+Bloomberg (`runs/v2_bloomberg/equite_mitigation.json`).
+
 ## Limites connues (revue finale)
 
 - **Le test n'était pas entièrement invisible avant le gel.** Le notebook 01 affichait déjà des statistiques du bloc

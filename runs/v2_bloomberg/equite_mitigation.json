@@ -1,0 +1,75 @@
+{
+  "commit_du_code": "aea4885",
+  "attribut": "régime k-means de la pipeline (calme ou agité), ajusté sur l'entraînement",
+  "mitigation": "repondération de Kamiran et Calders, w(g, y) = P(g) P(y) / P(g, y), mêmes hyperparamètres",
+  "seuil": 0.5,
+  "poids": {
+    "calme, hausse": 0.991,
+    "calme, baisse": 1.012,
+    "agité, hausse": 1.03,
+    "agité, baisse": 0.963
+  },
+  "entrainement_par_groupe": {
+    "agité": {
+      "hausse": 37,
+      "baisse": 30
+    },
+    "calme": {
+      "hausse": 120,
+      "baisse": 89
+    }
+  },
+  "platt_repondere": {
+    "a": 0.9186854698352089,
+    "c": -0.13455795309500262
+  },
+  "log_loss_constante_test": 0.6649268102731251,
+  "avant": {
+    "groupes": {
+      "calme": {
+        "mois": 27,
+        "baisses": 11,
+        "recall": 0.18181818181818182,
+        "taux_faux_positifs": 0.25,
+        "taux_predit_baisse": 0.2222222222222222
+      },
+      "agité": {
+        "mois": 6,
+        "baisses": 1,
+        "recall": 1.0,
+        "taux_faux_positifs": 0.0,
+        "taux_predit_baisse": 0.16666666666666666
+      }
+    },
+    "ecart_recall": 0.8181818181818181,
+    "ecart_faux_positifs": 0.25,
+    "ecart_parite": 0.05555555555555555,
+    "log_loss": 0.6342945302540383,
+    "brier": 0.221826818367999,
+    "exactitude": 0.6060606060606061
+  },
+  "apres": {
+    "groupes": {
+      "calme": {
+        "mois": 27,
+        "baisses": 11,
+        "recall": 0.18181818181818182,
+        "taux_faux_positifs": 0.25,
+        "taux_predit_baisse": 0.2222222222222222
+      },
+      "agité": {
+        "mois": 6,
+        "baisses": 1,
+        "recall": 1.0,
+        "taux_faux_positifs": 0.0,
+        "taux_predit_baisse": 0.16666666666666666
+      }
+    },
+    "ecart_recall": 0.8181818181818181,
+    "ecart_faux_positifs": 0.25,
+    "ecart_parite": 0.05555555555555555,
+    "log_loss": 0.6336309774826773,
+    "brier": 0.22152484460085245,
+    "exactitude": 0.6060606060606061
+  }
+}

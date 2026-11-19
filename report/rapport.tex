@@ -286,9 +286,32 @@ Pas de réunion BoJ & 11 & 4 & 0,75 & 0,57 & 0,743 & 0,657 \\\bottomrule
 \caption*{\small a. Recall de la classe baisse, l'« égalité des chances ». b. Taux de faux positifs. Seuil 0,5, test 2024-2026.}\end{table}
 
 L'écart de recall entre régimes (0,11) est bien inférieur à son erreur type (0,14 à 0,27 avec 3 à 9 baisses par
-groupe) : rien ne permet de conclure à un traitement inégal. Nous n'avons pas appliqué de mitigation : avec si peu de
-baisses par groupe, des seuils propres à chaque groupe seraient réglés sur le bruit. C'est la principale limite du
-projet au regard de l'énoncé.
+groupe) : rien ne permet de conclure à un traitement inégal. L'écart de taux de faux positifs (0,27) et de parité
+(0,22, part de mois prédits en baisse) est plus net.
+
+\paragraph{Mitigation : repondération (Kamiran et Calders).} Attribut : le régime k-means. Nous réentraînons la même
+pipeline, avec les mêmes hyperparamètres, en pondérant chaque mois d'entraînement par $w(g,y)=P(g)P(y)/P(g,y)$, ce qui
+rend régime et cible indépendants dans les données d'apprentissage ; la calibration de Platt est réapprise comme pour
+le modèle figé, sur les prédictions hors fold de l'entraînement. Rien n'est réglé sur le test, comparé avant et après
+(\texttt{python -m src.equite}, \texttt{runs/equite\_mitigation.json}). Ce calcul est postérieur à l'ouverture du
+test et ne change pas la décision figée.
+
+\begin{table}[H]\centering\footnotesize\setlength\tabcolsep{4pt}
+\begin{tabular}{lccccccc}\toprule
+Test 2024-2026 & Recall calme & Recall agité & Écart recall & Écart FP & Écart parité & Log-loss & Exactitude \\\midrule
+Avant (modèle figé) & 0,78 & 0,67 & 0,11 & 0,27 & 0,22 & 0,708 & 0,58 \\
+Après repondération & 0,56 & 0,67 & 0,11 & 0,03 & 0,01 & 0,700 & 0,52 \\\bottomrule
+\end{tabular}
+\caption*{\small Seuil 0,5, classe positive : la baisse. Log-loss du modèle constant sur le test : 0,657.}\end{table}
+
+La repondération égalise presque les taux de faux positifs et la parité entre régimes, et améliore un peu la log-loss,
+au prix de 6 points d'exactitude : le modèle prédit moins souvent la baisse en régime calme. L'égalité des chances
+(écart de recall) ne bouge pas, et avec 3 baisses en régime agité aucun de ces écarts n'est significatif. Sur la
+seconde version (Bloomberg, 1999-2026), le même audit donne un recall de 0,18 en régime calme (11 baisses) contre
+1,00 en régime agité, mais sur \emph{une seule} baisse ; régime et cible y sont déjà presque indépendants à
+l'entraînement (poids entre 0,96 et 1,03), si bien que la repondération ne change rien. Conclusion : nous ne
+retiendrions pas cette mitigation, dont l'effet ne se distingue pas du bruit, et l'équité reste la principale limite du
+projet au regard de l'énoncé, faute d'attribut sensible au sens propre.
 
 \input{section_apres_coup}
 

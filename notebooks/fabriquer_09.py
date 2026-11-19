@@ -253,6 +253,15 @@ l'entraînement, sur l'échelle des log-cotes). C'est ce que lisent l'API, le ta
 permutation et les tranches sont dans le notebook 04.
 """, ["src/predict.py"])
 
+section("3 · Équité entre régimes et mitigation", r"""
+**Ce que fait le fichier.** Il mesure, sur le test, le recall, le taux de faux positifs et la part de mois prédits en
+baisse dans chaque régime k-means (calme, agité), puis réentraîne la même pipeline avec la repondération de Kamiran et
+Calders, w(g, y) = P(g) P(y) / P(g, y), qui rend régime et cible indépendants à l'entraînement, et compare avant/après.
+Il tourne sur la version 1 et sur la version Bloomberg (`NIKKEI_CONFIG=config_bloomberg.yaml`).
+
+**Concepts.** Égalité des chances, égalité des cotes, parité démographique, mitigation par prétraitement (exigence 10).
+""", ["src/equite.py"])
+
 section("4 · Seconde version : 1999-2026, Bloomberg en référence", r"""
 **Ce que fait le fichier.** Après l'ouverture du test, il rejoue tout le protocole sur une histoire plus longue :
 1. **Contrôle Bloomberg** : compare le Tankan, l'IPC et le VIX de la table aux exports Bloomberg. Le Tankan coïncide
