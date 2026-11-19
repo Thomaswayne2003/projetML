@@ -38,6 +38,9 @@ Les notebooks sont numérotés dans l'ordre du projet : `00a` et `00b` collecten
 construisent et évaluent le modèle, `06_annexe_news_prix/` est l'étude préalable sur les news et les prix
 (avec ses propres modules Python).
 
+- `data/bloomberg/` : huit captures Bloomberg (18 novembre 2026), avec des vérifications visuelles et des pistes de
+  variables de valorisation et de bénéfices. Le modèle ne les utilise pas.
+
 ## Structure
 
 ```text
@@ -290,6 +293,9 @@ Le site s'enchaîne en deux temps, puis donne accès aux pièces :
   seize diapositives. Les flèches ou la barre d'espace passent de l'une à l'autre par une transition 3D (60 000 gouttes
   d'encre forment le signe du chapitre, puis éclatent), `T` affiche la version technique, `D` ouvre le détail du
   chapitre et `Échap` quitte le mode ;
+
+- **les captures Bloomberg** (`/bloomberg`) : huit écrans commentés (valorisation, révisions de bénéfices, CPI),
+  qui confirment ou nuancent les conclusions du projet ;
 - **le lecteur de notebooks** (`/notebooks`), le rapport et l'annexe en PDF.
 
 Une seule grammaire de couleurs : indigo pour la hausse et l'achat, vermillon pour la baisse et la vente, encre pour

@@ -47,6 +47,7 @@ NOTEBOOKS = [
     ("06_annexe_news_prix", "Annexe : signal news × signal prix, temps de réalisation, backtests, HMM"),
     ("07_seconde_version_bloomberg", "Seconde version : 1999-2026, Bloomberg, résultats et explicabilité"),
     ("08_ameliorations_sans_surapprentissage", "Améliorations sans surapprentissage : protocole figé, jugé sur 2010-2023"),
+    ("09_code_et_concepts", "Tout le code du projet, module par module, avec les concepts expliqués"),
 ]
 # Un notebook rangé dans son propre dossier (avec ses scripts et ses figures) se télécharge avec tout son dossier.
 DOSSIERS_NB = {"06_annexe_news_prix": "notebooks/06_annexe_news_prix"}
